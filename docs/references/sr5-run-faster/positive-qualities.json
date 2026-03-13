@@ -1,0 +1,301 @@
+{
+  "tables": {
+    "qualities-catalog": {
+      "source": "Run Faster, pp. 144-150",
+      "description": "Catalog of positive qualities from Run Faster",
+      "columns": ["name", "karma", "description", "restrictions"],
+      "rows": [
+        {
+          "name": "Adrenaline Surge",
+          "karma": 12,
+          "description": "Act first in first Initiative Pass of a new combat, regardless of Initiative Score. If multiple characters have this or Seize the Initiative, act in Initiative Score order.",
+          "restrictions": "Does not allow Surprised characters to act first in ambush."
+        },
+        {
+          "name": "Animal Empathy",
+          "karma": 3,
+          "description": "+2 dice pool modifier for all tests involving influence or control of an animal (including riding), including Awakened species.",
+          "restrictions": "None listed."
+        },
+        {
+          "name": "Black Market Pipeline",
+          "karma": 10,
+          "description": "Choose one contact and one merchandise category at creation. Purchases: 10% price reduction, +2 Availability Test modifier. Sales: (7% x Loyalty) of original value instead of 5%.",
+          "restrictions": "Contact must be appropriate to the chosen category."
+        },
+        {
+          "name": "Born Rich",
+          "karma": 5,
+          "description": "May trade up to 40 Karma for nuyen at 2,000 nuyen/Karma (up to 80,000 nuyen) instead of normal 10 Karma limit.",
+          "restrictions": "Character creation only."
+        },
+        {
+          "name": "City Slicker",
+          "karma": 7,
+          "description": "+1 dice pool modifier for all Outdoors skill group tests in urban environments. -1 dice pool modifier to Perception and Survival Tests in non-urban environments.",
+          "restrictions": "None listed."
+        },
+        {
+          "name": "College Education",
+          "karma": 4,
+          "description": "At creation: buy Academic Knowledge skills at half price (rounded up). Post-creation: Academic Knowledge ranks 3+ get 1 Karma cost reduction per rank.",
+          "restrictions": "None listed."
+        },
+        {
+          "name": "Common Sense",
+          "karma": 3,
+          "description": "GM warns before foolish actions. Max warnings per session = character's Edge rating.",
+          "restrictions": "None listed."
+        },
+        {
+          "name": "Daredevil",
+          "karma": 6,
+          "description": "Regain 2 points of Edge instead of 1 when performing exceptionally daring actions (GM discretion).",
+          "restrictions": "None listed."
+        },
+        {
+          "name": "Digital Doppelganger",
+          "karma": 7,
+          "description": "+2 threshold for Matrix Searches tracking the character on this ID. Digital identity cross-linked with someone else's.",
+          "restrictions": "Requires SINner quality. Must be linked to a particular SIN."
+        },
+        {
+          "name": "Disgraced",
+          "karma": 2,
+          "description": "+2 dice pool modifier to intimidate criminals. Treated as Prejudiced in Etiquette Tests with upright citizens.",
+          "restrictions": "None listed."
+        },
+        {
+          "name": "Erased",
+          "karma": 8,
+          "description": "Matrix searches find nothing. Legwork only via word-of-mouth. Public Awareness cannot exceed 1. Cannot maintain Lifestyle above Middle. Cannot use fake SIN/licenses for more than 3 months.",
+          "restrictions": "High Lifestyle requires a month of Low or lower afterward."
+        },
+        {
+          "name": "Fame (Local)",
+          "karma": 4,
+          "description": "Select a sprawl. +1 Social Limit, +1 Social Skill modifier vs those who know. PA +2. Day Job: income x2.",
+          "restrictions": "Requires SINner or Rating 3 fake SIN. Identified by Intuition+Logic (2) in home sprawl, (1) outside."
+        },
+        {
+          "name": "Fame (National)",
+          "karma": 8,
+          "description": "Select a nation and sprawl. In sprawl: +1 Social Limit, +2 Social Skill. In nation: +2 Social Limit, +1 Social Skill. PA +3. Day Job: income x4, +10% workload.",
+          "restrictions": "Requires SINner or Rating 3 fake SIN. Requires 4+ ranks in nation's native language."
+        },
+        {
+          "name": "Fame (Megacorporate)",
+          "karma": 12,
+          "description": "Choose megacorp, sprawl, nation. In megacorp: +2 Social Limit, +2 Social Skill. In nation/sprawl: +1 Social Limit, +1 Social Skill. PA +5. Day Job: income x6, +10% workload.",
+          "restrictions": "Requires SINner or Rating 3 fake SIN."
+        },
+        {
+          "name": "Fame (Global)",
+          "karma": 16,
+          "description": "+3 Social Limit, +3 Social Skill modifier to positively influence anyone who knows. PA +8. Day Job: income x10, +25% workload.",
+          "restrictions": "Requires SINner or Rating 3 fake SIN."
+        },
+        {
+          "name": "Friends in High Places",
+          "karma": 8,
+          "description": "Additional Charisma x 4 Karma for contacts at creation. All contacts must have Connection Rating 8+. Leftover Karma lost. Cannot call on them constantly.",
+          "restrictions": "Character creation only. Connection Rating minimum 8."
+        },
+        {
+          "name": "Hawk Eye",
+          "karma": 3,
+          "description": "+1 dice pool modifier to Perception Tests. Shift all Range Environmental modifiers up one category (e.g., Medium becomes Short).",
+          "restrictions": "Part of natural eyes. Incompatible with electronic vision enhancements and cyber-/bioware augmentations or replacements."
+        },
+        {
+          "name": "Inspired",
+          "karma": 4,
+          "description": "+2 Street Cred among fellow artists. +1 dice pool modifier for all Artisan skills OR all Performance skills (choose one at purchase).",
+          "restrictions": "Can only be selected once. Category cannot be changed."
+        },
+        {
+          "name": "Jack of All Trades, Master of None",
+          "karma": 2,
+          "description": "Karma costs for learning skills reduced by 1 (min 1) up to Rating 5. Beyond Rating 5, costs 2 additional Karma per point.",
+          "restrictions": "Does not apply during character creation."
+        },
+        {
+          "name": "Lightning Reflexes",
+          "karma": 20,
+          "description": "+1 Initiative rating, +1 initiative die. +1 dice pool modifier for all Defense Tests. Not cumulative with any other Initiative enhancement (technological, chemical, magical).",
+          "restrictions": "Requires unaugmented character."
+        },
+        {
+          "name": "Linguist",
+          "karma": 4,
+          "description": "Halve language learning time. +1 Language skill tests. At creation: Language skill points 2-for-1. Post-creation: ranks 3+ get 1 Karma reduction per rank.",
+          "restrictions": "None listed."
+        },
+        {
+          "name": "Made Man",
+          "karma": 5,
+          "description": "Free Group Contact (crime syndicate). Loyalty 3. Fence at 30% value. Stolen/restricted goods: 10% discount, +1 Availability. Obligation: ~20 hrs/week syndicate work.",
+          "restrictions": "Must participate in syndicate work."
+        },
+        {
+          "name": "Night Vision",
+          "karma": 2,
+          "description": "Grants low-light vision. Extremely light-sensitive: suffers increased Glare penalties (Blinding on clear day, Moderate on overcast). Mitigated by sunglasses.",
+          "restrictions": "Incompatible with cyber-/bioware augmentation or replacement. Quality lost if augmented (no Karma refund)."
+        },
+        {
+          "name": "Outdoorsman",
+          "karma": 3,
+          "description": "+2 dice pool modifier for all Outdoors skill group tests in rural/wild environments. -1 dice pool modifier to Perception and Survival Tests in urban environments.",
+          "restrictions": "None listed."
+        },
+        {
+          "name": "Overclocker",
+          "karma": 5,
+          "description": "Add 1 point of Rating to one cyberdeck ASDF attribute. Can be reallocated when cyberdeck is reconfigured.",
+          "restrictions": "None listed."
+        },
+        {
+          "name": "Perceptive",
+          "karma": "5 or 10",
+          "description": "5 Karma: +1 dice pool modifier on all Perception Tests (including Astral and Matrix). 10 Karma: modifier increases to +2.",
+          "restrictions": "None listed."
+        },
+        {
+          "name": "Perfect Time",
+          "karma": 5,
+          "description": "Always knows exact time. +1 dice pool modifier for Performance Tests involving timing/rhythm. One additional Free Action every Action Phase.",
+          "restrictions": "Obstructed by prolonged isolation, unconsciousness, drug/chip distortion, extended Matrix time."
+        },
+        {
+          "name": "Poor Link",
+          "karma": 8,
+          "description": "-2 dice pool modifier for Ritual Spellcasting Test (Step 7: Seal the Ritual) for all rituals targeting the character. +2 dice pool modifier for Resistance Tests against rituals.",
+          "restrictions": "Affects ALL rituals including friendly ones."
+        },
+        {
+          "name": "Privileged Family Name",
+          "karma": 7,
+          "description": "Real name carries clout in home sprawl. Get-out-of-jail-free for minor misdemeanors. Local minor NPCs suffer -2 Social tests against character.",
+          "restrictions": "Requires SINner (National or Corporate). Family name makes character easy to identify."
+        },
+        {
+          "name": "Restricted Gear",
+          "karma": 10,
+          "description": "Per item. At creation: buy one piece with Availability up to 24. Post-creation: Availability up to 18 at +35% cost. Max 3 total; only 1 at creation.",
+          "restrictions": "Maximum 3 purchases. Only 1 at character creation."
+        },
+        {
+          "name": "School of Hard Knocks",
+          "karma": 4,
+          "description": "At creation: buy Street Knowledge skills at 2-for-1. Post-creation: Street Knowledge ranks 3+ get 1 Karma cost reduction per rank.",
+          "restrictions": "None listed."
+        },
+        {
+          "name": "Sense of Direction",
+          "karma": 3,
+          "description": "Always knows true north. Can retrace path and estimate distances accurately. +1 dice pool modifier on Navigation skill tests.",
+          "restrictions": "Must be alert and able to perceive surroundings."
+        },
+        {
+          "name": "Sensei",
+          "karma": 5,
+          "description": "Teacher for one skill or skill group. Requires contact with Connection 3+. Single skill: Rating 13, Instruction 10, limit 7. Skill group: Rating 12, Instruction 12, limit 8. Free.",
+          "restrictions": "Must have contact with Connection Rating 3+."
+        },
+        {
+          "name": "Solid/Legendary Rep",
+          "karma": "2 or 4",
+          "description": "Reputation within a specific group (1,000-5,000 members). Solid (2 Karma): +1 Rep. Legendary (4 Karma): +2 Rep.",
+          "restrictions": "Can only be taken once."
+        },
+        {
+          "name": "Speed Reading",
+          "karma": 2,
+          "description": "Read ~800 words in ~5 seconds, 800-page book in ~1 hour. Not memorized. Locating specific info: Logic+Intuition Extended Test (GM sets threshold/interval).",
+          "restrictions": "None listed."
+        },
+        {
+          "name": "Spike Resistance",
+          "karma": "10 per rating",
+          "description": "+1 dice pool modifier per level to resist harmful biofeedback (black IC, dump shock, black hammer, etc.). Max Rating 3.",
+          "restrictions": "Maximum 3 levels."
+        },
+        {
+          "name": "Spirit Whisperer",
+          "karma": 8,
+          "description": "Spirits add 1 die resisting Summoning from this character. If successful, spirit arrives at Force+1 (considered summoned at declared Force for all purposes).",
+          "restrictions": "None listed."
+        },
+        {
+          "name": "Steely Eyed Wheelman",
+          "karma": 2,
+          "description": "Vehicle Tests: Terrain Modifiers reduced by 1 (minimum 0).",
+          "restrictions": "None listed."
+        },
+        {
+          "name": "Technical School Education",
+          "karma": 4,
+          "description": "At creation: buy Professional Knowledge skills at 2-for-1. Post-creation: Professional Knowledge ranks 3+ get 1 Karma cost reduction per rank.",
+          "restrictions": "None listed."
+        },
+        {
+          "name": "Tough as Nails",
+          "karma": "5 per level",
+          "description": "Each level: +1 box to Physical or Stun Condition monitor. Max 4 levels total, max 3 boxes on any one monitor.",
+          "restrictions": "Maximum 4 levels. Maximum 3 additional boxes per Condition monitor."
+        }
+      ]
+    }
+  },
+  "cross_references": [
+    {
+      "quality": "City Slicker",
+      "ref": "Outdoorsman",
+      "page": "p. 148, Run Faster",
+      "note": "Functional mirror quality for urban vs wilderness"
+    },
+    {
+      "quality": "Outdoorsman",
+      "ref": "City Slicker",
+      "page": "p. 145, Run Faster",
+      "note": "Functional mirror quality for wilderness vs urban"
+    },
+    {
+      "quality": "Speed Reading",
+      "ref": "Photographic Memory",
+      "page": "p. 76, SR5",
+      "note": "Speed Reading info is not memorized unless character also has Photographic Memory"
+    },
+    {
+      "quality": "Friends in High Places",
+      "ref": "Who You Know",
+      "page": "p. 172, Run Faster",
+      "note": "Contact abuse rules apply to high-connection contacts"
+    },
+    {
+      "quality": "Made Man",
+      "ref": "Group or Organization Contact Options",
+      "page": "p. 176, Run Faster",
+      "note": "Syndicate is a Group Contact"
+    },
+    {
+      "quality": "Night Vision",
+      "ref": "Environmental Compensation Table",
+      "page": "p. 175, SR5",
+      "note": "Glare penalties per Environmental Compensation Table"
+    },
+    {
+      "quality": "Inspired",
+      "ref": "Street Cred",
+      "page": "p. 372, SR5",
+      "note": "+2 Street Cred among fellow artists"
+    },
+    {
+      "quality": "Poor Link",
+      "ref": "Ritual Spellcasting",
+      "page": "SR5 core",
+      "note": "Modifies Step 7: Seal the Ritual"
+    }
+  ]
+}

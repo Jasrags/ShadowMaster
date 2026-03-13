@@ -1,0 +1,245 @@
+{
+  "book": "Run Faster",
+  "pdf": "docs/pdfs/sr5-run-faster.pdf",
+  "total_pages": 252,
+  "pdf_page_offset": 2,
+  "sections": [
+    {
+      "slug": "fiction-decade",
+      "title": "Decade (Fiction)",
+      "pages": "6-10",
+      "pdf_pages": "8-12",
+      "priority": "skip",
+      "reason": "Fiction/flavor text",
+      "page_count": 5,
+      "split_into": [],
+      "status": "skipped"
+    },
+    {
+      "slug": "introduction",
+      "title": "Introduction — Who You Are and How You Got Here",
+      "pages": "11-21",
+      "pdf_pages": "13-23",
+      "priority": "skip",
+      "reason": "Lore, flavor, background — Where You Came From, Game Information, Ethics/Codes",
+      "page_count": 11,
+      "split_into": [],
+      "status": "skipped"
+    },
+    {
+      "slug": "alternate-identities",
+      "title": "Alternate Identities",
+      "pages": "22-23",
+      "pdf_pages": "24-25",
+      "priority": "skip",
+      "reason": "Flavor/lore about identity types (Doc Wagon, Knight Errant, etc.)",
+      "page_count": 2,
+      "split_into": [],
+      "status": "skipped"
+    },
+    {
+      "slug": "more-than-skin-deep",
+      "title": "More Than Skin Deep — Building an Identity",
+      "pages": "44-61",
+      "pdf_pages": "46-63",
+      "priority": "high",
+      "reason": "Metatype lore and cultural info for dwarfs, elves, orks, trolls, humans — includes 'How X Fit Into Society' subsections with mechanical implications",
+      "page_count": 18,
+      "split_into": [],
+      "status": "done"
+    },
+    {
+      "slug": "construction-kits",
+      "title": "Construction Kits — Character Creation Methods",
+      "pages": "62-85",
+      "pdf_pages": "64-87",
+      "priority": "high",
+      "reason": "Sum to Ten generation, Point Buy, Life Modules — core character creation mechanics",
+      "page_count": 24,
+      "split_into": [],
+      "status": "done"
+    },
+    {
+      "slug": "new-quality",
+      "title": "New Quality — Rank",
+      "pages": "86-87",
+      "pdf_pages": "88-89",
+      "priority": "medium",
+      "reason": "Single new quality with mechanical rules",
+      "page_count": 2,
+      "split_into": [],
+      "status": "done"
+    },
+    {
+      "slug": "mess-of-metahumanity-sapients",
+      "title": "The Mess of Metahumanity — Sapients of the Sixth World",
+      "pages": "88-100",
+      "pdf_pages": "90-102",
+      "priority": "high",
+      "reason": "All metavariants (Gnome, Hanuman, Koborokuru, Menehune, Hobgoblin, Ogre, Oni, Satyr, Cyclops, Fomorian, Giant, Minotaur, Dryad, Nocturna, Wakyambi, Xapiri Thepe, Nartaki) and metasapients (Centaur, Naga, Pixie, Sasquatch) — attribute tables and special rules",
+      "page_count": 13,
+      "split_into": [],
+      "status": "done"
+    },
+    {
+      "slug": "shapeshifters-changelings",
+      "title": "Shapeshifters and Changelings",
+      "pages": "100-101",
+      "pdf_pages": "102-103",
+      "priority": "high",
+      "reason": "Shapeshifter and Changeling base rules and creation overview",
+      "page_count": 2,
+      "split_into": [],
+      "status": "done"
+    },
+    {
+      "slug": "creating-something-different",
+      "title": "Creating Something Different — Metavariant/Shapeshifter/Changeling Creation",
+      "pages": "101-110",
+      "pdf_pages": "103-112",
+      "priority": "high",
+      "reason": "Rules for creating metavariant characters, shapeshifters, changelings, and random metagenic qualities tables",
+      "page_count": 10,
+      "split_into": [],
+      "status": "done"
+    },
+    {
+      "slug": "positive-metagenic-qualities",
+      "title": "Positive Metagenic Qualities",
+      "pages": "111-118",
+      "pdf_pages": "113-120",
+      "priority": "high",
+      "reason": "Full catalog of positive metagenic qualities with mechanical stats",
+      "page_count": 8,
+      "split_into": [],
+      "status": "done"
+    },
+    {
+      "slug": "negative-metagenic-qualities",
+      "title": "Negative Metagenic Qualities",
+      "pages": "119-123",
+      "pdf_pages": "121-125",
+      "priority": "high",
+      "reason": "Full catalog of negative metagenic qualities with mechanical stats",
+      "page_count": 5,
+      "split_into": [],
+      "status": "done"
+    },
+    {
+      "slug": "into-the-night",
+      "title": "Into the Night — Infected",
+      "pages": "124-143",
+      "pdf_pages": "126-145",
+      "priority": "high",
+      "reason": "Infected character types (Bandersnatch through Wendigo), positive/negative infected qualities, diseases (HMHVV I/II/III), creating infected characters, new critter powers",
+      "page_count": 20,
+      "split_into": [],
+      "status": "done"
+    },
+    {
+      "slug": "positive-qualities",
+      "title": "Qualities for Good or Ill — Positive Qualities",
+      "pages": "144-150",
+      "pdf_pages": "146-152",
+      "priority": "high",
+      "reason": "Full catalog of new positive qualities",
+      "page_count": 7,
+      "split_into": [],
+      "status": "done"
+    },
+    {
+      "slug": "negative-qualities",
+      "title": "Qualities for Good or Ill — Negative Qualities",
+      "pages": "151-159",
+      "pdf_pages": "153-161",
+      "priority": "high",
+      "reason": "Full catalog of new negative qualities",
+      "page_count": 9,
+      "split_into": [],
+      "status": "done"
+    },
+    {
+      "slug": "who-you-know-contacts",
+      "title": "Who You Know — Contact Rules",
+      "pages": "172-180",
+      "pdf_pages": "174-182",
+      "priority": "high",
+      "reason": "Contact types, costs, gaining chips, group/org contacts, maintaining relationships — core contact mechanics",
+      "page_count": 9,
+      "split_into": [],
+      "status": "done"
+    },
+    {
+      "slug": "sample-contacts",
+      "title": "Sample Contacts",
+      "pages": "182-195",
+      "pdf_pages": "184-197",
+      "priority": "medium",
+      "reason": "NPC contact archetypes with stats — useful for GM tools but not core mechanics",
+      "page_count": 14,
+      "split_into": [],
+      "status": "done"
+    },
+    {
+      "slug": "bosses-and-betrayers",
+      "title": "Bosses and Betrayers — Johnsons and Fixers",
+      "pages": "196-200",
+      "pdf_pages": "198-202",
+      "priority": "medium",
+      "reason": "Johnson/Fixer NPC rules and lifecycle of an engagement",
+      "page_count": 5,
+      "split_into": [],
+      "status": "done"
+    },
+    {
+      "slug": "fiction-i-thought-we-were-friends",
+      "title": "I Thought We Were Friends (Fiction)",
+      "pages": "201",
+      "pdf_pages": "203",
+      "priority": "skip",
+      "reason": "Fiction",
+      "page_count": 1,
+      "split_into": [],
+      "status": "skipped"
+    },
+    {
+      "slug": "johnson-genesis",
+      "title": "Johnson Genesis — Syndicate/Corp Johnson Generation",
+      "pages": "202-211",
+      "pdf_pages": "204-213",
+      "priority": "medium",
+      "reason": "GM tool for generating Johnson NPCs — megacorp and syndicate backgrounds",
+      "page_count": 10,
+      "split_into": [],
+      "status": "done"
+    },
+    {
+      "slug": "lifestyles",
+      "title": "A Dump of One's Own — Lifestyles",
+      "pages": "212-227",
+      "pdf_pages": "214-229",
+      "priority": "high",
+      "reason": "Expanded lifestyle rules — comforts, necessities, security, neighborhood, entertainment, services, assets, bolt hole through commercial categories, lifestyle options, sample locations",
+      "page_count": 16,
+      "split_into": [],
+      "status": "done"
+    },
+    {
+      "slug": "equipment-packs",
+      "title": "Pack Your Kit — Equipment Packs",
+      "pages": "228-252",
+      "pdf_pages": "230-254",
+      "priority": "high",
+      "reason": "Pre-built gear packages for quick character creation — core, weapon/ammo, armor, cyber, lifestyle, color, drone, decker, vehicle, magic packs",
+      "page_count": 25,
+      "split_into": [],
+      "status": "done"
+    }
+  ],
+  "summary": {
+    "total_sections": 21,
+    "skip": 4,
+    "pending": 0,
+    "done": 17
+  }
+}

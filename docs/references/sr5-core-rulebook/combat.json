@@ -1,0 +1,889 @@
+{
+  "tables": {
+    "initiative-attribute-chart": {
+      "source": "SR5 Core Rulebook, p.159",
+      "description": "Initiative type, attribute formula, and base initiative dice for each combat mode",
+      "columns": ["initiative_type", "attributes", "base_initiative_dice"],
+      "rows": [
+        {
+          "initiative_type": "Physical",
+          "attributes": "Reaction + Intuition",
+          "base_initiative_dice": "1D6"
+        },
+        {
+          "initiative_type": "Astral",
+          "attributes": "Intuition × 2",
+          "base_initiative_dice": "2D6"
+        },
+        {
+          "initiative_type": "Matrix: AR",
+          "attributes": "Reaction + Intuition",
+          "base_initiative_dice": "1D6"
+        },
+        {
+          "initiative_type": "Matrix: cold-sim VR",
+          "attributes": "Data Processing + Intuition",
+          "base_initiative_dice": "3D6"
+        },
+        {
+          "initiative_type": "Matrix: hot-sim VR",
+          "attributes": "Data Processing + Intuition",
+          "base_initiative_dice": "4D6"
+        },
+        {
+          "initiative_type": "Rigging AR",
+          "attributes": "Reaction + Intuition",
+          "base_initiative_dice": "1D6"
+        }
+      ]
+    },
+    "combat-actions": {
+      "source": "SR5 Core Rulebook, p.162",
+      "description": "All combat actions categorized by type (Free, Simple, Complex, Interrupt)",
+      "columns": ["action_type", "action_name"],
+      "rows": [
+        { "action_type": "Free", "action_name": "Call a Shot" },
+        { "action_type": "Free", "action_name": "Change Linked Device Mode" },
+        { "action_type": "Free", "action_name": "Drop Object" },
+        { "action_type": "Free", "action_name": "Drop Prone" },
+        { "action_type": "Free", "action_name": "Eject Smartgun Clip" },
+        { "action_type": "Free", "action_name": "Gesture" },
+        { "action_type": "Free", "action_name": "Multiple Attacks" },
+        { "action_type": "Free", "action_name": "Run" },
+        { "action_type": "Free", "action_name": "Speak/Text/Transmit Phrase" },
+        { "action_type": "Simple", "action_name": "Activate Focus" },
+        { "action_type": "Simple", "action_name": "Call Spirit" },
+        { "action_type": "Simple", "action_name": "Change Device Mode" },
+        { "action_type": "Simple", "action_name": "Change Gun Mode" },
+        { "action_type": "Simple", "action_name": "Command Spirit" },
+        { "action_type": "Simple", "action_name": "Dismiss Spirit" },
+        { "action_type": "Simple", "action_name": "Fire Bow" },
+        { "action_type": "Simple", "action_name": "Fire Weapon (SA, SS, BF, FA)" },
+        { "action_type": "Simple", "action_name": "Insert Clip" },
+        { "action_type": "Simple", "action_name": "Observe in Detail" },
+        { "action_type": "Simple", "action_name": "Pick Up/Put Down Object" },
+        { "action_type": "Simple", "action_name": "Quick Draw" },
+        { "action_type": "Simple", "action_name": "Ready Weapon" },
+        { "action_type": "Simple", "action_name": "Reckless Spellcasting" },
+        { "action_type": "Simple", "action_name": "Reload Weapon (see table)" },
+        { "action_type": "Simple", "action_name": "Remove Clip" },
+        { "action_type": "Simple", "action_name": "Shift Perception" },
+        { "action_type": "Simple", "action_name": "Stand Up" },
+        { "action_type": "Simple", "action_name": "Take Aim" },
+        { "action_type": "Simple", "action_name": "Take Cover" },
+        { "action_type": "Simple", "action_name": "Throw Weapon" },
+        { "action_type": "Simple", "action_name": "Use Simple Device" },
+        { "action_type": "Complex", "action_name": "Astral Projection" },
+        { "action_type": "Complex", "action_name": "Banish Spirit" },
+        { "action_type": "Complex", "action_name": "Cast Spell" },
+        { "action_type": "Complex", "action_name": "Fire Full-Auto Weapon (FA)" },
+        { "action_type": "Complex", "action_name": "Fire Long or Semi-Auto Burst" },
+        { "action_type": "Complex", "action_name": "Fire Mounted or Vehicle Weapon" },
+        { "action_type": "Complex", "action_name": "Load and Fire Bow" },
+        { "action_type": "Complex", "action_name": "Melee Attack" },
+        { "action_type": "Complex", "action_name": "Reload Weapon (see table)" },
+        { "action_type": "Complex", "action_name": "Rigger Jump In" },
+        { "action_type": "Complex", "action_name": "Sprint" },
+        { "action_type": "Complex", "action_name": "Summoning" },
+        { "action_type": "Complex", "action_name": "Use Skill" },
+        { "action_type": "Interrupt", "action_name": "Block" },
+        { "action_type": "Interrupt", "action_name": "Dodge" },
+        { "action_type": "Interrupt", "action_name": "Full Defense" },
+        { "action_type": "Interrupt", "action_name": "Hit the Dirt" },
+        { "action_type": "Interrupt", "action_name": "Intercept" },
+        { "action_type": "Interrupt", "action_name": "Parry" }
+      ]
+    },
+    "interrupt-action-costs": {
+      "source": "SR5 Core Rulebook, p.168",
+      "description": "Initiative Score cost for each Interrupt Action",
+      "columns": ["action_name", "initiative_score_cost"],
+      "rows": [
+        { "action_name": "Block", "initiative_score_cost": -5 },
+        { "action_name": "Dodge", "initiative_score_cost": -5 },
+        { "action_name": "Full Defense", "initiative_score_cost": -10 },
+        { "action_name": "Hit the Dirt", "initiative_score_cost": -5 },
+        { "action_name": "Intercept", "initiative_score_cost": -5 },
+        { "action_name": "Parry", "initiative_score_cost": -5 }
+      ]
+    },
+    "reloading-weapons": {
+      "source": "SR5 Core Rulebook, p.163",
+      "description": "Reload method, result, and action type for each weapon reload mechanism",
+      "columns": ["reloading_method", "result", "action_type"],
+      "rows": [
+        {
+          "reloading_method": "Removable Clip (c)",
+          "result": "Remove or insert clip",
+          "action_type": "Simple"
+        },
+        {
+          "reloading_method": "Speed Loader",
+          "result": "Use speed loader to completely load gun",
+          "action_type": "Complex"
+        },
+        {
+          "reloading_method": "Fill Clip",
+          "result": "Insert (Agility) rounds into clip",
+          "action_type": "Complex"
+        },
+        {
+          "reloading_method": "Break Action (b)",
+          "result": "Insert 2 rounds",
+          "action_type": "Complex"
+        },
+        {
+          "reloading_method": "Belt Fed (belt)",
+          "result": "Remove or insert belt",
+          "action_type": "Complex"
+        },
+        {
+          "reloading_method": "Fill Belt/Drum",
+          "result": "Insert (Agility) Rounds into belt/drum",
+          "action_type": "Complex"
+        },
+        {
+          "reloading_method": "Internal Magazine (m)",
+          "result": "Insert (Agility) rounds",
+          "action_type": "Complex"
+        },
+        {
+          "reloading_method": "Muzzle-Loader (ml)",
+          "result": "Load 1 muzzle tube",
+          "action_type": "Complex"
+        },
+        {
+          "reloading_method": "Cylinder (cy)",
+          "result": "Insert (Agility) rounds into belt",
+          "action_type": "Complex"
+        },
+        {
+          "reloading_method": "Drum (d)",
+          "result": "Remove or insert drum",
+          "action_type": "Complex"
+        },
+        { "reloading_method": "Bow", "result": "Nock 1 arrow", "action_type": "Simple" }
+      ]
+    },
+    "movement-rates-metatype": {
+      "source": "SR5 Core Rulebook, p.162",
+      "description": "Walk Rate, Run Rate, and Sprint Increase by metatype group",
+      "columns": ["metatype", "walk_rate", "run_rate", "sprint_increase"],
+      "rows": [
+        {
+          "metatype": "Dwarf, Troll",
+          "walk_rate": "Agility × 2",
+          "run_rate": "Agility × 4",
+          "sprint_increase": "+1 m/hit"
+        },
+        {
+          "metatype": "Elf, Human, Ork",
+          "walk_rate": "Agility × 2",
+          "run_rate": "Agility × 4",
+          "sprint_increase": "+2 m/hit"
+        }
+      ]
+    },
+    "environmental-modifiers": {
+      "source": "SR5 Core Rulebook, p.175",
+      "description": "Combined environmental modifier based on visibility, light/glare, wind, and range conditions",
+      "columns": ["visibility", "light_glare", "wind", "range", "modifier"],
+      "rows": [
+        {
+          "visibility": "Clear",
+          "light_glare": "Full Light / No Glare",
+          "wind": "None or Light Breeze",
+          "range": "Short",
+          "modifier": 0
+        },
+        {
+          "visibility": "Light Rain/Fog/Smoke",
+          "light_glare": "Partial Light / Weak Glare",
+          "wind": "Light Winds",
+          "range": "Medium",
+          "modifier": -1
+        },
+        {
+          "visibility": "Moderate Rain/Fog/Smoke",
+          "light_glare": "Dim Light / Moderate Glare",
+          "wind": "Moderate Winds",
+          "range": "Long",
+          "modifier": -3
+        },
+        {
+          "visibility": "Heavy Rain/Fog/Smoke",
+          "light_glare": "Total Darkness / Blinding Glare",
+          "wind": "Strong Winds",
+          "range": "Extreme",
+          "modifier": -6
+        },
+        {
+          "visibility": "Combination of two or more at −6 row",
+          "light_glare": null,
+          "wind": null,
+          "range": null,
+          "modifier": -10
+        }
+      ]
+    },
+    "environmental-compensation": {
+      "source": "SR5 Core Rulebook, p.175",
+      "description": "System or accessory and its effect on environmental modifier categories",
+      "columns": ["compensation", "effect"],
+      "rows": [
+        { "compensation": "Flare Compensation", "effect": "Glare conditions shift two rows up" },
+        {
+          "compensation": "Image Magnification",
+          "effect": "Reduce Range conditions by one category"
+        },
+        {
+          "compensation": "Low-Light Vision",
+          "effect": "Treat Partial Light and Dim Light as Full Light"
+        },
+        {
+          "compensation": "Thermographic Vision",
+          "effect": "Visibility and Light conditions shift one row up"
+        },
+        {
+          "compensation": "Tracer Rounds (FA)",
+          "effect": "Wind in rows below Light Winds and Range in rows below Short shift one row up"
+        },
+        { "compensation": "Smartlink", "effect": "Wind shifts one row up" },
+        {
+          "compensation": "Sunglasses",
+          "effect": "Glare conditions shift one row up / Light conditions shift one row down"
+        },
+        {
+          "compensation": "Ultrasound",
+          "effect": "Visibility shifts one row up, ignore Light conditions (within 50 meters)"
+        }
+      ]
+    },
+    "situational-modifiers-ranged": {
+      "source": "SR5 Core Rulebook, p.176",
+      "description": "Attacker dice pool modifiers for ranged combat situational factors",
+      "columns": ["situation", "attacker_dice_pool_modifier"],
+      "rows": [
+        {
+          "situation": "Attacker firing from cover with imaging device",
+          "attacker_dice_pool_modifier": -3
+        },
+        { "situation": "Attacker firing from a moving vehicle", "attacker_dice_pool_modifier": -2 },
+        { "situation": "Attacker in melee combat", "attacker_dice_pool_modifier": -3 },
+        { "situation": "Attacker running", "attacker_dice_pool_modifier": -2 },
+        { "situation": "Attacker using off-hand weapon", "attacker_dice_pool_modifier": -2 },
+        { "situation": "Attacker wounded", "attacker_dice_pool_modifier": "−Wound modifier" },
+        { "situation": "Blind fire", "attacker_dice_pool_modifier": -6 },
+        { "situation": "Called shot", "attacker_dice_pool_modifier": -4 },
+        {
+          "situation": "Previously aimed with Take Aim",
+          "attacker_dice_pool_modifier": "+1 Dice Pool, +1 Accuracy"
+        },
+        {
+          "situation": "Wireless Smartgun",
+          "attacker_dice_pool_modifier": "+1 (gear) / +2 (implanted)"
+        }
+      ]
+    },
+    "firing-mode-table": {
+      "source": "SR5 Core Rulebook, p.180",
+      "description": "Firing mode, defense modifier applied to defender, rounds consumed, and notes",
+      "columns": ["mode", "defense_modifier", "rounds_used", "notes"],
+      "rows": [
+        {
+          "mode": "Single-Shot (SS)",
+          "defense_modifier": 0,
+          "rounds_used": 1,
+          "notes": "No recoil"
+        },
+        { "mode": "Semi-Automatic (SA)", "defense_modifier": 0, "rounds_used": 1, "notes": "" },
+        {
+          "mode": "Semi-Automatic Burst (SB)",
+          "defense_modifier": -2,
+          "rounds_used": 3,
+          "notes": ""
+        },
+        { "mode": "Burst Fire (BF)", "defense_modifier": -2, "rounds_used": 3, "notes": "" },
+        {
+          "mode": "Long Burst (LB) or Full Auto (FA) (Simple)",
+          "defense_modifier": -5,
+          "rounds_used": 6,
+          "notes": ""
+        },
+        {
+          "mode": "Full Auto (FA) (Complex)",
+          "defense_modifier": -9,
+          "rounds_used": 10,
+          "notes": ""
+        },
+        {
+          "mode": "Suppressive Fire",
+          "defense_modifier": "Duck or Cover",
+          "rounds_used": 20,
+          "notes": "No recoil"
+        }
+      ]
+    },
+    "scatter-table": {
+      "source": "SR5 Core Rulebook, p.182",
+      "description": "Scatter distance formula by projectile type; subtract attacker's hits from dice roll",
+      "columns": ["type", "scatter_formula"],
+      "rows": [
+        { "type": "Standard Grenade", "scatter_formula": "(1D6 − Hits) meters" },
+        { "type": "Aerodynamic Grenade", "scatter_formula": "(2D6 − Hits) meters" },
+        { "type": "Grenade Launcher", "scatter_formula": "(3D6 − Hits) meters" },
+        { "type": "Missile Launcher", "scatter_formula": "(4D6 − Hits) meters" },
+        { "type": "Rocket Launcher", "scatter_formula": "(5D6 − Hits) meters" }
+      ]
+    },
+    "melee-modifiers": {
+      "source": "SR5 Core Rulebook, p.187",
+      "description": "Dice pool modifiers for melee combat situational factors",
+      "columns": ["situation", "dice_pool_modifier"],
+      "rows": [
+        { "situation": "Attacker making charging attack", "dice_pool_modifier": "+2" },
+        { "situation": "Attacker prone", "dice_pool_modifier": "-1" },
+        { "situation": "Attacker making a Called Shot", "dice_pool_modifier": "-4" },
+        {
+          "situation": "Character attacking multiple targets",
+          "dice_pool_modifier": "Split dice pool"
+        },
+        { "situation": "Character has superior position", "dice_pool_modifier": "+2" },
+        { "situation": "Character using off-hand weapon", "dice_pool_modifier": "-2" },
+        { "situation": "Attacker wounded", "dice_pool_modifier": "−wound modifier" },
+        { "situation": "Defender receiving a charge", "dice_pool_modifier": "+1" },
+        {
+          "situation": "Environmental modifiers",
+          "dice_pool_modifier": "Light and Visibility columns only"
+        },
+        { "situation": "Attacker has friends in melee", "dice_pool_modifier": "+1 or Teamwork" },
+        { "situation": "Opponent prone", "dice_pool_modifier": "+1" },
+        { "situation": "Touch-only attack", "dice_pool_modifier": "+2" }
+      ]
+    },
+    "defense-modifiers": {
+      "source": "SR5 Core Rulebook, p.189",
+      "description": "Dice pool modifiers for all defense roll situations",
+      "columns": ["situation", "dice_pool_modifier"],
+      "rows": [
+        { "situation": "Defender inside a moving vehicle", "dice_pool_modifier": "+3" },
+        { "situation": "Defender prone", "dice_pool_modifier": "-2" },
+        { "situation": "Defender unaware of attack", "dice_pool_modifier": "No defense possible" },
+        { "situation": "Defender wounded", "dice_pool_modifier": "−wound modifiers" },
+        {
+          "situation": "Attacker has longer Reach",
+          "dice_pool_modifier": "-1 per point of net Reach"
+        },
+        {
+          "situation": "Defender has longer Reach",
+          "dice_pool_modifier": "+1 per point of net Reach"
+        },
+        { "situation": "Defender receiving a charge", "dice_pool_modifier": "+1" },
+        {
+          "situation": "Defender has defended against previous attack",
+          "dice_pool_modifier": "-1 per previous attack"
+        },
+        {
+          "situation": "Attacker firing flechette shotgun on narrow spread",
+          "dice_pool_modifier": "-1"
+        },
+        {
+          "situation": "Attacker firing flechette shotgun on medium spread",
+          "dice_pool_modifier": "-3"
+        },
+        {
+          "situation": "Attacker firing flechette shotgun on wide spread",
+          "dice_pool_modifier": "-5"
+        },
+        { "situation": "Attacker firing full-auto (Complex)", "dice_pool_modifier": "-9" },
+        {
+          "situation": "Attacker firing long burst or full-auto (Simple)",
+          "dice_pool_modifier": "-5"
+        },
+        { "situation": "Attacker firing burst or semi-auto burst", "dice_pool_modifier": "-2" },
+        { "situation": "Defender in melee targeted by ranged attack", "dice_pool_modifier": "-3" },
+        { "situation": "Defender running", "dice_pool_modifier": "+2" },
+        { "situation": "Defender/Target has Good Cover", "dice_pool_modifier": "+4" },
+        { "situation": "Defender/Target has Partial Cover", "dice_pool_modifier": "+2" },
+        { "situation": "Targeted by area-effect attack", "dice_pool_modifier": "-2" }
+      ]
+    },
+    "range-table": {
+      "source": "SR5 Core Rulebook, p.185",
+      "description": "Weapon type ranges in meters for Short (+0), Medium (−1), Long (−3), Extreme (−6) range bands",
+      "columns": ["category", "weapon", "short_m", "medium_m", "long_m", "extreme_m"],
+      "rows": [
+        {
+          "category": "Pistols",
+          "weapon": "Taser",
+          "short_m": "0–5",
+          "medium_m": "6–10",
+          "long_m": "11–15",
+          "extreme_m": "16–20"
+        },
+        {
+          "category": "Pistols",
+          "weapon": "Hold-Out Pistol",
+          "short_m": "0–5",
+          "medium_m": "6–15",
+          "long_m": "16–30",
+          "extreme_m": "31–50"
+        },
+        {
+          "category": "Pistols",
+          "weapon": "Light Pistol",
+          "short_m": "0–5",
+          "medium_m": "6–15",
+          "long_m": "16–30",
+          "extreme_m": "31–50"
+        },
+        {
+          "category": "Pistols",
+          "weapon": "Heavy Pistol",
+          "short_m": "0–5",
+          "medium_m": "6–20",
+          "long_m": "21–40",
+          "extreme_m": "41–60"
+        },
+        {
+          "category": "Automatics",
+          "weapon": "Machine Pistol",
+          "short_m": "0–5",
+          "medium_m": "6–15",
+          "long_m": "16–30",
+          "extreme_m": "31–50"
+        },
+        {
+          "category": "Automatics",
+          "weapon": "SMG",
+          "short_m": "0–10",
+          "medium_m": "11–40",
+          "long_m": "41–80",
+          "extreme_m": "81–150"
+        },
+        {
+          "category": "Automatics",
+          "weapon": "Assault Rifle",
+          "short_m": "0–25",
+          "medium_m": "26–150",
+          "long_m": "151–350",
+          "extreme_m": "351–550"
+        },
+        {
+          "category": "Longarms",
+          "weapon": "Shotgun (flechette)",
+          "short_m": "0–15",
+          "medium_m": "16–30",
+          "long_m": "31–45",
+          "extreme_m": "45–60"
+        },
+        {
+          "category": "Longarms",
+          "weapon": "Shotgun (slug)",
+          "short_m": "0–10",
+          "medium_m": "11–40",
+          "long_m": "41–80",
+          "extreme_m": "81–150"
+        },
+        {
+          "category": "Longarms",
+          "weapon": "Sniper Rifle",
+          "short_m": "0–50",
+          "medium_m": "51–350",
+          "long_m": "351–800",
+          "extreme_m": "801–1500"
+        },
+        {
+          "category": "Heavy Weapons",
+          "weapon": "Light Machinegun",
+          "short_m": "0–25",
+          "medium_m": "26–200",
+          "long_m": "201–400",
+          "extreme_m": "401–800"
+        },
+        {
+          "category": "Heavy Weapons",
+          "weapon": "Medium/Heavy Machinegun",
+          "short_m": "0–40",
+          "medium_m": "41–250",
+          "long_m": "251–750",
+          "extreme_m": "751–1200"
+        },
+        {
+          "category": "Heavy Weapons",
+          "weapon": "Assault Cannon",
+          "short_m": "0–50",
+          "medium_m": "51–300",
+          "long_m": "301–750",
+          "extreme_m": "751–1500"
+        },
+        {
+          "category": "Heavy Weapons",
+          "weapon": "Grenade Launcher",
+          "short_m": "5–50*",
+          "medium_m": "51–100",
+          "long_m": "101–150",
+          "extreme_m": "151–500"
+        },
+        {
+          "category": "Heavy Weapons",
+          "weapon": "Missile Launcher",
+          "short_m": "20–70*",
+          "medium_m": "71–150",
+          "long_m": "151–450",
+          "extreme_m": "451–1500"
+        },
+        {
+          "category": "Ballistic Projectiles",
+          "weapon": "Bow",
+          "short_m": "0–STR",
+          "medium_m": "To STR × 10",
+          "long_m": "To STR × 30",
+          "extreme_m": "To STR × 60"
+        },
+        {
+          "category": "Ballistic Projectiles",
+          "weapon": "Light Crossbow",
+          "short_m": "0–6",
+          "medium_m": "7–24",
+          "long_m": "25–60",
+          "extreme_m": "61–120"
+        },
+        {
+          "category": "Ballistic Projectiles",
+          "weapon": "Medium Crossbow",
+          "short_m": "0–9",
+          "medium_m": "10–36",
+          "long_m": "37–90",
+          "extreme_m": "91–150"
+        },
+        {
+          "category": "Ballistic Projectiles",
+          "weapon": "Heavy Crossbow",
+          "short_m": "0–15",
+          "medium_m": "16–45",
+          "long_m": "46–120",
+          "extreme_m": "121–180"
+        },
+        {
+          "category": "Impact Projectiles",
+          "weapon": "Thrown Knife",
+          "short_m": "0–STR",
+          "medium_m": "To STR × 2",
+          "long_m": "To STR × 3",
+          "extreme_m": "To STR × 5"
+        },
+        {
+          "category": "Impact Projectiles",
+          "weapon": "Shuriken",
+          "short_m": "0–STR",
+          "medium_m": "To STR × 2",
+          "long_m": "To STR × 5",
+          "extreme_m": "To STR × 7"
+        },
+        {
+          "category": "Thrown Grenades",
+          "weapon": "Standard",
+          "short_m": "0–STR × 2",
+          "medium_m": "To STR × 4",
+          "long_m": "To STR × 6",
+          "extreme_m": "To STR × 10"
+        },
+        {
+          "category": "Thrown Grenades",
+          "weapon": "Aerodynamic",
+          "short_m": "0–STR × 2",
+          "medium_m": "To STR × 4",
+          "long_m": "To STR × 8",
+          "extreme_m": "To STR × 15"
+        }
+      ]
+    },
+    "barrier-ratings": {
+      "source": "SR5 Core Rulebook, p.197",
+      "description": "Barrier material type with Structure and Armor ratings",
+      "columns": ["barrier_type", "examples", "structure", "armor"],
+      "rows": [
+        { "barrier_type": "Fragile", "examples": "Standard glass", "structure": 1, "armor": 2 },
+        {
+          "barrier_type": "Cheap Material",
+          "examples": "Drywall, plaster, door, regular tire",
+          "structure": 2,
+          "armor": 4
+        },
+        {
+          "barrier_type": "Average Material",
+          "examples": "Furniture, plastiboard, ballistic glass",
+          "structure": 4,
+          "armor": 6
+        },
+        {
+          "barrier_type": "Heavy Material",
+          "examples": "Tree, hardwood, dataterm, light post, chain link",
+          "structure": 6,
+          "armor": 8
+        },
+        {
+          "barrier_type": "Reinforced Material",
+          "examples": "Densiplast, security door, armored glass, Kevlar wallboard",
+          "structure": 8,
+          "armor": 12
+        },
+        {
+          "barrier_type": "Structural Material",
+          "examples": "Brick, plascrete",
+          "structure": 10,
+          "armor": 16
+        },
+        {
+          "barrier_type": "Heavy Structural Material",
+          "examples": "Concrete, metal beam",
+          "structure": 12,
+          "armor": 20
+        },
+        {
+          "barrier_type": "Armored/Reinforced Material",
+          "examples": "Reinforced concrete",
+          "structure": 14,
+          "armor": 24
+        },
+        {
+          "barrier_type": "Hardened Material",
+          "examples": "Blast bunkers",
+          "structure": "16+",
+          "armor": "32+"
+        }
+      ]
+    },
+    "damaging-barriers": {
+      "source": "SR5 Core Rulebook, p.198",
+      "description": "DV modifier applied when attacking a barrier by weapon type",
+      "columns": ["weapon", "dv_modifier"],
+      "rows": [
+        { "weapon": "Melee or unarmed", "dv_modifier": "No change" },
+        { "weapon": "Projectiles and bullets", "dv_modifier": "See Penetration Weapons" },
+        { "weapon": "Explosive in contact with barrier", "dv_modifier": "Base DV × 2" },
+        { "weapon": "AV rocket/missile", "dv_modifier": "Base DV × 2" },
+        { "weapon": "Combat spell", "dv_modifier": "No change" }
+      ]
+    },
+    "fire-armor-penetration": {
+      "source": "SR5 Core Rulebook, p.171",
+      "description": "Armor Penetration value by type of fire source",
+      "columns": ["type_of_fire", "ap"],
+      "rows": [
+        { "type_of_fire": "Open Flame", "ap": -2 },
+        { "type_of_fire": "Fire-based spells", "ap": "−spell Force" },
+        { "type_of_fire": "Flame-based weapon", "ap": -6 }
+      ]
+    },
+    "environment-fatigue": {
+      "source": "SR5 Core Rulebook, p.172",
+      "description": "Environmental severity level and corresponding fatigue damage interval",
+      "columns": ["environment_severity", "fatigue_damage_interval"],
+      "rows": [
+        { "environment_severity": "Mild", "fatigue_damage_interval": "6 hours" },
+        { "environment_severity": "Moderate", "fatigue_damage_interval": "3 hours" },
+        { "environment_severity": "Harsh", "fatigue_damage_interval": "60 minutes" },
+        {
+          "environment_severity": "Extreme",
+          "fatigue_damage_interval": "1 minute (10 Combat Turns)"
+        },
+        {
+          "environment_severity": "Deadly",
+          "fatigue_damage_interval": "6 seconds (2 Combat Turns)"
+        }
+      ]
+    },
+    "vehicle-test-threshold": {
+      "source": "SR5 Core Rulebook, p.199",
+      "description": "Vehicle Test threshold by situation difficulty with examples",
+      "columns": ["situation", "threshold", "examples"],
+      "rows": [
+        {
+          "situation": "Easy",
+          "threshold": 1,
+          "examples": "Merging, passing, sudden stop, drift or gradual turn (less than 75 degrees)"
+        },
+        {
+          "situation": "Average",
+          "threshold": 2,
+          "examples": "Avoiding an obstacle, maneuvering through a narrow spot, tight turn (75–130 degrees)"
+        },
+        {
+          "situation": "Hard",
+          "threshold": 3,
+          "examples": "Hairpin turn, stoppie on motorbike, driving through unusual places (mall), dog leg or hairpin turn (greater than 130 degrees)"
+        },
+        {
+          "situation": "Extreme",
+          "threshold": "4+",
+          "examples": "Jumping vehicle over obstacle, driving through space just big enough for the vehicle, ramping through air"
+        },
+        {
+          "situation": "Driver jumped in with Control Rig",
+          "threshold": "−Control Rig rating",
+          "examples": "Rigger using Control Rig has easier time controlling vehicle"
+        }
+      ]
+    },
+    "terrain-modifiers": {
+      "source": "SR5 Core Rulebook, p.201",
+      "description": "Terrain type and modifier added to Vehicle Test threshold",
+      "columns": ["terrain", "modifier", "examples"],
+      "rows": [
+        {
+          "terrain": "Open",
+          "modifier": 0,
+          "examples": "Highways, flat plains, open sea, clear sky"
+        },
+        {
+          "terrain": "Light",
+          "modifier": 1,
+          "examples": "Main street thoroughfares, rolling hills, dock areas, intra-city air traffic"
+        },
+        {
+          "terrain": "Restricted",
+          "modifier": 2,
+          "examples": "Side streets, light woods, rocky mountain slopes, light traffic, shallow waters, low altitude flying over heavy terrain"
+        },
+        {
+          "terrain": "Tight",
+          "modifier": 4,
+          "examples": "Back alleys, heavy woods, steep slopes, high traffic, swamp, heavy rapids, flying at street level through a city, flying through winding canyons"
+        }
+      ]
+    },
+    "vehicle-test-modifiers": {
+      "source": "SR5 Core Rulebook, p.201",
+      "description": "Situational modifiers to Vehicle Test dice pool or handling limit",
+      "columns": ["situation", "modifier"],
+      "rows": [
+        {
+          "situation": "Pilot has impaired Visibility",
+          "modifier": "Consult Visibility column (p.175)"
+        },
+        {
+          "situation": "Piloting in limited light conditions",
+          "modifier": "Consult Light column (p.175)"
+        },
+        { "situation": "Pilot unaware of event", "modifier": "No test possible" },
+        { "situation": "Pilot wounded", "modifier": "−wound modifiers from Vehicle test" },
+        {
+          "situation": "Piloting damaged vehicle",
+          "modifier": "−(damage modifier) Handling (minimum 1)"
+        },
+        { "situation": "Pilot using Augmented Reality (AR)", "modifier": "+1 Handling" },
+        { "situation": "Pilot using Virtual Reality (VR)", "modifier": "+2 Handling" }
+      ]
+    },
+    "vehicle-movement-rates": {
+      "source": "SR5 Core Rulebook, p.202",
+      "description": "Vehicle Speed Attribute to Walking Rate and Running Rate in meters per Combat Turn",
+      "columns": ["speed_attribute", "walking_rate_m_per_turn", "running_rate_m_per_turn"],
+      "rows": [
+        { "speed_attribute": 1, "walking_rate_m_per_turn": 5, "running_rate_m_per_turn": 10 },
+        { "speed_attribute": 2, "walking_rate_m_per_turn": 10, "running_rate_m_per_turn": 20 },
+        { "speed_attribute": 3, "walking_rate_m_per_turn": 20, "running_rate_m_per_turn": 40 },
+        { "speed_attribute": 4, "walking_rate_m_per_turn": 40, "running_rate_m_per_turn": 80 },
+        { "speed_attribute": 5, "walking_rate_m_per_turn": 80, "running_rate_m_per_turn": 160 },
+        { "speed_attribute": 6, "walking_rate_m_per_turn": 160, "running_rate_m_per_turn": 320 },
+        { "speed_attribute": 7, "walking_rate_m_per_turn": 320, "running_rate_m_per_turn": 640 },
+        { "speed_attribute": 8, "walking_rate_m_per_turn": 640, "running_rate_m_per_turn": 1280 },
+        { "speed_attribute": 9, "walking_rate_m_per_turn": 1280, "running_rate_m_per_turn": 2560 },
+        { "speed_attribute": 10, "walking_rate_m_per_turn": 2560, "running_rate_m_per_turn": 5120 }
+      ]
+    },
+    "ramming-damage": {
+      "source": "SR5 Core Rulebook, p.203",
+      "description": "Ramming Damage Value based on vehicle Speed in meters per turn",
+      "columns": ["speed_m_per_turn", "damage_value"],
+      "rows": [
+        { "speed_m_per_turn": "1–10", "damage_value": "Body ÷ 2" },
+        { "speed_m_per_turn": "11–50", "damage_value": "Body" },
+        { "speed_m_per_turn": "51–200", "damage_value": "Body × 2" },
+        { "speed_m_per_turn": "201–300", "damage_value": "Body × 3" },
+        { "speed_m_per_turn": "301–500", "damage_value": "Body × 5" },
+        { "speed_m_per_turn": "501+", "damage_value": "Body × 10" }
+      ]
+    },
+    "chase-ranges": {
+      "source": "SR5 Core Rulebook, p.204",
+      "description": "Chase Range brackets for Speed and Handling environments in approximate meters",
+      "columns": ["range", "speed_environment_approx_m", "handling_environment_approx_m"],
+      "rows": [
+        {
+          "range": "Short",
+          "speed_environment_approx_m": "0–10",
+          "handling_environment_approx_m": "0–5"
+        },
+        {
+          "range": "Medium",
+          "speed_environment_approx_m": "11–50",
+          "handling_environment_approx_m": "6–20"
+        },
+        {
+          "range": "Long",
+          "speed_environment_approx_m": "51–150",
+          "handling_environment_approx_m": "21–80"
+        },
+        {
+          "range": "Extreme",
+          "speed_environment_approx_m": "151–300",
+          "handling_environment_approx_m": "81–150"
+        }
+      ]
+    },
+    "healing-modifiers": {
+      "source": "SR5 Core Rulebook, p.208",
+      "description": "Dice pool modifiers applied to First Aid, Medicine, and natural healing tests",
+      "columns": ["situation", "modifier"],
+      "rows": [
+        { "situation": "Good conditions (sterilized medical facility)", "modifier": 0 },
+        { "situation": "Average conditions (indoors)", "modifier": -1 },
+        { "situation": "Poor conditions (street or wilderness)", "modifier": -2 },
+        { "situation": "Bad conditions (combat, bad weather, swamp)", "modifier": -3 },
+        { "situation": "Terrible conditions (fire, severe storm)", "modifier": -4 },
+        { "situation": "No medical supplies", "modifier": -3 },
+        { "situation": "Improvised medical supplies", "modifier": -1 },
+        { "situation": "Wireless medkit/autodoc", "modifier": "+Rating" },
+        { "situation": "Applying medical care remotely through medkit/autodoc", "modifier": -2 },
+        { "situation": "Assistance", "modifier": "As Teamwork Test (p.49)" },
+        { "situation": "Uncooperative patient", "modifier": -2 },
+        { "situation": "Patient is Awakened or Emerged", "modifier": -2 },
+        { "situation": "Patient has implants", "modifier": "-1 per 2 full points of lost Essence" }
+      ]
+    },
+    "sensor-defense": {
+      "source": "SR5 Core Rulebook, p.184",
+      "description": "Defense test formula by defender type against sensor targeting attacks",
+      "columns": ["defender", "sensor_defense_test"],
+      "rows": [
+        {
+          "defender": "Metahuman, Critter",
+          "sensor_defense_test": "Infiltration + Agility [Physical]"
+        },
+        {
+          "defender": "Vehicle (driven)",
+          "sensor_defense_test": "Infiltration (Vehicle) + Reaction [Handling]"
+        },
+        { "defender": "Drone", "sensor_defense_test": "Pilot + [Model] Evasion [Handling]" }
+      ]
+    },
+    "signature-table": {
+      "source": "SR5 Core Rulebook, p.184",
+      "description": "Target size modifiers applied to the detecting vehicle's dice pool for Sensor Tests",
+      "columns": ["target_size", "modifier"],
+      "rows": [
+        {
+          "target_size": "Large and oversized vehicles (trains, construction vehicles, zeppelins, tractor-trailers, airliners)",
+          "modifier": "+3"
+        },
+        { "target_size": "Electric-powered vehicles", "modifier": "-3" },
+        { "target_size": "Metahumans, Critters", "modifier": "-3" },
+        { "target_size": "Drones", "modifier": "-3" },
+        { "target_size": "Micro-drones", "modifier": "-6" }
+      ]
+    }
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "tables": {
+    "world-population-breakdown-2076": {
+      "source": "Run Faster, p.45",
+      "description": "Global metatype population distribution in 2076. Useful for NPC generation weighting.",
+      "columns": ["metatype", "percentage"],
+      "rows": [
+        { "metatype": "Human", "percentage": 39 },
+        { "metatype": "Ork", "percentage": 22 },
+        { "metatype": "Elf", "percentage": 15 },
+        { "metatype": "Dwarf", "percentage": 14 },
+        { "metatype": "Troll", "percentage": 5 },
+        { "metatype": "Other", "percentage": 5 }
+      ]
+    },
+    "dwarf-social-modifier": {
+      "source": "Run Faster, p.47",
+      "description": "Conditional Social limit modifiers for dwarfs based on cultural standing and interaction partner.",
+      "columns": ["actorStatus", "targetMetatype", "targetStatus", "socialLimitModifier", "notes"],
+      "rows": [
+        {
+          "actorStatus": "mainstream",
+          "targetMetatype": "dwarf",
+          "targetStatus": "mainstream",
+          "socialLimitModifier": 2,
+          "notes": "Both dwarfs in good cultural standing. Also applies to Availability checks."
+        },
+        {
+          "actorStatus": "tradition-flaunting",
+          "targetMetatype": "dwarf",
+          "targetStatus": "mainstream",
+          "socialLimitModifier": -1,
+          "notes": "Known to flaunt dwarven traditions. Penalty with all dwarfs except fellow exiles."
+        },
+        {
+          "actorStatus": "tradition-flaunting",
+          "targetMetatype": "dwarf",
+          "targetStatus": "exiled",
+          "socialLimitModifier": 0,
+          "notes": "No penalty between fellow exiles/tradition-flaunters."
+        },
+        {
+          "actorStatus": "exiled",
+          "targetMetatype": "dwarf",
+          "targetStatus": "exiled",
+          "socialLimitModifier": 0,
+          "notes": "No penalty between fellow exiles."
+        },
+        {
+          "actorStatus": "exiled",
+          "targetMetatype": "non-dwarf",
+          "targetStatus": "any",
+          "socialLimitModifier": 3,
+          "notes": "Fellow exile credibility boost when dealing with outsiders."
+        },
+        {
+          "actorStatus": "any",
+          "targetMetatype": "non-dwarf",
+          "targetStatus": "any",
+          "socialLimitModifier": 0,
+          "notes": "No modifier for dwarf-to-non-dwarf interactions (unless exiled, see above)."
+        }
+      ]
+    }
+  }
+}

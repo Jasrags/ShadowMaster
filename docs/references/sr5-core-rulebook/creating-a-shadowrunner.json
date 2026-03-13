@@ -1,0 +1,1004 @@
+{
+  "tables": {
+    "priority-table": {
+      "source": "SR5 Core Rulebook, p.65",
+      "description": "Maps priority levels A-E to metatype options, attribute points, magic/resonance, skills, and resources",
+      "columns": [
+        "priority",
+        "metatype",
+        "attributes",
+        "magic_or_resonance",
+        "skills",
+        "resources"
+      ],
+      "rows": [
+        {
+          "priority": "A",
+          "metatype": [
+            { "race": "Human", "special_attribute_points": 9 },
+            { "race": "Elf", "special_attribute_points": 8 },
+            { "race": "Dwarf", "special_attribute_points": 7 },
+            { "race": "Ork", "special_attribute_points": 7 },
+            { "race": "Troll", "special_attribute_points": 5 }
+          ],
+          "attributes": 24,
+          "magic_or_resonance": [
+            {
+              "type": "Magician or Mystic Adept",
+              "magic": 6,
+              "skills": "two Rating 5 Magical skills",
+              "spells": 10
+            },
+            {
+              "type": "Technomancer",
+              "resonance": 6,
+              "skills": "two Rating 5 Resonance skills",
+              "complex_forms": 5
+            }
+          ],
+          "skills": "46/10",
+          "resources": 450000
+        },
+        {
+          "priority": "B",
+          "metatype": [
+            { "race": "Human", "special_attribute_points": 7 },
+            { "race": "Elf", "special_attribute_points": 6 },
+            { "race": "Dwarf", "special_attribute_points": 4 },
+            { "race": "Ork", "special_attribute_points": 4 },
+            { "race": "Troll", "special_attribute_points": 0 }
+          ],
+          "attributes": 20,
+          "magic_or_resonance": [
+            {
+              "type": "Magician or Mystic Adept",
+              "magic": 4,
+              "skills": "two Rating 4",
+              "spells": 7
+            },
+            {
+              "type": "Technomancer",
+              "resonance": 4,
+              "skills": "two Rating 4 Resonance skills",
+              "complex_forms": 2
+            },
+            { "type": "Adept", "magic": 6, "skills": "one Rating 4 Active skill" },
+            {
+              "type": "Aspected Magician",
+              "magic": 5,
+              "skills": "one Rating 4 Magical skill group"
+            }
+          ],
+          "skills": "36/5",
+          "resources": 275000
+        },
+        {
+          "priority": "C",
+          "metatype": [
+            { "race": "Human", "special_attribute_points": 5 },
+            { "race": "Elf", "special_attribute_points": 3 },
+            { "race": "Dwarf", "special_attribute_points": 1 },
+            { "race": "Ork", "special_attribute_points": 0 }
+          ],
+          "attributes": 16,
+          "magic_or_resonance": [
+            { "type": "Magician or Mystic Adept", "magic": 3, "spells": 5 },
+            { "type": "Technomancer", "resonance": 3, "complex_forms": 1 },
+            { "type": "Adept", "magic": 4, "skills": "one Rating 2 Active skill" },
+            {
+              "type": "Aspected Magician",
+              "magic": 3,
+              "skills": "one Rating 2 Magical skill group"
+            }
+          ],
+          "skills": "28/2",
+          "resources": 140000
+        },
+        {
+          "priority": "D",
+          "metatype": [
+            { "race": "Human", "special_attribute_points": 3 },
+            { "race": "Elf", "special_attribute_points": 0 }
+          ],
+          "attributes": 14,
+          "magic_or_resonance": [
+            { "type": "Adept", "magic": 2 },
+            { "type": "Aspected Magician", "magic": 2 }
+          ],
+          "skills": "22/0",
+          "resources": 50000
+        },
+        {
+          "priority": "E",
+          "metatype": [{ "race": "Human", "special_attribute_points": 1 }],
+          "attributes": 12,
+          "magic_or_resonance": null,
+          "skills": "18/0",
+          "resources": 6000
+        }
+      ]
+    },
+    "metatype-attribute-table": {
+      "source": "SR5 Core Rulebook, p.66",
+      "description": "Base and maximum attribute values for each metatype, plus racial bonuses/disadvantages",
+      "columns": [
+        "race",
+        "body",
+        "agility",
+        "reaction",
+        "strength",
+        "willpower",
+        "logic",
+        "intuition",
+        "charisma",
+        "edge",
+        "essence",
+        "initiative",
+        "racial_bonuses"
+      ],
+      "rows": [
+        {
+          "race": "Human",
+          "body": "1/6",
+          "agility": "1/6",
+          "reaction": "1/6",
+          "strength": "1/6",
+          "willpower": "1/6",
+          "logic": "1/6",
+          "intuition": "1/6",
+          "charisma": "1/6",
+          "edge": "2/7",
+          "essence": 6,
+          "initiative": "REA + INT",
+          "racial_bonuses": "None"
+        },
+        {
+          "race": "Elf",
+          "body": "1/6",
+          "agility": "2/7",
+          "reaction": "1/6",
+          "strength": "1/6",
+          "willpower": "1/6",
+          "logic": "1/6",
+          "intuition": "1/6",
+          "charisma": "3/8",
+          "edge": "1/6",
+          "essence": 6,
+          "initiative": "REA + INT",
+          "racial_bonuses": "Low-Light Vision"
+        },
+        {
+          "race": "Dwarf",
+          "body": "3/8",
+          "agility": "1/6",
+          "reaction": "1/5",
+          "strength": "3/8",
+          "willpower": "2/7",
+          "logic": "1/6",
+          "intuition": "1/6",
+          "charisma": "1/6",
+          "edge": "1/6",
+          "essence": 6,
+          "initiative": "REA + INT",
+          "racial_bonuses": "Thermographic Vision, +2 dice for pathogen and toxin resistance, +20% increased Lifestyle cost"
+        },
+        {
+          "race": "Ork",
+          "body": "4/9",
+          "agility": "1/6",
+          "reaction": "1/6",
+          "strength": "3/8",
+          "willpower": "1/6",
+          "logic": "1/5",
+          "intuition": "1/5",
+          "charisma": "1/5",
+          "edge": "1/6",
+          "essence": 6,
+          "initiative": "REA + INT",
+          "racial_bonuses": "Low-Light Vision"
+        },
+        {
+          "race": "Troll",
+          "body": "5/10",
+          "agility": "1/5",
+          "reaction": "1/6",
+          "strength": "5/10",
+          "willpower": "1/6",
+          "logic": "1/5",
+          "intuition": "1/5",
+          "charisma": "1/4",
+          "edge": "1/6",
+          "essence": 6,
+          "initiative": "REA + INT",
+          "racial_bonuses": "Thermographic Vision, +1 Reach, +1 dermal armor, +100% increased Lifestyle costs"
+        }
+      ]
+    },
+    "positive-qualities-summary": {
+      "source": "SR5 Core Rulebook, p.73",
+      "description": "All positive qualities with Karma cost and page reference",
+      "columns": ["quality", "karma_cost", "page"],
+      "rows": [
+        { "quality": "Ambidextrous", "karma_cost": 4, "page": 71 },
+        { "quality": "Analytical Mind", "karma_cost": 5, "page": 72 },
+        { "quality": "Aptitude", "karma_cost": 14, "page": 72 },
+        { "quality": "Astral Chameleon", "karma_cost": 10, "page": 72 },
+        { "quality": "Bilingual", "karma_cost": 5, "page": 72 },
+        { "quality": "Blandness", "karma_cost": 8, "page": 72 },
+        { "quality": "Catlike", "karma_cost": 7, "page": 72 },
+        { "quality": "Codeslinger", "karma_cost": 10, "page": 72 },
+        { "quality": "Double-Jointed", "karma_cost": 6, "page": 72 },
+        { "quality": "Exceptional Attribute", "karma_cost": 14, "page": 72 },
+        { "quality": "First Impression", "karma_cost": 11, "page": 74 },
+        { "quality": "Focused Concentration", "karma_cost": "4 ea. (max 6)", "page": 74 },
+        { "quality": "Gearhead", "karma_cost": 11, "page": 74 },
+        { "quality": "Guts", "karma_cost": 10, "page": 74 },
+        { "quality": "High Pain Tolerance", "karma_cost": "7 ea. (max 3)", "page": 74 },
+        { "quality": "Home Ground", "karma_cost": 10, "page": 74 },
+        { "quality": "Human-Looking", "karma_cost": 6, "page": 75 },
+        { "quality": "Indomitable", "karma_cost": "8 ea. (max 3)", "page": 75 },
+        { "quality": "Juryrigger", "karma_cost": 10, "page": 75 },
+        { "quality": "Lucky", "karma_cost": 12, "page": 76 },
+        { "quality": "Magic Resistance", "karma_cost": "6 ea. (max 4)", "page": 76 },
+        { "quality": "Mentor Spirit", "karma_cost": 5, "page": 76 },
+        { "quality": "Natural Athlete", "karma_cost": 7, "page": 76 },
+        { "quality": "Natural Hardening", "karma_cost": 10, "page": 76 },
+        { "quality": "Natural Immunity", "karma_cost": "4 or 10", "page": 76 },
+        { "quality": "Photographic Memory", "karma_cost": 6, "page": 76 },
+        { "quality": "Quick Healer", "karma_cost": 3, "page": 77 },
+        { "quality": "Resistance to Pathogens/Toxins", "karma_cost": "4 or 8", "page": 77 },
+        { "quality": "Spirit Affinity", "karma_cost": 7, "page": 77 },
+        { "quality": "Toughness", "karma_cost": 9, "page": 77 },
+        { "quality": "Will to Live", "karma_cost": "3 ea. (max 3)", "page": 77 }
+      ]
+    },
+    "negative-qualities-summary": {
+      "source": "SR5 Core Rulebook, p.73",
+      "description": "All negative qualities with Karma bonus and page reference",
+      "columns": ["quality", "karma_bonus", "page"],
+      "rows": [
+        { "quality": "Addiction", "karma_bonus": "4 to 25", "page": 77 },
+        { "quality": "Allergy", "karma_bonus": "5 to 25", "page": 78 },
+        { "quality": "Astral Beacon", "karma_bonus": 10, "page": 78 },
+        { "quality": "Bad Luck", "karma_bonus": 12, "page": 79 },
+        { "quality": "Bad Rep", "karma_bonus": 7, "page": 79 },
+        { "quality": "Code of Honor", "karma_bonus": 15, "page": 79 },
+        { "quality": "Codeblock", "karma_bonus": 10, "page": 80 },
+        { "quality": "Combat Paralysis", "karma_bonus": 12, "page": 80 },
+        { "quality": "Dependents", "karma_bonus": "3, 6, or 9", "page": 80 },
+        { "quality": "Distinctive Style", "karma_bonus": 5, "page": 80 },
+        { "quality": "Elf Poser", "karma_bonus": 6, "page": 81 },
+        { "quality": "Gremlins", "karma_bonus": "4 ea. (max 4)", "page": 81 },
+        { "quality": "Incompetent", "karma_bonus": 5, "page": 81 },
+        { "quality": "Insomnia", "karma_bonus": "10 or 15", "page": 81 },
+        { "quality": "Loss of Confidence", "karma_bonus": 10, "page": 82 },
+        { "quality": "Low Pain Tolerance", "karma_bonus": 9, "page": 82 },
+        { "quality": "Ork Poser", "karma_bonus": 6, "page": 82 },
+        { "quality": "Prejudiced", "karma_bonus": "3 to 10", "page": 82 },
+        { "quality": "Scorched", "karma_bonus": 10, "page": 83 },
+        { "quality": "Sensitive System", "karma_bonus": 12, "page": 83 },
+        { "quality": "Simsense Vertigo", "karma_bonus": 5, "page": 83 },
+        { "quality": "SINner (Layered)", "karma_bonus": "5 to 25", "page": 84 },
+        { "quality": "Social Stress", "karma_bonus": 8, "page": 85 },
+        { "quality": "Spirit Bane", "karma_bonus": 7, "page": 85 },
+        { "quality": "Uncouth", "karma_bonus": 14, "page": 85 },
+        { "quality": "Uneducated", "karma_bonus": 8, "page": 87 },
+        { "quality": "Unsteady Hands", "karma_bonus": 7, "page": 87 },
+        { "quality": "Weak Immune System", "karma_bonus": 10, "page": 87 }
+      ]
+    },
+    "allergy-table": {
+      "source": "SR5 Core Rulebook, p.78",
+      "description": "Condition prevalence and severity point values for computing Allergy quality Karma bonus",
+      "columns": ["factor", "value", "description"],
+      "rows": [
+        {
+          "factor": "Uncommon",
+          "value": 2,
+          "description": "Rare substance/condition. Examples: silver, gold, antibiotics, grass"
+        },
+        {
+          "factor": "Common",
+          "value": 7,
+          "description": "Prevalent substance/condition. Examples: sunlight, seafood, bees, pollen, pollutants, Wi-Fi, soy, wheat"
+        },
+        { "factor": "Mild", "value": 3, "description": "-2 dice pool modifier to Physical Tests" },
+        {
+          "factor": "Moderate",
+          "value": 8,
+          "description": "-4 dice pool modifier to all Physical Tests"
+        },
+        {
+          "factor": "Severe",
+          "value": 13,
+          "description": "-4 dice pool modifier to all tests, +1 box Physical Damage (unresisted) per minute exposed"
+        },
+        {
+          "factor": "Extreme",
+          "value": 18,
+          "description": "-6 dice pool modifier to all tests, +1 box Physical Damage (unresisted) per 30 seconds exposed. Anaphylactic shock"
+        }
+      ]
+    },
+    "prejudiced-tables": {
+      "source": "SR5 Core Rulebook, p.82",
+      "description": "Prevalence and degree values for computing Prejudiced quality Karma bonus",
+      "columns": ["factor", "value"],
+      "rows": [
+        { "factor": "Common target group (e.g. humans, metahumans)", "value": 5 },
+        {
+          "factor": "Specific target group (e.g. the Awakened, technomancers, shapeshifters, aspected magicians)",
+          "value": 3
+        },
+        { "factor": "Biased (closet meta-hater)", "value": 0 },
+        { "factor": "Outspoken (typical member of Humanis)", "value": 2 },
+        { "factor": "Radical (racial supremacist)", "value": 5 }
+      ]
+    },
+    "sinner-layered-table": {
+      "source": "SR5 Core Rulebook, p.84",
+      "description": "SINner quality levels with Karma bonus and tax/restriction details",
+      "columns": ["level", "karma_bonus", "description"],
+      "rows": [
+        {
+          "level": "National SIN",
+          "karma_bonus": 5,
+          "description": "Legal citizen. 15% income tax. Biometric data shared with law enforcement."
+        },
+        {
+          "level": "Criminal SIN",
+          "karma_bonus": 10,
+          "description": "Felony record. Must broadcast SIN. Hostility from public, denied entry to locations."
+        },
+        {
+          "level": "Corporate Limited SIN",
+          "karma_bonus": 15,
+          "description": "Employed by megacorp. 20% income tax. Limited clearance, no advancement."
+        },
+        {
+          "level": "Corporate SIN",
+          "karma_bonus": 25,
+          "description": "Born into megacorp. 10% income tax. Deep suspicion from SINless. Hostile reactions if discovered."
+        }
+      ]
+    },
+    "knowledge-category-examples": {
+      "source": "SR5 Core Rulebook, p.89",
+      "description": "Knowledge skill categories with linked attribute and example skills",
+      "columns": ["category", "linked_attribute", "examples"],
+      "rows": [
+        {
+          "category": "Academic",
+          "linked_attribute": "Logic",
+          "examples": "Biology, Medicine, Magic Theory, Politics, Philosophy, Literature, History, Music, Parabotany, Parazoology"
+        },
+        {
+          "category": "Interests",
+          "linked_attribute": "Intuition",
+          "examples": "Current Simsense movies, popular trideo shows, 20th Century trivia, Elven Wine, Urban Brawl, Combat Biking, Pop music"
+        },
+        {
+          "category": "Professional",
+          "linked_attribute": "Logic",
+          "examples": "Journalism, Business, Law, Military Service"
+        },
+        {
+          "category": "Street",
+          "linked_attribute": "Intuition",
+          "examples": "Gang Identification, Criminal Organizations, Smuggling Routes, Fences"
+        }
+      ]
+    },
+    "skill-groups": {
+      "source": "SR5 Core Rulebook, p.90",
+      "description": "All skill groups and their component skills",
+      "columns": ["group", "skills"],
+      "rows": [
+        { "group": "Acting", "skills": ["Con", "Impersonation", "Performance"] },
+        { "group": "Athletics", "skills": ["Gymnastics", "Running", "Swimming"] },
+        { "group": "Biotech", "skills": ["Cybertechnology", "First Aid", "Medicine"] },
+        { "group": "Close Combat", "skills": ["Blades", "Clubs", "Unarmed"] },
+        { "group": "Conjuring", "skills": ["Banishing", "Binding", "Summoning"] },
+        { "group": "Cracking", "skills": ["Cybercombat", "Electronic Warfare", "Hacking"] },
+        { "group": "Electronics", "skills": ["Computer", "Hardware", "Software"] },
+        { "group": "Enchanting", "skills": ["Alchemy", "Artificing", "Disenchanting"] },
+        {
+          "group": "Engineering",
+          "skills": [
+            "Aeronautics Mechanic",
+            "Automotive Mechanic",
+            "Industrial Mechanic",
+            "Nautical Mechanic"
+          ]
+        },
+        { "group": "Firearms", "skills": ["Automatics", "Longarms", "Pistols"] },
+        { "group": "Influence", "skills": ["Etiquette", "Leadership", "Negotiation"] },
+        { "group": "Outdoors", "skills": ["Navigation", "Survival", "Tracking"] },
+        {
+          "group": "Sorcery",
+          "skills": ["Counterspelling", "Ritual Spellcasting", "Spellcasting"]
+        },
+        { "group": "Stealth", "skills": ["Disguise", "Palming", "Sneaking"] },
+        { "group": "Tasking", "skills": ["Compiling", "Decompiling", "Registering"] }
+      ]
+    },
+    "individual-skills-by-attribute": {
+      "source": "SR5 Core Rulebook, p.90",
+      "description": "All individual skills organized by linked attribute",
+      "columns": ["attribute", "skills"],
+      "rows": [
+        {
+          "attribute": "Agility",
+          "skills": [
+            "Archery",
+            "Automatics",
+            "Blades",
+            "Clubs",
+            "Escape Artist",
+            "Exotic Melee Weapon (Specific)",
+            "Exotic Ranged Weapon (Specific)",
+            "Gunnery",
+            "Gymnastics",
+            "Heavy Weapons",
+            "Locksmith",
+            "Longarms",
+            "Palming",
+            "Pistols",
+            "Sneaking",
+            "Throwing Weapons",
+            "Unarmed Combat"
+          ]
+        },
+        { "attribute": "Body", "skills": ["Diving", "Free-Fall"] },
+        {
+          "attribute": "Reaction",
+          "skills": [
+            "Pilot Aerospace",
+            "Pilot Aircraft",
+            "Pilot Exotic Vehicle (Specific)",
+            "Pilot Ground Craft",
+            "Pilot Walker",
+            "Pilot Watercraft"
+          ]
+        },
+        { "attribute": "Strength", "skills": ["Running", "Swimming"] },
+        {
+          "attribute": "Charisma",
+          "skills": [
+            "Animal Handling",
+            "Con",
+            "Etiquette",
+            "Impersonation",
+            "Instruction",
+            "Intimidation",
+            "Leadership",
+            "Negotiation",
+            "Performance"
+          ]
+        },
+        {
+          "attribute": "Intuition",
+          "skills": [
+            "Artisan",
+            "Assensing",
+            "Disguise",
+            "Interests Knowledge",
+            "Language",
+            "Navigation",
+            "Perception",
+            "Street Knowledge",
+            "Tracking"
+          ]
+        },
+        {
+          "attribute": "Logic",
+          "skills": [
+            "Academic Knowledge",
+            "Aeronautics Mechanic",
+            "Arcana",
+            "Armorer",
+            "Automotive Mechanic",
+            "Biotechnology",
+            "Chemistry",
+            "Computer",
+            "Cybertechnology",
+            "Cybercombat",
+            "Demolitions",
+            "Electronic Warfare",
+            "First Aid",
+            "Forgery",
+            "Industrial Mechanic",
+            "Hacking",
+            "Hardware",
+            "Medicine",
+            "Nautical Mechanic",
+            "Professional Knowledge",
+            "Software"
+          ]
+        },
+        { "attribute": "Willpower", "skills": ["Astral Combat", "Survival"] },
+        {
+          "attribute": "Magic",
+          "skills": [
+            "Alchemy",
+            "Artificing",
+            "Banishing",
+            "Binding",
+            "Counterspelling",
+            "Disenchanting",
+            "Ritual Spellcasting",
+            "Spellcasting",
+            "Summoning"
+          ]
+        },
+        { "attribute": "Resonance", "skills": ["Compiling", "Decompiling", "Registering"] }
+      ]
+    },
+    "lifestyle-costs": {
+      "source": "SR5 Core Rulebook, p.95",
+      "description": "Monthly cost for each lifestyle level",
+      "columns": ["lifestyle", "monthly_cost"],
+      "rows": [
+        { "lifestyle": "Street", "monthly_cost": 0 },
+        { "lifestyle": "Squatter", "monthly_cost": 500 },
+        { "lifestyle": "Low", "monthly_cost": 2000 },
+        { "lifestyle": "Middle", "monthly_cost": 5000 },
+        { "lifestyle": "High", "monthly_cost": 10000 },
+        { "lifestyle": "Luxury", "monthly_cost": 100000 }
+      ]
+    },
+    "starting-nuyen": {
+      "source": "SR5 Core Rulebook, p.95",
+      "description": "Dice formula per lifestyle for calculating starting nuyen carried into play",
+      "columns": ["lifestyle", "formula"],
+      "rows": [
+        { "lifestyle": "Street", "formula": "1D6 x 20" },
+        { "lifestyle": "Squatter", "formula": "2D6 x 40" },
+        { "lifestyle": "Low", "formula": "3D6 x 60" },
+        { "lifestyle": "Middle", "formula": "4D6 x 100" },
+        { "lifestyle": "High", "formula": "5D6 x 500" },
+        { "lifestyle": "Luxury", "formula": "6D6 x 1000" }
+      ]
+    },
+    "additional-purchases-and-restrictions": {
+      "source": "SR5 Core Rulebook, p.98",
+      "description": "Karma costs and restrictions for additional purchases during Step 7",
+      "columns": ["item", "karma_cost", "restriction"],
+      "rows": [
+        {
+          "item": "Bound Spirits",
+          "karma_cost": "1 Karma per service (Force = Magic attribute)",
+          "restriction": "Max bound spirits = Charisma"
+        },
+        {
+          "item": "Complex Forms",
+          "karma_cost": "4 Karma per complex form",
+          "restriction": "Max at creation = Logic attribute"
+        },
+        {
+          "item": "Spells",
+          "karma_cost": "5 Karma per spell",
+          "restriction": "Max spells/rituals/preparations known at creation = Magic Rating x 2"
+        },
+        {
+          "item": "Bond Foci",
+          "karma_cost": "Variable (see p.318)",
+          "restriction": "Max total Force of bonded foci at creation = Magic Rating x 2"
+        },
+        {
+          "item": "Contacts",
+          "karma_cost": "1 Karma per Connection + 1 Karma per Loyalty (min 2 Karma)",
+          "restriction": "Max 7 Karma per single contact. No limit on number of contacts."
+        },
+        {
+          "item": "Registering Sprites",
+          "karma_cost": "1 Karma per task (Level = Resonance Rating)",
+          "restriction": "Max registered sprites = Charisma"
+        }
+      ]
+    },
+    "final-calculations": {
+      "source": "SR5 Core Rulebook, p.101",
+      "description": "Formulas for all derived statistics calculated in Step 8",
+      "columns": ["mechanic", "formula", "augmentation_bonuses"],
+      "rows": [
+        {
+          "mechanic": "Initiative",
+          "formula": "(Intuition + Reaction) + 1D6",
+          "augmentation_bonuses": "Add appropriate attribute and Initiative Dice bonuses"
+        },
+        {
+          "mechanic": "Astral Initiative",
+          "formula": "(Intuition x 2) + 2D6",
+          "augmentation_bonuses": null
+        },
+        {
+          "mechanic": "Matrix AR Initiative",
+          "formula": "(Intuition + Reaction) + 1D6",
+          "augmentation_bonuses": null
+        },
+        {
+          "mechanic": "Matrix VR Initiative (Cold Sim)",
+          "formula": "(Data Processing + Intuition) + 3D6",
+          "augmentation_bonuses": null
+        },
+        {
+          "mechanic": "Matrix VR Initiative (Hot Sim)",
+          "formula": "(Data Processing + Intuition) + 4D6",
+          "augmentation_bonuses": null
+        },
+        {
+          "mechanic": "Mental Limit",
+          "formula": "[(Logic x 2) + Intuition + Willpower] / 3 (round up)",
+          "augmentation_bonuses": null
+        },
+        {
+          "mechanic": "Physical Limit",
+          "formula": "[(Strength x 2) + Body + Reaction] / 3 (round up)",
+          "augmentation_bonuses": null
+        },
+        {
+          "mechanic": "Social Limit",
+          "formula": "[(Charisma x 2) + Willpower + Essence] / 3 (round up)",
+          "augmentation_bonuses": "Round Essence UP before calculating"
+        },
+        {
+          "mechanic": "Physical Condition Monitor",
+          "formula": "[Body / 2] + 8 (round up)",
+          "augmentation_bonuses": "Add bonuses to Body before calculating"
+        },
+        {
+          "mechanic": "Stun Condition Monitor",
+          "formula": "[Willpower / 2] + 8 (round up)",
+          "augmentation_bonuses": "Add bonuses to Willpower before calculating"
+        },
+        {
+          "mechanic": "Overflow",
+          "formula": "Body + Augmentation bonuses",
+          "augmentation_bonuses": null
+        },
+        {
+          "mechanic": "Living Persona: Attack",
+          "formula": "Charisma",
+          "augmentation_bonuses": null
+        },
+        {
+          "mechanic": "Living Persona: Data Processing",
+          "formula": "Logic",
+          "augmentation_bonuses": null
+        },
+        {
+          "mechanic": "Living Persona: Device Rating",
+          "formula": "Resonance",
+          "augmentation_bonuses": null
+        },
+        {
+          "mechanic": "Living Persona: Firewall",
+          "formula": "Willpower",
+          "augmentation_bonuses": null
+        },
+        {
+          "mechanic": "Living Persona: Sleaze",
+          "formula": "Intuition",
+          "augmentation_bonuses": null
+        },
+        {
+          "mechanic": "Reputation: Notoriety",
+          "formula": "0 (unless modified by qualities)",
+          "augmentation_bonuses": null
+        },
+        {
+          "mechanic": "Reputation: Public Awareness",
+          "formula": "0 (unless modified by qualities)",
+          "augmentation_bonuses": null
+        },
+        {
+          "mechanic": "Reputation: Street Cred",
+          "formula": "0 (unless modified by qualities)",
+          "augmentation_bonuses": null
+        }
+      ]
+    },
+    "karma-advancement-attributes": {
+      "source": "SR5 Core Rulebook, p.107",
+      "description": "Cumulative Karma cost to raise an attribute from a starting rating to a desired rating. Formula: New Rating x 5 per step.",
+      "columns": [
+        "starting_rating",
+        "to_2",
+        "to_3",
+        "to_4",
+        "to_5",
+        "to_6",
+        "to_7",
+        "to_8",
+        "to_9",
+        "to_10",
+        "to_11"
+      ],
+      "rows": [
+        {
+          "starting_rating": 1,
+          "to_2": 10,
+          "to_3": 25,
+          "to_4": 45,
+          "to_5": 70,
+          "to_6": 100,
+          "to_7": 135,
+          "to_8": null,
+          "to_9": null,
+          "to_10": null,
+          "to_11": null
+        },
+        {
+          "starting_rating": 2,
+          "to_2": null,
+          "to_3": 15,
+          "to_4": 35,
+          "to_5": 60,
+          "to_6": 90,
+          "to_7": 125,
+          "to_8": 165,
+          "to_9": null,
+          "to_10": null,
+          "to_11": null
+        },
+        {
+          "starting_rating": 3,
+          "to_2": null,
+          "to_3": null,
+          "to_4": 20,
+          "to_5": 45,
+          "to_6": 75,
+          "to_7": 110,
+          "to_8": 150,
+          "to_9": 195,
+          "to_10": null,
+          "to_11": null
+        },
+        {
+          "starting_rating": 4,
+          "to_2": null,
+          "to_3": null,
+          "to_4": null,
+          "to_5": 25,
+          "to_6": 55,
+          "to_7": 90,
+          "to_8": 130,
+          "to_9": 175,
+          "to_10": 225,
+          "to_11": null
+        },
+        {
+          "starting_rating": 5,
+          "to_2": null,
+          "to_3": null,
+          "to_4": null,
+          "to_5": null,
+          "to_6": 30,
+          "to_7": 65,
+          "to_8": 105,
+          "to_9": 150,
+          "to_10": 200,
+          "to_11": "(255)"
+        },
+        {
+          "starting_rating": 6,
+          "to_2": null,
+          "to_3": null,
+          "to_4": null,
+          "to_5": null,
+          "to_6": null,
+          "to_7": 35,
+          "to_8": 75,
+          "to_9": 120,
+          "to_10": 170,
+          "to_11": "(225)"
+        },
+        {
+          "starting_rating": 7,
+          "to_2": null,
+          "to_3": null,
+          "to_4": null,
+          "to_5": null,
+          "to_6": null,
+          "to_7": null,
+          "to_8": 40,
+          "to_9": 85,
+          "to_10": 135,
+          "to_11": "(190)"
+        },
+        {
+          "starting_rating": 8,
+          "to_2": null,
+          "to_3": null,
+          "to_4": null,
+          "to_5": null,
+          "to_6": null,
+          "to_7": null,
+          "to_8": null,
+          "to_9": 45,
+          "to_10": 95,
+          "to_11": "(150)"
+        },
+        {
+          "starting_rating": 9,
+          "to_2": null,
+          "to_3": null,
+          "to_4": null,
+          "to_5": null,
+          "to_6": null,
+          "to_7": null,
+          "to_8": null,
+          "to_9": null,
+          "to_10": 50,
+          "to_11": "(105)"
+        },
+        {
+          "starting_rating": 10,
+          "to_2": null,
+          "to_3": null,
+          "to_4": null,
+          "to_5": null,
+          "to_6": null,
+          "to_7": null,
+          "to_8": null,
+          "to_9": null,
+          "to_10": null,
+          "to_11": "(55)"
+        }
+      ],
+      "note": "Numbers in parentheses are only available to characters with the correct quality (Exceptional Attribute)."
+    },
+    "karma-advancement-skills": {
+      "source": "SR5 Core Rulebook, p.107",
+      "description": "Cumulative Karma cost to raise skills to a desired rating. Formula varies by skill type.",
+      "columns": [
+        "skill_type",
+        "to_1",
+        "to_2",
+        "to_3",
+        "to_4",
+        "to_5",
+        "to_6",
+        "to_7",
+        "to_8",
+        "to_9",
+        "to_10",
+        "to_11",
+        "to_12",
+        "to_13"
+      ],
+      "rows": [
+        {
+          "skill_type": "Active Skill",
+          "to_1": 2,
+          "to_2": 6,
+          "to_3": 12,
+          "to_4": 20,
+          "to_5": 30,
+          "to_6": 42,
+          "to_7": 56,
+          "to_8": 72,
+          "to_9": 90,
+          "to_10": 110,
+          "to_11": 132,
+          "to_12": 156,
+          "to_13": "182 (Aptitude)"
+        },
+        {
+          "skill_type": "Active Skill Group",
+          "to_1": 5,
+          "to_2": 15,
+          "to_3": 30,
+          "to_4": 50,
+          "to_5": 75,
+          "to_6": 105,
+          "to_7": 140,
+          "to_8": 180,
+          "to_9": 225,
+          "to_10": 275,
+          "to_11": 330,
+          "to_12": 390,
+          "to_13": 455
+        },
+        {
+          "skill_type": "Knowledge Skills",
+          "to_1": 1,
+          "to_2": 3,
+          "to_3": 6,
+          "to_4": 10,
+          "to_5": 15,
+          "to_6": 21,
+          "to_7": 28,
+          "to_8": 36,
+          "to_9": 45,
+          "to_10": 55,
+          "to_11": 66,
+          "to_12": 78,
+          "to_13": 91
+        },
+        {
+          "skill_type": "Language Skills",
+          "to_1": 1,
+          "to_2": 3,
+          "to_3": 6,
+          "to_4": 10,
+          "to_5": 15,
+          "to_6": 21,
+          "to_7": 28,
+          "to_8": 36,
+          "to_9": 45,
+          "to_10": 55,
+          "to_11": 66,
+          "to_12": 78,
+          "to_13": 91
+        }
+      ],
+      "note": "Rating 13 for Active Skills only available with Aptitude quality. After character creation, max skill rating is 12 (13 with Aptitude)."
+    },
+    "character-improvement-table": {
+      "source": "SR5 Core Rulebook, p.107",
+      "description": "Karma costs for miscellaneous character improvements",
+      "columns": ["improvement", "karma_cost"],
+      "rows": [
+        { "improvement": "New specialization (Active, Knowledge, or Language)", "karma_cost": 7 },
+        { "improvement": "New Knowledge/Language Skill", "karma_cost": 1 },
+        { "improvement": "New Positive quality", "karma_cost": "Karma cost x 2" },
+        { "improvement": "Remove a Negative quality", "karma_cost": "Bonus Karma Value x 2" },
+        { "improvement": "New complex form", "karma_cost": 4 },
+        { "improvement": "New initiate level", "karma_cost": "10 + (Grade x 3)" },
+        { "improvement": "New spell", "karma_cost": 5 }
+      ]
+    },
+    "training-rate-table": {
+      "source": "SR5 Core Rulebook, p.107",
+      "description": "Time required for each type of character improvement",
+      "columns": ["improvement", "rate"],
+      "rows": [
+        {
+          "improvement": "Improving an attribute (Mental, Physical, Magic, Resonance)",
+          "rate": "New Rating x 1 week"
+        },
+        { "improvement": "Improving Edge", "rate": "No time required" },
+        { "improvement": "Improving a skill (Rating 1-4)", "rate": "New Rating x 1 day" },
+        { "improvement": "Improving a skill (Rating 5-8)", "rate": "New Rating x 1 week" },
+        { "improvement": "Improving a skill (Rating 9-13)", "rate": "New Rating x 2 weeks" },
+        { "improvement": "Improving a skill group", "rate": "New Rating x 2 weeks" },
+        { "improvement": "New specialization", "rate": "1 month" }
+      ]
+    },
+    "alternate-gameplay-resources": {
+      "source": "SR5 Core Rulebook, p.64",
+      "description": "Modified Resources column values for Street-Level and Prime Runner gameplay modes",
+      "columns": ["priority", "standard", "street_level", "prime_runner"],
+      "rows": [
+        { "priority": "A", "standard": 450000, "street_level": 75000, "prime_runner": 500000 },
+        { "priority": "B", "standard": 275000, "street_level": 50000, "prime_runner": 325000 },
+        { "priority": "C", "standard": 140000, "street_level": 25000, "prime_runner": 210000 },
+        { "priority": "D", "standard": 50000, "street_level": 15000, "prime_runner": 150000 },
+        { "priority": "E", "standard": 6000, "street_level": 6000, "prime_runner": 100000 }
+      ]
+    },
+    "alternate-gameplay-rules": {
+      "source": "SR5 Core Rulebook, p.64",
+      "description": "Rule modifications for Street-Level and Prime Runner gameplay modes",
+      "columns": ["rule", "street_level", "prime_runner"],
+      "rows": [
+        { "rule": "Starting Karma", "street_level": 13, "prime_runner": 35 },
+        { "rule": "Max Karma (with Negative Qualities)", "street_level": 26, "prime_runner": 70 },
+        { "rule": "Max Device Rating", "street_level": 4, "prime_runner": 6 },
+        { "rule": "Max Availability", "street_level": 10, "prime_runner": 15 },
+        {
+          "rule": "Max Karma-to-nuyen conversion",
+          "street_level": "5 Karma (10,000 nuyen)",
+          "prime_runner": "25 Karma (50,000 nuyen)"
+        },
+        {
+          "rule": "Contact Karma pool",
+          "street_level": "Charisma x 3",
+          "prime_runner": "Charisma x 6"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,282 @@
+{
+  "book": "SR5 Core Rulebook",
+  "pdf": "docs/pdfs/sr5-core-rulebook.pdf",
+  "total_pages": 502,
+  "pdf_page_offset": 2,
+  "note": "PDF page = book page + 2 (e.g., book p.62 = PDF p.64)",
+  "sections": [
+    {
+      "slug": "another-night-another-run",
+      "title": "Another Night, Another Run",
+      "pages": "8-13",
+      "pdf_pages": "10-15",
+      "priority": "skip",
+      "reason": "Fiction/flavor. No mechanical content.",
+      "status": "skipped"
+    },
+    {
+      "slug": "introduction",
+      "title": "Introduction",
+      "pages": "14-15",
+      "pdf_pages": "16-17",
+      "priority": "skip",
+      "reason": "Meta introduction to the game. No mechanical content.",
+      "status": "skipped"
+    },
+    {
+      "slug": "the-battle-fought",
+      "title": "The Battle Fought",
+      "pages": "16-19",
+      "pdf_pages": "18-21",
+      "priority": "skip",
+      "reason": "Lore/history. No mechanical content.",
+      "status": "skipped"
+    },
+    {
+      "slug": "life-in-the-sixth-world",
+      "title": "Life in the Sixth World",
+      "pages": "20-43",
+      "pdf_pages": "22-45",
+      "priority": "skip",
+      "reason": "Lore/setting. No mechanical content.",
+      "status": "skipped"
+    },
+    {
+      "slug": "shadowrun-concepts",
+      "title": "Shadowrun Concepts",
+      "pages": "44-57",
+      "pdf_pages": "46-59",
+      "priority": "high",
+      "reason": "Core mechanics: hits, thresholds, tests, limits, edge, condition monitors, combat turns, actions. Foundation for all other systems.",
+      "reads_estimate": 1,
+      "status": "done"
+    },
+    {
+      "slug": "girls-with-guns",
+      "title": "Girls with Guns",
+      "pages": "58-61",
+      "pdf_pages": "60-63",
+      "priority": "skip",
+      "reason": "Fiction/flavor. No mechanical content.",
+      "status": "skipped"
+    },
+    {
+      "slug": "creating-a-shadowrunner",
+      "title": "Creating a Shadowrunner",
+      "pages": "62-107",
+      "pdf_pages": "64-109",
+      "priority": "high",
+      "reason": "Complete character creation rules, priority system, qualities, advancement.",
+      "reads_estimate": 3,
+      "status": "done"
+    },
+    {
+      "slug": "skills",
+      "title": "Skills",
+      "pages": "128-155",
+      "pdf_pages": "130-157",
+      "priority": "high",
+      "reason": "Skill types, ratings, groups, defaulting, all individual skill descriptions, using attributes.",
+      "reads_estimate": 2,
+      "status": "done"
+    },
+    {
+      "slug": "combat",
+      "title": "Combat",
+      "pages": "158-209",
+      "pdf_pages": "160-211",
+      "priority": "high",
+      "reason": "Combat turn sequence, initiative, actions, attack/defense, damage, healing. Core gameplay loop.",
+      "reads_estimate": 3,
+      "status": "done"
+    },
+    {
+      "slug": "rooftops-and-rainbows",
+      "title": "Rooftops & Rainbows",
+      "pages": "210-213",
+      "pdf_pages": "212-215",
+      "priority": "skip",
+      "reason": "Fiction/flavor. No mechanical content.",
+      "status": "skipped"
+    },
+    {
+      "slug": "the-matrix",
+      "title": "The Matrix",
+      "pages": "214-259",
+      "pdf_pages": "216-261",
+      "priority": "high",
+      "reason": "Matrix rules, personas, devices, hosts, IC, matrix actions, programs, cyberdecks, technomancers, sprites.",
+      "reads_estimate": 3,
+      "status": "done"
+    },
+    {
+      "slug": "the-danger-of-side-jobs",
+      "title": "The Danger of Side Jobs",
+      "pages": "260-263",
+      "pdf_pages": "262-265",
+      "priority": "skip",
+      "reason": "Fiction/flavor. No mechanical content.",
+      "status": "skipped"
+    },
+    {
+      "slug": "riggers",
+      "title": "Riggers",
+      "pages": "264-271",
+      "pdf_pages": "266-273",
+      "priority": "high",
+      "reason": "Rigging rules, control rig, jumped in, drone commands, electronic warfare for riggers.",
+      "reads_estimate": 1,
+      "status": "done"
+    },
+    {
+      "slug": "a-little-shadow-music",
+      "title": "A Little Shadow Music",
+      "pages": "272-275",
+      "pdf_pages": "274-277",
+      "priority": "skip",
+      "reason": "Fiction/flavor. No mechanical content.",
+      "status": "skipped"
+    },
+    {
+      "slug": "magic",
+      "title": "Magic",
+      "pages": "276-327",
+      "pdf_pages": "278-329",
+      "priority": "high",
+      "reason": "Magic basics, traditions, lodges, perceiving magic, sorcery, counterspelling, ritual spellcasting, conjuring, enchanting, adept powers, initiation, mentor spirits, spell listings.",
+      "reads_estimate": 3,
+      "status": "done"
+    },
+    {
+      "slug": "all-the-angles",
+      "title": "All the Angles",
+      "pages": "328-331",
+      "pdf_pages": "330-333",
+      "priority": "skip",
+      "reason": "Fiction/flavor. No mechanical content.",
+      "status": "skipped"
+    },
+    {
+      "slug": "gamemaster-advice",
+      "title": "Gamemaster Advice",
+      "pages": "332-377",
+      "pdf_pages": "334-379",
+      "priority": "medium",
+      "reason": "Contains NPC rules, contacts mechanics, campaign rules, run templates, alternate campaigns, security systems, identification. Mix of mechanical and advisory.",
+      "reads_estimate": 3,
+      "status": "done",
+      "subsections_of_interest": [
+        { "title": "Non-Player Characters", "pages": "378-387" },
+        { "title": "Contacts", "pages": "386-390" },
+        { "title": "Critters", "pages": "392-407" },
+        { "title": "Run Templates", "pages": "340-341" },
+        { "title": "Random Run Tables", "pages": "342-343" },
+        { "title": "Security in the Sixth World", "pages": "355-367" },
+        { "title": "Identification", "pages": "366-368" },
+        { "title": "Reputation", "pages": "372-373" },
+        { "title": "Lifestyles", "pages": "373-377" }
+      ]
+    },
+    {
+      "slug": "helps-and-hindrances",
+      "title": "Helps and Hindrances",
+      "pages": "378-415",
+      "pdf_pages": "380-417",
+      "priority": "medium",
+      "reason": "NPCs, grunts, prime runners, contacts, critters, toxins/drugs/BTLs, substance abuse/addiction.",
+      "reads_estimate": 2,
+      "status": "done",
+      "subsections_of_interest": [
+        { "title": "Non-Player Characters / Grunts", "pages": "378-385" },
+        { "title": "Prime Runners", "pages": "385-386" },
+        { "title": "Contacts", "pages": "386-390" },
+        { "title": "Critters", "pages": "392-407" },
+        { "title": "Toxins, Drugs, and BTLs", "pages": "408-413" },
+        { "title": "Substance Abuse and Addiction", "pages": "413-415" }
+      ]
+    },
+    {
+      "slug": "street-gear",
+      "title": "Street Gear",
+      "pages": "416-467",
+      "pdf_pages": "418-469",
+      "priority": "high",
+      "reason": "All gear listings: weapons, armor, electronics, cyberware, bioware, vehicles, drones. Core catalog data.",
+      "reads_estimate": 3,
+      "status": "done",
+      "split_into": [
+        "street-gear-weapons-armor",
+        "street-gear-electronics-cyber",
+        "street-gear-vehicles-drones"
+      ],
+      "subsections_of_interest": [
+        { "title": "Gear Ratings / Buying Gear", "pages": "416-418" },
+        { "title": "Fencing Gear / Legality", "pages": "418-419" },
+        { "title": "Concealing Gear", "pages": "419" },
+        { "title": "Carrying Gear / Encumbrance", "pages": "420" },
+        { "title": "Wireless Functionality", "pages": "420-421" },
+        { "title": "Melee Weapons", "pages": "421-422" },
+        { "title": "Projectile and Throwing Weapons", "pages": "423-424" },
+        { "title": "Firearms", "pages": "424-431" },
+        { "title": "Firearm Accessories", "pages": "431-432" },
+        { "title": "Ammunition", "pages": "433-434" },
+        { "title": "Grenades, Rockets, and Missiles", "pages": "434-436" },
+        { "title": "Clothing and Armor", "pages": "436-438" },
+        { "title": "Electronics", "pages": "438-441" },
+        { "title": "Software / Skillsofts", "pages": "441-442" },
+        { "title": "ID and Credit", "pages": "442" },
+        { "title": "Tools", "pages": "443" },
+        { "title": "Optical/Imaging/Vision/Audio Devices", "pages": "443-446" },
+        { "title": "Security Devices", "pages": "446-448" },
+        { "title": "Survival / Grapple / Biotech", "pages": "448-451" },
+        { "title": "Cyberware/Bioware Grades", "pages": "451" },
+        { "title": "Headware", "pages": "451-453" },
+        { "title": "Eyeware", "pages": "453" },
+        { "title": "Earware", "pages": "453" },
+        { "title": "Bodyware", "pages": "454-455" },
+        { "title": "Cyberlimbs", "pages": "455-458" },
+        { "title": "Bioware", "pages": "459-461" },
+        { "title": "Magical Equipment", "pages": "461" },
+        { "title": "Vehicles and Drones", "pages": "461-466" }
+      ]
+    },
+    {
+      "slug": "sr5-master-index",
+      "title": "SR5 Master Index",
+      "pages": "468-477",
+      "pdf_pages": "470-479",
+      "priority": "skip",
+      "reason": "Index. No mechanical content to extract.",
+      "status": "skipped"
+    },
+    {
+      "slug": "random-run-generator",
+      "title": "Random Run Generator",
+      "pages": "478",
+      "pdf_pages": "480",
+      "priority": "low",
+      "reason": "Single-page random table for generating run concepts.",
+      "reads_estimate": 1,
+      "status": "done"
+    },
+    {
+      "slug": "record-sheets",
+      "title": "Record Sheets",
+      "pages": "479-502",
+      "pdf_pages": "481-504",
+      "priority": "skip",
+      "reason": "Blank character sheets. No mechanical content.",
+      "status": "skipped"
+    }
+  ],
+  "summary": {
+    "total_sections": 22,
+    "skip": 11,
+    "high_priority": 7,
+    "medium_priority": 2,
+    "low_priority": 1,
+    "done": 11,
+    "estimated_reads_remaining": 0,
+    "estimated_pages_to_read": 0
+  }
+}

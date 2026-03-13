@@ -1,0 +1,131 @@
+{
+  "tables": {
+    "job-type": {
+      "source": "SR5 Core Rulebook, p.338",
+      "description": "Determines the broad category of work the runners are being hired to do. Roll 1D6 and consult the table.",
+      "dice": "1D6",
+      "columns": ["1D6 Result", "Job Type"],
+      "rows": [
+        { "roll": 1, "value": "Datasteal" },
+        { "roll": 2, "value": "Assassination or Destruction" },
+        { "roll": 3, "value": "Extraction or Insertion" },
+        { "roll": 4, "value": "Misdirection" },
+        { "roll": 5, "value": "Protection" },
+        { "roll": 6, "value": "Delivery" }
+      ]
+    },
+    "meet-locations": {
+      "source": "SR5 Core Rulebook, p.338",
+      "description": "Determines where the initial meeting with the employer takes place. Roll 1D6 and consult the table.",
+      "dice": "1D6",
+      "columns": ["1D6 Result", "Location Type"],
+      "rows": [
+        { "roll": 1, "value": "Bar, Club, or Restaurant" },
+        { "roll": 2, "value": "Warehouse, Loading Dock, Factory, or Other Underused Site" },
+        { "roll": 3, "value": "Barrens District or Other Urban Hellhole" },
+        { "roll": 4, "value": "Moving Vehicle" },
+        { "roll": 5, "value": "Matrix Host" },
+        { "roll": 6, "value": "Astral Space" }
+      ]
+    },
+    "macguffins": {
+      "source": "SR5 Core Rulebook, p.339",
+      "description": "The central element of interest to the story; the target of the run. Roll 1D6 and consult the table.",
+      "dice": "1D6",
+      "columns": ["1D6 Result", "MacGuffin"],
+      "rows": [
+        { "roll": 1, "value": "A key employee" },
+        { "roll": 2, "value": "A prototype product" },
+        { "roll": 3, "value": "Cutting-edge tech research" },
+        { "roll": 4, "value": "Bioengineered life form" },
+        { "roll": 5, "value": "Magical object" },
+        { "roll": 6, "value": "Urban building, rural location, or infrastructure object" }
+      ]
+    },
+    "employers": {
+      "source": "SR5 Core Rulebook, p.339",
+      "description": "Who is employing the runners to accomplish their goals? Roll 2D6, add them together, and consult the table.",
+      "dice": "2D6",
+      "columns": ["2D6 Result", "Employer Type"],
+      "rows": [
+        {
+          "roll": 2,
+          "rollMin": 2,
+          "rollMax": 2,
+          "value": "Secrecy Society",
+          "examples": "Black Lodge, Human Nation"
+        },
+        {
+          "roll": 3,
+          "rollMin": 3,
+          "rollMax": 3,
+          "value": "Political or Activist Group",
+          "examples": "Humanis Policlub, Mothers of Metahumans"
+        },
+        {
+          "roll": 4,
+          "rollMin": 4,
+          "rollMax": 4,
+          "value": "Government Official or Agency",
+          "examples": null
+        },
+        {
+          "roll": "5-6",
+          "rollMin": 5,
+          "rollMax": 6,
+          "value": "Minor Corporation",
+          "examples": "A-level or smaller"
+        },
+        {
+          "roll": "7-8",
+          "rollMin": 7,
+          "rollMax": 8,
+          "value": "Megacorporation",
+          "examples": "AA-level or larger"
+        },
+        {
+          "roll": 9,
+          "rollMin": 9,
+          "rollMax": 9,
+          "value": "Criminal Syndicate",
+          "examples": "Yakuza, Mafia"
+        },
+        {
+          "roll": 10,
+          "rollMin": 10,
+          "rollMax": 10,
+          "value": "Magical Group",
+          "examples": "Illuminates of the New Dawn"
+        },
+        {
+          "roll": 11,
+          "rollMin": 11,
+          "rollMax": 11,
+          "value": "Private Individual",
+          "examples": null
+        },
+        {
+          "roll": 12,
+          "rollMin": 12,
+          "rollMax": 12,
+          "value": "Exotic or Mysterious Being",
+          "examples": "free spirit, dragon, AI"
+        }
+      ]
+    },
+    "twists": {
+      "source": "SR5 Core Rulebook, p.339",
+      "description": "In Shadowrun things never go exactly according to plan. Roll 1D6 and consult the table to inject a complication into the run.",
+      "dice": "1D6",
+      "columns": ["1D6 Result", "Twist"],
+      "rows": [
+        { "roll": 1, "value": "Security is unexpectedly high" },
+        { "roll": 2, "value": "A third party is also interested" },
+        { "roll": 3, "value": "The target is not what it appears to be (group was lied to)" },
+        { "roll": 4, "value": "The job requires a rare piece of equipment" },
+        { "roll": 5, "value": "Target has been moved or is being moved" },
+        { "roll": 6, "value": "The employer decides to double-cross the runners" }
+      ]
+    }
+  }
+}

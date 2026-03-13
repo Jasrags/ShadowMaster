@@ -1,0 +1,492 @@
+{
+  "tables": {
+    "qualities-catalog": {
+      "source": "Run Faster, pp. 111-118",
+      "description": "Catalog of positive metagenic qualities for SURGE changelings",
+      "columns": ["name", "karma", "description", "restrictions"],
+      "rows": [
+        {
+          "name": "360-Degree Eyesight",
+          "karma": 4,
+          "description": "+1 vision Perception/Surprise Tests; -1 while moving; -1 Ranged Attack >10m. Cumulative.",
+          "restrictions": "Incompatible with eye replacement. Incurs Freaks social modifiers."
+        },
+        {
+          "name": "Animal Pelage (Camo Fur)",
+          "karma": 3,
+          "description": "+1 Sneaking Tests in decreased light or pattern-appropriate environments.",
+          "restrictions": "Incompatible with other natural/artificial hair or skin modifications. Counts as Unusual Hair."
+        },
+        {
+          "name": "Animal Pelage (Insulating Pelt)",
+          "karma": 4,
+          "description": "+2 Survival Tests in frigid environments. +4 Armor vs Cold. -2 Survival Tests in extreme heat.",
+          "restrictions": "Incompatible with other natural/artificial hair or skin modifications. Counts as Unusual Hair."
+        },
+        {
+          "name": "Animal Pelage (Quills)",
+          "karma": 5,
+          "description": "Defensive: grappled attacker takes DV (STR+1)P AP+1. Offensive: Exotic Melee Weapon (Quills) DV (STR+1)P Reach -- AP+1. Arms/legs must be exposed.",
+          "restrictions": "Incompatible with other natural/artificial hair or skin modifications. Counts as Unusual Hair."
+        },
+        {
+          "name": "Arcane Arrester",
+          "karma": 10,
+          "description": "Per level (max 2). Add Level x 2 dice to spell resistance. Against non-resisted spells, roll 2/4 dice and subtract hits from caster's hits.",
+          "restrictions": "Requires Magic attribute. Cannot combine with Magic Resistance. Affects self-cast spells."
+        },
+        {
+          "name": "Balance Receptor",
+          "karma": 6,
+          "description": "+1 to balance tests, Agility-based Tests to maintain balance, Climbing, Jumping, all Gymnastics Tests.",
+          "restrictions": "Incompatible with cyberears and balance augmenter."
+        },
+        {
+          "name": "Beak",
+          "karma": 3,
+          "description": "Cannot chew; gizzard processes food. Reduces Lifestyle costs by 10%. +1 to resist ingested toxins.",
+          "restrictions": "Freaks social modifiers."
+        },
+        {
+          "name": "Beak (Raptor Beak)",
+          "karma": 5,
+          "description": "Combat beak. Unarmed Combat DV (STR+2)P, Reach -1, AP -2. Also grants Beak benefits.",
+          "restrictions": "Freaks social modifiers."
+        },
+        {
+          "name": "Bicardiac",
+          "karma": 4,
+          "description": "Second heart. Double fatigue damage interval for strenuous activities.",
+          "restrictions": "Compatible with synthacardium. Only primary heart can be augmented."
+        },
+        {
+          "name": "Biosonar",
+          "karma": 4,
+          "description": "Echolocation via Free Action (Speak). Image out to 50m for Attack/Perception. +1 audio Perception. +1 DV vs sonic attacks.",
+          "restrictions": "None listed."
+        },
+        {
+          "name": "Bone Spikes",
+          "karma": 5,
+          "description": "Bony protrusions. Unarmed melee damage = (STR+2)P. Cannot wear standard armor (+50% cost for custom).",
+          "restrictions": "None listed."
+        },
+        {
+          "name": "Broadened Auditory Spectrum",
+          "karma": 4,
+          "description": "Choose Ultrasound or Infrasound. Perception Test to detect sounds in chosen band. +1 to Perception limit involving sound. May take twice.",
+          "restrictions": "Incompatible with any earware."
+        },
+        {
+          "name": "Camouflage (Basic)",
+          "karma": 4,
+          "description": "Skin changes color after 1 min exposure. +2 threshold to see character (standing still, no clothing). Fades in 10 min.",
+          "restrictions": "Incompatible with any other dermal modification. Freaks social modifiers."
+        },
+        {
+          "name": "Camouflage (Dynamic Coloration)",
+          "karma": 8,
+          "description": "Skin changes color even while moving. -2 to visual perception while moving, -4 if stationary. No clothing allowed.",
+          "restrictions": "Incompatible with any other dermal modification. Freaks social modifiers."
+        },
+        {
+          "name": "Celerity",
+          "karma": 6,
+          "description": "Walking = AGI x 3, Running = AGI x 6, Sprint = +1m/turn.",
+          "restrictions": "Incompatible with leg/muscle-altering systems (cyberlimbs, muscle replacement/toner/augmentation) and Satyr Legs."
+        },
+        {
+          "name": "Claws (Digging)",
+          "karma": 3,
+          "description": "+2 digging/moving earth tests. Combat: Unarmed DV (STR)P, Reach --, AP +1.",
+          "restrictions": "Incompatible with cyberweapon or limb replacement. Cannot be retracted."
+        },
+        {
+          "name": "Claws (Razor)",
+          "karma": 5,
+          "description": "Unarmed Combat DV (STR+1)P, AP -1.",
+          "restrictions": "None listed."
+        },
+        {
+          "name": "Claws (Retractable)",
+          "karma": 7,
+          "description": "Same as Razor Claws but can be retracted and hidden.",
+          "restrictions": "None listed."
+        },
+        {
+          "name": "Climate Adaptation",
+          "karma": 4,
+          "description": "Choose Desert or Arctic. +1 Survival Tests and fatigue resistance in chosen climate. -1 in opposite climate.",
+          "restrictions": "Incompatible with dermal plating, skin modifications, suprathyroid gland."
+        },
+        {
+          "name": "Corrosive Spit",
+          "karma": 5,
+          "description": "Exotic Ranged Weapon (Corrosive Spit) + AGI [Physical], range = Body meters. Acid damage DV 6P. Once per 30 minutes.",
+          "restrictions": "None listed."
+        },
+        {
+          "name": "Dermal Alteration (Bark Skin)",
+          "karma": 5,
+          "description": "+2 armor, cumulative with worn armor.",
+          "restrictions": "Incompatible with any other natural/artificial skin modification."
+        },
+        {
+          "name": "Dermal Alteration (Blubber)",
+          "karma": 3,
+          "description": "+2 armor vs Cold damage. -2 Perception Tests involving cold.",
+          "restrictions": "Incompatible with any other natural/artificial skin modification."
+        },
+        {
+          "name": "Dermal Alteration (Dragon Skin)",
+          "karma": 3,
+          "description": "+2 armor vs Fire damage. -2 Perception Tests involving heat.",
+          "restrictions": "Incompatible with any other natural/artificial skin modification."
+        },
+        {
+          "name": "Dermal Alteration (Granite Shell)",
+          "karma": 15,
+          "description": "+4 Hardened Armor (p. 397 SR5). Not stackable with worn armor for DR Tests but still provides 2 auto hits.",
+          "restrictions": "Incompatible with any other natural/artificial skin modification."
+        },
+        {
+          "name": "Dermal Alteration (Rhino Hide)",
+          "karma": 7,
+          "description": "+3 armor, cumulative with worn armor.",
+          "restrictions": "Incompatible with any other natural/artificial skin modification."
+        },
+        {
+          "name": "Dermal Deposits",
+          "karma": 3,
+          "description": "+1 natural armor, cumulative with worn armor. Stacks with troll natural armor.",
+          "restrictions": "None listed."
+        },
+        {
+          "name": "Defensive Secretion",
+          "karma": 4,
+          "description": "Skin exudes defensive liquid when agitated. Touching bare skin: -1 all tests for 24h or Medicine+Logic [Mental] (2).",
+          "restrictions": "Does not work against spirits."
+        },
+        {
+          "name": "Electroception (Electrosense)",
+          "karma": 4,
+          "description": "Sense electromagnetic fields. Observe in Detail: Perception+Intuition [Mental]. Range = Essence meters.",
+          "restrictions": "Noise modifiers apply."
+        },
+        {
+          "name": "Electroception (Technosense)",
+          "karma": 7,
+          "description": "Sense wireless technology signals. Observe in Detail: Perception+Intuition [Mental]. Range = Essence meters.",
+          "restrictions": "Cannot manipulate signals. Noise modifiers apply."
+        },
+        {
+          "name": "Elongated Limbs",
+          "karma": 4,
+          "description": "Reach +1 (cumulative). Special clothing/armor at +10% cost. Ill-fitting armor reduced by 10%.",
+          "restrictions": "None listed."
+        },
+        {
+          "name": "Fangs",
+          "karma": 4,
+          "description": "Unarmed Combat DV (STR+1)P, Reach -1, AP --.",
+          "restrictions": "None listed."
+        },
+        {
+          "name": "Frog Tongue",
+          "karma": 4,
+          "description": "Long adhesive tongue. Snatch objects < unaugmented STR x 100g. If has Natural Venom, can deliver touch melee via Exotic Melee Weapon (Frog Tongue).",
+          "restrictions": "None listed."
+        },
+        {
+          "name": "Functional Tail (Balance)",
+          "karma": 6,
+          "description": "1-2m tail not under conscious control. +1 Balance, Climbing, Gymnastics, Jumping tests.",
+          "restrictions": "Incompatible with other tail mods. Freaks social modifiers. Sitting penalty: -1 all actions."
+        },
+        {
+          "name": "Functional Tail (Paddle)",
+          "karma": 4,
+          "description": "Broad beaver-like tail. +2 Swimming Tests.",
+          "restrictions": "Incompatible with other tail mods. Freaks social modifiers. Sitting penalty: -1 all actions."
+        },
+        {
+          "name": "Functional Tail (Prehensile)",
+          "karma": 7,
+          "description": "Manipulate like extra limb. Effective STR = half unaugmented STR (round down). -4 fine manipulation. No extra attack.",
+          "restrictions": "Incompatible with other tail mods. Freaks social modifiers. Sitting penalty: -1 all actions."
+        },
+        {
+          "name": "Functional Tail (Thagomizer)",
+          "karma": 5,
+          "description": "Spiked prehensile tail. Exotic Melee Weapon (Thagomizer) DV (STR+3)P, Reach 1, AP -1.",
+          "restrictions": "Incompatible with other tail mods. Freaks social modifiers. Sitting penalty: -1 all actions."
+        },
+        {
+          "name": "Gills (Partial)",
+          "karma": 4,
+          "description": "Air or Aqua gills. Fatigue Test durations halved in non-native environment.",
+          "restrictions": "None listed."
+        },
+        {
+          "name": "Gills (Full)",
+          "karma": 6,
+          "description": "Air or Aqua gills. Function equally in either environment with no penalty.",
+          "restrictions": "None listed."
+        },
+        {
+          "name": "Glamour",
+          "karma": 12,
+          "description": "+2 Social Limit. +1 all Social Skill Tests except Intimidation. Suffers Distinctive Style effects.",
+          "restrictions": "None listed."
+        },
+        {
+          "name": "Goring Horns",
+          "karma": 5,
+          "description": "Exotic Melee Weapon (Horns) DV (STR+2)P, Reach --, AP -1.",
+          "restrictions": "None listed."
+        },
+        {
+          "name": "Greasy Skin",
+          "karma": 3,
+          "description": "-2 to Subduing melee attacks against character (>50% body exposed).",
+          "restrictions": "Incompatible with extensive body hair or skin modifications/qualities."
+        },
+        {
+          "name": "Keen-Eared",
+          "karma": 3,
+          "description": "+1 audio-based Perception Tests.",
+          "restrictions": "None listed."
+        },
+        {
+          "name": "Larger Tusks",
+          "karma": 5,
+          "description": "Unarmed Combat DV (STR+2)P, Reach --, AP --.",
+          "restrictions": "Incompatible with mouth implants (except Proboscis). Freaks social modifiers."
+        },
+        {
+          "name": "Low-Light Vision (Feline Eyes)",
+          "karma": 2,
+          "description": "Natural low-light vision with reflective feline slit irises.",
+          "restrictions": "Cannot combine with eye replacement. Freaks social modifiers."
+        },
+        {
+          "name": "Low-Light Vision (Normal Eyes)",
+          "karma": 4,
+          "description": "Natural low-light vision with normal-looking eyes.",
+          "restrictions": "Cannot combine with eye replacement."
+        },
+        {
+          "name": "Magic Sense",
+          "karma": 7,
+          "description": "Detect magic. Intuition+Willpower [Astral]. Range = Magic x 5 meters (min 5m).",
+          "restrictions": "None listed."
+        },
+        {
+          "name": "Magnetoception",
+          "karma": 4,
+          "description": "+1 Navigation Tests. Detect electronics/power/magnetic anomalies: Perception+Intuition [Mental] vs Object Resistance within 5m.",
+          "restrictions": "None listed."
+        },
+        {
+          "name": "Marsupial Pouch",
+          "karma": 3,
+          "description": "Smuggling Compartment with Concealability -6.",
+          "restrictions": "None listed."
+        },
+        {
+          "name": "Metagenic (Attribute) Improvement",
+          "karma": 15,
+          "description": "Raise min and max of one Mental or Physical attribute by 1. Once per attribute. Cumulative with Exceptional Attribute.",
+          "restrictions": "Once per attribute."
+        },
+        {
+          "name": "Metahuman Traits",
+          "karma": 2,
+          "description": "Cosmetic metahuman features. +1 disguise as resembled metatype.",
+          "restrictions": "Humans only."
+        },
+        {
+          "name": "Monkey Paws",
+          "karma": 4,
+          "description": "+2 Gymnastics, Climbing, Zero-G Movement when barefoot (+1 with accommodating shoes).",
+          "restrictions": "None listed."
+        },
+        {
+          "name": "Nasty Vibe",
+          "karma": 5,
+          "description": "+2 Intimidation Tests and fear-instilling attempts.",
+          "restrictions": "None listed."
+        },
+        {
+          "name": "Natural Venom",
+          "karma": "3-20 (calculated)",
+          "description": "Body produces animal toxin (immune to own). Cost = Vector cost + Severity cost. Vectors: Inhalation (3), Contact (5), Injected (0, requires Fangs).",
+          "restrictions": "Incompatible with Corrosive Spit."
+        },
+        {
+          "name": "Ogre Stomach",
+          "karma": 8,
+          "description": "Digest unusual substances. Lifestyle -20%. +2 Toxin Resistance vs ingested toxins.",
+          "restrictions": "None listed."
+        },
+        {
+          "name": "Photometabolism",
+          "karma": 4,
+          "description": "Photosynthesis supplements diet. Lifestyle -10%. -1 all Social Tests (uncomfortable at night/in shade).",
+          "restrictions": "Incompatible with Nocturnal and all skin/hair modifications."
+        },
+        {
+          "name": "Proboscis",
+          "karma": 5,
+          "description": "Prehensile trunk. Exotic Melee Weapon (Trunk) DV (STR-1)P, Reach --, AP +1. -2 fine manipulation. Effective STR = unaugmented STR.",
+          "restrictions": "Freaks social modifiers."
+        },
+        {
+          "name": "Satyr Legs",
+          "karma": 10,
+          "description": "Running = AGI x 6, Sprint = +1m/turn. +2 STR to kicking attack damage.",
+          "restrictions": "Freaks social modifiers. Incompatible with Celerity."
+        },
+        {
+          "name": "Setae",
+          "karma": 4,
+          "description": "Gecko hands. Always use assisted climbing rates (hands must be exposed).",
+          "restrictions": "None listed."
+        },
+        {
+          "name": "Shiva Arms",
+          "karma": 8,
+          "description": "Per pair. Extra arm pair. Hold/carry double. Off-hand penalties apply. Can use Multiple Attacks with firearms. Max 2 pairs (6 arms).",
+          "restrictions": "Freaks social modifiers."
+        },
+        {
+          "name": "Thermal Sensitivity",
+          "karma": 4,
+          "description": "Non-visual Perception to detect heat sources within 10m. Not fooled by Invisibility/Silence. Reduces Visibility and Light/Glare modifiers by 1 level.",
+          "restrictions": "None listed."
+        },
+        {
+          "name": "Thermographic Vision",
+          "karma": 3,
+          "description": "Natural thermographic vision (identical to dwarf/troll).",
+          "restrictions": "None listed."
+        },
+        {
+          "name": "Thorns",
+          "karma": 2,
+          "description": "+1 DV to Unarmed Combat attacks. -1 all Physical Tests. Custom clothing required (+20-100% cost).",
+          "restrictions": "None listed."
+        },
+        {
+          "name": "Underwater Vision",
+          "karma": 3,
+          "description": "Adapted eye membrane. Unrestricted vision in/out of water. Use underwater visibility modifiers as if wearing goggles.",
+          "restrictions": "None listed."
+        },
+        {
+          "name": "Vomeronasal Organ",
+          "karma": 3,
+          "description": "+2 smell-based Perception. +1 Social Tests when can smell target. -1 all tests from strong odors. Tailored pheromones provide 2x bonus vs this character.",
+          "restrictions": "None listed."
+        },
+        {
+          "name": "Webbed Digits",
+          "karma": 4,
+          "description": "+2 Swimming Tests. -1 fine manipulations with webbed digits.",
+          "restrictions": "None listed."
+        }
+      ]
+    },
+    "electroception-table": {
+      "source": "Run Faster, p. 114",
+      "description": "Information revealed by Electroception based on hits and sense type",
+      "columns": ["hits", "sense", "information"],
+      "rows": [
+        {
+          "hits": 1,
+          "sense": "Electrosense",
+          "information": "Presence and direction of the electrical field's source"
+        },
+        {
+          "hits": 1,
+          "sense": "Technosense",
+          "information": "Presence and direction of wireless signal(s)"
+        },
+        {
+          "hits": 2,
+          "sense": "Electrosense",
+          "information": "Relative size and type of the electrical source (biological or technological)"
+        },
+        {
+          "hits": 2,
+          "sense": "Technosense",
+          "information": "Strength of the wireless signals (active wireless or transmitter)"
+        },
+        {
+          "hits": 3,
+          "sense": "Electrosense",
+          "information": "Exact position of the field's source or if the biological source has been augmented (cyberware, bioware change the 'flavor' of the field)"
+        },
+        {
+          "hits": 3,
+          "sense": "Technosense",
+          "information": "Presence of cyberware implants or gear with active wireless"
+        },
+        {
+          "hits": 4,
+          "sense": "Electrosense",
+          "information": "Personal orientation and height/depth within 5 meters in relation to the earth's magnetic field; type of biological source (metahuman type, animal size)"
+        },
+        {
+          "hits": 4,
+          "sense": "Technosense",
+          "information": "Type of device (RFID tag, commlink, smartlink, drone, identification of technomancer abilities present within observed area)"
+        },
+        {
+          "hits": "5+",
+          "sense": "Technosense",
+          "information": "Presence of nanites; presence of stealth RFID tags; identification of a technomancer"
+        }
+      ]
+    },
+    "animal-toxins-table": {
+      "source": "Run Faster, p. 117",
+      "description": "Toxin severity levels for the Natural Venom quality",
+      "columns": ["severity", "karma_cost", "speed", "power", "effect", "penetration"],
+      "rows": [
+        {
+          "severity": "Mild",
+          "karma_cost": 3,
+          "speed": "1 Combat Turn",
+          "power": 8,
+          "effect": "Disorientation; Stun Damage",
+          "penetration": 0
+        },
+        {
+          "severity": "Moderate",
+          "karma_cost": 5,
+          "speed": "1 Combat Turn",
+          "power": 12,
+          "effect": "Disorientation; Nausea; Stun Damage",
+          "penetration": -1
+        },
+        {
+          "severity": "Serious",
+          "karma_cost": 10,
+          "speed": "Immediate",
+          "power": 10,
+          "effect": "Disorientation; Paralysis; Physical Damage",
+          "penetration": -2
+        },
+        {
+          "severity": "Deadly",
+          "karma_cost": 15,
+          "speed": "Immediate",
+          "power": 12,
+          "effect": "Nausea; Paralysis; Physical Damage",
+          "penetration": -2
+        }
+      ]
+    }
+  }
+}

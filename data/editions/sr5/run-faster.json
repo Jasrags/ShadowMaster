@@ -6457,6 +6457,8 @@
             "description": "A weapons supplier who offers firearms, ammunition, and military gear to those willing to barter.",
             "suggestedConnection": [3, 5],
             "suggestedLoyalty": [1, 3],
+            "serviceType": "swag",
+            "preferredPayment": "barter-hobby-vice",
             "commonServices": [
               "weapon-procurement",
               "ammunition-supply",
@@ -6479,6 +6481,8 @@
             "description": "A social hub who hears everything and knows everyone in the neighborhood. Run Faster expanded version.",
             "suggestedConnection": [1, 2],
             "suggestedLoyalty": [1, 4],
+            "serviceType": "legwork",
+            "preferredPayment": "cash-credstick",
             "commonServices": ["rumors", "introduction", "meeting-place", "street-intel"],
             "riskProfile": "low",
             "typicalCosts": {
@@ -6496,6 +6500,8 @@
             "description": "A private sector security professional who provides physical protection and extra muscle.",
             "suggestedConnection": [1, 3],
             "suggestedLoyalty": [1, 3],
+            "serviceType": "support",
+            "preferredPayment": "cash-credstick",
             "commonServices": [
               "physical-protection",
               "security-assessment",
@@ -6517,6 +6523,8 @@
             "description": "A gambling operator who takes bets, loans money, and knows the odds on everything.",
             "suggestedConnection": [1, 3],
             "suggestedLoyalty": [1, 3],
+            "serviceType": "shadow-service",
+            "preferredPayment": "cash-credstick",
             "commonServices": [
               "gambling",
               "loans",
@@ -6538,6 +6546,8 @@
             "description": "A border officer who can verify SINs, provide geographic intelligence, and assist with border crossings.",
             "suggestedConnection": [1, 3],
             "suggestedLoyalty": [1, 3],
+            "serviceType": "legwork",
+            "preferredPayment": "service-free-labor",
             "commonServices": [
               "border-crossing",
               "sin-verification",
@@ -6559,9 +6569,15 @@
             "description": "A professional tracker who chases down subjects for the right price.",
             "suggestedConnection": [2, 4],
             "suggestedLoyalty": [1, 3],
+            "serviceType": "legwork",
+            "preferredPayment": "cash-credstick",
             "commonServices": ["tracking", "skip-tracing", "bounty-collection", "street-intel"],
             "riskProfile": "high",
-            "typicalCosts": { "tracking": 1000, "skip-tracing": 500, "street-intel": 100 },
+            "typicalCosts": {
+              "tracking": 1000,
+              "skip-tracing": 500,
+              "street-intel": 100
+            },
             "commonLocations": ["Bail bond offices", "Dive bars"],
             "commonOrganizations": []
           },
@@ -6571,6 +6587,8 @@
             "description": "A skilled vehicle mechanic who handles illegal modifications, repairs, and stolen parts.",
             "suggestedConnection": [2, 4],
             "suggestedLoyalty": [1, 3],
+            "serviceType": "shadow-service",
+            "preferredPayment": "barter-easy-to-sell",
             "commonServices": [
               "vehicle-repair",
               "vehicle-modification",
@@ -6592,6 +6610,8 @@
             "description": "A community spiritual leader who provides emotional support, counseling, and sanctuary.",
             "suggestedConnection": [1, 3],
             "suggestedLoyalty": [2, 5],
+            "serviceType": "support",
+            "preferredPayment": "service-shadowrun-job",
             "commonServices": [
               "counseling",
               "sanctuary",
@@ -6599,7 +6619,11 @@
               "emotional-support"
             ],
             "riskProfile": "low",
-            "typicalCosts": { "counseling": 0, "sanctuary": 0, "community-connections": 50 },
+            "typicalCosts": {
+              "counseling": 0,
+              "sanctuary": 0,
+              "community-connections": 50
+            },
             "commonLocations": ["Churches", "Community centers", "Homeless shelters"],
             "commonOrganizations": []
           },
@@ -6609,6 +6633,8 @@
             "description": "A bureaucrat who leverages political power for personal gain and can offer government resources.",
             "suggestedConnection": [5, 7],
             "suggestedLoyalty": [1, 3],
+            "serviceType": "personal-favor",
+            "preferredPayment": "service-shadowrun-job",
             "commonServices": [
               "political-favors",
               "government-info",
@@ -6630,6 +6656,8 @@
             "description": "A fashion-forward socialite who knows everyone on the club scene and can network with the powerful.",
             "suggestedConnection": [2, 4],
             "suggestedLoyalty": [1, 3],
+            "serviceType": "networking",
+            "preferredPayment": "cash-corporate-scrip",
             "commonServices": [
               "social-networking",
               "fashion-trends",
@@ -6651,6 +6679,8 @@
             "description": "A corporate executive agent with access to intelligence and dirty secrets, fiercely loyal to her company.",
             "suggestedConnection": [3, 5],
             "suggestedLoyalty": [1, 3],
+            "serviceType": "legwork",
+            "preferredPayment": "cash-corporate-scrip",
             "commonServices": [
               "corporate-intel",
               "corporate-access",
@@ -6672,6 +6702,8 @@
             "description": "An obsessive convention-goer who can help with travel arrangements and cover stories through their fandom networks.",
             "suggestedConnection": [1, 2],
             "suggestedLoyalty": [1, 4],
+            "serviceType": "support",
+            "preferredPayment": "barter-hobby-vice",
             "commonServices": [
               "travel-arrangements",
               "cover-stories",
@@ -6693,6 +6725,8 @@
             "description": "A corporate office scheduler and social hub who knows all the gossip and office politics.",
             "suggestedConnection": [2, 4],
             "suggestedLoyalty": [1, 4],
+            "serviceType": "legwork",
+            "preferredPayment": "cash-corporate-scrip",
             "commonServices": [
               "corporate-gossip",
               "office-access",
@@ -6700,7 +6734,11 @@
               "internal-connections"
             ],
             "riskProfile": "low",
-            "typicalCosts": { "corporate-gossip": 50, "office-access": 200, "schedule-info": 100 },
+            "typicalCosts": {
+              "corporate-gossip": 50,
+              "office-access": 200,
+              "schedule-info": 100
+            },
             "commonLocations": ["Corporate lobbies", "Break rooms", "Coffee shops"],
             "commonOrganizations": []
           },
@@ -6710,6 +6748,8 @@
             "description": "A faceless corporate worker who can provide routine corporate access and an inside perspective.",
             "suggestedConnection": [1, 3],
             "suggestedLoyalty": [1, 4],
+            "serviceType": "support",
+            "preferredPayment": "cash-corporate-scrip",
             "commonServices": [
               "corporate-access",
               "routine-info",
@@ -6717,7 +6757,11 @@
               "inside-perspective"
             ],
             "riskProfile": "low",
-            "typicalCosts": { "corporate-access": 100, "routine-info": 50, "cover-identity": 200 },
+            "typicalCosts": {
+              "corporate-access": 100,
+              "routine-info": 50,
+              "cover-identity": 200
+            },
             "commonLocations": ["Corporate cafeterias", "Commuter trains", "Suburban bars"],
             "commonOrganizations": []
           },
@@ -6727,6 +6771,8 @@
             "description": "A smuggler who specializes in moving people across borders through tunnels, bribes, and alternative routes.",
             "suggestedConnection": [2, 4],
             "suggestedLoyalty": [1, 3],
+            "serviceType": "shadow-service",
+            "preferredPayment": "barter-easy-to-sell",
             "commonServices": [
               "border-smuggling",
               "safe-passage",
@@ -6748,6 +6794,8 @@
             "description": "A body shop tech who repairs and installs cyberware, with discounts on used parts.",
             "suggestedConnection": [3, 5],
             "suggestedLoyalty": [1, 3],
+            "serviceType": "shadow-service",
+            "preferredPayment": "service-shadowrun-job",
             "commonServices": [
               "cyberware-installation",
               "cyberware-repair",
@@ -6769,6 +6817,8 @@
             "description": "A criminal organization leader with an army of thugs and deep underworld knowledge.",
             "suggestedConnection": [2, 4],
             "suggestedLoyalty": [1, 3],
+            "serviceType": "legwork",
+            "preferredPayment": "service-shadowrun-job",
             "commonServices": [
               "muscle",
               "criminal-info",
@@ -6776,7 +6826,11 @@
               "underground-connections"
             ],
             "riskProfile": "high",
-            "typicalCosts": { "muscle": 500, "criminal-info": 200, "territory-access": 100 },
+            "typicalCosts": {
+              "muscle": 500,
+              "criminal-info": 200,
+              "territory-access": 100
+            },
             "commonLocations": ["Gang hangouts", "Back alleys", "Abandoned buildings"],
             "commonOrganizations": []
           },
@@ -6786,6 +6840,8 @@
             "description": "A mysterious spook with government connections who trades knowledge for odd jobs.",
             "suggestedConnection": [5, 7],
             "suggestedLoyalty": [1, 2],
+            "serviceType": "networking",
+            "preferredPayment": "service-drek-jobs",
             "commonServices": [
               "government-intel",
               "classified-info",
@@ -6807,9 +6863,15 @@
             "description": "A Matrix-savvy forger who creates fake SINs and data trails for the SINless.",
             "suggestedConnection": [4, 6],
             "suggestedLoyalty": [1, 3],
+            "serviceType": "shadow-service",
+            "preferredPayment": "cash-credstick",
             "commonServices": ["fake-sin", "fake-license", "identity-verification", "sin-analysis"],
             "riskProfile": "high",
-            "typicalCosts": { "fake-sin": 2500, "fake-license": 200, "identity-verification": 500 },
+            "typicalCosts": {
+              "fake-sin": 2500,
+              "fake-license": 200,
+              "identity-verification": 500
+            },
             "commonLocations": ["Matrix-only meetings", "Secure data havens"],
             "commonOrganizations": []
           },
@@ -6819,6 +6881,8 @@
             "description": "A stool pigeon with privileged inside information about criminal organizations.",
             "suggestedConnection": [1, 3],
             "suggestedLoyalty": [1, 2],
+            "serviceType": "shadow-service",
+            "preferredPayment": "cash-credstick",
             "commonServices": [
               "inside-info",
               "organization-intel",
@@ -6840,6 +6904,8 @@
             "description": "A trusted transporter with legitimate paperwork who moves goods across international borders.",
             "suggestedConnection": [5, 7],
             "suggestedLoyalty": [1, 3],
+            "serviceType": "shadow-service",
+            "preferredPayment": "cash-hard-currency",
             "commonServices": [
               "international-smuggling",
               "package-delivery",
@@ -6861,6 +6927,8 @@
             "description": "A law enforcement dispatcher who monitors security alarms and can warn runners of incoming responses.",
             "suggestedConnection": [1, 3],
             "suggestedLoyalty": [1, 3],
+            "serviceType": "legwork",
+            "preferredPayment": "service-shadowrun-job",
             "commonServices": [
               "law-enforcement-alerts",
               "police-response-timing",
@@ -6882,6 +6950,8 @@
             "description": "An investigator with access to criminal records, old cases, and cultivated sources.",
             "suggestedConnection": [4, 6],
             "suggestedLoyalty": [1, 3],
+            "serviceType": "legwork",
+            "preferredPayment": "service-shadowrun-job",
             "commonServices": [
               "criminal-investigation",
               "evidence-examination",
@@ -6903,6 +6973,8 @@
             "description": "A high-ranking Mafia advisor with legal knowledge and political influence.",
             "suggestedConnection": [4, 6],
             "suggestedLoyalty": [1, 3],
+            "serviceType": "personal-favor",
+            "preferredPayment": "service-drek-jobs",
             "commonServices": [
               "organized-crime-connections",
               "legal-advice",
@@ -6924,6 +6996,8 @@
             "description": "A corporate media power broker who controls what information reaches the masses.",
             "suggestedConnection": [4, 6],
             "suggestedLoyalty": [1, 2],
+            "serviceType": "networking",
+            "preferredPayment": "service-free-labor",
             "commonServices": [
               "media-manipulation",
               "news-suppression",
@@ -6945,6 +7019,8 @@
             "description": "A passionate activist who fights for metahuman equality and can organize protests as distractions.",
             "suggestedConnection": [2, 4],
             "suggestedLoyalty": [1, 4],
+            "serviceType": "support",
+            "preferredPayment": "barter-profession-items",
             "commonServices": [
               "protest-organization",
               "community-connections",
@@ -6966,6 +7042,8 @@
             "description": "An aggressive journalist who trades information for scoops and has access to databases.",
             "suggestedConnection": [1, 3],
             "suggestedLoyalty": [1, 3],
+            "serviceType": "legwork",
+            "preferredPayment": "service-shadowrun-job",
             "commonServices": [
               "news-and-rumors",
               "surveillance",
@@ -6987,6 +7065,8 @@
             "description": "A scientist who studies Awakened creatures and can identify paracritter threats and weaknesses.",
             "suggestedConnection": [1, 2],
             "suggestedLoyalty": [1, 4],
+            "serviceType": "legwork",
+            "preferredPayment": "barter-profession-items",
             "commonServices": [
               "paracritter-identification",
               "creature-weaknesses",
@@ -7008,9 +7088,15 @@
             "description": "A neighborhood trader who buys and sells used goods and knows everyone's routines.",
             "suggestedConnection": [1, 3],
             "suggestedLoyalty": [1, 4],
+            "serviceType": "swag",
+            "preferredPayment": "barter-easy-to-sell",
             "commonServices": ["buy-sell-goods", "neighborhood-intel", "used-gear", "quick-cash"],
             "riskProfile": "low",
-            "typicalCosts": { "neighborhood-intel": 20, "used-gear": 0, "quick-cash": 0 },
+            "typicalCosts": {
+              "neighborhood-intel": 20,
+              "used-gear": 0,
+              "quick-cash": 0
+            },
             "commonLocations": ["Pawn shops", "Flea markets"],
             "commonOrganizations": []
           },
@@ -7020,6 +7106,8 @@
             "description": "A chemical and pharmaceutical expert who can create, deconstruct, and supply drugs and medical supplies.",
             "suggestedConnection": [2, 4],
             "suggestedLoyalty": [1, 3],
+            "serviceType": "swag",
+            "preferredPayment": "cash-credstick",
             "commonServices": [
               "drug-procurement",
               "pharmaceutical-knowledge",
@@ -7041,6 +7129,8 @@
             "description": "A Matrix social media personality with a following who can influence opinions and gather information.",
             "suggestedConnection": [1, 2],
             "suggestedLoyalty": [1, 3],
+            "serviceType": "networking",
+            "preferredPayment": "cash-credstick",
             "commonServices": [
               "social-media-influence",
               "public-opinion",
@@ -7062,6 +7152,8 @@
             "description": "A trash dump scavenger who salvages low-tech goods and knows where to hide bodies.",
             "suggestedConnection": [1, 2],
             "suggestedLoyalty": [1, 3],
+            "serviceType": "swag",
+            "preferredPayment": "barter-easy-to-sell",
             "commonServices": [
               "salvaged-goods",
               "body-disposal",
@@ -7069,7 +7161,11 @@
               "barter-goods"
             ],
             "riskProfile": "low",
-            "typicalCosts": { "salvaged-goods": 0, "body-disposal": 500, "low-tech-equipment": 0 },
+            "typicalCosts": {
+              "salvaged-goods": 0,
+              "body-disposal": 500,
+              "low-tech-equipment": 0
+            },
             "commonLocations": ["Trash dumps", "Recycling centers", "Barrens outskirts"],
             "commonOrganizations": []
           },
@@ -7079,6 +7175,8 @@
             "description": "A low-budget security guard with building access and eyes on his assigned beat.",
             "suggestedConnection": [1, 2],
             "suggestedLoyalty": [1, 3],
+            "serviceType": "personal-favor",
+            "preferredPayment": "service-drek-jobs",
             "commonServices": [
               "security-patrol-info",
               "building-access",
@@ -7100,6 +7198,8 @@
             "description": "A wildly popular musician who can connect runners with influential people worldwide.",
             "suggestedConnection": [3, 5],
             "suggestedLoyalty": [1, 2],
+            "serviceType": "networking",
+            "preferredPayment": "service-free-labor",
             "commonServices": [
               "celebrity-access",
               "social-influence",
@@ -7121,6 +7221,8 @@
             "description": "A disciplined protector who manages safehouses and keeps their residents hidden.",
             "suggestedConnection": [2, 4],
             "suggestedLoyalty": [1, 4],
+            "serviceType": "support",
+            "preferredPayment": "cash-corporate-scrip",
             "commonServices": [
               "safe-lodging",
               "security",
@@ -7128,7 +7230,11 @@
               "fugitive-protection"
             ],
             "riskProfile": "medium",
-            "typicalCosts": { "safe-lodging": 300, "security": 200, "fugitive-protection": 500 },
+            "typicalCosts": {
+              "safe-lodging": 300,
+              "security": 200,
+              "fugitive-protection": 500
+            },
             "commonLocations": ["Safehouses", "Secure locations"],
             "commonOrganizations": []
           },
@@ -7138,6 +7244,8 @@
             "description": "A wannabe decker with homemade gear who can provide cheap Matrix services.",
             "suggestedConnection": [1, 3],
             "suggestedLoyalty": [1, 4],
+            "serviceType": "networking",
+            "preferredPayment": "cash-credstick",
             "commonServices": [
               "matrix-recon",
               "malware-deployment",
@@ -7159,9 +7267,15 @@
             "description": "A street-tough gang member who can shake trees and see what falls out.",
             "suggestedConnection": [1, 2],
             "suggestedLoyalty": [1, 3],
+            "serviceType": "networking",
+            "preferredPayment": "cash-credstick",
             "commonServices": ["street-muscle", "neighborhood-watch", "gang-intel", "intimidation"],
             "riskProfile": "medium",
-            "typicalCosts": { "street-muscle": 100, "gang-intel": 50, "intimidation": 75 },
+            "typicalCosts": {
+              "street-muscle": 100,
+              "gang-intel": 50,
+              "intimidation": 75
+            },
             "commonLocations": ["Street corners", "Gang hangouts", "Barrens bars"],
             "commonOrganizations": []
           },
@@ -7171,9 +7285,15 @@
             "description": "A SINless street dweller who leverages anonymity for surveillance and local intelligence.",
             "suggestedConnection": [1, 2],
             "suggestedLoyalty": [1, 3],
+            "serviceType": "support",
+            "preferredPayment": "barter-hobby-vice",
             "commonServices": ["surveillance", "barrens-knowledge", "anonymity", "local-rumors"],
             "riskProfile": "low",
-            "typicalCosts": { "surveillance": 50, "barrens-knowledge": 20, "local-rumors": 10 },
+            "typicalCosts": {
+              "surveillance": 50,
+              "barrens-knowledge": 20,
+              "local-rumors": 10
+            },
             "commonLocations": ["Under bridges", "Abandoned buildings", "Soup kitchens"],
             "commonOrganizations": []
           },
@@ -7183,6 +7303,8 @@
             "description": "A neighborhood fixture who observes comings and goings and provides friendly advice.",
             "suggestedConnection": [1, 2],
             "suggestedLoyalty": [1, 4],
+            "serviceType": "shadow-service",
+            "preferredPayment": "cash-credstick",
             "commonServices": [
               "local-intel",
               "meeting-point",
@@ -7190,7 +7312,11 @@
               "community-connections"
             ],
             "riskProfile": "low",
-            "typicalCosts": { "local-intel": 20, "meeting-point": 0, "small-goods": 0 },
+            "typicalCosts": {
+              "local-intel": 20,
+              "meeting-point": 0,
+              "small-goods": 0
+            },
             "commonLocations": ["Their store", "Local markets"],
             "commonOrganizations": []
           },
@@ -7200,6 +7326,8 @@
             "description": "An underground medical professional. Run Faster expanded version with different specializations.",
             "suggestedConnection": [3, 5],
             "suggestedLoyalty": [1, 3],
+            "serviceType": "shadow-service",
+            "preferredPayment": "barter-profession-items",
             "commonServices": [
               "medical-care",
               "cyberware-installation",
@@ -7221,9 +7349,15 @@
             "description": "A young barrens survivor who is small enough to be ignored but useful for running messages and watching.",
             "suggestedConnection": [1, 2],
             "suggestedLoyalty": [1, 4],
+            "serviceType": "support",
+            "preferredPayment": "barter-easy-to-sell",
             "commonServices": ["surveillance", "message-running", "street-info", "distraction"],
             "riskProfile": "low",
-            "typicalCosts": { "surveillance": 20, "message-running": 10, "street-info": 15 },
+            "typicalCosts": {
+              "surveillance": 20,
+              "message-running": 10,
+              "street-info": 15
+            },
             "commonLocations": ["Street corners", "Abandoned lots", "Soup kitchens"],
             "commonOrganizations": []
           },
@@ -7233,6 +7367,8 @@
             "description": "A magical supplies dealer. Run Faster expanded version with alchemy and sorcery skills.",
             "suggestedConnection": [2, 4],
             "suggestedLoyalty": [1, 3],
+            "serviceType": "swag",
+            "preferredPayment": "cash-credstick",
             "commonServices": [
               "magical-supplies",
               "arcane-knowledge",
@@ -7254,6 +7390,8 @@
             "description": "A city navigator who works long hours and can provide transportation, even into dangerous areas.",
             "suggestedConnection": [1, 3],
             "suggestedLoyalty": [1, 4],
+            "serviceType": "support",
+            "preferredPayment": "cash-corporate-scrip",
             "commonServices": [
               "transportation",
               "city-navigation",
@@ -7275,6 +7413,8 @@
             "description": "An eco-terrorist devoted to opposing environmental destruction through extreme measures.",
             "suggestedConnection": [3, 5],
             "suggestedLoyalty": [1, 3],
+            "serviceType": "personal-favor",
+            "preferredPayment": "barter-illegal-items",
             "commonServices": [
               "demolitions-expertise",
               "eco-terrorism-connections",
@@ -7296,6 +7436,8 @@
             "description": "An old-school Pink Mohawk rebel who disrupts corporate media and broadcasts hidden truths.",
             "suggestedConnection": [1, 3],
             "suggestedLoyalty": [1, 4],
+            "serviceType": "shadow-service",
+            "preferredPayment": "cash-credstick",
             "commonServices": [
               "media-disruption",
               "signal-jamming",
@@ -7317,6 +7459,8 @@
             "description": "A smooth-talking vehicle dealer who sells anonymous vehicles and can switch grid IDs.",
             "suggestedConnection": [1, 3],
             "suggestedLoyalty": [1, 3],
+            "serviceType": "swag",
+            "preferredPayment": "barter-profession-items",
             "commonServices": [
               "vehicle-sales",
               "vehicle-rental",
@@ -7324,7 +7468,11 @@
               "anonymous-transportation"
             ],
             "riskProfile": "low",
-            "typicalCosts": { "vehicle-sales": 0, "vehicle-rental": 200, "grid-id-switching": 500 },
+            "typicalCosts": {
+              "vehicle-sales": 0,
+              "vehicle-rental": 200,
+              "grid-id-switching": 500
+            },
             "commonLocations": ["Used car lots", "Parking garages", "Auto repair shops"],
             "commonOrganizations": []
           }
@@ -7341,72 +7489,183 @@
           "gender": {
             "diceFormula": "1d6",
             "results": [
-              { "roll": [1, 3], "result": "Male" },
-              { "roll": [4, 6], "result": "Female" }
+              {
+                "roll": [1, 3],
+                "result": "Male"
+              },
+              {
+                "roll": [4, 6],
+                "result": "Female"
+              }
             ]
           },
           "age": {
             "diceFormula": "1d6",
             "results": [
-              { "roll": [1, 2], "result": "Young" },
-              { "roll": [3, 4], "result": "Middle-aged" },
-              { "roll": [5, 6], "result": "Old" }
+              {
+                "roll": [1, 2],
+                "result": "Young"
+              },
+              {
+                "roll": [3, 4],
+                "result": "Middle-aged"
+              },
+              {
+                "roll": [5, 6],
+                "result": "Old"
+              }
             ]
           },
           "metatype": {
             "diceFormula": "2d6",
             "results": [
-              { "roll": [2, 5], "result": "Human" },
-              { "roll": [6, 7], "result": "Ork" },
-              { "roll": [8, 9], "result": "Elf" },
-              { "roll": [10, 11], "result": "Dwarf" },
-              { "roll": [12, 12], "result": "Troll" }
+              {
+                "roll": [2, 5],
+                "result": "Human"
+              },
+              {
+                "roll": [6, 7],
+                "result": "Ork"
+              },
+              {
+                "roll": [8, 9],
+                "result": "Elf"
+              },
+              {
+                "roll": [10, 11],
+                "result": "Dwarf"
+              },
+              {
+                "roll": [12, 12],
+                "result": "Troll"
+              }
             ]
           },
           "personalLife": {
             "diceFormula": "1d6",
             "results": [
-              { "roll": 1, "result": "Single" },
-              { "roll": 2, "result": "In a Relationship" },
-              { "roll": 3, "result": "Familial Relationships" },
-              { "roll": 4, "result": "Divorced" },
-              { "roll": 5, "result": "Widowed" },
-              { "roll": 6, "result": "None of Your Damn Business" }
+              {
+                "roll": 1,
+                "result": "Single"
+              },
+              {
+                "roll": 2,
+                "result": "In a Relationship"
+              },
+              {
+                "roll": 3,
+                "result": "Familial Relationships"
+              },
+              {
+                "roll": 4,
+                "result": "Divorced"
+              },
+              {
+                "roll": 5,
+                "result": "Widowed"
+              },
+              {
+                "roll": 6,
+                "result": "None of Your Damn Business"
+              }
             ]
           },
           "preferredPayment": {
             "diceFormula": "2d6",
             "results": [
-              { "roll": 2, "result": "Cash (hard currency)" },
-              { "roll": 3, "result": "Service (drek jobs)" },
-              { "roll": 4, "result": "Cash (corp scrip)" },
-              { "roll": 5, "result": "Barter (items needed for the profession)" },
-              { "roll": 6, "result": "Service (shadowrunner job)" },
-              { "roll": 7, "result": "Cash (credstick)" },
-              { "roll": 8, "result": "Cash (credstick)" },
-              { "roll": 9, "result": "Barter (easy-to-sell items)" },
-              { "roll": 10, "result": "Service (free-labor jobs)" },
-              { "roll": 11, "result": "Barter (hobby/vice items)" },
-              { "roll": 12, "result": "Cash (ECC or other foreign electronic currency)" }
+              {
+                "roll": 2,
+                "result": "Cash (hard currency)"
+              },
+              {
+                "roll": 3,
+                "result": "Service (drek jobs)"
+              },
+              {
+                "roll": 4,
+                "result": "Cash (corp scrip)"
+              },
+              {
+                "roll": 5,
+                "result": "Barter (items needed for the profession)"
+              },
+              {
+                "roll": 6,
+                "result": "Service (shadowrunner job)"
+              },
+              {
+                "roll": 7,
+                "result": "Cash (credstick)"
+              },
+              {
+                "roll": 8,
+                "result": "Cash (credstick)"
+              },
+              {
+                "roll": 9,
+                "result": "Barter (easy-to-sell items)"
+              },
+              {
+                "roll": 10,
+                "result": "Service (free-labor jobs)"
+              },
+              {
+                "roll": 11,
+                "result": "Barter (hobby/vice items)"
+              },
+              {
+                "roll": 12,
+                "result": "Cash (ECC or other foreign electronic currency)"
+              }
             ]
           },
           "hobbiesVices": {
             "diceFormula": "2d6",
             "results": [
-              { "roll": 2, "result": "Gamemaster's choice" },
-              { "roll": 3, "result": "Family obligations (children, parents, siblings, etc.)" },
-              { "roll": 4, "result": "Gambling (cards, horses, etc.)" },
-              { "roll": 5, "result": "Bad habits (illegal drugs, BTLs)" },
+              {
+                "roll": 2,
+                "result": "Gamemaster's choice"
+              },
+              {
+                "roll": 3,
+                "result": "Family obligations (children, parents, siblings, etc.)"
+              },
+              {
+                "roll": 4,
+                "result": "Gambling (cards, horses, etc.)"
+              },
+              {
+                "roll": 5,
+                "result": "Bad habits (illegal drugs, BTLs)"
+              },
               {
                 "roll": 6,
                 "result": "Personal grooming (clothes/fashion, shoes, perfumes, cosmetic treatments)"
               },
-              { "roll": 7, "result": "Nothing of interest or of use" },
-              { "roll": 8, "result": "Social habits (drinking, smoking)" },
-              { "roll": 9, "result": "Entertainment (trid shows, movies, music)" },
-              { "roll": 10, "result": "Weapons (guns, blades, military, etc.)" },
-              { "roll": 11, "result": "Vehicles (cars, drones, etc.)" },
-              { "roll": 12, "result": "Gamemaster's choice" }
+              {
+                "roll": 7,
+                "result": "Nothing of interest or of use"
+              },
+              {
+                "roll": 8,
+                "result": "Social habits (drinking, smoking)"
+              },
+              {
+                "roll": 9,
+                "result": "Entertainment (trid shows, movies, music)"
+              },
+              {
+                "roll": 10,
+                "result": "Weapons (guns, blades, military, etc.)"
+              },
+              {
+                "roll": 11,
+                "result": "Vehicles (cars, drones, etc.)"
+              },
+              {
+                "roll": 12,
+                "result": "Gamemaster's choice"
+              }
             ]
           },
           "mentalQuirks": [
@@ -7483,7 +7742,10 @@
           {
             "id": "bandersnatch",
             "name": "Bandersnatch",
-            "source": { "book": "run-faster", "page": 148 },
+            "source": {
+              "book": "run-faster",
+              "page": 148
+            },
             "hmhvvStrain": "hmhvv-ii",
             "baseMetatypes": ["sasquatch"],
             "karmaCost": 22,
@@ -7505,7 +7767,10 @@
           {
             "id": "banshee",
             "name": "Banshee",
-            "source": { "book": "run-faster", "page": 148 },
+            "source": {
+              "book": "run-faster",
+              "page": 148
+            },
             "hmhvvStrain": "hmhvv-i",
             "baseMetatypes": ["elf"],
             "karmaCost": 32,
@@ -7533,7 +7798,10 @@
           {
             "id": "dzoo-noo-qua",
             "name": "Dzoo-Noo-Qua",
-            "source": { "book": "run-faster", "page": 149 },
+            "source": {
+              "book": "run-faster",
+              "page": 149
+            },
             "hmhvvStrain": "hmhvv-i",
             "baseMetatypes": ["troll"],
             "karmaCost": 43,
@@ -7562,7 +7830,10 @@
           {
             "id": "fomoraig",
             "name": "Fomoraig",
-            "source": { "book": "run-faster", "page": 149 },
+            "source": {
+              "book": "run-faster",
+              "page": 149
+            },
             "hmhvvStrain": "hmhvv-ii",
             "baseMetatypes": ["troll"],
             "karmaCost": 22,
@@ -7580,7 +7851,10 @@
           {
             "id": "ghoul",
             "name": "Ghoul",
-            "source": { "book": "run-faster", "page": 150 },
+            "source": {
+              "book": "run-faster",
+              "page": 150
+            },
             "hmhvvStrain": "hmhvv-iii",
             "baseMetatypes": ["any"],
             "karmaCost": 29,
@@ -7602,7 +7876,10 @@
           {
             "id": "gnawer",
             "name": "Gnawer",
-            "source": { "book": "run-faster", "page": 150 },
+            "source": {
+              "book": "run-faster",
+              "page": 150
+            },
             "hmhvvStrain": "hmhvv-ii",
             "baseMetatypes": ["dwarf"],
             "karmaCost": 29,
@@ -7620,7 +7897,10 @@
           {
             "id": "goblin",
             "name": "Goblin",
-            "source": { "book": "run-faster", "page": 151 },
+            "source": {
+              "book": "run-faster",
+              "page": 151
+            },
             "hmhvvStrain": "hmhvv-i",
             "baseMetatypes": ["dwarf"],
             "karmaCost": 27,
@@ -7642,7 +7922,10 @@
           {
             "id": "grendel",
             "name": "Grendel",
-            "source": { "book": "run-faster", "page": 151 },
+            "source": {
+              "book": "run-faster",
+              "page": 151
+            },
             "hmhvvStrain": "hmhvv-ii",
             "baseMetatypes": ["ork"],
             "karmaCost": 32,
@@ -7660,7 +7943,10 @@
           {
             "id": "harvester",
             "name": "Harvester",
-            "source": { "book": "run-faster", "page": 152 },
+            "source": {
+              "book": "run-faster",
+              "page": 152
+            },
             "hmhvvStrain": "hmhvv-ii",
             "baseMetatypes": ["elf"],
             "karmaCost": 29,
@@ -7678,7 +7964,10 @@
           {
             "id": "loup-garou",
             "name": "Loup-Garou",
-            "source": { "book": "run-faster", "page": 152 },
+            "source": {
+              "book": "run-faster",
+              "page": 152
+            },
             "hmhvvStrain": "hmhvv-ii",
             "baseMetatypes": ["human"],
             "karmaCost": 30,
@@ -7701,7 +7990,10 @@
           {
             "id": "mutaqua",
             "name": "Mutaqua",
-            "source": { "book": "run-faster", "page": 153 },
+            "source": {
+              "book": "run-faster",
+              "page": 153
+            },
             "hmhvvStrain": "hmhvv-ia",
             "baseMetatypes": ["troll"],
             "karmaCost": 54,
@@ -7733,7 +8025,10 @@
           {
             "id": "nosferatu",
             "name": "Nosferatu",
-            "source": { "book": "run-faster", "page": 153 },
+            "source": {
+              "book": "run-faster",
+              "page": 153
+            },
             "hmhvvStrain": "hmhvv-ia",
             "baseMetatypes": ["human"],
             "karmaCost": 48,
@@ -7766,7 +8061,10 @@
           {
             "id": "vampire",
             "name": "Vampire",
-            "source": { "book": "run-faster", "page": 154 },
+            "source": {
+              "book": "run-faster",
+              "page": 154
+            },
             "hmhvvStrain": "hmhvv-i",
             "baseMetatypes": ["human"],
             "karmaCost": 27,
@@ -7797,7 +8095,10 @@
           {
             "id": "wendigo",
             "name": "Wendigo",
-            "source": { "book": "run-faster", "page": 155 },
+            "source": {
+              "book": "run-faster",
+              "page": 155
+            },
             "hmhvvStrain": "hmhvv-i",
             "baseMetatypes": ["ork"],
             "karmaCost": 47,

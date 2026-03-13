@@ -1,0 +1,367 @@
+{
+  "tables": {
+    "qualities-catalog": {
+      "source": "Run Faster, pp. 151-159",
+      "description": "Catalog of negative qualities from Run Faster",
+      "columns": ["name", "karma", "description", "restrictions"],
+      "rows": [
+        {
+          "name": "Albinism",
+          "karma": "4 or 8",
+          "description": "Partial/complete lack of pigmentation. Weak Glare in indoor/overcast lighting; Moderate Glare on sunny days. All other Glare modifiers increased by one level. Halved sunburn resistance test duration. 4 Karma if character has cybereyes.",
+          "restrictions": "Cybereyes reduce to 4 Karma. Must buy down immediately if cybereyes gained during play."
+        },
+        {
+          "name": "Amnesia (Surface Loss)",
+          "karma": 4,
+          "description": "Classic amnesia. Retains skills/abilities but no memory of identity or past. Knowledge skills absent; 2 Karma to access existing Knowledge skill, normal cost for new ones.",
+          "restrictions": "GM determines backstory."
+        },
+        {
+          "name": "Amnesia (Neural Deletion)",
+          "karma": 8,
+          "description": "Extreme memory loss. Physical Attributes, skills, qualities, Edge all start as mysteries. Requires GM collaboration for character creation.",
+          "restrictions": "Requires GM approval and collaboration. Character creation is largely GM-controlled."
+        },
+        {
+          "name": "Asthma",
+          "karma": 8,
+          "description": "Chronic asthma. Additional/more rapid Fatigue effects. Faces Fatigue damage twice as often. Cumulative effects: 1 box=-1 Physical Actions/Social Limit; 2 boxes=-1 all Actions/Social Limit; 4 boxes=Fatigue resisted with Willpower only; 8 boxes=-1 all Actions/Social Limit.",
+          "restrictions": "None listed."
+        },
+        {
+          "name": "Bi-Polar",
+          "karma": 7,
+          "description": "Mental state fluctuates. GM rolls 1d6: 1-2=manic (+1 AGI/REA, -2 LOG/INT), 3-4=depressed (-2 AGI/REA/LOG/INT), 5-6=stable. Medication: 500 nuyen/month with SIN.",
+          "restrictions": "Requires prescription and SIN for medication."
+        },
+        {
+          "name": "Big Regret",
+          "karma": 5,
+          "description": "Dark secret from past. Social Limit -3 against anyone who knows. Cannot buy off until secret becomes public; then +1 Notoriety and must buy off ASAP.",
+          "restrictions": "Cannot buy off until secret is public."
+        },
+        {
+          "name": "Blind",
+          "karma": "15 (5 with Astral Sight)",
+          "description": "Completely blind. Auto-fail vision Perception. -4 general Perception, -3 Surprise Tests. Blind Fire in Ranged, Total Darkness in Melee. Cannot use cybereyes. Awakened with astral perception: -2 all physical plane actions.",
+          "restrictions": "Cannot use cybereyes. 5 Karma cost only for characters with Astral Sight access."
+        },
+        {
+          "name": "Borrowed Time",
+          "karma": 20,
+          "description": "Fatal condition. Each session GM secretly rolls 3d6; three of a kind = character dies at dramatic moment. Cannot be bought off. Character can survive by burning ALL current Edge.",
+          "restrictions": "Cannot be bought off with Karma. Only Edge burn removes it."
+        },
+        {
+          "name": "Computer Illiterate",
+          "karma": 7,
+          "description": "-4 dice pool modifier to all tests involving computers, electronic devices, or Matrix-connected systems. GM may require Success Tests for basic tasks during stress.",
+          "restrictions": "None listed."
+        },
+        {
+          "name": "Creature of Comfort",
+          "karma": "10, 17, or 25",
+          "description": "Accustomed to a Lifestyle level (10=Middle, 17=High, 25=Luxury). -1 to all Social and Healing tests per Lifestyle category below chosen level for every day spent slumming.",
+          "restrictions": "None listed."
+        },
+        {
+          "name": "Day Job",
+          "karma": "5, 10, or 15",
+          "description": "Regular job. 5 Karma=1,000 nuyen/10 hrs/wk; 10 Karma=2,500 nuyen/20 hrs/wk; 15 Karma=5,000 nuyen/40 hrs/wk. Missing work: first=warning, second=fired (-2 Street Cred, lose month salary).",
+          "restrictions": "Requires valid SIN (SINner quality or Rating 4+ fake SIN)."
+        },
+        {
+          "name": "Deaf",
+          "karma": 15,
+          "description": "Completely deaf. Auto-fail audio Perception. -2 general Perception, -3 Surprise Tests. Other modifiers at GM discretion.",
+          "restrictions": "None listed."
+        },
+        {
+          "name": "Did You Just Call Me Dumb?",
+          "karma": 3,
+          "description": "Character camouflages insults in speech. Any Glitch on any Social test always counts as a Critical Glitch.",
+          "restrictions": "None listed."
+        },
+        {
+          "name": "Dimmer Bulb",
+          "karma": "5 per level (max 3)",
+          "description": "-1 dice pool modifier per level on all tests involving Logic or Intuition.",
+          "restrictions": "Maximum 3 levels."
+        },
+        {
+          "name": "Driven",
+          "karma": 2,
+          "description": "Obsessive quest. Willpower + Logic (4) Test when faced with clue/opportunity or must drop everything to pursue it. +1 Willpower while actively working a lead.",
+          "restrictions": "None listed."
+        },
+        {
+          "name": "Emotional Attachment",
+          "karma": 5,
+          "description": "Irrational attachment to specific gear. Will always use it; risks life to retrieve if lost. If irretrievably lost: spend Karma to buy off OR -1 penalty to relevant tests for 6 months, then transfers to new item.",
+          "restrictions": "None listed."
+        },
+        {
+          "name": "Ex-Con",
+          "karma": 15,
+          "description": "Fresh out of prison on parole. Criminal record with police/prison corp. Must check in with PO 2x/week Matrix + 1x/week in person. No Restricted/Forbidden augmentations. Street contacts OK; Corp contacts need Loyalty 4+; Law enforcement need Loyalty 5-6.",
+          "restrictions": "Cannot be bought off; must be replaced with equal/greater negative qualities."
+        },
+        {
+          "name": "Flashbacks",
+          "karma": "7 or 15",
+          "description": "Vivid hallucinations triggered by specific stimulus. Composure (5) Test or incapacitated for (5 - hits) Combat Turns. 7 Karma=once every other run; 15 Karma=at least once per session.",
+          "restrictions": "Stimulus determined with GM during character creation."
+        },
+        {
+          "name": "Hobo with a Shotgun",
+          "karma": 10,
+          "description": "Will not stay above Squatter lifestyle. If forced above Squatter: -2 to all Mental attributes until spending a day in Squatter/Street lifestyle.",
+          "restrictions": "None listed."
+        },
+        {
+          "name": "Hung Out to Dry",
+          "karma": 8,
+          "description": "Contacts have stopped responding; character is a social pariah for unknown reason. GM knows the cause. Must buy off or replace with equal negative quality once resolved.",
+          "restrictions": "Must be bought off or replaced when situation is resolved."
+        },
+        {
+          "name": "Illiterate",
+          "karma": 5,
+          "description": "Cannot read. Social Limit -1. -2 dice pool modifier with computer/commlink systems. Cannot choose reading-dependent Knowledge skills at creation. Reading-dependent Knowledge skills cost double Karma during play.",
+          "restrictions": "None listed."
+        },
+        {
+          "name": "In Debt",
+          "karma": "1 to 15",
+          "description": "Owes money. 5,000 nuyen per Karma point during character creation (max 75,000 nuyen). Debt = borrowed + 50%, +10%/month compound. Missing payment: 1 box Physical per 20,000 nuyen owed (unresistable, unhealable until paid).",
+          "restrictions": "None listed."
+        },
+        {
+          "name": "Incomplete Deprogramming",
+          "karma": 10,
+          "description": "Former deep-cover agent. Stress triggers Composure (4) Test or cover identity takes control for 1D6 minutes. Loses runner skills during episodes. Can trigger multiple times per encounter.",
+          "restrictions": "None listed."
+        },
+        {
+          "name": "Infirm",
+          "karma": "5 to 25 (per 5 Karma)",
+          "description": "Diminished physical fitness. Per 5 Karma: all Physical Attribute maximums drop by 1. Max 5 times. No Attribute maximum below 1. Cannot exceed modified maximum by any source.",
+          "restrictions": "Stacks with Aged (Bullets & Bandages p. 12). No Attribute maximum below 1."
+        },
+        {
+          "name": "Liar",
+          "karma": 7,
+          "description": "-1 dice pool modifier to all Social skill tests. GM rolls 1D6 when addressing someone: on 1, target assumes character is lying. Repeat offense with same NPC: go wrong on 1-2. Third offense: +1 Notoriety, -1 Loyalty (0 Loyalty = contact lost).",
+          "restrictions": "None listed."
+        },
+        {
+          "name": "Night Blindness",
+          "karma": 6,
+          "description": "Natural vision doesn't adjust to poor lighting. All Light/Glare Environmental modifiers one category worse (except Full Light/No Glare).",
+          "restrictions": "Incompatible with any quality affecting eyes. Must buy off if corrective cyber/bioware installed."
+        },
+        {
+          "name": "Oblivious",
+          "karma": "6 or 10",
+          "description": "6 Karma: -2 dice pool modifier to all Perception Tests (standard, Astral, Matrix). 10 Karma: all Perception Test thresholds increased by 1.",
+          "restrictions": "None listed."
+        },
+        {
+          "name": "Pacifist",
+          "karma": "10 or 15",
+          "description": "10 Karma: avoids violence except self-defense (after clear attack). Non-lethal still counts as violent. 15 Karma: no violence ever. Violence causes -1 Mental tests until Charisma+Willpower (20, 1 day) Extended Test. Failure in 7 days: lose 1 WIL or CHA (permanent). Killing: -2 modifier, 1 week interval, Mental Limit -1.",
+          "restrictions": "None listed."
+        },
+        {
+          "name": "Paranoia",
+          "karma": 7,
+          "description": "-2 dice pool modifier on all Social Tests with contacts Loyalty <4 or unfamiliar persons. Refuses to share address/location. Must change living spaces every few months.",
+          "restrictions": "None listed."
+        },
+        {
+          "name": "Paraplegic",
+          "karma": 10,
+          "description": "Paralyzed from waist down. Wheelchair locomotion: walk=AGI x 3, run=AGI x 4. Trouble with stairs/curbs. Lifestyle +10% cost. Vehicles +5% or need Rigger Interface for DNI. No effect on astral/Matrix.",
+          "restrictions": "None listed."
+        },
+        {
+          "name": "Phobia",
+          "karma": "5 to 15 (calculated)",
+          "description": "Visceral fear of specific stimulus. Cost = Frequency (Uncommon 2, Common 5) + Severity (Mild 3: -1 all; Moderate 5: -3 all + Composure (2) or flee; Severe 10: -6 all + Composure (5) or flee (5-hits) turns).",
+          "restrictions": "None listed."
+        },
+        {
+          "name": "Pie Iesu Domine. Dona Eis Requiem.",
+          "karma": 2,
+          "description": "Flagellant. Gains High Pain Tolerance 1. Always starts day with 1 box Physical damage. Seeks to re-inflict damage if healed.",
+          "restrictions": "None listed."
+        },
+        {
+          "name": "Poor Self Control (Braggart)",
+          "karma": 5,
+          "description": "Must top others' claims. Composure (3) to resist. May be ignored, considered infantile, or challenged to prove claims.",
+          "restrictions": "Can take multiple Poor Self Control sub-types (once each)."
+        },
+        {
+          "name": "Poor Self Control (Thrill-Seeker)",
+          "karma": 4,
+          "description": "Always takes most dangerous option. Composure (2) to resist. Payoff: +1 Initiative Score for 5 Combat Turns.",
+          "restrictions": "Can take multiple Poor Self Control sub-types (once each)."
+        },
+        {
+          "name": "Poor Self Control (Compulsive)",
+          "karma": "4 to 12",
+          "description": "Must exert order. Composure (2) to resist. Base = 2 x Composure threshold (1-4); +2 personal environment, +3 single public aspect, +4 broad public environment.",
+          "restrictions": "Can take multiple Poor Self Control sub-types (once each)."
+        },
+        {
+          "name": "Poor Self Control (Vindictive)",
+          "karma": 5,
+          "description": "Must consider escalation/retaliation. Composure (2) to resist instant payback. Even when resisted, must add offender to hit list.",
+          "restrictions": "Can take multiple Poor Self Control sub-types (once each)."
+        },
+        {
+          "name": "Poor Self Control (Combat Monster)",
+          "karma": 10,
+          "description": "Loses self-control in combat. Fights until all opponents disabled. Composure (3) to break off fight.",
+          "restrictions": "Can take multiple Poor Self Control sub-types (once each)."
+        },
+        {
+          "name": "Records on File",
+          "karma": "1 per Rating (max 10)",
+          "description": "Big 10 megacorp has records. +2 dice pool modifier for megacorp agents to identify character. +2 to track/locate in C+ security areas.",
+          "restrictions": "Incompatible with Erased quality."
+        },
+        {
+          "name": "Reduced (Smell)",
+          "karma": 2,
+          "description": "-2 dice pool modifier to tests involving smell. Cumulative with other Reduced senses for general Perception.",
+          "restrictions": "Cannot have Reduced and corresponding total loss (Blind/Deaf) simultaneously."
+        },
+        {
+          "name": "Reduced (Taste)",
+          "karma": 2,
+          "description": "-2 dice pool modifier to tests involving taste. Cumulative with other Reduced senses for general Perception.",
+          "restrictions": "Cannot have Reduced and corresponding total loss (Blind/Deaf) simultaneously."
+        },
+        {
+          "name": "Reduced (Hearing)",
+          "karma": 5,
+          "description": "-2 dice pool modifier to tests involving hearing. Cumulative with other Reduced senses for general Perception.",
+          "restrictions": "Cannot have Reduced (Hearing) and Deaf at the same time."
+        },
+        {
+          "name": "Reduced (Sight)",
+          "karma": 5,
+          "description": "-2 dice pool modifier to tests involving sight. Cumulative with other Reduced senses for general Perception.",
+          "restrictions": "Cannot have Reduced (Sight) and Blind at the same time."
+        },
+        {
+          "name": "Reduced (Astral Sight)",
+          "karma": 5,
+          "description": "-2 dice pool modifier to tests involving astral sight. Cumulative with other Reduced senses for general Perception.",
+          "restrictions": "Awakened characters only (6 Karma per book text for certain Awakened)."
+        },
+        {
+          "name": "Reduced (Touch)",
+          "karma": 10,
+          "description": "-2 dice pool modifier to tests involving touch. Affects most Physical skill rolls due to lack of tactile sensitivity.",
+          "restrictions": "None listed."
+        },
+        {
+          "name": "Sensory Overload Syndrome",
+          "karma": 15,
+          "description": "Epileptic-like episodes in high ARO saturation areas. Willpower + Edge (4) Test or seizure for (5 - hits) minutes. Preventable by deactivating enhancements/commlink or hidden mode.",
+          "restrictions": "Hidden mode creates identification issues."
+        },
+        {
+          "name": "Signature",
+          "karma": 10,
+          "description": "Must leave calling card at every job. Tests to identify/track character get dice pool modifier = Street Cred + Public Awareness.",
+          "restrictions": "None listed."
+        },
+        {
+          "name": "Vendetta",
+          "karma": 7,
+          "description": "Blood feud with individual or group. Composure (3) when encountering target or must incite violent confrontation. If nemesis neutralized: buy off or new nemesis assigned.",
+          "restrictions": "None listed."
+        },
+        {
+          "name": "Wanted",
+          "karma": 10,
+          "description": "Bounty/contract on character worth 25,000+ nuyen. Must deal with bounty hunters frequently. If bounty cleared, must buy off with Karma.",
+          "restrictions": "None listed."
+        }
+      ]
+    },
+    "asthma-effects": {
+      "source": "Run Faster, p. 152",
+      "description": "Cumulative effects of Asthma quality based on Fatigue damage boxes",
+      "columns": ["damage_boxes", "effects"],
+      "rows": [
+        {
+          "damage_boxes": 1,
+          "effects": "Wheezing; -1 dice pool modifier to all Physical Actions; Social Limit decreased by 1"
+        },
+        {
+          "damage_boxes": 2,
+          "effects": "Shortness of breath; -1 dice pool modifier to all Actions; Social Limit decreased by 1 additional point"
+        },
+        {
+          "damage_boxes": 4,
+          "effects": "Chest tightness; further Fatigue damage resisted with only Willpower"
+        },
+        {
+          "damage_boxes": 8,
+          "effects": "Wracking cough; -1 dice pool modifier to all Actions; Social Limit decreased by 1 additional point"
+        }
+      ]
+    },
+    "day-job": {
+      "source": "Run Faster, p. 154",
+      "description": "Day Job quality tiers showing Karma, salary, and hours",
+      "columns": ["karma", "salary_per_month", "hours_per_week"],
+      "rows": [
+        { "karma": 5, "salary_per_month": 1000, "hours_per_week": 10 },
+        { "karma": 10, "salary_per_month": 2500, "hours_per_week": 20 },
+        { "karma": 15, "salary_per_month": 5000, "hours_per_week": 40 }
+      ]
+    },
+    "phobia-frequency": {
+      "source": "Run Faster, p. 158",
+      "description": "Phobia frequency component of Karma cost",
+      "columns": ["condition", "karma", "description"],
+      "rows": [
+        {
+          "condition": "Uncommon",
+          "karma": 2,
+          "description": "Triggering condition is relatively rare (e.g., smell of roses, specific insects)"
+        },
+        {
+          "condition": "Common",
+          "karma": 5,
+          "description": "Triggering condition is commonly encountered (e.g., sunlight, trolls, insects, magic, outdoors, crowds)"
+        }
+      ]
+    },
+    "phobia-severity": {
+      "source": "Run Faster, p. 158",
+      "description": "Phobia severity component of Karma cost and mechanical effects",
+      "columns": ["severity", "karma", "effects"],
+      "rows": [
+        { "severity": "Mild", "karma": 3, "effects": "-1 dice pool modifier to all actions" },
+        {
+          "severity": "Moderate",
+          "karma": 5,
+          "effects": "-3 dice pool modifier to all actions; Composure (2) Test or must get away from source"
+        },
+        {
+          "severity": "Severe",
+          "karma": 10,
+          "effects": "-6 dice pool modifier; Composure (5) Test or must flee for (5 - hits) Combat Turns"
+        }
+      ]
+    }
+  }
+}

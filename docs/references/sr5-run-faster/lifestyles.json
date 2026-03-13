@@ -1,0 +1,872 @@
+{
+  "source": "Run Faster, p.212-227",
+  "tables": {
+    "lifestyle-levels": {
+      "source": "Run Faster, p.217-218",
+      "description": "Base category levels, limits, points, and costs for each lifestyle tier",
+      "columns": [
+        "id",
+        "name",
+        "comfortsAndNecessities",
+        "comfortsAndNecessitiesLimit",
+        "security",
+        "securityLimit",
+        "neighborhood",
+        "neighborhoodLimit",
+        "points",
+        "costPerMonth",
+        "builtInOptions",
+        "notes"
+      ],
+      "rows": [
+        {
+          "id": "bolt-hole",
+          "name": "Bolt Hole",
+          "comfortsAndNecessities": 1,
+          "comfortsAndNecessitiesLimit": 2,
+          "security": 1,
+          "securityLimit": 4,
+          "neighborhood": 1,
+          "neighborhoodLimit": 4,
+          "points": 4,
+          "costPerMonth": 1000,
+          "builtInOptions": ["not-a-home"],
+          "notes": "+4 threshold to tracking tests. Entertainment: assets only (no services or outings). Cost applies for entire month even if used for a day."
+        },
+        {
+          "id": "street",
+          "name": "Street",
+          "comfortsAndNecessities": 0,
+          "comfortsAndNecessitiesLimit": 1,
+          "security": 0,
+          "securityLimit": 1,
+          "neighborhood": 0,
+          "neighborhoodLimit": 1,
+          "points": 2,
+          "costPerMonth": 0,
+          "builtInOptions": [],
+          "notes": "Increased levels in C&N, Security, and Neighborhood result in flat increase of 50 nuyen per level per month (not percentage). Assets/services must be GM approved and accessible to general public."
+        },
+        {
+          "id": "squatter",
+          "name": "Squatter",
+          "comfortsAndNecessities": 1,
+          "comfortsAndNecessitiesLimit": 2,
+          "security": 1,
+          "securityLimit": 2,
+          "neighborhood": 1,
+          "neighborhoodLimit": 2,
+          "points": 2,
+          "costPerMonth": 500,
+          "builtInOptions": [],
+          "notes": null
+        },
+        {
+          "id": "low",
+          "name": "Low",
+          "comfortsAndNecessities": 2,
+          "comfortsAndNecessitiesLimit": 3,
+          "security": 2,
+          "securityLimit": 3,
+          "neighborhood": 2,
+          "neighborhoodLimit": 3,
+          "points": 3,
+          "costPerMonth": 2000,
+          "builtInOptions": [],
+          "notes": null
+        },
+        {
+          "id": "medium",
+          "name": "Medium",
+          "comfortsAndNecessities": 3,
+          "comfortsAndNecessitiesLimit": 4,
+          "security": 3,
+          "securityLimit": 4,
+          "neighborhood": 4,
+          "neighborhoodLimit": 5,
+          "points": 4,
+          "costPerMonth": 5000,
+          "builtInOptions": [],
+          "notes": null
+        },
+        {
+          "id": "high",
+          "name": "High",
+          "comfortsAndNecessities": 4,
+          "comfortsAndNecessitiesLimit": 6,
+          "security": 4,
+          "securityLimit": 6,
+          "neighborhood": 5,
+          "neighborhoodLimit": 6,
+          "points": 6,
+          "costPerMonth": 10000,
+          "builtInOptions": [],
+          "notes": null
+        },
+        {
+          "id": "luxury",
+          "name": "Luxury",
+          "comfortsAndNecessities": 5,
+          "comfortsAndNecessitiesLimit": 7,
+          "security": 5,
+          "securityLimit": 8,
+          "neighborhood": 5,
+          "neighborhoodLimit": 7,
+          "points": 12,
+          "costPerMonth": 100000,
+          "builtInOptions": [],
+          "notes": null
+        },
+        {
+          "id": "traveler",
+          "name": "Traveler",
+          "comfortsAndNecessities": 2,
+          "comfortsAndNecessitiesLimit": 4,
+          "security": 2,
+          "securityLimit": 4,
+          "neighborhood": 2,
+          "neighborhoodLimit": 4,
+          "points": "1D6+2",
+          "costPerMonth": 3000,
+          "builtInOptions": [],
+          "notes": "Points re-rolled each month. Points can be spent on Comforts, Security, or Necessities. Entertainment designed by GM. Only assets and services added by GM (do not add to cost)."
+        },
+        {
+          "id": "commercial",
+          "name": "Commercial",
+          "comfortsAndNecessities": 3,
+          "comfortsAndNecessitiesLimit": 4,
+          "security": 3,
+          "securityLimit": 7,
+          "neighborhood": 4,
+          "neighborhoodLimit": 6,
+          "points": 4,
+          "costPerMonth": 8000,
+          "builtInOptions": [],
+          "notes": "Storefront, not a residence. Rent reduction: Charisma + Etiquette (Corporate) [Social] test each month, each net hit reduces cost by 1,000 nuyen."
+        }
+      ]
+    },
+    "neighborhood-zone": {
+      "source": "Run Faster, p.220",
+      "description": "Neighborhood zone classifications with emergency response times",
+      "columns": ["neighborhoodLevel", "zone", "responseTime", "description"],
+      "rows": [
+        {
+          "neighborhoodLevel": 0,
+          "zone": "Z",
+          "responseTime": "2D6 Hours",
+          "description": "Lawless area deep in barrens. Criminal organizations and gangs. Awakened critters and toxic spirits. Serious disrepair."
+        },
+        {
+          "neighborhoodLevel": 1,
+          "zone": "E",
+          "responseTime": "1D6 Hours",
+          "description": "Low-rent/industrial districts. SINless squatters and homeless. Heavy or toxic industrial facilities."
+        },
+        {
+          "neighborhoodLevel": 2,
+          "zone": "D",
+          "responseTime": "1D6 x 12 minutes",
+          "description": "Between industrial and residential. Exposure to pollution. Run-down business districts, abandoned warehouses, forgotten tenements."
+        },
+        {
+          "neighborhoodLevel": 3,
+          "zone": "C",
+          "responseTime": "1D6 x 10 minutes",
+          "description": "District has seen better days. Low-rent residences, storage facilities, small bodegas."
+        },
+        {
+          "neighborhoodLevel": 4,
+          "zone": "B",
+          "responseTime": "1D6 x 5 minutes",
+          "description": "Middle class. Commercial places and occasional light industrial."
+        },
+        {
+          "neighborhoodLevel": 5,
+          "zone": "A",
+          "responseTime": "2D6 + 3 minutes",
+          "description": "High-class residences and corporate buildings."
+        },
+        {
+          "neighborhoodLevel": 6,
+          "zone": "AA",
+          "responseTime": "1D6 + 4 minutes",
+          "description": "Luxury-class residences and posh commercial places."
+        },
+        {
+          "neighborhoodLevel": 7,
+          "zone": "AAA",
+          "responseTime": "1D6 minutes",
+          "description": "Corporate headquarters. Skyraker condos. Occasional private islands."
+        }
+      ]
+    },
+    "entertainment-assets": {
+      "source": "Run Faster, p.220-224",
+      "description": "Entertainment options of type Asset",
+      "columns": [
+        "id",
+        "name",
+        "type",
+        "pointCost",
+        "monthlyNuyenCost",
+        "minimumLifestyle",
+        "effect",
+        "repeatable"
+      ],
+      "rows": [
+        {
+          "id": "armory",
+          "name": "Armory",
+          "type": "asset",
+          "pointCost": 2,
+          "monthlyNuyenCost": 1000,
+          "minimumLifestyle": "high",
+          "effect": "Room dedicated to guns. Ammo and one stock firearm (from creation) on hand. With toolkit: 1 point Accuracy or AP repaired per week, 1 point Reach in two weeks.",
+          "repeatable": false
+        },
+        {
+          "id": "garage",
+          "name": "Garage",
+          "type": "asset",
+          "pointCost": null,
+          "monthlyNuyenCost": null,
+          "minimumLifestyle": null,
+          "effect": "Large covered area for a single vehicle. Points, cost, and minimum lifestyle depend on vehicle type (see garage-table). With a Shop: 1 box damage repaired/week free. With Facility: 2 boxes/week.",
+          "repeatable": true
+        },
+        {
+          "id": "greenhouse",
+          "name": "Greenhouse",
+          "type": "asset",
+          "pointCost": 2,
+          "monthlyNuyenCost": 500,
+          "minimumLifestyle": "high",
+          "effect": "Small plot for growing food. Reduce environmental damage due to food allergies by 1.",
+          "repeatable": false
+        },
+        {
+          "id": "grid-subscription",
+          "name": "Grid Subscription",
+          "type": "asset",
+          "pointCost": 1,
+          "monthlyNuyenCost": 50,
+          "minimumLifestyle": "medium",
+          "effect": "Subscription-based entertainment access. Without it, only the public grid available.",
+          "repeatable": false
+        },
+        {
+          "id": "gym",
+          "name": "Gym",
+          "type": "asset",
+          "pointCost": 2,
+          "monthlyNuyenCost": 300,
+          "minimumLifestyle": "medium",
+          "effect": "Reduce training time to improve physical stats by 20%.",
+          "repeatable": false
+        },
+        {
+          "id": "indoor-arboretum",
+          "name": "Indoor Arboretum",
+          "type": "asset",
+          "pointCost": 2,
+          "monthlyNuyenCost": 500,
+          "minimumLifestyle": "high",
+          "effect": "Room of living vegetation. Bright spot in astral plane. Reduces C&N environmental damage due to pollution allergies by 1.",
+          "repeatable": false
+        },
+        {
+          "id": "panic-room",
+          "name": "Panic Room",
+          "type": "asset",
+          "pointCost": 2,
+          "monthlyNuyenCost": 1000,
+          "minimumLifestyle": "high",
+          "effect": "Reinforced 3m x 3m room with structural material (p.197, SR5) and Rating 5 lock.",
+          "repeatable": false
+        },
+        {
+          "id": "private-room",
+          "name": "Private Room",
+          "type": "asset",
+          "pointCost": 1,
+          "monthlyNuyenCost": 20,
+          "minimumLifestyle": "squatter",
+          "effect": "Simple 2m x 2m space. Provides concealability (-4 dice pool penalty for Perception Tests to notice a person from outside) and full cover.",
+          "repeatable": true
+        },
+        {
+          "id": "shooting-range",
+          "name": "Shooting Range",
+          "type": "asset",
+          "pointCost": 2,
+          "monthlyNuyenCost": 500,
+          "minimumLifestyle": "high",
+          "effect": "Reduce training time with a firearm skill by 10%.",
+          "repeatable": false
+        },
+        {
+          "id": "soy-processing-unit",
+          "name": "Soy Processing Unit",
+          "type": "asset",
+          "pointCost": 1,
+          "monthlyNuyenCost": 20,
+          "minimumLifestyle": "medium",
+          "effect": "SOTA kitchen devices. Reduce potential environmental damage tied to C&N due to food allergies by 1.",
+          "repeatable": false
+        },
+        {
+          "id": "sports-court",
+          "name": "Sports Court (Small)",
+          "type": "asset",
+          "pointCost": 2,
+          "monthlyNuyenCost": 300,
+          "minimumLifestyle": "high",
+          "effect": "Tennis court, basketball court, bowling alley, etc. Reduces training time with an athletics skill by 10%.",
+          "repeatable": false
+        },
+        {
+          "id": "swimming-pool",
+          "name": "Swimming Pool",
+          "type": "asset",
+          "pointCost": 1,
+          "monthlyNuyenCost": 100,
+          "minimumLifestyle": "medium",
+          "effect": "Small pool for relaxation and exercise. Can be purchased more than once to increase size.",
+          "repeatable": true
+        },
+        {
+          "id": "walk-in-freezer",
+          "name": "Walk-in Freezer",
+          "type": "asset",
+          "pointCost": 1,
+          "monthlyNuyenCost": 1000,
+          "minimumLifestyle": "commercial",
+          "effect": "Chilled room for food storage.",
+          "repeatable": false
+        },
+        {
+          "id": "workshop-facility",
+          "name": "Workshop/Facility",
+          "type": "asset",
+          "pointCost": 2,
+          "monthlyNuyenCost": 2500,
+          "minimumLifestyle": "medium",
+          "effect": "Space for gear-related work. Must include Commercial lifestyle. Combined with a Shop or Facility, gear/weapons repaired at 1 box/week (2 with Facility) without additional cost.",
+          "repeatable": false
+        },
+        {
+          "id": "yard",
+          "name": "Yard",
+          "type": "asset",
+          "pointCost": 2,
+          "monthlyNuyenCost": 50,
+          "minimumLifestyle": "low",
+          "effect": "50-200 sq meters of outdoor ground. Large enough to park a car, install a ritual circle, etc.",
+          "repeatable": true
+        },
+        {
+          "id": "zen-den-bat-cave",
+          "name": "Zen Den/Bat Cave",
+          "type": "asset",
+          "pointCost": 2,
+          "monthlyNuyenCost": 100,
+          "minimumLifestyle": "medium",
+          "effect": "Room dedicated to hobbies. Zen den: +1 dice pool bonus on Interest Knowledge Skills at home. Bat cave: +1 dice pool bonus on Academic Knowledge Skills at home (requires Kit; max 3 Kits).",
+          "repeatable": false
+        }
+      ]
+    },
+    "entertainment-services": {
+      "source": "Run Faster, p.220-223",
+      "description": "Entertainment options of type Service",
+      "columns": [
+        "id",
+        "name",
+        "type",
+        "pointCost",
+        "monthlyNuyenCost",
+        "minimumLifestyle",
+        "effect",
+        "repeatable"
+      ],
+      "rows": [
+        {
+          "id": "cleaning-service",
+          "name": "Cleaning Service",
+          "type": "service",
+          "pointCost": 1,
+          "monthlyNuyenCost": "special",
+          "minimumLifestyle": "high",
+          "effect": "Tidying up home and cleaning/mending clothes with privacy guarantee. See cleaning-service-table for costs. Can be purchased multiple times for landscape care, beauty salon/barber, basic car maintenance.",
+          "repeatable": true
+        },
+        {
+          "id": "discreet-cleaning-service",
+          "name": "Discreet Cleaning Service",
+          "type": "service",
+          "pointCost": 4,
+          "monthlyNuyenCost": 10000,
+          "minimumLifestyle": "none",
+          "effect": "Organization patches bullet holes, washes blood stains, cleanses astral in under 24 hours. Handles one body disposal per month. Tied to character, not lifestyle. Does not end when lifestyle changes.",
+          "repeatable": false
+        },
+        {
+          "id": "discreet-deliveryman-candyman",
+          "name": "Discreet Deliveryman/Candyman",
+          "type": "service",
+          "pointCost": 3,
+          "monthlyNuyenCost": "100/1000",
+          "minimumLifestyle": "none",
+          "effect": "Deliveryman (100/month): legal items, Availability 8 or less. Candyman (1000/month): restricted/illegal items, Availability up to 16. Dice pool 14 for Sneaking, Edge 4. Delivery only; purchase separate.",
+          "repeatable": false
+        },
+        {
+          "id": "merchandise-goods",
+          "name": "Merchandise: Goods (Specific Item)",
+          "type": "service",
+          "pointCost": "1+",
+          "monthlyNuyenCost": 10000,
+          "minimumLifestyle": "commercial",
+          "effect": "Location provides legal goods for sale. Base Availability 3 for gear. Each additional point adds 2 to Availability (max 4 points for luxury-quality). 10% discount on items, reduced Extended Test interval by 1 category.",
+          "repeatable": false
+        },
+        {
+          "id": "merchandise-pawn-shop",
+          "name": "Merchandise: Pawn Shop/Thrift Store",
+          "type": "service",
+          "pointCost": 2,
+          "monthlyNuyenCost": 10000,
+          "minimumLifestyle": "commercial",
+          "effect": "Fence used legal goods. Items sold within a week at 15% of normal purchase price.",
+          "repeatable": false
+        },
+        {
+          "id": "merchandise-used-goods",
+          "name": "Merchandise: Used Goods (Specific Item)",
+          "type": "service",
+          "pointCost": 2,
+          "monthlyNuyenCost": 10000,
+          "minimumLifestyle": "commercial",
+          "effect": "Fence one specific item type. Threshold to find buyer halved. Sell immediately at 25% of purchase price.",
+          "repeatable": false
+        },
+        {
+          "id": "public-transportation",
+          "name": "Public Transportation",
+          "type": "service",
+          "pointCost": 1,
+          "monthlyNuyenCost": 50,
+          "minimumLifestyle": "low",
+          "effect": "Monthly pass for bus, trolley, subway, ferry, etc. in region.",
+          "repeatable": false
+        },
+        {
+          "id": "railway-pass",
+          "name": "Railway Pass",
+          "type": "service",
+          "pointCost": 1,
+          "monthlyNuyenCost": 75,
+          "minimumLifestyle": "medium",
+          "effect": "Monthly pass for light rail or mag-lev train between two relatively close sprawls. Includes border-crossing fees. Purchased for two city locations.",
+          "repeatable": false
+        }
+      ]
+    },
+    "entertainment-outings": {
+      "source": "Run Faster, p.222-223",
+      "description": "Entertainment options of type Outing",
+      "columns": [
+        "id",
+        "name",
+        "type",
+        "pointCost",
+        "monthlyNuyenCost",
+        "minimumLifestyle",
+        "effect",
+        "repeatable"
+      ],
+      "rows": [
+        {
+          "id": "local-bar-patron",
+          "name": "Local Bar Patron",
+          "type": "outing",
+          "pointCost": 1,
+          "monthlyNuyenCost": 25,
+          "minimumLifestyle": "low",
+          "effect": "Habitual location (bar, restaurant, fast-food joint). One specific location chosen per purchase.",
+          "repeatable": true
+        },
+        {
+          "id": "patron-of-the-arts",
+          "name": "Patron of the Arts",
+          "type": "outing",
+          "pointCost": null,
+          "monthlyNuyenCost": null,
+          "minimumLifestyle": null,
+          "effect": "Membership privileges: front-row seats, members-only specials, limited suite or luxury box access. Covers food and drink. See patron-table for costs per type.",
+          "repeatable": true
+        }
+      ]
+    },
+    "garage-table": {
+      "source": "Run Faster, p.221",
+      "description": "Garage entertainment asset costs by vehicle type",
+      "columns": ["id", "vehicle", "points", "monthlyCost", "minimumLifestyle", "notes"],
+      "rows": [
+        {
+          "id": "airplane",
+          "vehicle": "Airplane",
+          "points": 4,
+          "monthlyCost": 20000,
+          "minimumLifestyle": "luxury",
+          "notes": null
+        },
+        {
+          "id": "boat",
+          "vehicle": "Boat",
+          "points": 3,
+          "monthlyCost": 5000,
+          "minimumLifestyle": "high",
+          "notes": "Includes space on a dock and access to launch. Smaller personal watercraft treated same as cars."
+        },
+        {
+          "id": "car-small",
+          "vehicle": "Car (Body 4 or less)",
+          "points": 1,
+          "monthlyCost": 50,
+          "minimumLifestyle": "medium",
+          "notes": null
+        },
+        {
+          "id": "car-large",
+          "vehicle": "Car (Body 5 or greater)",
+          "points": 2,
+          "monthlyCost": 100,
+          "minimumLifestyle": "medium",
+          "notes": null
+        },
+        {
+          "id": "helicopter",
+          "vehicle": "Helicopter",
+          "points": 4,
+          "monthlyCost": 10000,
+          "minimumLifestyle": "luxury",
+          "notes": "Includes access to a helicopter pad to launch the vehicle."
+        }
+      ]
+    },
+    "cleaning-service-table": {
+      "source": "Run Faster, p.221",
+      "description": "Cleaning service monthly costs by sensitivity type",
+      "columns": ["id", "service", "monthlyCost", "effect"],
+      "rows": [
+        {
+          "id": "standard",
+          "service": "Standard",
+          "monthlyCost": 100,
+          "effect": "Basic cleaning with reasonable privacy."
+        },
+        {
+          "id": "mage-sensitive",
+          "service": "Mage sensitive",
+          "monthlyCost": 200,
+          "effect": "Destroys biomaterials. Material link items found at domicile/vehicle are contaminated and cannot be used for ritual purposes."
+        },
+        {
+          "id": "pollution-sensitive",
+          "service": "Pollution sensitive",
+          "monthlyCost": 400,
+          "effect": "Uses less harsh chemicals and natural materials. Reduces Fatigue damage from environmental allergies (C&I) by 1."
+        }
+      ]
+    },
+    "patron-table": {
+      "source": "Run Faster, p.223",
+      "description": "Patron of the Arts entertainment outing costs by venue type",
+      "columns": ["id", "type", "points", "monthlyCost", "minimumLifestyle"],
+      "rows": [
+        {
+          "id": "concerts-sports",
+          "type": "Rock concerts / sport events",
+          "points": 1,
+          "monthlyCost": 100,
+          "minimumLifestyle": "medium"
+        },
+        {
+          "id": "private-club",
+          "type": "Private club memberships (Dante's, 77)",
+          "points": 1,
+          "monthlyCost": 200,
+          "minimumLifestyle": "high"
+        },
+        {
+          "id": "public-entertainment",
+          "type": "Public entertainment (zoo, museum)",
+          "points": 1,
+          "monthlyCost": 75,
+          "minimumLifestyle": "low"
+        },
+        {
+          "id": "theme-parks",
+          "type": "Theme parks (Virtual Disneyland)",
+          "points": 1,
+          "monthlyCost": 100,
+          "minimumLifestyle": "medium"
+        }
+      ]
+    },
+    "lifestyle-options": {
+      "source": "Run Faster, p.224-226",
+      "description": "Positive and negative lifestyle options that modify the lifestyle",
+      "columns": ["id", "name", "polarity", "effect", "restrictions", "source"],
+      "rows": [
+        {
+          "id": "corporate-owned",
+          "name": "Corporate Owned",
+          "polarity": "positive",
+          "effect": "Increase C&N value and limit by 1. Increase Security value and limit by 1. Reduce available points by 3.",
+          "restrictions": "Requires corporate or limited corporate SIN. Base lifestyle must have 3+ points.",
+          "source": "Run Faster, p.224"
+        },
+        {
+          "id": "extra-secure",
+          "name": "Extra Secure",
+          "polarity": "positive",
+          "effect": "No changes from core rulebook. Covers all assets purchased for the lifestyle without additional cost.",
+          "restrictions": null,
+          "source": "SR5, p.370"
+        },
+        {
+          "id": "one-good-thing",
+          "name": "One Good Thing About This Place",
+          "polarity": "positive",
+          "effect": "Choose one entertainment asset worth 1 or 2 points. Always available as long as monthly cost is paid.",
+          "restrictions": "Traveler lifestyle only.",
+          "source": "Run Faster, p.226"
+        },
+        {
+          "id": "safehouse",
+          "name": "Safehouse",
+          "polarity": "positive",
+          "effect": "Add +4 to dice pool of anyone trying to track the subject while residing there. Cannot purchase Entertainment assets (other assets can be added). Must obey house rules. Adds 500 nuyen/month.",
+          "restrictions": "Character cannot control Entertainment options.",
+          "source": "Run Faster, p.226"
+        },
+        {
+          "id": "special-work-area",
+          "name": "Special Work Area",
+          "polarity": "positive",
+          "effect": "Applies to a single asset (Garage or Workshop). +2 bonus to Limit for relevant skill tests. 1,000 nuyen/month additional cost per purchase.",
+          "restrictions": "Can be purchased more than once per lifestyle.",
+          "source": "SR5, p.370"
+        },
+        {
+          "id": "angry-drunk-reputation",
+          "name": "Angry Drunk Reputation",
+          "polarity": "negative",
+          "effect": "Cannot have Bar Patron or Patron of the Arts (Private Club) entertainment options. May cause issues meeting Mr. Johnson. Add 1 point.",
+          "restrictions": "Bad reputation stays in the neighborhood when character leaves.",
+          "source": "Run Faster, p.224"
+        },
+        {
+          "id": "cramped",
+          "name": "Cramped",
+          "polarity": "negative",
+          "effect": "Applies to a single asset (Garage or Workshop). Reduces asset monthly cost by 10%. Limit reduced by 2 for tests in cramped space. Add 1 point.",
+          "restrictions": "Can be purchased once per asset.",
+          "source": "SR5, p.370"
+        },
+        {
+          "id": "hotel-california",
+          "name": "Hotel California",
+          "polarity": "negative",
+          "effect": "Limited window for entering/leaving premises. Rest of time, character is stuck. Lockdown period agreed with GM. Add 1 point.",
+          "restrictions": null,
+          "source": "Run Faster, p.226"
+        },
+        {
+          "id": "maid-is-out",
+          "name": "Maid Is Out",
+          "polarity": "negative",
+          "effect": "Reduce limit of C&N by 1. Cleaning Service cannot be purchased. Increase DV of environmental fatigue by 1 for environmental allergies. Add 1 point.",
+          "restrictions": null,
+          "source": "Run Faster, p.226"
+        },
+        {
+          "id": "not-a-home",
+          "name": "Not A Home",
+          "polarity": "negative",
+          "effect": "Location not designed for habitation. No plumbing, possibly no privacy. Reduce limit of C&N by 1. Add 1 point.",
+          "restrictions": "Built into Bolt Hole lifestyle.",
+          "source": "Run Faster, p.226"
+        },
+        {
+          "id": "obscure-difficult-to-find",
+          "name": "Obscure/Difficult to Find",
+          "polarity": "negative",
+          "effect": "Cannot have Discreet Deliveryman or Candyman entertainment options. Add 1 point.",
+          "restrictions": null,
+          "source": "SR5, p.370"
+        },
+        {
+          "id": "safety-third",
+          "name": "Safety Third",
+          "polarity": "negative",
+          "effect": "Reduce number of 1s needed for a glitch by 1 (for tests in the area). Requires Shop or Facility plus Garage or Workshop Asset. Applies to single asset. Add 1 point.",
+          "restrictions": "Can be taken more than once per asset.",
+          "source": "Run Faster, p.226"
+        },
+        {
+          "id": "thrifty",
+          "name": "Thrifty",
+          "polarity": "negative",
+          "effect": "Reduce points available by 2 and monthly cost by 1,000 nuyen.",
+          "restrictions": "Traveler lifestyle only.",
+          "source": "Run Faster, p.226"
+        },
+        {
+          "id": "w-zone",
+          "name": "W Zone",
+          "polarity": "negative",
+          "effect": "Location is wilderness, outside any urban area. Grid spotty, power not public. Reduce Neighborhood level by 1. Increase security response by 1D6 hours. Add 1 point.",
+          "restrictions": null,
+          "source": "Run Faster, p.226"
+        }
+      ]
+    },
+    "fashion-by-lifestyle": {
+      "source": "Run Faster, p.217",
+      "description": "Clothing styles and price ranges for each lifestyle tier",
+      "columns": ["lifestyle", "clothing", "priceRangeMin", "priceRangeMax"],
+      "rows": [
+        {
+          "lifestyle": "street-squatter",
+          "clothing": "Vendingwear (recycled plastic, limited colors)",
+          "priceRangeMin": 1,
+          "priceRangeMax": 20
+        },
+        {
+          "lifestyle": "low",
+          "clothing": "Cast-off clothes, simple casual/business from industrial polymers (Beaux Retail/Mitsuhama, Kong Walmart)",
+          "priceRangeMin": 20,
+          "priceRangeMax": 150
+        },
+        {
+          "lifestyle": "medium",
+          "clothing": "Wellington Bros (Shiawase Fashion), Vashon Island (Shiawase Fashion), Victory (Ares)",
+          "priceRangeMin": 150,
+          "priceRangeMax": 500
+        },
+        {
+          "lifestyle": "high",
+          "clothing": "Tres Chic (Aztechnology), RhineGold (Saeder-Krupp), KoGo (Wuxing)",
+          "priceRangeMin": 500,
+          "priceRangeMax": 1000
+        },
+        {
+          "lifestyle": "luxury",
+          "clothing": "Designer: Berwick (Mortimer of London), Armante (Zoe), Jean-Paul",
+          "priceRangeMin": 1000,
+          "priceRangeMax": 5000
+        }
+      ]
+    },
+    "sample-locations": {
+      "source": "Run Faster, p.227",
+      "description": "Pre-built sample lifestyle locations with all stats",
+      "columns": [
+        "id",
+        "name",
+        "comfortsAndNecessities",
+        "security",
+        "neighborhood",
+        "entertainment",
+        "entertainmentAssets",
+        "options",
+        "cost",
+        "costPeriod"
+      ],
+      "rows": [
+        {
+          "id": "the-cube-tokyo",
+          "name": "The Cube, Tokyo (Coffin Hotel)",
+          "comfortsAndNecessities": 2,
+          "security": 2,
+          "neighborhood": 2,
+          "entertainment": 0,
+          "entertainmentAssets": [],
+          "options": [],
+          "cost": 70,
+          "costPeriod": "night"
+        },
+        {
+          "id": "the-millennium-los-angeles",
+          "name": "The Millennium, Los Angeles (Standard Hotel)",
+          "comfortsAndNecessities": 5,
+          "security": 5,
+          "neighborhood": 6,
+          "entertainment": 3,
+          "entertainmentAssets": ["gym", "indoor-arboretum", "swimming-pool"],
+          "options": [],
+          "cost": 430,
+          "costPeriod": "night"
+        },
+        {
+          "id": "red-light-district-safehouse",
+          "name": "Red Light District Safehouse",
+          "comfortsAndNecessities": 3,
+          "security": 2,
+          "neighborhood": 3,
+          "entertainment": 0,
+          "entertainmentAssets": ["armory"],
+          "options": ["obscure-difficult-to-find", "safehouse"],
+          "cost": 3100,
+          "costPeriod": "month"
+        },
+        {
+          "id": "robyns",
+          "name": "Robyn's (Bookshop)",
+          "comfortsAndNecessities": 3,
+          "security": 5,
+          "neighborhood": 4,
+          "entertainment": 2,
+          "entertainmentAssets": ["merchandise-goods"],
+          "options": [],
+          "cost": 9600,
+          "costPeriod": "month"
+        },
+        {
+          "id": "stuffer-shack",
+          "name": "Stuffer Shack",
+          "comfortsAndNecessities": 3,
+          "security": 3,
+          "neighborhood": 4,
+          "entertainment": 3,
+          "entertainmentAssets": ["merchandise-goods", "soy-processing-unit", "walk-in-freezer"],
+          "options": [],
+          "cost": 8000,
+          "costPeriod": "month"
+        },
+        {
+          "id": "typical-middle-class-suburban-home",
+          "name": "Typical Middle Class Suburban Home",
+          "comfortsAndNecessities": 3,
+          "security": 3,
+          "neighborhood": 4,
+          "entertainment": 4,
+          "entertainmentAssets": [
+            "grid-subscription",
+            "patron-of-the-arts",
+            "public-transportation",
+            "zen-den-bat-cave"
+          ],
+          "options": [],
+          "cost": 5000,
+          "costPeriod": "month"
+        }
+      ]
+    }
+  }
+}

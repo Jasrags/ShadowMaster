@@ -1,0 +1,1250 @@
+{
+  "tables": {
+    "sum-to-ten-point-costs": {
+      "source": "Run Faster, p.62",
+      "description": "Point costs for each priority level in Sum to Ten generation",
+      "columns": ["priority", "points"],
+      "rows": [
+        { "priority": "A", "points": 4 },
+        { "priority": "B", "points": 3 },
+        { "priority": "C", "points": 2 },
+        { "priority": "D", "points": 1 },
+        { "priority": "E", "points": 0 }
+      ]
+    },
+    "priority-table": {
+      "source": "Run Faster, p.63",
+      "description": "Priority Table for Sum to Ten (identical to SR5 core p.65)",
+      "columns": ["priority", "metatype", "attributes", "magicOrResonance", "skills", "resources"],
+      "rows": [
+        {
+          "priority": "A",
+          "metatype": [
+            { "name": "Human", "specialAttributePoints": 9 },
+            { "name": "Elf", "specialAttributePoints": 8 },
+            { "name": "Dwarf", "specialAttributePoints": 7 },
+            { "name": "Ork", "specialAttributePoints": 7 },
+            { "name": "Troll", "specialAttributePoints": 5 }
+          ],
+          "attributes": 24,
+          "magicOrResonance": [
+            {
+              "type": "Magician",
+              "magic": 6,
+              "skills": "two Rating 5 Magical skills",
+              "spells": 10,
+              "complexForms": null
+            },
+            {
+              "type": "Mystic Adept",
+              "magic": 6,
+              "skills": "two Rating 5 Magical skills",
+              "spells": 10,
+              "complexForms": null
+            },
+            {
+              "type": "Technomancer",
+              "resonance": 6,
+              "skills": "two Rating 5 Resonance skills",
+              "spells": null,
+              "complexForms": 5
+            }
+          ],
+          "skills": "46/10",
+          "resources": 450000
+        },
+        {
+          "priority": "B",
+          "metatype": [
+            { "name": "Human", "specialAttributePoints": 7 },
+            { "name": "Elf", "specialAttributePoints": 6 },
+            { "name": "Dwarf", "specialAttributePoints": 4 },
+            { "name": "Ork", "specialAttributePoints": 4 },
+            { "name": "Troll", "specialAttributePoints": 0 }
+          ],
+          "attributes": 20,
+          "magicOrResonance": [
+            {
+              "type": "Magician",
+              "magic": 4,
+              "skills": "two Rating 4 Magical skills",
+              "spells": 7,
+              "complexForms": null
+            },
+            {
+              "type": "Mystic Adept",
+              "magic": 4,
+              "skills": "two Rating 4 Magical skills",
+              "spells": 7,
+              "complexForms": null
+            },
+            {
+              "type": "Technomancer",
+              "resonance": 4,
+              "skills": "two Rating 4 Resonance skills",
+              "spells": null,
+              "complexForms": 2
+            },
+            {
+              "type": "Adept",
+              "magic": 6,
+              "skills": "one Rating 4 Active skill",
+              "spells": null,
+              "complexForms": null
+            },
+            {
+              "type": "Aspected Magician",
+              "magic": 5,
+              "skills": "one Rating 4 Magical skill group",
+              "spells": null,
+              "complexForms": null
+            }
+          ],
+          "skills": "36/5",
+          "resources": 275000
+        },
+        {
+          "priority": "C",
+          "metatype": [
+            { "name": "Human", "specialAttributePoints": 5 },
+            { "name": "Elf", "specialAttributePoints": 3 },
+            { "name": "Dwarf", "specialAttributePoints": 1 },
+            { "name": "Ork", "specialAttributePoints": 0 }
+          ],
+          "attributes": 16,
+          "magicOrResonance": [
+            { "type": "Magician", "magic": 3, "skills": null, "spells": 5, "complexForms": null },
+            {
+              "type": "Mystic Adept",
+              "magic": 3,
+              "skills": null,
+              "spells": 5,
+              "complexForms": null
+            },
+            {
+              "type": "Technomancer",
+              "resonance": 3,
+              "skills": null,
+              "spells": null,
+              "complexForms": 1
+            },
+            {
+              "type": "Adept",
+              "magic": 4,
+              "skills": "one Rating 2 Active skill",
+              "spells": null,
+              "complexForms": null
+            },
+            {
+              "type": "Aspected Magician",
+              "magic": 3,
+              "skills": "one Rating 2 Magical skill group",
+              "spells": null,
+              "complexForms": null
+            }
+          ],
+          "skills": "28/2",
+          "resources": 140000
+        },
+        {
+          "priority": "D",
+          "metatype": [
+            { "name": "Human", "specialAttributePoints": 3 },
+            { "name": "Elf", "specialAttributePoints": 0 }
+          ],
+          "attributes": 14,
+          "magicOrResonance": [
+            { "type": "Adept", "magic": 2, "skills": null, "spells": null, "complexForms": null },
+            {
+              "type": "Aspected Magician",
+              "magic": 2,
+              "skills": null,
+              "spells": null,
+              "complexForms": null
+            }
+          ],
+          "skills": "22/0",
+          "resources": 50000
+        },
+        {
+          "priority": "E",
+          "metatype": [{ "name": "Human", "specialAttributePoints": 1 }],
+          "attributes": 12,
+          "magicOrResonance": null,
+          "skills": "18/0",
+          "resources": 6000
+        }
+      ]
+    },
+    "metatype-cost-table": {
+      "source": "Run Faster, p.64",
+      "description": "Karma cost to purchase metatype in Point Buy and Life Modules systems",
+      "columns": ["metatype", "cost"],
+      "rows": [
+        { "metatype": "Human", "cost": 0, "category": "basic" },
+        { "metatype": "Dwarf", "cost": 50, "category": "basic" },
+        { "metatype": "Elf", "cost": 40, "category": "basic" },
+        { "metatype": "Ork", "cost": 50, "category": "basic" },
+        { "metatype": "Troll", "cost": 90, "category": "basic" },
+        { "metatype": "Centaur", "cost": 60, "category": "extended" },
+        { "metatype": "Cyclopean", "cost": 100, "category": "extended" },
+        { "metatype": "Dryad", "cost": 90, "category": "extended" },
+        { "metatype": "Fomorian", "cost": 100, "category": "extended" },
+        { "metatype": "Giant", "cost": 90, "category": "extended" },
+        { "metatype": "Gnome", "cost": 50, "category": "extended" },
+        { "metatype": "Hanuman", "cost": 100, "category": "extended" },
+        { "metatype": "Hobgoblin", "cost": 40, "category": "extended" },
+        { "metatype": "Koborokuru", "cost": 70, "category": "extended" },
+        { "metatype": "Menehune", "cost": 50, "category": "extended" },
+        { "metatype": "Minotaur", "cost": 100, "category": "extended" },
+        { "metatype": "Naga", "cost": 95, "category": "extended" },
+        { "metatype": "Nartaki", "cost": 40, "category": "extended" },
+        { "metatype": "Nocturna", "cost": 60, "category": "extended" },
+        { "metatype": "Ogre", "cost": 40, "category": "extended" },
+        { "metatype": "Oni", "cost": 50, "category": "extended" },
+        { "metatype": "Pixie", "cost": 70, "category": "extended" },
+        { "metatype": "Sasquatch", "cost": 90, "category": "extended" },
+        { "metatype": "Satyr", "cost": 50, "category": "extended" },
+        { "metatype": "Shapeshifter [Bovine; Vulpine]", "cost": 100, "category": "extended" },
+        { "metatype": "Shapeshifter [Canine; Falconine]", "cost": 110, "category": "extended" },
+        { "metatype": "Shapeshifter [Lupine; Equine]", "cost": 120, "category": "extended" },
+        { "metatype": "Shapeshifter [Pantherine; Tigrine]", "cost": 150, "category": "extended" },
+        { "metatype": "Shapeshifter [Ursine; Leonine]", "cost": 160, "category": "extended" },
+        { "metatype": "Wakyambi", "cost": 70, "category": "extended" },
+        { "metatype": "Xapiri Thepe", "cost": 80, "category": "extended" }
+      ]
+    },
+    "point-buy-magic-qualities": {
+      "source": "Run Faster, p.64-65",
+      "description": "Karma costs to gain Magic or Resonance in Point Buy system",
+      "columns": ["quality", "karmaCost", "grants", "notes"],
+      "rows": [
+        {
+          "quality": "Adept",
+          "karmaCost": 20,
+          "grants": "Magic 1",
+          "notes": "Free power points equal to Magic Rating. Can buy more Magic ranks with Karma."
+        },
+        {
+          "quality": "Aspected Magician",
+          "karmaCost": 15,
+          "grants": "Magic 1",
+          "notes": "Skilled in one area: Sorcery, Conjuring, or Enchanting. Can buy more Magic ranks."
+        },
+        {
+          "quality": "Magician",
+          "karmaCost": 30,
+          "grants": "Magic 1",
+          "notes": "Full spellcasting, conjuring, other magical abilities. Can buy more Magic ranks."
+        },
+        {
+          "quality": "Mystic Adept",
+          "karmaCost": 35,
+          "grants": "Magic 1",
+          "notes": "No free power points. Buy power points at 5 Karma each, max equal to Magic Rating."
+        },
+        {
+          "quality": "Technomancer",
+          "karmaCost": 15,
+          "grants": "Resonance 1",
+          "notes": "Can buy more Resonance ranks with Karma."
+        }
+      ]
+    },
+    "nationalities": {
+      "source": "Run Faster, p.66-67",
+      "description": "Nationality modules for Life Modules system. Each costs 15 Karma.",
+      "columns": [
+        "nationality",
+        "primaryLanguage",
+        "secondaryLanguages",
+        "universalSkills",
+        "regions"
+      ],
+      "rows": [
+        {
+          "nationality": "UCAS",
+          "primaryLanguage": "English (N)",
+          "secondaryLanguages": [
+            "Spanish",
+            "German",
+            "Italian",
+            "French",
+            "Mandarin",
+            "Polish",
+            "Yiddish"
+          ],
+          "universalSkills": "Computer +1, Knowledge: History +1, Knowledge: UCAS +1",
+          "regions": [
+            {
+              "name": "General UCAS",
+              "bonuses": "Logic +1, Etiquette +1, Knowledge: [City] +2, Language +2, SINner (5)"
+            },
+            {
+              "name": "Canada",
+              "bonuses": "Body +1, Navigation +1, Survival +1, Etiquette +1, SINner (5)"
+            },
+            {
+              "name": "Denver (UCAS sector)",
+              "bonuses": "Intuition +1, Knowledge: Denver +2, Negotiation +1, Etiquette +1, SINner (5)"
+            },
+            {
+              "name": "Seattle",
+              "bonuses": "Reaction +1, Perception +1, Intimidation +1, Knowledge: Seattle +2, SINner (5)"
+            },
+            { "name": "SINless", "bonuses": "Agility +1, Knowledge: [City] +1" }
+          ]
+        },
+        {
+          "nationality": "CAS",
+          "primaryLanguage": "English (N)",
+          "secondaryLanguages": ["Spanish", "German", "Polish", "Yiddish"],
+          "universalSkills": "Etiquette +1, Knowledge: History +1, Knowledge: CAS +1",
+          "regions": [
+            { "name": "General CAS", "bonuses": "Charisma +1, Computer +2, SINner (5)" },
+            {
+              "name": "Denver",
+              "bonuses": "Intuition +1, Knowledge: Denver 2, Negotiation +1, Computer +1, SINner (5)"
+            },
+            { "name": "SINless", "bonuses": "Body +1, Knowledge: [City] +1" }
+          ]
+        },
+        {
+          "nationality": "NAN",
+          "primaryLanguage": "Choose one from Regions",
+          "secondaryLanguages": ["See Regions; English may also be selected with 1 rank"],
+          "universalSkills": "Archery +2, Knowledge: History +1, Knowledge: NAN +1",
+          "regions": [
+            {
+              "name": "Algonkian-Manitou Council",
+              "bonuses": "Languages: Athabaskan, Anishinaabe, Iroquoian, Outdoor skill group +1, Perception +1, Blades +1, Unarmed Combat +1, Street Knowledge: [Tribe] +1, SINner (5)"
+            },
+            {
+              "name": "Athabaskan Council",
+              "bonuses": "Languages: Athabaskan, Eskimo-Aleut, Body +1, Survival +1, SINner (5)"
+            },
+            {
+              "name": "Pueblo Corporate Council",
+              "bonuses": "Languages: Uto-Aztecan, Zuni, Electronics skill group +1, Etiquette +2, Professional Knowledge: Business Practices +1, SINner (5)"
+            },
+            {
+              "name": "Salish-Shidhe Council",
+              "bonuses": "Secondary Languages: Salish, Siouan, Or'zet, Logic +1, Survival +1, SINner (5)"
+            },
+            {
+              "name": "Sioux Nation",
+              "bonuses": "Languages: Anishinaabe, Athabaskan, Iroquoian, Siouan, Outdoor skill group +1, Blades +2, Street Knowledge: Sioux Culture +1, SINner (5)"
+            },
+            {
+              "name": "Trans-Polar Aleut Nation",
+              "bonuses": "Languages: Eskimo-Aleut, Exotic Melee Weapon (Harpoon) +2, Perception +1, Survival +1, Professional Knowledge: Polar Critters +2, SINner (5)"
+            },
+            {
+              "name": "Tsimshian Nation",
+              "bonuses": "Languages: Athabaskan, Tlingit, Tsimshianic, Siouan, Strength +1, Blades +1, Allergy (Uncommon/Mild) (5)"
+            },
+            { "name": "Denver", "bonuses": "Intuition +1, Computer +1, SINner (5)" },
+            {
+              "name": "Las Vegas",
+              "bonuses": "Languages: any Native American Tribal, Perception +1, Con +2, Etiquette +1, Street Knowledge: Gambling Games +2, SINner (5)"
+            },
+            {
+              "name": "Salt Lake City",
+              "bonuses": "Artisan +1, Computer +1, Etiquette +1, Negotiation +1, Perception +1, Street Knowledge: Mormons +2, SINner (5)"
+            }
+          ]
+        },
+        {
+          "nationality": "Tir Tairngire",
+          "primaryLanguage": "Sperethiel (N)",
+          "secondaryLanguages": ["English 2"],
+          "universalSkills": "Etiquette +1, Knowledge: History +1, Street Knowledge: Tir Tairngire +1",
+          "regions": [
+            { "name": "Elves/Humans", "bonuses": "Charisma +1, Computer +2, SINner (5)" },
+            {
+              "name": "Orks/Trolls/Dwarfs",
+              "bonuses": "Con +2, Disguise +1, Intimidation +1, Sneaking +1, Perception +1, Street Knowledge: Counterculture +2, SINner (5)"
+            }
+          ]
+        }
+      ]
+    },
+    "formative-years": {
+      "source": "Run Faster, p.67-69",
+      "description": "Formative Years modules (age 0-10). Each costs 40 Karma.",
+      "karmaCost": 40,
+      "columns": ["name", "attributes", "qualities", "skills"],
+      "rows": [
+        {
+          "name": "Arcology Living",
+          "attributes": { "logic": 1, "charisma": 1 },
+          "qualities": ["Limited Corporate SIN (15)"],
+          "skills": "Electronics skill group +2, Etiquette +2, Perception +1, Academic Knowledge: [Corporation] +3"
+        },
+        {
+          "name": "Corp Drone",
+          "attributes": { "logic": 1, "charisma": 1 },
+          "qualities": [],
+          "skills": "Electronics skill group +2, Etiquette +2, Perception +1, Academic Knowledge: [Corporation] +3"
+        },
+        {
+          "name": "Farm Living",
+          "attributes": { "body": 1, "strength": 1 },
+          "qualities": ["Uneducated (8)", "Toughness (9)"],
+          "skills": "Industrial Mechanic +1, Professional Knowledge: Farming 5"
+        },
+        {
+          "name": "Fugitive",
+          "attributes": { "reaction": 1, "willpower": 1, "intuition": 1 },
+          "qualities": ["Paranoia (7)", "Criminal SIN (10)", "Bad Rep (7)"],
+          "skills": "Acting skill group +2, Perception +1, Sneaking +1, Street Knowledge: [City] +2"
+        },
+        {
+          "name": "Isolated Rural Upbringing",
+          "attributes": { "body": 1, "strength": 1 },
+          "qualities": ["Uncouth (14)", "Uneducated (8)", "Toughness (9)"],
+          "skills": "Blades +1, Outdoors skill group +2, Running +1, Unarmed Combat +1, Knowledge: Farming +2"
+        },
+        {
+          "name": "Military Brat",
+          "attributes": { "strength": 1, "reaction": 1 },
+          "qualities": ["Uncouth (14)"],
+          "skills": "Close Combat skill group +2, Negotiation +1, Perception +1, Professional Knowledge: Military +3, Interest Knowledge: Military History +2"
+        },
+        {
+          "name": "Orphan",
+          "attributes": { "willpower": 1 },
+          "qualities": [],
+          "skills": "Computer +1, Perception +2, Sneaking +2, Survival +1, Street Knowledge: [City] +3, Professional Knowledge: Foster System +3"
+        },
+        {
+          "name": "Rich Kid",
+          "attributes": { "charisma": 1 },
+          "qualities": ["Trust Fund 10", "Prejudiced: Poor -7"],
+          "skills": "Artisan +1, Leadership +2, Computers +2, Interest Knowledge: [Any] +3, Language +3"
+        },
+        {
+          "name": "Street Urchin",
+          "attributes": { "body": 1, "willpower": 1 },
+          "qualities": ["Paranoia (7)", "Flashbacks (7)", "Uneducated (8)", "Toughness (9)"],
+          "skills": "Close Combat skill group +2, Perception +1, Running +1, Sneaking +1, Street Knowledge: [City] +3"
+        },
+        {
+          "name": "White Collar",
+          "attributes": { "logic": 1, "charisma": 1 },
+          "qualities": [],
+          "skills": "Etiquette (Professional) specialization, Negotiation +1, Interest Knowledge: [Any] +3, Language +3"
+        }
+      ]
+    },
+    "teen-years": {
+      "source": "Run Faster, p.70-72",
+      "description": "Teen Years modules (age 10-17). Each costs 50 Karma.",
+      "karmaCost": 50,
+      "columns": ["name", "attributes", "qualities", "skills"],
+      "rows": [
+        {
+          "name": "Corporate Education",
+          "attributes": { "charisma": 1, "logic": 1 },
+          "qualities": [],
+          "skills": "Electronics skill group +1, Chemistry +1, Gymnastics +1, Academic Knowledge: [Any, choose two] +1, Professional Knowledge: [Corporation] +2, Professional Knowledge: [Job] +2"
+        },
+        {
+          "name": "Farm Living",
+          "attributes": { "body": 1, "intuition": 1 },
+          "qualities": ["Animal Empathy (3)"],
+          "skills": "Industrial Mechanics +2, Longarms +1, Pilot Ground Craft +2, Pistols +1, Professional Knowledge: Farming +1, Interest Knowledge: [Any] +1"
+        },
+        {
+          "name": "Gang Warfare",
+          "attributes": { "body": 1, "reaction": 1, "willpower": 1 },
+          "qualities": [
+            "Black Market Pipeline (10)",
+            "Paranoia (7)",
+            "Uneducated (8)",
+            "Criminal SIN (10)"
+          ],
+          "skills": "Blades +2, Firearms skill group +1, First Aid +1, Leadership +1, Negotiation +1, Perception +1, Running +1, Sneaking +1, Survival +1, Street Knowledge: [City] +2"
+        },
+        {
+          "name": "High School",
+          "attributes": { "charisma": 1, "logic": 1 },
+          "qualities": [],
+          "skills": "Athletics +1, Computers +2, Chemistry +1, Software +2, Academic Knowledge: [Any, choose two] +1, Language +1, Street Knowledge: [Hometown/City] +1"
+        },
+        {
+          "name": "Home Tutored",
+          "attributes": { "logic": 1, "willpower": 1 },
+          "qualities": ["Social Stress (8)"],
+          "skills": "Chemistry +1, Computers +3, Software +2, Academic Knowledge: [Any, choose two] +3, Language +2"
+        },
+        {
+          "name": "Isolated Rural Upbringing",
+          "attributes": { "body": 1, "willpower": 1 },
+          "qualities": ["Incompetent: Electronics (5)"],
+          "skills": "Blades +1, First Aid +1, Gymnastics +1, Longarms +1, Outdoors group +1, Perception +2, Sneaking +1, Street Knowledge: Critters +2"
+        },
+        {
+          "name": "Magical Education",
+          "attributes": { "willpower": 1, "charisma": 1 },
+          "qualities": ["Corporate Limited SIN (15)"],
+          "skills": "Varies by magic type (see module). For all: Arcana +2, Academic Knowledge: Magical Theory +5, Academic Knowledge: [Any] +4, Academic Knowledge: [Any] +4, Academic Knowledge: [Any] +3, Language [Any] +2",
+          "notes": "Requires purchasing Adept/Aspected Magician/Magician/Mystic Adept separately. Must pick Further Education then Corporate, or go straight to Corporate."
+        },
+        {
+          "name": "Military School",
+          "attributes": { "body": 1, "charisma": 1 },
+          "qualities": ["Military Rank (5)", "Code of Honor (15)"],
+          "skills": "Blades +1, Electronics skill group +1, Firearms skill group +1, First Aid +1, Leadership +1, Unarmed Combat +1, Running +1, Swimming +1, Professional Knowledge: Military +3, Academic Knowledge: Military History +3, Academic Knowledge: [Any] +1, Professional Knowledge: Strategy +1"
+        },
+        {
+          "name": "Preparatory School",
+          "attributes": { "charisma": 1, "logic": 1 },
+          "qualities": ["First Impression (11)"],
+          "skills": "Chemistry +1, Computers +1, Etiquette +1, Academic Knowledge: [Any, choose two] +1, Language [Any] +1",
+          "exclusions": [
+            "Fugitive (Formative Years)",
+            "Isolated Rural Upbringing (Formative Years)"
+          ]
+        },
+        {
+          "name": "Street Kid",
+          "attributes": { "body": 1, "willpower": 1 },
+          "qualities": ["Bad Rep (7)", "Enemy (10)"],
+          "skills": "Acting skill group +2, Clubs +1, Etiquette +1, Gymnastics +1, Intimidation +1, First Aid +1, Negotiation +1, Perception +1, Running +1, Stealth skill group +1, Street Knowledge: [City] +1"
+        }
+      ]
+    },
+    "further-education": {
+      "source": "Run Faster, p.72-75",
+      "description": "Further Education modules. Community College/Trade School = 2 years, University/Military Academy = 4 years. Cost in parentheses in header.",
+      "columns": [
+        "name",
+        "karmaCost",
+        "duration",
+        "attributes",
+        "qualities",
+        "universalSkills",
+        "disciplines"
+      ],
+      "rows": [
+        {
+          "name": "Community College",
+          "karmaCost": 55,
+          "duration": "2 years",
+          "attributes": { "logic": 1, "willpower": 1 },
+          "universalSkills": null,
+          "disciplines": {
+            "science": [
+              {
+                "name": "Architecture",
+                "skills": "Artisan: Drawing specialization, First Aid +1, Industrial Mechanic +1, Academic Knowledge: Buildings +5"
+              },
+              {
+                "name": "Business",
+                "skills": "Con +1, Etiquette +1, Negotiation +2, Academic Knowledge: Economics +5"
+              },
+              {
+                "name": "Computer Science",
+                "skills": "Cybercombat +1, Electronics skill group +1, Hacking +1, Academic Knowledge: Matrix Design +6"
+              },
+              {
+                "name": "Engineering",
+                "skills": "Chemistry +1, Hardware +1, Industrial Mechanic +2, Academic Knowledge: Engineering +5"
+              },
+              {
+                "name": "Law",
+                "skills": "Etiquette +1, Negotiation +2, Performance +1, Academic Knowledge: Law +5"
+              },
+              {
+                "name": "Magic",
+                "skills": "Sorcery skill group +1, Academic Knowledge: Magical Theory or Metaplanes +5"
+              },
+              {
+                "name": "Mathematics",
+                "skills": "Etiquette +1, Software +1, Academic Knowledge: Mathematics +6"
+              },
+              {
+                "name": "Medicine",
+                "skills": "Biotech skill group +1, Academic Knowledge: Medicine +5"
+              },
+              {
+                "name": "Natural Sciences",
+                "skills": "Computer +1, Software +1, Academic Knowledge: [Chemistry/Physics/Biology (choose one)] +6"
+              }
+            ],
+            "arts": [
+              { "name": "Art", "skills": "Artisan +2, Academic Knowledge: Art History +4" },
+              {
+                "name": "History",
+                "skills": "Computer +1, Software +1, Academic Knowledge: History +6"
+              },
+              {
+                "name": "Languages",
+                "skills": "Etiquette +1, Language: [Any] +4, Language: [Any] +2, Language: [Any] +2"
+              },
+              {
+                "name": "Literature",
+                "skills": "Artisan +1 (with Writing specialization), Academic Knowledge: Literature +4"
+              },
+              {
+                "name": "Metahumanities",
+                "skills": "Academic Knowledge: [Ancient Language/Philosophy/Religion] +10 (divide among all three areas, with each area having a minimum of two ranks)"
+              },
+              {
+                "name": "Social Sciences",
+                "skills": "Academic Knowledge: [Sociology/Psychology/Archaeology/Criminology/Politics] +10 (divide among at least three areas, with no single area having more than 6 ranks)"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Ivy League University",
+          "karmaCost": 80,
+          "duration": "4 years",
+          "attributes": { "charisma": 1, "logic": 1, "willpower": 1 },
+          "universalSkills": "Computer +1, Etiquette +1, Perception +1, Academic Knowledge: [Any] +4",
+          "disciplines": {
+            "science": [
+              {
+                "name": "Architecture",
+                "skills": "First Aid +1, Industrial Mechanic +1, Academic Knowledge: Buildings +6"
+              },
+              {
+                "name": "Business",
+                "skills": "Etiquette +1, Negotiation +1, Academic Knowledge: Economics +6"
+              },
+              {
+                "name": "Computer Science",
+                "skills": "Electronics skill group +1, Academic Knowledge: Matrix Design +5"
+              },
+              {
+                "name": "Engineering",
+                "skills": "Chemistry +1, Industrial Mechanic +1, Academic Knowledge: Engineering +6"
+              },
+              {
+                "name": "Law",
+                "skills": "Negotiation +1, Performance +1, Academic Knowledge: Law +6"
+              },
+              {
+                "name": "Magic",
+                "skills": "Sorcery skill group +1, Academic Knowledge: Magical Theory or Metaplanes +5"
+              },
+              {
+                "name": "Mathematics",
+                "skills": "Etiquette +1, Software +1, Academic Knowledge: Mathematics +6"
+              },
+              {
+                "name": "Medicine",
+                "skills": "Biotech skill group +1, Academic Knowledge: Medicine +5"
+              },
+              {
+                "name": "Natural Sciences",
+                "skills": "Computer +1, Software +1, Academic Knowledge: [Chemistry/Physics/Biology (choose one)] +6"
+              }
+            ],
+            "arts": [
+              { "name": "Art", "skills": "Artisan +2, Academic Knowledge: Art History +4" },
+              {
+                "name": "History",
+                "skills": "Computer +1, Software +1, Academic Knowledge: History +6"
+              },
+              {
+                "name": "Languages",
+                "skills": "Etiquette +1, Language: [Any] +4, Language: [Any] +2, Language: [Any] +2"
+              },
+              {
+                "name": "Literature",
+                "skills": "Artisan +1 (with Writing specialization), Academic Knowledge: Literature +4"
+              },
+              {
+                "name": "Metahumanities",
+                "skills": "Academic Knowledge: [Ancient Language/Philosophy/Religion] +10 (divide among all three areas, with each area having a minimum of two ranks)"
+              },
+              {
+                "name": "Social Sciences",
+                "skills": "Academic Knowledge: [Sociology/Psychology/Archaeology/Criminology/Politics] +10 (divide among at least three areas, with no single area having more than 6 ranks)"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Military Academy",
+          "karmaCost": 115,
+          "duration": "4 years",
+          "attributes": { "body": 1, "reaction": 1, "strength": 1 },
+          "qualities": ["Military Rank (20)"],
+          "universalSkills": "Firearms skill group +1, First Aid +1, Leadership +1, Navigation +1, Swimming +1, Unarmed Combat +1, Academic Knowledge: Military History +2, Professional Knowledge: Military +3",
+          "disciplines": {
+            "science": [
+              {
+                "name": "Architecture",
+                "skills": "Artisan (Drawing specialization), First Aid +1, Industrial Mechanic +1, Academic Knowledge: Buildings +5"
+              },
+              {
+                "name": "Business",
+                "skills": "Con +1, Etiquette +1, Negotiation +2, Academic Knowledge: Economics +5"
+              },
+              {
+                "name": "Computer Science",
+                "skills": "Cybercombat +1, Electronics skill group +1, Hacking +1, Academic Knowledge: Matrix Design +6"
+              },
+              {
+                "name": "Engineering",
+                "skills": "Chemistry +1, Hardware +1, Industrial Mechanic +2, Academic Knowledge: Engineering +5"
+              },
+              {
+                "name": "Law",
+                "skills": "Etiquette +1, Negotiation +2, Performance +1, Academic Knowledge: Law +5"
+              },
+              {
+                "name": "Magic",
+                "skills": "Sorcery skill group +1, Academic Knowledge: Magical Theory or Metaplanes +5"
+              },
+              {
+                "name": "Mathematics",
+                "skills": "Computer +1, Etiquette +1, Software +2, Academic Knowledge: Mathematics +5"
+              },
+              {
+                "name": "Medicine",
+                "skills": "Biotech skill group +2, Chemistry +1, Academic Knowledge: Medicine +6"
+              },
+              {
+                "name": "Natural Sciences",
+                "skills": "Computer +1, First Aid +1, Software +2, Academic Knowledge: [Chemistry/Physics/Biology] +5"
+              }
+            ],
+            "arts": [
+              { "name": "Art", "skills": "Artisan +3, Academic Knowledge: Art History 3" },
+              {
+                "name": "History",
+                "skills": "Computer +1, Software +2, Academic Knowledge: [National] or [World] History +5"
+              },
+              {
+                "name": "Languages",
+                "skills": "Etiquette +1, Negotiation +1, Language: [Any] +6, Language: [Any] +5"
+              },
+              {
+                "name": "Literature",
+                "skills": "Artisan +1 (also add Writing specialization), Computer +1, Academic Knowledge: Literature +5"
+              },
+              {
+                "name": "Metahumanities",
+                "skills": "Computer +1, Academic Knowledge: [Ancient Language/Philosophy/Religion] +13 (divide among all three, with no one skill having more than 7 ranks)"
+              },
+              {
+                "name": "Social Sciences",
+                "skills": "Computer +1, Academic Knowledge: [Sociology/Psychology/Archaeology/Criminology/Politics] +13 (divide among desired subjects, with no one subject having more than 6 ranks)"
+              }
+            ]
+          }
+        },
+        {
+          "name": "State University/College",
+          "karmaCost": 65,
+          "duration": "4 years",
+          "attributes": { "logic": 1, "willpower": 1 },
+          "universalSkills": "Computer +1, Perception +1, Etiquette +1, Academic Knowledge: [Any] +4",
+          "disciplines": {
+            "science": [
+              {
+                "name": "Architecture",
+                "skills": "Artisan +1 (with Drawing specialization), First Aid +1, Industrial Mechanic +1, Academic Knowledge: Buildings +5"
+              },
+              {
+                "name": "Business",
+                "skills": "Con +1, Etiquette +1, Negotiation +2, Academic Knowledge: Economics +5"
+              },
+              {
+                "name": "Computer Science",
+                "skills": "Cybercombat +1, Electronics skill group +1, Hacking +1, Academic Knowledge: Matrix Design +6"
+              },
+              {
+                "name": "Engineering",
+                "skills": "Chemistry +1, Hardware +1, Industrial Mechanic +2, Academic Knowledge: Engineering +5"
+              },
+              {
+                "name": "Law",
+                "skills": "Etiquette +1, Negotiation +2, Performance +1, Academic Knowledge: Law +5"
+              },
+              {
+                "name": "Magic",
+                "skills": "Sorcery skill group +1, Academic Knowledge: Magical Theory or Metaplanes +5"
+              },
+              {
+                "name": "Mathematics",
+                "skills": "Computer +1, Etiquette +1, Software +2, Academic Knowledge: Mathematics +5"
+              },
+              {
+                "name": "Medicine",
+                "skills": "Biotech skill group +1, Biotechnology +1, Chemistry +1, Academic Knowledge: Medicine +6"
+              },
+              {
+                "name": "Natural Sciences",
+                "skills": "Computer +1, First Aid +1, Software +2, Academic Knowledge: [Chemistry/Physics/Biology] +5"
+              }
+            ],
+            "arts": [
+              { "name": "Art", "skills": "Artisan +3, Academic Knowledge: Art History 3" },
+              {
+                "name": "History",
+                "skills": "Computer +1, Software +2, Academic Knowledge: [National] History or [World] History +5"
+              },
+              {
+                "name": "Languages",
+                "skills": "Etiquette +1, Negotiation +1, Language: [Any] +6, Language: [Any] +5"
+              },
+              {
+                "name": "Literature",
+                "skills": "Artisan +1 (with Writing specialization), Computer +1, Instruction +1, Academic Knowledge: Literature +5"
+              },
+              {
+                "name": "Metahumanities",
+                "skills": "Computer +1, Academic Knowledge: [Ancient Language/Philosophy/Religion] +13 (distribute with no more than 6 ranks in each subject)"
+              },
+              {
+                "name": "Social Sciences",
+                "skills": "Computer +1, Academic Knowledge: [Sociology/Psychology/Archaeology/Criminology/Politics] +13 (no more than 6 ranks in any given subject)"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Trade School/Technical College",
+          "karmaCost": 40,
+          "duration": "2 years",
+          "attributes": { "logic": 1 },
+          "universalSkills": "Computers +1, Gymnastics +2, Perception +1",
+          "disciplines": {
+            "vocations": [
+              {
+                "name": "Architect",
+                "skills": "First Aid +1, Industrial Mechanic +1, Professional Knowledge: Buildings +6"
+              },
+              {
+                "name": "Fashion Designer",
+                "skills": "Artisan +1 (with Fashion specialization), Professional Knowledge: Fashion +4"
+              },
+              {
+                "name": "Graphic Designer",
+                "skills": "Artisan +1 (with Drawing specialization), Professional Knowledge: Corporate Logos +4"
+              },
+              {
+                "name": "Journalist",
+                "skills": "Con +1, Etiquette +1, Negotiation +1, Professional Knowledge: Politics +4"
+              },
+              {
+                "name": "Lawyer",
+                "skills": "Etiquette +1, Negotiation +1, Performance +1, Professional Knowledge: Law +4"
+              },
+              {
+                "name": "Mechanic",
+                "skills": "First Aid +2, Engineering skill group +1, Professional Knowledge: Mechanics +3"
+              },
+              {
+                "name": "Media Studies",
+                "skills": "Etiquette +1, Negotiation +1, Professional Knowledge: Trid Shows +6"
+              },
+              {
+                "name": "Nurse",
+                "skills": "Biotech skill group +1, Etiquette +1, Professional Knowledge: Medicine +3"
+              },
+              {
+                "name": "Tradesman",
+                "skills": "Automotive Mechanic +1, First Aid +1, Industrial Mechanic +1, Professional Knowledge: DIY +4"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "real-life": {
+      "source": "Run Faster, p.76-81",
+      "description": "Real Life modules (~4 years each). Each costs 100 Karma. Multiple may be taken but not the same one twice. Skills cannot exceed 7 from modules.",
+      "karmaCost": 100,
+      "columns": ["name", "attributes", "qualities", "skills"],
+      "rows": [
+        {
+          "name": "Bounty Hunter",
+          "attributes": { "body": 1, "willpower": 1, "intuition": 1 },
+          "qualities": [],
+          "skills": "Athletics skill group +1, Close Combat skill group +1, First Aid +1, Intimidation +1, Longarms +1, Perception +1, Pistols +1, Survival +1, Tracking +1, Street Knowledge: Lone Star Procedures +3, Street Knowledge: Crook Hangouts +3"
+        },
+        {
+          "name": "Celebrity",
+          "attributes": { "charisma": 1, "plus1ToTwoOtherAttributes": true },
+          "qualities": ["Fame (8)"],
+          "skills": "Con +1, Escape Artist +1, +6 to buy any skills appropriate to field of celebrity (no more than 3 ranks in any individual skill; ranks in Con and Escape Artist may be purchased with these points), Professional Knowledge: [Sports/Music/Film] +3",
+          "notes": "Also +1 to two attributes of choice (must be two separate attributes, other than Charisma)"
+        },
+        {
+          "name": "Combat Correspondent",
+          "attributes": { "charisma": 1, "willpower": 1 },
+          "qualities": ["Guts (10)"],
+          "skills": "Electronics skill group +2, Navigation +1, Negotiation +2, Perception +2, Survival +1, Professional Knowledge: Journalism +5, Language: [Any] +3, Language: [Any] +1"
+        },
+        {
+          "name": "Corporate",
+          "attributes": { "logic": 1, "intuition": 1 },
+          "qualities": ["Limited Corporate SIN (15)"],
+          "universalSkills": "Etiquette +1, Professional Knowledge: [Corporation] +3",
+          "jobs": [
+            {
+              "name": "Company Man",
+              "skills": "Firearms skill group +3, Demolitions +2, Pilot Ground Craft +2, Sneaking +3, Unarmed Combat +2"
+            },
+            {
+              "name": "Hacker/Decker",
+              "skills": "Cracking skill group +2, Electronics skill group +3, First Aid +2, Academic Knowledge: Physics +3, Professional Knowledge: Matrix Security Design +6"
+            },
+            {
+              "name": "Security Guard",
+              "skills": "Athletics skill group +2, Close Combat skill group +2, Firearms skill group +2, Perception +2, Professional Knowledge: Security Procedures +5, Professional Knowledge: Law Enforcement Procedures +4"
+            },
+            {
+              "name": "Security Rigger",
+              "skills": "Electronics skill group +2, Gunnery +3, Perception +2, Pilot Aircraft +2, Pilot Anthroform +2, Pilot Ground Craft +3, Professional Knowledge: Drones +3"
+            },
+            {
+              "name": "Wage Mage",
+              "skills": "Arcana +2, Assensing +3, Astral Combat +2, Conjuring skill group +2, Enchanting skill group +1, Sorcery skill group +2, Professional Knowledge: Magical Law +1"
+            },
+            {
+              "name": "Wage Slave",
+              "skills": "Charisma +1, Willpower +1, Con +1, Etiquette +2, Negotiation +2, Professional Knowledge: Administration +6"
+            }
+          ]
+        },
+        {
+          "name": "Covert Operations",
+          "attributes": { "intuition": 1, "willpower": 1 },
+          "qualities": ["Hawk Eye (3)", "Poor Link (8)"],
+          "skills": "Chemistry +1, Con +1, Escape Artist +1, Etiquette +1, Gymnastics +1, Navigation +1, Perception +1, Pistols +1, Sneaking +2, Survival +1, Unarmed Combat +1, Language: [Any] +3, Knowledge: [Any] +3, Professional Knowledge: Codes +2, Street Knowledge: [City] +3"
+        },
+        {
+          "name": "Drifter",
+          "attributes": { "plus1ToTwoAttributes": true },
+          "qualities": ["High Pain Tolerance (7)", "Sense of Direction (3)"],
+          "skills": "Con +2, Escape Artist +1, Negotiation +1, Running +1, Sneaking +1, Survival +2, Swimming +1, Unarmed Combat +1, Street Knowledge: Grey Market +3, Street Knowledge: Black Market +3, Street Knowledge: [City] +5, Street Knowledge: [Any] +3",
+          "notes": "+1 to any two attributes (must be separate)"
+        },
+        {
+          "name": "Ganger",
+          "attributes": { "body": 1, "strength": 1 },
+          "qualities": ["Criminal SIN (10)"],
+          "skills": "Blades +3, Cracking skill group +1, Demolitions +1, Electronics skill group +1, Escape Artist +1, Firearms skill group +2, Heavy Weapons +1, Stealth skill group +1, Survival +1, Perception +1, Pilot Ground Craft +1, Running +1"
+        },
+        {
+          "name": "Government Agent",
+          "attributes": { "intuition": 1, "reaction": 1 },
+          "qualities": ["SINner (5)"],
+          "skills": "First Aid +1, Influence skill group +2, Pistols +2, Perception +3, Pilot Ground Craft +1, Running +1, Tracking +1, Professional Knowledge: Government Procedures +5, Professional Knowledge: Law Enforcement Protocols +5, Professional Knowledge: National Threats +4"
+        },
+        {
+          "name": "Law Enforcement",
+          "attributes": { "body": 1, "reaction": 1, "willpower": 1 },
+          "qualities": [],
+          "basicTraining": "Clubs +1, Etiquette +1, First Aid +1, Leadership +1, Perception +1, Pistols +1, Professional Knowledge: Police Procedures +3",
+          "specializations": [
+            {
+              "name": "Beat Cop",
+              "skills": "Intimidation +2, Navigation +1, Pilot Ground Craft +1, Professional Knowledge: [City] +5"
+            },
+            {
+              "name": "Cyber Crime",
+              "skills": "Cracking skill group +1, Electronics skill group +1, Professional Knowledge: Matrix Criminals +5"
+            },
+            {
+              "name": "Cyber Division",
+              "skills": "Cybertechnology +1, Firearms skill group +1, Heavy Weapons +2, Unarmed Combat +1"
+            },
+            {
+              "name": "Mage Division",
+              "skills": "Arcana +1, Assensing +2, Sorcery skill group +1, Professional Knowledge: Magical Threats +2"
+            },
+            {
+              "name": "Rigger",
+              "skills": "Automotive Mechanic +1, Gunnery +1, Pilot Aircraft +1, Pilot Anthroform +1, Pilot Ground Craft +2, Professional Knowledge: Drones +1"
+            },
+            {
+              "name": "SWAT Team",
+              "skills": "Armorer +1, Firearms skill group +1, Gymnastics +1, Throwing Weapons +2"
+            }
+          ]
+        },
+        {
+          "name": "Organized Crime",
+          "attributes": {},
+          "qualities": ["Made Man (5)", "Criminal SIN (10)"],
+          "skills": "Blades +1, Con +2, Demolitions +1, Escape Artist +1, Etiquette +1, Firearms skill group +3, Forgery +1, Hardware +1, Intimidation +2, Leadership +1, Negotiation +1, Perception +2, Piloting Ground Craft +1, Stealth skill group +1, Unarmed Combat +2, Street Knowledge: [Syndicate] +4, Street Knowledge: [City] +3"
+        },
+        {
+          "name": "Political Activist",
+          "attributes": { "charisma": 1, "willpower": 1 },
+          "qualities": ["Criminal SIN (10)"],
+          "skills": "Con +1, Disguise +1, Etiquette +2, Forgery +2, Instruction +2, Leadership +2, Negotiation +2, Palming +2, Perception +2, Piloting Ground Craft +1, Pistols +2, Street Knowledge: [City] +3, Street Knowledge: Police Procedures +3, Interest Knowledge: [Policlub] +4"
+        },
+        {
+          "name": "Postgraduate Studies",
+          "attributes": { "logic": 1, "intuition": 1, "charisma": 1 },
+          "qualities": [],
+          "skills": "Instruction +2, +10 to skills from your education module (no more than 4 added to any one skill), Academic Knowledge: [Major] +2, Academic Knowledge: [Any] +2",
+          "prerequisites": ["Further Education module"]
+        },
+        {
+          "name": "Private Investigator/Detective",
+          "attributes": { "intuition": 1, "logic": 1, "willpower": 1 },
+          "qualities": ["SINner (5)"],
+          "skills": "Athletics skill group +1, First Aid +1, Influence skill group +1, Perception +2, Pistols +2, Pilot Ground Craft +1, Tracking +1, Unarmed Combat +1, Street Knowledge: Law Enforcement Procedures +3, Street Knowledge: [City] +2",
+          "prerequisites": [
+            "Tour of Duty, Law Enforcement, Covert Operations, Shadow Work, or Corporate module"
+          ]
+        },
+        {
+          "name": "Regular Job",
+          "attributes": { "charisma": 1, "logic": 1, "willpower": 1 },
+          "qualities": [],
+          "skills": "Leadership +1, Etiquette +1, Negotiation +1, Professional Knowledge: [Job] +1, Professional Knowledge: [Job] +2, Interest Knowledge: [Any] +1, +6 points to be spent among vocational skills relating to your job (no more than 3 ranks per skill)"
+        },
+        {
+          "name": "Shadow Work (Shadowrunner)",
+          "attributes": { "body": 1 },
+          "qualities": [],
+          "roles": [
+            {
+              "name": "Face",
+              "skills": "Charisma +1, Con +1, Influence skill group +3, Intimidation +1, Perception +1, Pilot Ground Craft +1, Pistols +1, First Impression quality (11)"
+            },
+            {
+              "name": "Decker",
+              "skills": "Cracking skill group +2, Electronics skill group +2, Forgery +1, Intuition +1, Perception +1, Pistols +1, Street Knowledge: Matrix Security Procedures +4, Codeslinger quality (10)"
+            },
+            {
+              "name": "Smuggler",
+              "skills": "Electronic Warfare +2, Etiquette +1, Gunnery +2, [Aeronautics, Automotive, or Nautical] Mechanic +2, Navigation +1, Negotiation +1, Perception +2, Pilot Aircraft +2, Pilot Ground Craft +2, Pilot Watercraft +2, Pistols +1, Sneaking +1, Street Knowledge: Border Patrol Tactics +6, Street Knowledge: Smuggler Safe Houses +6, Street Knowledge: Smuggler Routes +6"
+            },
+            {
+              "name": "Street Samurai",
+              "skills": "Agility +1, Reaction +1, Athletics skill group +1, Blades +2, Firearms skill group +2, Heavy Weapons +1, Negotiation +1, Pilot Ground Craft +1, Sneaking +1, Unarmed Combat +1, Street Knowledge: Safe Houses +3, Code of Honor (15)"
+            },
+            {
+              "name": "Weapon Specialist",
+              "skills": "Archery +1, Armorer +3, Chemistry +2, Close Combat skill group +2, Demolitions +1, Firearms skill group +2, Heavy Weapons +1, Negotiation +1, Throwing Weapons +1, Professional Knowledge: Blade Design +4, Professional Knowledge: Gun Design +5, Interest Knowledge: Gun Trivia +3"
+            }
+          ]
+        },
+        {
+          "name": "Street Magic",
+          "attributes": { "willpower": 1 },
+          "qualities": [],
+          "roles": [
+            {
+              "name": "Aspected Magician",
+              "skills": "+1 to Alchemy, Conjuring, or Spellcasting skill group; Arcana +2, Assensing +2, Blades +1, First Aid +1, Survival +1, Professional Knowledge: Magical Security +3, Professional Knowledge: Small-Group Tactics +2, Street Knowledge: Magical Theory +1"
+            },
+            {
+              "name": "Occult Investigator",
+              "skills": "Arcana +1, Assensing +3, Conjuring skill group +1, Influence skill group +1, Locksmith +1, Perception +3, Pistols +1, Sorcery skill group +2, Tracking +2, Professional Knowledge: Forensics +5, Street Knowledge: [City] +4"
+            },
+            {
+              "name": "Eco-Shaman",
+              "skills": "Assensing +2, Astral Combat +2, Conjuring skill group +2, Demolitions +1, Etiquette +1, First Aid +1, Forgery +2, Perception +2, Pistols +1, Sorcery skill group +2, Street Knowledge: Megacorp Law +5, Street Knowledge: Magical Theory +3"
+            },
+            {
+              "name": "Street Mage",
+              "skills": "Assensing +2, Blades +1, Conjuring skill group +3, Palming +1, Perception +1, Sneaking +1, Sorcery skill group +2, Survival +1, Street Knowledge: Charity Shelters +5, Street Knowledge: [City] +4"
+            },
+            {
+              "name": "Street Shaman",
+              "skills": "Assensing +2, Blades +1, Conjuring skill group +3, Palming +1, Perception +1, Sneaking +1, Sorcery skill group +1, Survival +1, Street Knowledge: Charity Shelters +5, Street Knowledge: [sprawl] +4"
+            },
+            {
+              "name": "Talismonger",
+              "skills": "Assensing +3, Chemistry +1, Enchanting skill group +3, Etiquette +2, First Aid +1, Negotiation +2, Pistols +1, Professional Knowledge: Telesma +5, Professional Knowledge: Alchemy +5"
+            }
+          ]
+        },
+        {
+          "name": "Terrorist",
+          "attributes": { "logic": 1, "willpower": 1 },
+          "qualities": ["Criminal SIN (10)"],
+          "skills": "Con +1, Demolitions +3, Disguise +2, Firearms skill group +2, Leadership +2, Palming +2, Perception +2, Pilot Ground Craft +1, Street Knowledge: [City] +3, Street Knowledge: Law Enforcement Procedures +2"
+        },
+        {
+          "name": "Think Tank",
+          "attributes": { "willpower": 1, "logic": 2 },
+          "qualities": ["Analytical Mind (5)"],
+          "skills": "Etiquette +2, Academic Knowledge: [Any] +6, Academic Knowledge: [Any] +3, Academic Knowledge: [Any] +3; note that three different Academic Knowledge skills must be selected"
+        }
+      ]
+    },
+    "tours-of-duty": {
+      "source": "Run Faster, p.82-83",
+      "description": "Military Tour of Duty modules. Each represents a 5-year commitment. Costs 100 Karma each (same as Real Life). Rank 5+ = NCO, Rank 20+ = Officer.",
+      "karmaCost": 100,
+      "columns": ["name", "attributes", "qualities", "basicTraining", "branches"],
+      "rows": [
+        {
+          "name": "Tour of Duty: Mercenary",
+          "attributes": { "body": 1, "reaction": 1, "strength": 1 },
+          "qualities": [],
+          "basicTraining": "Firearms skill group +1, First Aid +1, Navigation +1, Professional Knowledge: Foreign Military +3",
+          "branches": [
+            {
+              "name": "Air Force",
+              "skills": "Aeronautics Mechanic +1, Armorer +1, Blades +1, Free-Fall +1, Gunnery +1, Pilot Aircraft +2, Survival +1"
+            },
+            {
+              "name": "Army",
+              "skills": "Armorer +1, Blades +1, Free-Fall +1, Heavy Weapons +1, Pilot Ground Craft +1, Running +1, Survival +1, Swimming +1, Throwing Weapons +1"
+            },
+            {
+              "name": "Engineering Corps",
+              "skills": "Armorer +2, Demolitions +1, Engineering skill group +1, Gunnery +1, Professional Knowledge: Military Vehicles +3"
+            },
+            {
+              "name": "Mage Corps",
+              "skills": "Assensing +2, Arcana +1, Conjuring skill group +1, Sorcery skill group +1"
+            },
+            { "name": "Medical Corps", "skills": "Biotech skill group +2" },
+            {
+              "name": "Navy",
+              "skills": "Armorer +1, Blades +1, Gunnery +1, Perception +1, Pilot Watercraft +2, Survival +1, Swimming +1"
+            },
+            {
+              "name": "Rigger Corps",
+              "skills": "Gunnery +2, Electronic Warfare +2, Pilot Aircraft +1, Pilot Anthroform +1, Pilot Ground Craft +1"
+            },
+            {
+              "name": "Special Forces",
+              "skills": "Armorer +1, Blades +1, Demolition +1, Free-Fall +1, Perception +1, Pilot Ground Craft +1, Pilot Watercraft +1, Sneaking +1, Survival +1"
+            }
+          ]
+        },
+        {
+          "name": "Tour of Duty: NAN",
+          "attributes": { "body": 1, "strength": 1, "intuition": 1 },
+          "qualities": [],
+          "basicTraining": "Firearms skill group +1, First Aid +1, Navigation +1, Unarmed Combat +1, Professional Knowledge: NAN Military +3",
+          "branches": [
+            {
+              "name": "Air Force",
+              "skills": "Blades +1, Free-Fall +1, Gunnery +1, Pilot Aircraft +2, Survival +1, Tracking +1"
+            },
+            {
+              "name": "Army",
+              "skills": "Armorer +1, Blades +1, Heavy Weapons +1, Pilot Ground Craft +1, Survival +2, Throwing Weapons +1"
+            },
+            {
+              "name": "Engineering Corps",
+              "skills": "Armorer +2, Demolitions +1, Engineer skill group +1, Gunnery +1"
+            },
+            {
+              "name": "Mage Corps",
+              "skills": "Assensing +1, Blades +1, Conjuring skill group +1, Sorcery skill group +1, Survival +1"
+            },
+            { "name": "Medical Corps", "skills": "Biotech skill group +2" },
+            {
+              "name": "Navy",
+              "skills": "Armorer +1, Blades +1, Gunnery +1, Pilot Watercraft +1, Survival +2, Swimming +1"
+            },
+            {
+              "name": "Rigger Corps",
+              "skills": "Archery +1, Blades +1, Electronic Warfare +1, Gunnery +1, Pilot Aircraft +1, Pilot Anthroform +1, Pilot Ground Craft +1, Survival +1"
+            },
+            {
+              "name": "Special Forces",
+              "skills": "Armorer +1, Blades +1, Demolitions +1, Free-Fall +1, Pilot Ground Craft +1, Pilot Watercraft +1, Survival +1, Sneaking +1"
+            }
+          ]
+        },
+        {
+          "name": "Tour of Duty: Tir Tairngire",
+          "attributes": { "agility": 1, "strength": 1 },
+          "qualities": [],
+          "basicTraining": "Firearms skill group +1, First Aid +1, Navigation +1, Unarmed Combat +1, Professional Knowledge: Peacekeepers +4",
+          "branches": [
+            {
+              "name": "Air Force",
+              "skills": "Armorer +1, Blades +1, Free-Fall +1, Gunnery +1, Pilot Aircraft +2, Reaction +1, Survival +1"
+            },
+            {
+              "name": "Border Patrol",
+              "skills": "Charisma +1, Armorer +1, Blades +1, Heavy Weapons +1, Perception +1, Pilot Ground Craft +1, Sneaking +1, Swimming +1, Survival +1, Throwing Weapons +1"
+            },
+            {
+              "name": "Engineering Corps",
+              "skills": "Logic +1, Armorer +2, Demolitions +1, Engineering skill group +1, Gunnery +1, Professional Knowledge: Tir Military Vehicles +3"
+            },
+            {
+              "name": "Ghosts",
+              "skills": "Willpower +1, Armorer +1, Blades +1, Demolitions +1, Free-Fall +1, Perception +1, Pilot Ground Craft +1, Pilot Watercraft +1, Sneaking +1, Survival +1"
+            },
+            {
+              "name": "Mage Corps",
+              "skills": "Logic +1, Arcana +1, Assensing +2, Conjuring skill group +1, Sorcery skill group +1"
+            },
+            { "name": "Medical Corps", "skills": "Logic +1, Biotech skill group +2" },
+            {
+              "name": "Navy",
+              "skills": "Blades +1, Gunnery +1, Pilot Watercraft +2, Armorer +1, Perception +1, Survival +1, Swimming +1, Body +1"
+            },
+            {
+              "name": "Netwatch",
+              "skills": "Cracking skill group +1, Electronics skill group +1, Intuition +1, Perception +1, Professional Knowledge: Matrix Threats +6"
+            },
+            {
+              "name": "Peace Keepers",
+              "skills": "Body +1, Armorer +1, Blades +1, Clubs +1, Free-Fall +1, Heavy Weapons +1, Pilot Ground Craft +1, Perception +1, Survival +1, Throwing Weapons +1"
+            },
+            {
+              "name": "Rigger Corp",
+              "skills": "Reaction +1, Electronic Warfare +2, Gunnery +2, Pilot Aircraft +1, Pilot Anthroform +1, Pilot Ground Craft +1"
+            }
+          ]
+        },
+        {
+          "name": "Tour of Duty: UCAS/CAS/CFS",
+          "attributes": { "body": 1, "reaction": 1, "strength": 1 },
+          "qualities": ["SINner (5)"],
+          "basicTraining": "Firearms skill group +1, First Aid +1, Navigation +1, Unarmed Combat +1, Professional Knowledge: Military +4",
+          "branches": [
+            {
+              "name": "Air Force",
+              "skills": "Armorer +2, Blades +1, Free-Fall +1, Gunnery +1, Pilot Aircraft +2, Survival +1"
+            },
+            {
+              "name": "Army",
+              "skills": "Armorer +1, Blades +1, Free-Fall +1, Heavy Weapons +1, Pilot Ground Craft +1, Survival +1, Throwing Weapons +2"
+            },
+            {
+              "name": "Engineering Corps",
+              "skills": "Armorer +2, Demolitions +1, Engineering skill group +1, Gunnery +1, Professional Knowledge: Military Vehicles +5"
+            },
+            {
+              "name": "Mage Corps",
+              "skills": "Assensing +2, Conjuring skill group +1, Perception +1, Sorcery skill group +1"
+            },
+            {
+              "name": "Medical Corps",
+              "skills": "Biotech skill group +2, Professional Knowledge: Medicine +3",
+              "prerequisites": ["Nurse or Medicine from Further Education"]
+            },
+            {
+              "name": "Navy",
+              "skills": "Armorer +1, Blades +1, Gunnery +2, Pilot Watercraft +2, Survival +1, Swimming +1"
+            },
+            {
+              "name": "Rigger Corps",
+              "skills": "Electronic Warfare +2, Gunnery +2, Pilot Aircraft +1, Pilot Anthroform +1, Pilot Ground Craft +1"
+            },
+            {
+              "name": "Special Forces",
+              "skills": "Armorer +1, Blades +1, Demolitions +1, Free-Fall +1, Perception +1, Pilot Ground Craft +1, Pilot Watercraft +1, Sneaking +1, Survival +1, Tracking +1"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

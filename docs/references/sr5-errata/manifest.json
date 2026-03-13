@@ -1,0 +1,25 @@
+{
+  "book": "Shadowrun Fifth Edition Errata",
+  "pdf": "docs/pdfs/sr5-errata.pdf",
+  "total_pages": 4,
+  "pdf_page_offset": 0,
+  "sections": [
+    {
+      "slug": "errata",
+      "title": "SR5 Core Rulebook Errata",
+      "pages": "1-4",
+      "pdf_pages": "1-4",
+      "priority": "high",
+      "reason": "All mechanical corrections to the core rulebook",
+      "page_count": 4,
+      "split_into": [],
+      "status": "done"
+    }
+  ],
+  "summary": {
+    "total_sections": 1,
+    "skip": 0,
+    "pending": 0,
+    "done": 1
+  }
+}

@@ -1,0 +1,1151 @@
+{
+  "tables": {
+    "skill-ratings": {
+      "source": "SR5 Core Rulebook, p.129",
+      "description": "Descriptive labels for skill rating values 0 through 13",
+      "columns": ["rating", "label", "notes"],
+      "rows": [
+        {
+          "rating": "No Rating",
+          "label": "Unaware",
+          "notes": "Special level of ignorance; requires Incompetent quality or defined history deficiency. Cannot default. Skill never occurs to character as a solution."
+        },
+        {
+          "rating": 0,
+          "label": "Untrained",
+          "notes": "Default knowledge from society and Matrix interaction. Can attempt defaultable skills at -1 die."
+        },
+        {
+          "rating": 1,
+          "label": "Beginner",
+          "notes": "A little training; knows how it works but not always why."
+        },
+        { "rating": 2, "label": "Novice", "notes": "Hobbyist, not an enthusiast." },
+        {
+          "rating": 3,
+          "label": "Competent",
+          "notes": "Skilled at basic operations; struggles with complex operations and tricks."
+        },
+        {
+          "rating": 4,
+          "label": "Proficient",
+          "notes": "Comfortable; performs well under normal pressure. Professional level for most jobs."
+        },
+        {
+          "rating": 5,
+          "label": "Skilled",
+          "notes": "Handles unfamiliar situations; gets creative."
+        },
+        {
+          "rating": 6,
+          "label": "Professional",
+          "notes": "Could sell skills on the open market. Maximum skill level for starting player characters."
+        },
+        {
+          "rating": 7,
+          "label": "Veteran",
+          "notes": "Has seen what the skill can and cannot do. Others ask for advice."
+        },
+        {
+          "rating": 8,
+          "label": "Expert",
+          "notes": "Highly sought-after talent. Corporations recruit actively."
+        },
+        { "rating": 9, "label": "Exceptional", "notes": "Name is synonymous with the skill." },
+        {
+          "rating": 10,
+          "label": "Elite",
+          "notes": "Famous even among the very best in the field."
+        },
+        {
+          "rating": 11,
+          "label": "Legendary",
+          "notes": "A paragon; techniques named after the character."
+        },
+        {
+          "rating": 12,
+          "label": "Apex",
+          "notes": "Top 0.00001% of all practitioners in known history."
+        },
+        {
+          "rating": 13,
+          "label": "Apex",
+          "notes": "Pinnacle achievable only with the Aptitude quality (p. 72)."
+        }
+      ]
+    },
+    "active-skill-list": {
+      "source": "SR5 Core Rulebook, p.151",
+      "description": "All Active skills organized by linked attribute, with defaulting status. Italicized skills in the source cannot be defaulted.",
+      "columns": ["skill", "linkedAttribute", "canDefault", "skillGroup"],
+      "rows": [
+        {
+          "skill": "Archery",
+          "linkedAttribute": "Agility",
+          "canDefault": true,
+          "skillGroup": null
+        },
+        {
+          "skill": "Automatics",
+          "linkedAttribute": "Agility",
+          "canDefault": true,
+          "skillGroup": "Firearms"
+        },
+        {
+          "skill": "Blades",
+          "linkedAttribute": "Agility",
+          "canDefault": true,
+          "skillGroup": "Close Combat"
+        },
+        {
+          "skill": "Clubs",
+          "linkedAttribute": "Agility",
+          "canDefault": true,
+          "skillGroup": "Close Combat"
+        },
+        {
+          "skill": "Escape Artist",
+          "linkedAttribute": "Agility",
+          "canDefault": true,
+          "skillGroup": null
+        },
+        {
+          "skill": "Exotic Melee Weapon (Specific)",
+          "linkedAttribute": "Agility",
+          "canDefault": false,
+          "skillGroup": null
+        },
+        {
+          "skill": "Exotic Ranged Weapon (Specific)",
+          "linkedAttribute": "Agility",
+          "canDefault": false,
+          "skillGroup": null
+        },
+        {
+          "skill": "Gunnery",
+          "linkedAttribute": "Agility",
+          "canDefault": true,
+          "skillGroup": null
+        },
+        {
+          "skill": "Gymnastics",
+          "linkedAttribute": "Agility",
+          "canDefault": true,
+          "skillGroup": "Athletics"
+        },
+        {
+          "skill": "Heavy Weapons",
+          "linkedAttribute": "Agility",
+          "canDefault": true,
+          "skillGroup": null
+        },
+        {
+          "skill": "Locksmith",
+          "linkedAttribute": "Agility",
+          "canDefault": false,
+          "skillGroup": null
+        },
+        {
+          "skill": "Longarms",
+          "linkedAttribute": "Agility",
+          "canDefault": true,
+          "skillGroup": "Firearms"
+        },
+        {
+          "skill": "Palming",
+          "linkedAttribute": "Agility",
+          "canDefault": false,
+          "skillGroup": "Stealth"
+        },
+        {
+          "skill": "Pistols",
+          "linkedAttribute": "Agility",
+          "canDefault": true,
+          "skillGroup": "Firearms"
+        },
+        {
+          "skill": "Sneaking",
+          "linkedAttribute": "Agility",
+          "canDefault": true,
+          "skillGroup": "Stealth"
+        },
+        {
+          "skill": "Throwing Weapons",
+          "linkedAttribute": "Agility",
+          "canDefault": true,
+          "skillGroup": null
+        },
+        {
+          "skill": "Unarmed Combat",
+          "linkedAttribute": "Agility",
+          "canDefault": true,
+          "skillGroup": "Close Combat"
+        },
+        { "skill": "Diving", "linkedAttribute": "Body", "canDefault": true, "skillGroup": null },
+        { "skill": "Free-Fall", "linkedAttribute": "Body", "canDefault": true, "skillGroup": null },
+        {
+          "skill": "Pilot Aerospace",
+          "linkedAttribute": "Reaction",
+          "canDefault": false,
+          "skillGroup": null
+        },
+        {
+          "skill": "Pilot Aircraft",
+          "linkedAttribute": "Reaction",
+          "canDefault": false,
+          "skillGroup": null
+        },
+        {
+          "skill": "Pilot Exotic Vehicle (Specific)",
+          "linkedAttribute": "Reaction",
+          "canDefault": false,
+          "skillGroup": null
+        },
+        {
+          "skill": "Pilot Ground Craft",
+          "linkedAttribute": "Reaction",
+          "canDefault": true,
+          "skillGroup": null
+        },
+        {
+          "skill": "Pilot Walker",
+          "linkedAttribute": "Reaction",
+          "canDefault": false,
+          "skillGroup": null
+        },
+        {
+          "skill": "Pilot Watercraft",
+          "linkedAttribute": "Reaction",
+          "canDefault": true,
+          "skillGroup": null
+        },
+        {
+          "skill": "Running",
+          "linkedAttribute": "Strength",
+          "canDefault": true,
+          "skillGroup": "Athletics"
+        },
+        {
+          "skill": "Swimming",
+          "linkedAttribute": "Strength",
+          "canDefault": true,
+          "skillGroup": "Athletics"
+        },
+        {
+          "skill": "Animal Handling",
+          "linkedAttribute": "Charisma",
+          "canDefault": true,
+          "skillGroup": null
+        },
+        {
+          "skill": "Con",
+          "linkedAttribute": "Charisma",
+          "canDefault": true,
+          "skillGroup": "Acting"
+        },
+        {
+          "skill": "Etiquette",
+          "linkedAttribute": "Charisma",
+          "canDefault": true,
+          "skillGroup": "Influence"
+        },
+        {
+          "skill": "Impersonation",
+          "linkedAttribute": "Charisma",
+          "canDefault": true,
+          "skillGroup": "Acting"
+        },
+        {
+          "skill": "Instruction",
+          "linkedAttribute": "Charisma",
+          "canDefault": true,
+          "skillGroup": null
+        },
+        {
+          "skill": "Intimidation",
+          "linkedAttribute": "Charisma",
+          "canDefault": true,
+          "skillGroup": null
+        },
+        {
+          "skill": "Leadership",
+          "linkedAttribute": "Charisma",
+          "canDefault": true,
+          "skillGroup": "Influence"
+        },
+        {
+          "skill": "Negotiation",
+          "linkedAttribute": "Charisma",
+          "canDefault": true,
+          "skillGroup": "Influence"
+        },
+        {
+          "skill": "Performance",
+          "linkedAttribute": "Charisma",
+          "canDefault": true,
+          "skillGroup": "Acting"
+        },
+        {
+          "skill": "Artisan",
+          "linkedAttribute": "Intuition",
+          "canDefault": false,
+          "skillGroup": null
+        },
+        {
+          "skill": "Assensing",
+          "linkedAttribute": "Intuition",
+          "canDefault": false,
+          "skillGroup": null
+        },
+        {
+          "skill": "Disguise",
+          "linkedAttribute": "Intuition",
+          "canDefault": true,
+          "skillGroup": "Stealth"
+        },
+        {
+          "skill": "Interests Knowledge",
+          "linkedAttribute": "Intuition",
+          "canDefault": true,
+          "skillGroup": null
+        },
+        {
+          "skill": "Language",
+          "linkedAttribute": "Intuition",
+          "canDefault": true,
+          "skillGroup": null
+        },
+        {
+          "skill": "Navigation",
+          "linkedAttribute": "Intuition",
+          "canDefault": true,
+          "skillGroup": "Outdoors"
+        },
+        {
+          "skill": "Perception",
+          "linkedAttribute": "Intuition",
+          "canDefault": true,
+          "skillGroup": null
+        },
+        {
+          "skill": "Street Knowledge",
+          "linkedAttribute": "Intuition",
+          "canDefault": true,
+          "skillGroup": null
+        },
+        {
+          "skill": "Tracking",
+          "linkedAttribute": "Intuition",
+          "canDefault": true,
+          "skillGroup": "Outdoors"
+        },
+        {
+          "skill": "Academic Knowledge",
+          "linkedAttribute": "Logic",
+          "canDefault": true,
+          "skillGroup": null
+        },
+        {
+          "skill": "Aeronautics Mechanic",
+          "linkedAttribute": "Logic",
+          "canDefault": false,
+          "skillGroup": "Engineering"
+        },
+        { "skill": "Arcana", "linkedAttribute": "Logic", "canDefault": false, "skillGroup": null },
+        { "skill": "Armorer", "linkedAttribute": "Logic", "canDefault": true, "skillGroup": null },
+        {
+          "skill": "Automotive Mechanic",
+          "linkedAttribute": "Logic",
+          "canDefault": false,
+          "skillGroup": "Engineering"
+        },
+        {
+          "skill": "Biotechnology",
+          "linkedAttribute": "Logic",
+          "canDefault": false,
+          "skillGroup": null
+        },
+        {
+          "skill": "Chemistry",
+          "linkedAttribute": "Logic",
+          "canDefault": false,
+          "skillGroup": null
+        },
+        {
+          "skill": "Computer",
+          "linkedAttribute": "Logic",
+          "canDefault": true,
+          "skillGroup": "Electronics"
+        },
+        {
+          "skill": "Cybercombat",
+          "linkedAttribute": "Logic",
+          "canDefault": true,
+          "skillGroup": "Cracking"
+        },
+        {
+          "skill": "Cybertechnology",
+          "linkedAttribute": "Logic",
+          "canDefault": false,
+          "skillGroup": "Biotech"
+        },
+        {
+          "skill": "Demolitions",
+          "linkedAttribute": "Logic",
+          "canDefault": true,
+          "skillGroup": null
+        },
+        {
+          "skill": "Electronic Warfare",
+          "linkedAttribute": "Logic",
+          "canDefault": false,
+          "skillGroup": "Cracking"
+        },
+        {
+          "skill": "First Aid",
+          "linkedAttribute": "Logic",
+          "canDefault": true,
+          "skillGroup": "Biotech"
+        },
+        { "skill": "Forgery", "linkedAttribute": "Logic", "canDefault": true, "skillGroup": null },
+        {
+          "skill": "Hacking",
+          "linkedAttribute": "Logic",
+          "canDefault": true,
+          "skillGroup": "Cracking"
+        },
+        {
+          "skill": "Hardware",
+          "linkedAttribute": "Logic",
+          "canDefault": false,
+          "skillGroup": "Electronics"
+        },
+        {
+          "skill": "Industrial Mechanic",
+          "linkedAttribute": "Logic",
+          "canDefault": false,
+          "skillGroup": "Engineering"
+        },
+        {
+          "skill": "Medicine",
+          "linkedAttribute": "Logic",
+          "canDefault": false,
+          "skillGroup": "Biotech"
+        },
+        {
+          "skill": "Nautical Mechanic",
+          "linkedAttribute": "Logic",
+          "canDefault": false,
+          "skillGroup": "Engineering"
+        },
+        {
+          "skill": "Professional Knowledge",
+          "linkedAttribute": "Logic",
+          "canDefault": true,
+          "skillGroup": null
+        },
+        {
+          "skill": "Software",
+          "linkedAttribute": "Logic",
+          "canDefault": false,
+          "skillGroup": "Electronics"
+        },
+        {
+          "skill": "Astral Combat",
+          "linkedAttribute": "Willpower",
+          "canDefault": false,
+          "skillGroup": null
+        },
+        {
+          "skill": "Survival",
+          "linkedAttribute": "Willpower",
+          "canDefault": true,
+          "skillGroup": "Outdoors"
+        },
+        {
+          "skill": "Alchemy",
+          "linkedAttribute": "Magic",
+          "canDefault": false,
+          "skillGroup": "Enchanting"
+        },
+        {
+          "skill": "Banishing",
+          "linkedAttribute": "Magic",
+          "canDefault": false,
+          "skillGroup": "Conjuring"
+        },
+        {
+          "skill": "Binding",
+          "linkedAttribute": "Magic",
+          "canDefault": false,
+          "skillGroup": "Conjuring"
+        },
+        {
+          "skill": "Counterspelling",
+          "linkedAttribute": "Magic",
+          "canDefault": false,
+          "skillGroup": "Sorcery"
+        },
+        {
+          "skill": "Disenchanting",
+          "linkedAttribute": "Magic",
+          "canDefault": false,
+          "skillGroup": "Enchanting"
+        },
+        {
+          "skill": "Ritual Spellcasting",
+          "linkedAttribute": "Magic",
+          "canDefault": false,
+          "skillGroup": "Sorcery"
+        },
+        {
+          "skill": "Spellcasting",
+          "linkedAttribute": "Magic",
+          "canDefault": false,
+          "skillGroup": "Sorcery"
+        },
+        {
+          "skill": "Summoning",
+          "linkedAttribute": "Magic",
+          "canDefault": false,
+          "skillGroup": "Conjuring"
+        },
+        {
+          "skill": "Compiling",
+          "linkedAttribute": "Resonance",
+          "canDefault": false,
+          "skillGroup": "Tasking"
+        },
+        {
+          "skill": "Decompiling",
+          "linkedAttribute": "Resonance",
+          "canDefault": false,
+          "skillGroup": "Tasking"
+        },
+        {
+          "skill": "Registering",
+          "linkedAttribute": "Resonance",
+          "canDefault": false,
+          "skillGroup": "Tasking"
+        }
+      ]
+    },
+    "skill-groups": {
+      "source": "SR5 Core Rulebook, p.153",
+      "description": "All skill groups with their member skills",
+      "columns": ["group", "skills"],
+      "rows": [
+        { "group": "Acting", "skills": ["Con", "Impersonation", "Performance"] },
+        { "group": "Athletics", "skills": ["Gymnastics", "Running", "Swimming"] },
+        {
+          "group": "Biotech",
+          "skills": ["Biotechnology", "Cybertechnology", "First Aid", "Medicine"]
+        },
+        { "group": "Close Combat", "skills": ["Blades", "Clubs", "Unarmed Combat"] },
+        { "group": "Conjuring", "skills": ["Banishing", "Binding", "Summoning"] },
+        { "group": "Cracking", "skills": ["Cybercombat", "Electronic Warfare", "Hacking"] },
+        { "group": "Electronics", "skills": ["Computer", "Hardware", "Software"] },
+        { "group": "Enchanting", "skills": ["Alchemy", "Artificing", "Disenchanting"] },
+        {
+          "group": "Engineering",
+          "skills": [
+            "Aeronautics Mechanic",
+            "Automotive Mechanic",
+            "Industrial Mechanic",
+            "Nautical Mechanic"
+          ]
+        },
+        { "group": "Firearms", "skills": ["Automatics", "Longarms", "Pistols"] },
+        { "group": "Influence", "skills": ["Etiquette", "Leadership", "Negotiation"] },
+        { "group": "Outdoors", "skills": ["Navigation", "Survival", "Tracking"] },
+        {
+          "group": "Sorcery",
+          "skills": ["Counterspelling", "Ritual Spellcasting", "Spellcasting"]
+        },
+        { "group": "Stealth", "skills": ["Disguise", "Palming", "Sneaking"] },
+        { "group": "Tasking", "skills": ["Compiling", "Decompiling", "Registering"] }
+      ]
+    },
+    "climbing-table": {
+      "source": "SR5 Core Rulebook, p.134",
+      "description": "Movement distance (round up) and dice pool modifiers for climbing by situation and surface type",
+      "columns": ["situation", "movementDistanceOrModifier"],
+      "rows": [
+        {
+          "section": "Movement Distance (round up)",
+          "situation": "Assisted climbing down (rappelling)",
+          "value": "20 meters + 1 meter per hit"
+        },
+        {
+          "section": "Movement Distance (round up)",
+          "situation": "Assisted climbing upward",
+          "value": "1 meter per hit"
+        },
+        {
+          "section": "Movement Distance (round up)",
+          "situation": "Assisted climbing horizontally",
+          "value": "1 meter per 2 hits"
+        },
+        {
+          "section": "Movement Distance (round up)",
+          "situation": "Assisted climbing upside down (on a ceiling or overhang)",
+          "value": "1 meter per 3 hits"
+        },
+        {
+          "section": "Movement Distance (round up)",
+          "situation": "Unassisted climbing upward",
+          "value": "1 meter per 2 hits"
+        },
+        {
+          "section": "Movement Distance (round up)",
+          "situation": "Unassisted climbing down",
+          "value": "1 meter per hit"
+        },
+        { "section": "Dice Pool Modifier", "situation": "Assisted climbing", "value": "+2" },
+        {
+          "section": "Dice Pool Modifier — Surface",
+          "situation": "Easily climbable (chain-link fence)",
+          "value": "+1"
+        },
+        {
+          "section": "Dice Pool Modifier — Surface",
+          "situation": "Broken (tree, loose stone wall)",
+          "value": "+0"
+        },
+        {
+          "section": "Dice Pool Modifier — Surface",
+          "situation": "Flat (brick wall, side of old building)",
+          "value": "-3"
+        },
+        {
+          "section": "Dice Pool Modifier — Surface",
+          "situation": "Sheer (metal wall, seamless stone)",
+          "value": "-5"
+        },
+        {
+          "section": "Dice Pool Modifier — Surface",
+          "situation": "Slippery or wet",
+          "value": "-2"
+        },
+        {
+          "section": "Dice Pool Modifier — Surface",
+          "situation": "Greased or gel-treated",
+          "value": "-4"
+        }
+      ]
+    },
+    "escape-artist-table": {
+      "source": "SR5 Core Rulebook, p.135",
+      "description": "Thresholds to escape by restraint type and dice pool modifiers by situation",
+      "columns": ["restraintOrSituation", "thresholdOrModifier"],
+      "rows": [
+        { "section": "Restraint Threshold", "item": "Rope, plastic cuffs", "value": 2 },
+        { "section": "Restraint Threshold", "item": "Metal handcuffs", "value": 3 },
+        { "section": "Restraint Threshold", "item": "Straitjacket", "value": 4 },
+        { "section": "Restraint Threshold", "item": "Containment manacles", "value": 5 },
+        { "section": "Restraint Modifier", "item": "Reinforced material", "value": "+1" },
+        { "section": "Situation Modifier", "item": "Character being watched", "value": -2 },
+        {
+          "section": "Situation Modifier",
+          "item": "Character physically restrained",
+          "value": "-(Restrainer's Strength)"
+        },
+        {
+          "section": "Situation Modifier",
+          "item": "Character has picks or cutting implement",
+          "value": "+2"
+        }
+      ]
+    },
+    "perception-test-modifiers": {
+      "source": "SR5 Core Rulebook, p.135",
+      "description": "Dice pool modifiers applied to Perception + Intuition [Mental] tests",
+      "columns": ["situation", "dicePoolModifier"],
+      "rows": [
+        { "situation": "Perceiver is distracted", "dicePoolModifier": -2 },
+        {
+          "situation": "Perceiver is specifically looking/listening for it",
+          "dicePoolModifier": "+3"
+        },
+        { "situation": "Object/sound not in immediate vicinity", "dicePoolModifier": -2 },
+        { "situation": "Object/sound far away", "dicePoolModifier": -3 },
+        { "situation": "Object/sound stands out in some way", "dicePoolModifier": "+2" },
+        { "situation": "Interfering sight/odor/sound", "dicePoolModifier": -2 },
+        { "situation": "Perceiver has active enhancements", "dicePoolModifier": "+(Rating)" },
+        { "situation": "Visibility and Light", "dicePoolModifier": "Environmental Factors, p. 173" }
+      ]
+    },
+    "perception-thresholds": {
+      "source": "SR5 Core Rulebook, p.136",
+      "description": "Threshold for Perception tests based on how obvious or detectable the subject is",
+      "columns": ["itemEventIs", "threshold", "examples"],
+      "rows": [
+        {
+          "itemEventIs": "Obvious/Large/Loud",
+          "threshold": 1,
+          "examples": "Neon sign, running crowd, yelling, gunfire"
+        },
+        {
+          "itemEventIs": "Normal",
+          "threshold": 2,
+          "examples": "Street sign, pedestrian, conversation, silenced gunfire"
+        },
+        {
+          "itemEventIs": "Obscured/Small/Muffled",
+          "threshold": 3,
+          "examples": "Item dropped under table, contact lens, whispering"
+        },
+        {
+          "itemEventIs": "Hidden/Micro/Silent",
+          "threshold": 4,
+          "examples": "Secret door, needle in haystack, subvocal speech"
+        }
+      ]
+    },
+    "survival-test-table": {
+      "source": "SR5 Core Rulebook, p.137",
+      "description": "Thresholds and modifiers for Survival + Willpower [Mental] tests",
+      "columns": ["category", "situation", "value"],
+      "rows": [
+        {
+          "category": "Wilderness Terrain Threshold",
+          "situation": "Mild (forest, plains, urban)",
+          "value": 1
+        },
+        {
+          "category": "Wilderness Terrain Threshold",
+          "situation": "Moderate (foothills, jungle, swamp)",
+          "value": 2
+        },
+        {
+          "category": "Wilderness Terrain Threshold",
+          "situation": "Tough (desert, high mountains)",
+          "value": 3
+        },
+        {
+          "category": "Wilderness Terrain Threshold",
+          "situation": "Extreme (Arctic, Antarctic)",
+          "value": "5+"
+        },
+        {
+          "category": "Situation Pool Modifier",
+          "situation": "Camping/survival gear on hand",
+          "value": "+2"
+        },
+        { "category": "Situation Pool Modifier", "situation": "No food or water", "value": -2 },
+        {
+          "category": "Situation Pool Modifier",
+          "situation": "Heat/climate control available",
+          "value": "+1"
+        },
+        {
+          "category": "Situation Pool Modifier",
+          "situation": "Inappropriate clothing/armor",
+          "value": "-1 to -4"
+        },
+        {
+          "category": "Situation Pool Modifier",
+          "situation": "Extended travel or exertion",
+          "value": "-1 to -4"
+        },
+        {
+          "category": "Situation Pool Modifier",
+          "situation": "Toxic terrain",
+          "value": "-2 to -4"
+        },
+        {
+          "category": "Situation Pool Modifier",
+          "situation": "Character injured",
+          "value": "-(Wound Modifier)"
+        },
+        { "category": "Weather Pool Modifier", "situation": "Poor", "value": -1 },
+        { "category": "Weather Pool Modifier", "situation": "Terrible", "value": -2 },
+        { "category": "Weather Pool Modifier", "situation": "Extreme", "value": -4 }
+      ]
+    },
+    "social-modifiers": {
+      "source": "SR5 Core Rulebook, p.140",
+      "description": "Dice pool modifiers for social skill tests. Modifiers marked with † apply to the target character's dice pool; marked with § can apply to either. Unless otherwise noted modifiers apply to the acting character's pool.",
+      "columns": ["section", "situation", "dicePoolModifier", "appliesTo"],
+      "rows": [
+        {
+          "section": "General — NPC Attitude",
+          "situation": "Friendly",
+          "dicePoolModifier": "+2",
+          "appliesTo": "acting"
+        },
+        {
+          "section": "General — NPC Attitude",
+          "situation": "Neutral",
+          "dicePoolModifier": "+0",
+          "appliesTo": "acting"
+        },
+        {
+          "section": "General — NPC Attitude",
+          "situation": "Suspicious",
+          "dicePoolModifier": "-1",
+          "appliesTo": "acting"
+        },
+        {
+          "section": "General — NPC Attitude",
+          "situation": "Prejudiced",
+          "dicePoolModifier": "-2",
+          "appliesTo": "acting"
+        },
+        {
+          "section": "General — NPC Attitude",
+          "situation": "Hostile",
+          "dicePoolModifier": "-3",
+          "appliesTo": "acting"
+        },
+        {
+          "section": "General — NPC Attitude",
+          "situation": "Enemy",
+          "dicePoolModifier": "-4",
+          "appliesTo": "acting"
+        },
+        {
+          "section": "General — Desired Result",
+          "situation": "Advantageous to NPC",
+          "dicePoolModifier": "+1",
+          "appliesTo": "acting"
+        },
+        {
+          "section": "General — Desired Result",
+          "situation": "Of no value to NPC",
+          "dicePoolModifier": "+0",
+          "appliesTo": "acting"
+        },
+        {
+          "section": "General — Desired Result",
+          "situation": "Annoying to NPC",
+          "dicePoolModifier": "-1",
+          "appliesTo": "acting"
+        },
+        {
+          "section": "General — Desired Result",
+          "situation": "Harmful to NPC",
+          "dicePoolModifier": "-3",
+          "appliesTo": "acting"
+        },
+        {
+          "section": "General — Desired Result",
+          "situation": "Disastrous to NPC",
+          "dicePoolModifier": "-4",
+          "appliesTo": "acting"
+        },
+        {
+          "section": "General — Desired Result",
+          "situation": "Control Thoughts/Emotions spell cast on",
+          "dicePoolModifier": "-1 per hit",
+          "appliesTo": "acting"
+        },
+        {
+          "section": "General",
+          "situation": "Character has (known) street reputation",
+          "dicePoolModifier": "+(Street Cred, see p. 372)",
+          "appliesTo": "acting"
+        },
+        {
+          "section": "General",
+          "situation": "Subject has (known) street reputation",
+          "dicePoolModifier": "-(Street Cred, see p. 372)",
+          "appliesTo": "acting"
+        },
+        {
+          "section": "General",
+          "situation": "Subject has 'ace in the hole'",
+          "dicePoolModifier": "+2",
+          "appliesTo": "target",
+          "note": "† target pool"
+        },
+        {
+          "section": "General",
+          "situation": "Subject has romantic attraction to character",
+          "dicePoolModifier": "+2",
+          "appliesTo": "acting"
+        },
+        {
+          "section": "General",
+          "situation": "Character is intoxicated",
+          "dicePoolModifier": "-1",
+          "appliesTo": "either",
+          "note": "§ either pool"
+        },
+        {
+          "section": "Con Modifiers",
+          "situation": "Character has plausible-seeming evidence",
+          "dicePoolModifier": "+1 or +2",
+          "appliesTo": "acting"
+        },
+        {
+          "section": "Con Modifiers",
+          "situation": "Subject has time to evaluate situation",
+          "dicePoolModifier": "-1",
+          "appliesTo": "acting"
+        },
+        {
+          "section": "Con Modifiers",
+          "situation": "Subject is distracted",
+          "dicePoolModifier": "+1",
+          "appliesTo": "acting"
+        },
+        {
+          "section": "Etiquette Modifiers",
+          "situation": "Character is wearing the wrong attire or doesn't have the right look",
+          "dicePoolModifier": "-2",
+          "appliesTo": "acting"
+        },
+        {
+          "section": "Etiquette Modifiers",
+          "situation": "Character is obviously nervous, agitated, or frenzied",
+          "dicePoolModifier": "-2",
+          "appliesTo": "acting"
+        },
+        {
+          "section": "Etiquette Modifiers",
+          "situation": "Subject is distracted",
+          "dicePoolModifier": "-1",
+          "appliesTo": "acting",
+          "note": "§ either pool"
+        },
+        {
+          "section": "Intimidation Modifiers",
+          "situation": "Character is physically imposing",
+          "dicePoolModifier": "+1 to +3",
+          "appliesTo": "acting"
+        },
+        {
+          "section": "Intimidation Modifiers",
+          "situation": "Subject is physically imposing",
+          "dicePoolModifier": "-1 to -3",
+          "appliesTo": "acting"
+        },
+        {
+          "section": "Intimidation Modifiers",
+          "situation": "Characters outnumber the subject(s)",
+          "dicePoolModifier": "+2",
+          "appliesTo": "acting"
+        },
+        {
+          "section": "Intimidation Modifiers",
+          "situation": "Subjects outnumber the character(s)",
+          "dicePoolModifier": "-2",
+          "appliesTo": "acting"
+        },
+        {
+          "section": "Intimidation Modifiers",
+          "situation": "Character wielding weapon or obvious magic",
+          "dicePoolModifier": "+2",
+          "appliesTo": "acting"
+        },
+        {
+          "section": "Intimidation Modifiers",
+          "situation": "Subject wielding weapon or obvious magic",
+          "dicePoolModifier": "-2",
+          "appliesTo": "acting"
+        },
+        {
+          "section": "Intimidation Modifiers",
+          "situation": "Character is causing (or has caused) subject physical pain (torture)",
+          "dicePoolModifier": "+2",
+          "appliesTo": "acting"
+        },
+        {
+          "section": "Intimidation Modifiers",
+          "situation": "Subject is oblivious to danger or doesn't think character 'would try something so stupid'",
+          "dicePoolModifier": "+2",
+          "appliesTo": "target",
+          "note": "† target pool"
+        },
+        {
+          "section": "Leadership Modifiers",
+          "situation": "Character has superior rank",
+          "dicePoolModifier": "+1 to +3",
+          "appliesTo": "acting"
+        },
+        {
+          "section": "Leadership Modifiers",
+          "situation": "Subject has superior rank",
+          "dicePoolModifier": "-1 to -3",
+          "appliesTo": "acting"
+        },
+        {
+          "section": "Leadership Modifiers",
+          "situation": "Character is an obvious authority figure",
+          "dicePoolModifier": "+1",
+          "appliesTo": "acting"
+        },
+        {
+          "section": "Leadership Modifiers",
+          "situation": "Character not part of subject's social strata",
+          "dicePoolModifier": "-1 to -3",
+          "appliesTo": "acting"
+        },
+        {
+          "section": "Leadership Modifiers",
+          "situation": "Subject is a fan or devoted to character",
+          "dicePoolModifier": "+2",
+          "appliesTo": "acting"
+        },
+        {
+          "section": "Negotiation Modifiers",
+          "situation": "Character lacks background knowledge of situation",
+          "dicePoolModifier": "-2",
+          "appliesTo": "either",
+          "note": "§ either pool"
+        },
+        {
+          "section": "Negotiation Modifiers",
+          "situation": "Character has blackmailed material or heavy bargaining chip",
+          "dicePoolModifier": "+2",
+          "appliesTo": "either",
+          "note": "§ either pool"
+        }
+      ]
+    },
+    "social-skill-tests": {
+      "source": "SR5 Core Rulebook, p.141",
+      "description": "The dice pools rolled by the acting character and the opposing character for each social skill test",
+      "columns": ["skill", "characterRoll", "targetRoll"],
+      "rows": [
+        {
+          "skill": "Con",
+          "characterRoll": "Con + Charisma [Social]",
+          "targetRoll": "Con + Charisma [Social]"
+        },
+        {
+          "skill": "Etiquette",
+          "characterRoll": "Etiquette + Charisma [Social]",
+          "targetRoll": "Perception + Charisma [Social]"
+        },
+        {
+          "skill": "Impersonation",
+          "characterRoll": "Impersonation + Charisma [Social]",
+          "targetRoll": "Perception + Intuition [Mental]"
+        },
+        {
+          "skill": "Intimidation",
+          "characterRoll": "Intimidation + Charisma [Social]",
+          "targetRoll": "Charisma + Willpower"
+        },
+        {
+          "skill": "Leadership",
+          "characterRoll": "Leadership + Charisma [Social]",
+          "targetRoll": "Leadership + Willpower [Social]"
+        },
+        {
+          "skill": "Negotiation",
+          "characterRoll": "Negotiation + Charisma [Social]",
+          "targetRoll": "Negotiation + Charisma [Social]"
+        },
+        {
+          "skill": "Performance",
+          "characterRoll": "Performance + Charisma [Social]",
+          "targetRoll": "Charisma + Willpower"
+        }
+      ]
+    },
+    "knowledge-skill-thresholds": {
+      "source": "SR5 Core Rulebook, p.149",
+      "description": "Threshold values for Knowledge skill tests based on the depth of knowledge sought",
+      "columns": ["characterSeeks", "threshold"],
+      "rows": [
+        { "characterSeeks": "General Knowledge", "threshold": 1 },
+        { "characterSeeks": "Detailed Knowledge", "threshold": 2 },
+        { "characterSeeks": "Intricate Knowledge", "threshold": 4 },
+        { "characterSeeks": "Obscure Knowledge", "threshold": "6+" }
+      ]
+    },
+    "language-skill-table": {
+      "source": "SR5 Core Rulebook, p.151",
+      "description": "Thresholds and modifiers for Language skill tests",
+      "columns": ["situation", "thresholdOrModifier"],
+      "rows": [
+        {
+          "section": "Threshold",
+          "situation": "Universal concept (hunger, fear, bodily function)",
+          "value": 1
+        },
+        {
+          "section": "Threshold",
+          "situation": "Basic conversation (concerns of daily life)",
+          "value": 1
+        },
+        {
+          "section": "Threshold",
+          "situation": "Complex subject (special/limited interest topics)",
+          "value": 2
+        },
+        {
+          "section": "Threshold",
+          "situation": "Intricate subjects (almost any technical subject)",
+          "value": 3
+        },
+        {
+          "section": "Threshold",
+          "situation": "Obscure subject (very technical/rare knowledge)",
+          "value": 4
+        },
+        {
+          "section": "Dice Pool Modifier",
+          "situation": "Speaking lingo (or variation of particular language)",
+          "value": -2
+        },
+        {
+          "section": "Dice Pool Modifier",
+          "situation": "Using augmented reality visual display help",
+          "value": "+1 to +4"
+        }
+      ]
+    },
+    "2075-lingo-guide": {
+      "source": "SR5 Core Rulebook, p.150",
+      "description": "Common lingos of the Sixth World. Lingos are specializations of base Language skills.",
+      "columns": ["name", "meaning"],
+      "rows": [
+        { "name": "Cityspeak", "meaning": "A Japanese/English pidgin spoken in Seattle" },
+        { "name": "Creole", "meaning": "A French/English hybrid spoken in the CAS" },
+        { "name": "Street", "meaning": "Localized jive based on a city's street population" },
+        { "name": "'133tspeak", "meaning": "Decker code talk" },
+        { "name": "Milspec", "meaning": "Military jargon shared between soldiers/mercs" },
+        {
+          "name": "Corp",
+          "meaning": "Technical banter shared by corporate office staff and lawyers"
+        },
+        { "name": "Orbital", "meaning": "Jargon shared by off-world colonies" }
+      ]
+    },
+    "build-repair-table": {
+      "source": "SR5 Core Rulebook, p.146",
+      "description": "Dice pool modifiers applied to building and repairing Extended Tests based on working conditions, tools/parts availability, and reference materials",
+      "columns": ["category", "situation", "poolModifier"],
+      "rows": [
+        { "category": "Working Conditions", "situation": "Distracting", "poolModifier": -1 },
+        { "category": "Working Conditions", "situation": "Poor", "poolModifier": -2 },
+        { "category": "Working Conditions", "situation": "Bad", "poolModifier": -3 },
+        { "category": "Working Conditions", "situation": "Terrible", "poolModifier": -4 },
+        { "category": "Working Conditions", "situation": "Superior", "poolModifier": "+1" },
+        { "category": "Tools and/or Parts", "situation": "Inadequate", "poolModifier": -2 },
+        {
+          "category": "Tools and/or Parts",
+          "situation": "Unavailable",
+          "poolModifier": "-4 or not allowed"
+        },
+        { "category": "Tools and/or Parts", "situation": "Superior", "poolModifier": "+1 or more" },
+        { "category": "Plans/Reference Materials", "situation": "Available", "poolModifier": "+1" },
+        {
+          "category": "Plans/Reference Materials",
+          "situation": "Augmented Reality Enhanced",
+          "poolModifier": "+2"
+        },
+        { "category": "Working from Memory", "situation": "Logic 5+", "poolModifier": "+0" },
+        {
+          "category": "Working from Memory",
+          "situation": "Logic 1–4",
+          "poolModifier": "-(5 - Logic)"
+        }
+      ]
+    }
+  }
+}

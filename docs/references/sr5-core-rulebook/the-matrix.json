@@ -1,0 +1,1241 @@
+{
+  "tables": {
+    "user-modes": {
+      "source": "SR5 Core Rulebook, p.231",
+      "description": "Initiative and Initiative Dice for each Matrix user mode, with notes",
+      "columns": ["user-mode", "initiative", "initiative-dice", "notes"],
+      "rows": [
+        {
+          "user-mode": "Augmented Reality",
+          "initiative": "Physical Initiative",
+          "initiative-dice": "Physical Initiative Dice",
+          "notes": "Can be distracting; GM may impose -2 Perception penalty if attention split"
+        },
+        {
+          "user-mode": "Cold-Sim VR",
+          "initiative": "Data Processing + Intuition",
+          "initiative-dice": "3D6",
+          "notes": "Biofeedback damage is Stun; body goes limp"
+        },
+        {
+          "user-mode": "Hot-Sim VR",
+          "initiative": "Data Processing + Intuition",
+          "initiative-dice": "4D6",
+          "notes": "+2 dice pool bonus to all Matrix actions; biofeedback damage is Physical; hot-sim is illegal"
+        }
+      ]
+    },
+    "noise-distance": {
+      "source": "SR5 Core Rulebook, p.231",
+      "description": "Noise levels based on physical distance to Matrix target. Applied as negative dice pool modifier to Matrix actions (not defense or resistance tests).",
+      "columns": ["distance", "noise-level"],
+      "rows": [
+        { "distance": "Directly connected (any distance)", "noise-level": 0 },
+        { "distance": "Up to 100 meters", "noise-level": 0 },
+        { "distance": "101–1,000 meters (1 km)", "noise-level": 1 },
+        { "distance": "1,001–10,000 meters (10 km)", "noise-level": 3 },
+        { "distance": "10,001–100,000 meters (100 km)", "noise-level": 5 },
+        { "distance": "Greater than 100 km", "noise-level": 8 }
+      ]
+    },
+    "noise-situations": {
+      "source": "SR5 Core Rulebook, p.231",
+      "description": "Additional noise from situational environmental factors.",
+      "columns": ["situation", "noise-level"],
+      "rows": [
+        { "situation": "Dense foliage", "noise-level": "1 per 5 meters" },
+        { "situation": "Faraday cage", "noise-level": "no signal — action blocked" },
+        { "situation": "Fresh water", "noise-level": "1 per 10 cm" },
+        { "situation": "Jamming", "noise-level": "1 per hit on Jam Signals actions" },
+        { "situation": "Metal-laced earth or wall", "noise-level": "1 per 5 meters" },
+        { "situation": "Salt water", "noise-level": "1 per centimeter" },
+        { "situation": "Spam zone or static zone", "noise-level": "Rating" },
+        { "situation": "Wireless negation (e.g., wallpaper or paint)", "noise-level": "Rating" }
+      ]
+    },
+    "noise-zones": {
+      "source": "SR5 Core Rulebook, p.231",
+      "description": "Noise ratings for common spam zones (commercial/high-traffic areas) and static zones (remote/isolated areas).",
+      "columns": ["spam-zone", "static-zone", "noise-rating"],
+      "rows": [
+        { "spam-zone": "City downtown", "static-zone": "Abandoned building", "noise-rating": 1 },
+        {
+          "spam-zone": "Sprawl downtown",
+          "static-zone": "Abandoned neighborhood, barrens",
+          "noise-rating": 2
+        },
+        {
+          "spam-zone": "Major event or advertising blitz",
+          "static-zone": "Rural area, abandoned underground area, heavy rain or snow",
+          "noise-rating": 3
+        },
+        {
+          "spam-zone": "Commercial area in a city",
+          "static-zone": "Wilderness, severe storm",
+          "noise-rating": 4
+        },
+        {
+          "spam-zone": "Commercial area in a sprawl",
+          "static-zone": "Remote place with satellite access only",
+          "noise-rating": 5
+        },
+        {
+          "spam-zone": "Massive gathering or during widespread emergency",
+          "static-zone": "Remote, enclosed place (cave, desert ruin)",
+          "noise-rating": 6
+        }
+      ]
+    },
+    "device-ratings": {
+      "source": "SR5 Core Rulebook, p.234",
+      "description": "Device Rating categories with representative examples. Device Rating determines Matrix Condition Monitor (8 + DR/2), base Data Processing and Firewall values.",
+      "columns": ["device-type", "device-rating", "examples"],
+      "rows": [
+        {
+          "device-type": "Simple",
+          "device-rating": 1,
+          "examples": "General appliances, public terminals, entertainment systems"
+        },
+        {
+          "device-type": "Average",
+          "device-rating": 2,
+          "examples": "Standard personal electronics, basic cyberware, vehicles, drones, weapons, residential security devices"
+        },
+        {
+          "device-type": "Smart",
+          "device-rating": 3,
+          "examples": "Security vehicles, alphaware, corporate security devices"
+        },
+        {
+          "device-type": "Advanced",
+          "device-rating": 4,
+          "examples": "High-end devices, betaware, military vehicles and security devices"
+        },
+        {
+          "device-type": "Cutting Edge",
+          "device-rating": 5,
+          "examples": "Deltaware, credsticks, black-ops vehicles and security devices"
+        },
+        {
+          "device-type": "Bleeding Edge",
+          "device-rating": 6,
+          "examples": "Billion-nuyen experimental devices, spacecraft"
+        }
+      ]
+    },
+    "matrix-spotting": {
+      "source": "SR5 Core Rulebook, p.234/241",
+      "description": "Rules for spotting Matrix icons based on distance and whether the target is running silent.",
+      "columns": ["target-condition", "not-running-silent", "running-silent"],
+      "rows": [
+        {
+          "target-condition": "Within 100 meters",
+          "not-running-silent": "Automatic",
+          "running-silent": "Not applicable (no automatic spotting)"
+        },
+        {
+          "target-condition": "Outside 100 meters",
+          "not-running-silent": "Simple Computer + Intuition [Data Processing]",
+          "running-silent": "Opposed Computer + Intuition [Data Processing] v. Logic + Sleaze"
+        },
+        {
+          "target-condition": "A host",
+          "not-running-silent": "Automatic",
+          "running-silent": "Not applicable"
+        }
+      ],
+      "notes": [
+        "Icons with a mark on you can be spotted without a test regardless of distance.",
+        "Marks cannot run silent.",
+        "When looking for a silent icon already known to be present: Opposed Computer + Intuition [Data Processing] v. Logic + Sleaze; first hit spots, remaining hits give info."
+      ]
+    },
+    "cyberdecks": {
+      "source": "SR5 Core Rulebook, p.227",
+      "description": "Standard cyberdeck models with Device Rating, Attribute Array (four values assigned to ASDF in any order), max simultaneous programs, availability, and cost.",
+      "columns": [
+        "name",
+        "device-rating",
+        "attribute-array",
+        "programs",
+        "availability",
+        "cost-nuyen"
+      ],
+      "rows": [
+        {
+          "name": "Erika MCD-1",
+          "device-rating": 1,
+          "attribute-array": [4, 3, 2, 1],
+          "programs": 1,
+          "availability": "3R",
+          "cost-nuyen": 49500
+        },
+        {
+          "name": "Microdeck Summit",
+          "device-rating": 1,
+          "attribute-array": [4, 3, 3, 1],
+          "programs": 1,
+          "availability": "3R",
+          "cost-nuyen": 58000
+        },
+        {
+          "name": "Microtrónica Azteca 200",
+          "device-rating": 2,
+          "attribute-array": [5, 4, 3, 2],
+          "programs": 2,
+          "availability": "6R",
+          "cost-nuyen": 110250
+        },
+        {
+          "name": "Hermes Chariot",
+          "device-rating": 2,
+          "attribute-array": [5, 4, 4, 2],
+          "programs": 2,
+          "availability": "6R",
+          "cost-nuyen": 123000
+        },
+        {
+          "name": "Novatech Navigator",
+          "device-rating": 3,
+          "attribute-array": [6, 5, 4, 3],
+          "programs": 3,
+          "availability": "6R",
+          "cost-nuyen": 205750
+        },
+        {
+          "name": "Renraku Tsurugi",
+          "device-rating": 3,
+          "attribute-array": [6, 5, 5, 3],
+          "programs": 3,
+          "availability": "9R",
+          "cost-nuyen": 214125
+        },
+        {
+          "name": "Sony CIY-720",
+          "device-rating": 4,
+          "attribute-array": [7, 6, 5, 4],
+          "programs": 4,
+          "availability": "12R",
+          "cost-nuyen": 345000
+        },
+        {
+          "name": "Shiawase Cyber-5",
+          "device-rating": 5,
+          "attribute-array": [8, 7, 6, 5],
+          "programs": 5,
+          "availability": "15R",
+          "cost-nuyen": 549375
+        },
+        {
+          "name": "Fairlight Excalibur",
+          "device-rating": 6,
+          "attribute-array": [9, 8, 7, 6],
+          "programs": 6,
+          "availability": "18R",
+          "cost-nuyen": 823250
+        }
+      ]
+    },
+    "matrix-search": {
+      "source": "SR5 Core Rulebook, p.241",
+      "description": "Matrix Search thresholds and times by information availability. Test: Simple Computer + Intuition [Data Processing]. Net hits above threshold halve remaining time. Failure costs full base time.",
+      "columns": ["information-type", "threshold", "base-time"],
+      "rows": [
+        {
+          "information-type": "General Knowledge or Public",
+          "threshold": 1,
+          "base-time": "1 minute"
+        },
+        {
+          "information-type": "Limited Interest or Not Publicized",
+          "threshold": 3,
+          "base-time": "30 minutes"
+        },
+        {
+          "information-type": "Hidden or Actively Hunted and Erased",
+          "threshold": 6,
+          "base-time": "12 hours"
+        },
+        { "information-type": "Protected or Secret", "threshold": null, "base-time": null }
+      ],
+      "modifiers": [
+        { "condition": "Intricate or Specialized", "dice-pool-modifier": -1 },
+        { "condition": "Obscure", "dice-pool-modifier": -2 },
+        { "condition": "On another grid", "dice-pool-modifier": -2 }
+      ]
+    },
+    "matrix-actions": {
+      "source": "SR5 Core Rulebook, p.238–243",
+      "description": "All Matrix actions with type, marks required, limit (Matrix attribute), and test formula.",
+      "columns": ["action", "type", "marks-required", "limit", "test"],
+      "rows": [
+        {
+          "action": "Brute Force",
+          "type": "Complex",
+          "marks-required": 0,
+          "limit": "Attack",
+          "test": "Cybercombat + Logic [Attack] v. Willpower + Firewall",
+          "notes": "Places 1 mark; can optionally inflict 1 DV per 2 full net hits; 2 marks = -4 pool; 3 marks = -10 pool; can hop grid (defense 4 local / 6 global)"
+        },
+        {
+          "action": "Change Icon",
+          "type": "Simple",
+          "marks-required": "Owner",
+          "limit": "Data Processing",
+          "test": "none",
+          "notes": "Change icon appearance; target own or any icon with owner access"
+        },
+        {
+          "action": "Check Overwatch Score",
+          "type": "Simple",
+          "marks-required": 0,
+          "limit": "Sleaze",
+          "test": "Electronic Warfare + Logic [Sleaze] v. 6 dice",
+          "notes": "Sleaze action; reveals OS at time of action start plus defense hits"
+        },
+        {
+          "action": "Control Device",
+          "type": "Variable",
+          "marks-required": "varies (1 Free, 2 Simple, 3 Standard/Complex)",
+          "limit": "Data Processing (or special)",
+          "test": "[Data Processing (or special)] v. [appropriate test] or Electronic Warfare + Intuition [Sleaze] v. Intuition + Firewall",
+          "notes": "Perform action through device; action type matches device action; split pool for multiple devices; Sleaze limit when Sleaze is used"
+        },
+        {
+          "action": "Crack File",
+          "type": "Complex",
+          "marks-required": 1,
+          "limit": "Attack",
+          "test": "Hacking + Logic [Attack] v. Protection Rating × 2",
+          "notes": "Removes protection from a file"
+        },
+        {
+          "action": "Crash Program",
+          "type": "Complex",
+          "marks-required": 1,
+          "limit": "Attack",
+          "test": "Cybercombat + Logic [Attack] v. Intuition + Firewall",
+          "notes": "Crashes one running program on the target; cannot restart until device reboots"
+        },
+        {
+          "action": "Data Spike",
+          "type": "Complex",
+          "marks-required": 0,
+          "limit": "Attack",
+          "test": "Cybercombat + Logic [Attack] v. Intuition + Firewall",
+          "notes": "DV = Attack rating + 1 per net hit + 2 per mark on target; resisted with Device Rating + Firewall"
+        },
+        {
+          "action": "Disarm Data Bomb",
+          "type": "Complex",
+          "marks-required": 0,
+          "limit": "Firewall",
+          "test": "Software + Intuition [Firewall] v. Data Bomb Rating × 2",
+          "notes": "Any net hits removes and deletes bomb; failure triggers bomb"
+        },
+        {
+          "action": "Edit File",
+          "type": "Complex",
+          "marks-required": 1,
+          "limit": "Data Processing",
+          "test": "Computer + Logic [Data Processing] v. Intuition + Firewall",
+          "notes": "Create, change, copy, delete, or protect any file. Copying makes you owner. To protect: Simple test, hits = protection rating. Continuous edit: once per Combat Turn."
+        },
+        {
+          "action": "Enter/Exit Host",
+          "type": "Complex",
+          "marks-required": 1,
+          "limit": null,
+          "test": "n/a",
+          "notes": "No test; requires mark to enter; anyone inside can exit; returns to the grid you entered from"
+        },
+        {
+          "action": "Erase Mark",
+          "type": "Complex",
+          "marks-required": "special (3 marks on the icon)",
+          "limit": "Attack",
+          "test": "Computer + Logic [Attack] v. Willpower + Firewall",
+          "notes": "Erase a mark; 2 at once: -4 pool; 3 at once: -10 pool; all from same icon/source; cannot change owner"
+        },
+        {
+          "action": "Erase Matrix Signature",
+          "type": "Complex",
+          "marks-required": 0,
+          "limit": "Attack",
+          "test": "Computer + Resonance [Attack] v. (Signature Rating) × 2",
+          "notes": "Requires Resonance attribute; Attack action (OS risk, Matrix damage risk)"
+        },
+        {
+          "action": "Format Device",
+          "type": "Complex",
+          "marks-required": 3,
+          "limit": "Sleaze",
+          "test": "Computer + Logic [Sleaze] v. Willpower + Firewall",
+          "notes": "Rewrites boot code; device shuts down permanently (until software replaced: Extended Software + Logic [Mental] (12, 1 hour)); loses wireless mods, retains physical function"
+        },
+        {
+          "action": "Full Matrix Defense",
+          "type": "Interrupt",
+          "marks-required": "Owner",
+          "limit": "Firewall",
+          "test": "none",
+          "notes": "Add Willpower to Attack action defense pool; -10 Initiative Score; lasts rest of Combat Turn"
+        },
+        {
+          "action": "Grid Hop",
+          "type": "Complex",
+          "marks-required": 0,
+          "limit": "Data Processing",
+          "test": "none",
+          "notes": "Hop to a grid you have legitimate access to; must leave host first"
+        },
+        {
+          "action": "Hack on the Fly",
+          "type": "Complex",
+          "marks-required": 0,
+          "limit": "Sleaze",
+          "test": "Hacking + Logic [Sleaze] v. Intuition + Firewall",
+          "notes": "Places 1 mark (Sleaze action); every 2 full net hits = 1 hit for Matrix Perception; 2 marks: -4; 3 marks: -10; can hop grid (defense 4 local / 6 global)"
+        },
+        {
+          "action": "Hide",
+          "type": "Complex",
+          "marks-required": 0,
+          "limit": "Sleaze",
+          "test": "Electronic Warfare + Intuition [Sleaze] v. Intuition + Data Processing",
+          "notes": "Makes target that was spotting you lose you; cannot hide from icons with a mark on you"
+        },
+        {
+          "action": "Invite Mark",
+          "type": "Simple",
+          "marks-required": "Owner",
+          "limit": "Data Processing",
+          "test": "none",
+          "notes": "Offer other personas the opportunity to mark your icon; set count, duration, offer duration; revocable before mark placed"
+        },
+        {
+          "action": "Jack Out",
+          "type": "Simple",
+          "marks-required": "Owner",
+          "limit": "Firewall",
+          "test": "Hardware + Willpower [Firewall] v. Logic + Attack (only if link-locked)",
+          "notes": "Jacks out and reboots device; dumpshock if link-locked and test fails; beat each link-locker separately with single roll"
+        },
+        {
+          "action": "Jam Signals",
+          "type": "Complex",
+          "marks-required": "Owner",
+          "limit": "Attack",
+          "test": "Electronic Warfare + Logic [Attack]",
+          "notes": "Turns device into local jammer; hits = noise added to all devices within 100 meters; cannot perform other Matrix actions while jamming"
+        },
+        {
+          "action": "Jump Into Rigged Device",
+          "type": "Complex",
+          "marks-required": 3,
+          "limit": "Data Processing",
+          "test": "Electronic Warfare + Logic [Data Processing] v. Willpower + Firewall",
+          "notes": "Prerequisites: 3 marks, VR mode, device has rigger adaptation, user has control rig; no test if owner/owner permission"
+        },
+        {
+          "action": "Matrix Perception",
+          "type": "Complex",
+          "marks-required": 0,
+          "limit": "Data Processing",
+          "test": "Computer + Intuition [Data Processing] (v. Logic + Sleaze for silent targets)",
+          "notes": "Find icons and analyze Matrix objects; first hit spots distant target; each additional hit reveals one piece of information"
+        },
+        {
+          "action": "Matrix Search",
+          "type": "Special",
+          "marks-required": null,
+          "limit": "Data Processing",
+          "test": "Simple Computer + Intuition [Data Processing]",
+          "notes": "See Matrix Search Table for thresholds and times"
+        },
+        {
+          "action": "Reboot Device",
+          "type": "Complex",
+          "marks-required": 3,
+          "limit": "Data Processing",
+          "test": "Computer + Logic [Data Processing] v. Willpower + Firewall",
+          "notes": "Shuts down and reboots at end of current Combat Turn; resets OS to 0, erases all marks; dumpshock if in VR; cannot reboot link-locked devices; owner needs no test"
+        },
+        {
+          "action": "Send Message",
+          "type": "Simple",
+          "marks-required": "n/a (or 1)",
+          "limit": "Data Processing",
+          "test": "none",
+          "notes": "Send text/audio (short sentence), image, or file to a user via commcode; longer messages via DNI; can open live feed"
+        },
+        {
+          "action": "Set Data Bomb",
+          "type": "Complex",
+          "marks-required": 1,
+          "limit": "Sleaze",
+          "test": "Software + Logic [Sleaze] v. (Device Rating × 2)",
+          "notes": "Rating up to net hits; choose file deletion on activation; set passcode; one bomb per file; triggers on read/edit/copy/protect/delete/another-bomb-without-passcode; DV = (Rating)D6"
+        },
+        {
+          "action": "Snoop",
+          "type": "Complex",
+          "marks-required": 1,
+          "limit": "Sleaze",
+          "test": "Electronic Warfare + Intuition [Sleaze] v. Logic + Firewall",
+          "notes": "Intercept Matrix traffic between target and any other icon as long as mark is held"
+        },
+        {
+          "action": "Spoof Command",
+          "type": "Complex",
+          "marks-required": "1 (on icon being imitated, not target)",
+          "limit": "Sleaze",
+          "test": "Hacking + Intuition [Sleaze] v. Logic + Firewall",
+          "notes": "Spoof owner identity to control device; only works on devices and agents (not IC, sprites, hosts, personas)"
+        },
+        {
+          "action": "Switch Interface Mode",
+          "type": "Simple",
+          "marks-required": "Owner",
+          "limit": "Data Processing",
+          "test": "none",
+          "notes": "Switch AR ↔ VR; VR→AR loses bonus Initiative Dice; cannot switch if link-locked"
+        },
+        {
+          "action": "Trace Icon",
+          "type": "Complex",
+          "marks-required": 2,
+          "limit": "Data Processing",
+          "test": "Computer + Intuition [Data Processing] v. Willpower + Sleaze",
+          "notes": "Find physical location of device or persona; maintain with at least 1 mark; does not work on hosts or IC"
+        }
+      ]
+    },
+    "matrix-actions-by-function": {
+      "source": "SR5 Core Rulebook, p.244",
+      "description": "Matrix actions grouped by functional category for quick reference.",
+      "columns": ["category", "action", "type"],
+      "rows": [
+        { "category": "Device Manipulation", "action": "Control Device", "type": "Variable" },
+        { "category": "Device Manipulation", "action": "Format Device", "type": "Complex" },
+        { "category": "Device Manipulation", "action": "Reboot Device", "type": "Complex" },
+        { "category": "Device Manipulation", "action": "Spoof Command", "type": "Complex" },
+        { "category": "File Manipulation", "action": "Crack File", "type": "Complex" },
+        { "category": "File Manipulation", "action": "Disarm Data Bomb", "type": "Complex" },
+        { "category": "File Manipulation", "action": "Edit File", "type": "Complex" },
+        { "category": "File Manipulation", "action": "Set Data Bomb", "type": "Complex" },
+        {
+          "category": "Information Gathering",
+          "action": "Check Overwatch Score",
+          "type": "Simple"
+        },
+        { "category": "Information Gathering", "action": "Matrix Perception", "type": "Complex" },
+        { "category": "Information Gathering", "action": "Matrix Search", "type": "Special" },
+        { "category": "Information Gathering", "action": "Snoop", "type": "Complex" },
+        { "category": "Information Gathering", "action": "Trace Icon", "type": "Complex" },
+        { "category": "Mark Manipulation", "action": "Brute Force", "type": "Complex" },
+        { "category": "Mark Manipulation", "action": "Erase Mark", "type": "Complex" },
+        { "category": "Mark Manipulation", "action": "Erase Matrix Signature", "type": "Complex" },
+        { "category": "Mark Manipulation", "action": "Hack on the Fly", "type": "Complex" },
+        { "category": "Mark Manipulation", "action": "Invite Mark", "type": "Simple" },
+        { "category": "Matrix Combat", "action": "Crash Program", "type": "Complex" },
+        { "category": "Matrix Combat", "action": "Data Spike", "type": "Complex" },
+        { "category": "Matrix Combat", "action": "Full Matrix Defense", "type": "Interrupt" },
+        { "category": "Miscellaneous", "action": "Change Icon", "type": "Simple" },
+        { "category": "Miscellaneous", "action": "Enter/Exit Host", "type": "Complex" },
+        { "category": "Miscellaneous", "action": "Erase Matrix Signature", "type": "Complex" },
+        { "category": "Miscellaneous", "action": "Grid Hop", "type": "Complex" },
+        { "category": "Miscellaneous", "action": "Hide", "type": "Complex" },
+        { "category": "Miscellaneous", "action": "Jack Out", "type": "Simple" },
+        { "category": "Miscellaneous", "action": "Jam Signals", "type": "Complex" },
+        { "category": "Miscellaneous", "action": "Jump Into Rigged Device", "type": "Complex" },
+        { "category": "Miscellaneous", "action": "Send Message", "type": "Simple" },
+        { "category": "Miscellaneous", "action": "Switch Interface Mode", "type": "Simple" }
+      ]
+    },
+    "matrix-actions-by-limit": {
+      "source": "SR5 Core Rulebook, p.244",
+      "description": "Matrix actions grouped by their Matrix attribute limit (Attack, Sleaze, Data Processing, Firewall).",
+      "columns": ["limit-attribute", "action", "type"],
+      "rows": [
+        { "limit-attribute": "Attack", "action": "Brute Force", "type": "Complex" },
+        { "limit-attribute": "Attack", "action": "Crack File", "type": "Complex" },
+        { "limit-attribute": "Attack", "action": "Crash Program", "type": "Complex" },
+        { "limit-attribute": "Attack", "action": "Data Spike", "type": "Complex" },
+        { "limit-attribute": "Attack", "action": "Erase Mark", "type": "Complex" },
+        { "limit-attribute": "Attack", "action": "Erase Matrix Signature", "type": "Complex" },
+        { "limit-attribute": "Attack", "action": "Jam Signals", "type": "Complex" },
+        { "limit-attribute": "Sleaze", "action": "Check Overwatch Score", "type": "Simple" },
+        { "limit-attribute": "Sleaze", "action": "Format Device", "type": "Complex" },
+        { "limit-attribute": "Sleaze", "action": "Hack on the Fly", "type": "Complex" },
+        { "limit-attribute": "Sleaze", "action": "Hide", "type": "Complex" },
+        { "limit-attribute": "Sleaze", "action": "Set Data Bomb", "type": "Complex" },
+        { "limit-attribute": "Sleaze", "action": "Snoop", "type": "Complex" },
+        { "limit-attribute": "Sleaze", "action": "Spoof Command", "type": "Complex" },
+        { "limit-attribute": "Data Processing", "action": "Change Icon", "type": "Simple" },
+        { "limit-attribute": "Data Processing", "action": "Control Device", "type": "Variable" },
+        { "limit-attribute": "Data Processing", "action": "Edit File", "type": "Complex" },
+        { "limit-attribute": "Data Processing", "action": "Enter/Exit Host", "type": "Complex" },
+        { "limit-attribute": "Data Processing", "action": "Grid Hop", "type": "Complex" },
+        { "limit-attribute": "Data Processing", "action": "Invite Mark", "type": "Simple" },
+        {
+          "limit-attribute": "Data Processing",
+          "action": "Jump Into Rigged Device",
+          "type": "Complex"
+        },
+        { "limit-attribute": "Data Processing", "action": "Matrix Perception", "type": "Complex" },
+        { "limit-attribute": "Data Processing", "action": "Matrix Search", "type": "Special" },
+        { "limit-attribute": "Data Processing", "action": "Reboot Device", "type": "Complex" },
+        { "limit-attribute": "Data Processing", "action": "Send Message", "type": "Simple" },
+        {
+          "limit-attribute": "Data Processing",
+          "action": "Switch Interface Mode",
+          "type": "Simple"
+        },
+        { "limit-attribute": "Data Processing", "action": "Trace Icon", "type": "Complex" },
+        { "limit-attribute": "Firewall", "action": "Disarm Data Bomb", "type": "Complex" },
+        { "limit-attribute": "Firewall", "action": "Erase Matrix Signature", "type": "Complex" },
+        { "limit-attribute": "Firewall", "action": "Full Matrix Defense", "type": "Interrupt" },
+        { "limit-attribute": "Firewall", "action": "Jack Out", "type": "Simple" }
+      ],
+      "notes": [
+        "Control Device may or may not use Data Processing as its limit depending on the action performed through the device."
+      ]
+    },
+    "programs": {
+      "source": "SR5 Core Rulebook, p.245–246",
+      "description": "All programs (common and hacking) with their effects, availability, and cost. Agents listed separately.",
+      "columns": ["program", "category", "availability", "cost-nuyen", "effect"],
+      "rows": [
+        {
+          "program": "Browse",
+          "category": "Common",
+          "availability": "—",
+          "cost-nuyen": 80,
+          "effect": "Halves time for Matrix Search actions"
+        },
+        {
+          "program": "Configurator",
+          "category": "Common",
+          "availability": "—",
+          "cost-nuyen": 80,
+          "effect": "Stores an alternate deck configuration; switch to it on next reconfigure (even if Configurator stops running)"
+        },
+        {
+          "program": "Edit",
+          "category": "Common",
+          "availability": "—",
+          "cost-nuyen": 80,
+          "effect": "+2 to Data Processing limit for Edit File tests"
+        },
+        {
+          "program": "Encryption",
+          "category": "Common",
+          "availability": "—",
+          "cost-nuyen": 80,
+          "effect": "+1 bonus to Firewall attribute"
+        },
+        {
+          "program": "Signal Scrub",
+          "category": "Common",
+          "availability": "—",
+          "cost-nuyen": 80,
+          "effect": "Rating 2 noise reduction"
+        },
+        {
+          "program": "Toolbox",
+          "category": "Common",
+          "availability": "—",
+          "cost-nuyen": 80,
+          "effect": "+1 bonus to Data Processing attribute"
+        },
+        {
+          "program": "Virtual Machine",
+          "category": "Common",
+          "availability": "—",
+          "cost-nuyen": 80,
+          "effect": "Run 2 additional programs simultaneously; persona takes 1 additional unresistable Matrix damage box whenever it takes Matrix damage"
+        },
+        {
+          "program": "Armor",
+          "category": "Hacking",
+          "availability": "4R",
+          "cost-nuyen": 250,
+          "effect": "+2 dice pool modifier to resist Matrix damage"
+        },
+        {
+          "program": "Baby Monitor",
+          "category": "Hacking",
+          "availability": "4R",
+          "cost-nuyen": 250,
+          "effect": "Always know your current Overwatch Score"
+        },
+        {
+          "program": "Biofeedback",
+          "category": "Hacking",
+          "availability": "4R",
+          "cost-nuyen": 250,
+          "effect": "Attacks against biological targets also cause equal Stun (cold-sim) or Physical (hot-sim) biofeedback damage; applies to damage from failed Attack actions against you too; resisted with Willpower + Firewall"
+        },
+        {
+          "program": "Biofeedback Filter",
+          "category": "Hacking",
+          "availability": "4R",
+          "cost-nuyen": 250,
+          "effect": "+2 dice pool to resist biofeedback damage"
+        },
+        {
+          "program": "Blackout",
+          "category": "Hacking",
+          "availability": "4R",
+          "cost-nuyen": 250,
+          "effect": "Like Biofeedback but only Stun damage, even in hot-sim"
+        },
+        {
+          "program": "Decryption",
+          "category": "Hacking",
+          "availability": "4R",
+          "cost-nuyen": 250,
+          "effect": "+1 bonus to Attack attribute"
+        },
+        {
+          "program": "Defuse",
+          "category": "Hacking",
+          "availability": "4R",
+          "cost-nuyen": 250,
+          "effect": "+4 dice pool modifier to resist Data Bomb damage"
+        },
+        {
+          "program": "Demolition",
+          "category": "Hacking",
+          "availability": "4R",
+          "cost-nuyen": 250,
+          "effect": "+1 to the rating of any Data Bomb you set while this is running"
+        },
+        {
+          "program": "Exploit",
+          "category": "Hacking",
+          "availability": "4R",
+          "cost-nuyen": 250,
+          "effect": "+2 bonus to Sleaze attribute when attempting Hack on the Fly"
+        },
+        {
+          "program": "Fork",
+          "category": "Hacking",
+          "availability": "4R",
+          "cost-nuyen": 250,
+          "effect": "Perform a single Matrix action on two targets; single test, each defends separately, modifiers from each count toward pool"
+        },
+        {
+          "program": "Guard",
+          "category": "Hacking",
+          "availability": "4R",
+          "cost-nuyen": 250,
+          "effect": "Reduces extra damage from marks by 1 DV per mark (attacker's bonus damage)"
+        },
+        {
+          "program": "Hammer",
+          "category": "Hacking",
+          "availability": "4R",
+          "cost-nuyen": 250,
+          "effect": "+2 DV Matrix damage on any action that causes Matrix damage (not to targets damaged by failed attacks against you)"
+        },
+        {
+          "program": "Lockdown",
+          "category": "Hacking",
+          "availability": "4R",
+          "cost-nuyen": 250,
+          "effect": "When you cause damage to a persona, target is link-locked until they stop this program or successfully Jack Out"
+        },
+        {
+          "program": "Mugger",
+          "category": "Hacking",
+          "availability": "4R",
+          "cost-nuyen": 250,
+          "effect": "Bonus damage from marks increased by 1 DV per mark"
+        },
+        {
+          "program": "Shell",
+          "category": "Hacking",
+          "availability": "4R",
+          "cost-nuyen": 250,
+          "effect": "+1 dice pool modifier to resist both Matrix damage and biofeedback damage (stacks)"
+        },
+        {
+          "program": "Sneak",
+          "category": "Hacking",
+          "availability": "4R",
+          "cost-nuyen": 250,
+          "effect": "+2 dice pool modifier to defend against Trace Icon; if demiGOD converges while running, physical location is not revealed"
+        },
+        {
+          "program": "Stealth",
+          "category": "Hacking",
+          "availability": "4R",
+          "cost-nuyen": 250,
+          "effect": "+1 bonus to Sleaze attribute"
+        },
+        {
+          "program": "Track",
+          "category": "Hacking",
+          "availability": "4R",
+          "cost-nuyen": 250,
+          "effect": "+2 to Data Processing attribute for Trace Icon tests; if target runs Sneak, negates Sneak's +2 bonus (not both)"
+        },
+        {
+          "program": "Wrapper",
+          "category": "Hacking",
+          "availability": "4R",
+          "cost-nuyen": 250,
+          "effect": "Icons can look like anything when using Change Icon; others can see true icon with Matrix Perception (must suspect enough to check)"
+        },
+        {
+          "program": "Agent (Rating 1–3)",
+          "category": "Agent",
+          "availability": "Rating × 3",
+          "cost-nuyen": "Rating × 1000",
+          "effect": "Autonomous program; uses device Matrix attributes; Computer/Hacking/Cybercombat at agent rating; attacks damage its device"
+        },
+        {
+          "program": "Agent (Rating 4–6)",
+          "category": "Agent",
+          "availability": "Rating × 3",
+          "cost-nuyen": "Rating × 2000",
+          "effect": "Autonomous program; uses device Matrix attributes; Computer/Hacking/Cybercombat at agent rating; attacks damage its device"
+        }
+      ]
+    },
+    "sample-host-ratings": {
+      "source": "SR5 Core Rulebook, p.247",
+      "description": "Representative host ratings by type of organization. Host attributes are distributed as (Rating), (Rating+1), (Rating+2), (Rating+3) in any order chosen by the host owner.",
+      "columns": ["examples", "host-rating-range"],
+      "rows": [
+        {
+          "examples": "Personal sites, pirate archives, public education",
+          "host-rating-range": "1–2"
+        },
+        {
+          "examples": "Low-end commercial, private business, public libraries, small policlubs",
+          "host-rating-range": "3–4"
+        },
+        {
+          "examples": "Social media, small colleges and universities, local police, international policlubs",
+          "host-rating-range": "5–6"
+        },
+        {
+          "examples": "Matrix games, local corporate hosts, large universities, low-level government",
+          "host-rating-range": "7–8"
+        },
+        {
+          "examples": "Affluent groups, regional corporate hosts, major government, secure sites",
+          "host-rating-range": "9–10"
+        },
+        {
+          "examples": "Megacorporate headquarters, military command, clandestine head office",
+          "host-rating-range": "11–12"
+        }
+      ]
+    },
+    "ic-types": {
+      "source": "SR5 Core Rulebook, p.248",
+      "description": "All Intrusion Countermeasures (IC) types with attack tests and effects. All IC attacks use Host Rating × 2 [Attack] as the dice pool. All IC is considered legal. IC is always in hot-sim mode (4D6 Initiative Dice). Failed IC attacks cause no harm to the attacker. Bricked IC vanishes; host can relaunch next Combat Turn.",
+      "columns": ["ic-type", "attack-test", "defense-dice-pool", "effect"],
+      "rows": [
+        {
+          "ic-type": "Acid",
+          "attack-test": "Host Rating × 2 [Attack]",
+          "defense-dice-pool": "Willpower + Firewall",
+          "effect": "On 1+ net hits: reduce target Firewall by 1 (cumulative, until reboot). At Firewall 0: 1 DV Matrix damage per net hit."
+        },
+        {
+          "ic-type": "Binder",
+          "attack-test": "Host Rating × 2 [Attack]",
+          "defense-dice-pool": "Willpower + Data Processing",
+          "effect": "On 1+ net hits: reduce target Data Processing by 1 (cumulative, until reboot). At DP 0: 1 DV Matrix damage per net hit."
+        },
+        {
+          "ic-type": "Black IC",
+          "attack-test": "Host Rating × 2 [Attack]",
+          "defense-dice-pool": "Intuition + Firewall",
+          "effect": "Causes (Attack) DV Matrix damage (+1 DV/net hit, +2 DV/mark on target) AND equal biofeedback damage. Link-locks target."
+        },
+        {
+          "ic-type": "Blaster (Grey IC)",
+          "attack-test": "Host Rating × 2 [Attack]",
+          "defense-dice-pool": "Logic + Firewall",
+          "effect": "Causes (Attack) DV Matrix damage (+1 DV/net hit, +2 DV/mark). Biofeedback is Stun only. Single successful attack also link-locks target."
+        },
+        {
+          "ic-type": "Crash",
+          "attack-test": "Host Rating × 2 [Attack]",
+          "defense-dice-pool": "Intuition + Firewall",
+          "effect": "If IC has a mark on target and hits: crashes one running program (random). Cannot restart until reboot."
+        },
+        {
+          "ic-type": "Jammer",
+          "attack-test": "Host Rating × 2 [Attack]",
+          "defense-dice-pool": "Willpower + Attack",
+          "effect": "On 1+ net hits: reduce target Attack by 1 (cumulative, until reboot). At Attack 0: 1 DV Matrix damage per net hit."
+        },
+        {
+          "ic-type": "Killer",
+          "attack-test": "Host Rating × 2 [Attack]",
+          "defense-dice-pool": "Intuition + Firewall",
+          "effect": "Causes (Attack) DV Matrix damage (+1 DV/net hit, +2 DV/mark)."
+        },
+        {
+          "ic-type": "Marker",
+          "attack-test": "Host Rating × 2 [Attack]",
+          "defense-dice-pool": "Willpower + Sleaze",
+          "effect": "On 1+ net hits: reduce target Sleaze by 1 (cumulative, until reboot). At Sleaze 0: 1 DV Matrix damage per net hit."
+        },
+        {
+          "ic-type": "Patrol",
+          "attack-test": "n/a",
+          "defense-dice-pool": "n/a",
+          "effect": "Scans marks and checks for illegal activity via Matrix Perception. No Attack; shares info with host. Doesn't take Matrix damage from failed attacks. Usually runs 24/7 and does not count against host IC limit."
+        },
+        {
+          "ic-type": "Probe",
+          "attack-test": "Host Rating × 2 [Attack]",
+          "defense-dice-pool": "Intuition + Firewall",
+          "effect": "Each successful 'attack' places another mark on the target (for host and its IC), up to maximum 3 marks."
+        },
+        {
+          "ic-type": "Scramble",
+          "attack-test": "Host Rating × 2 [Attack]",
+          "defense-dice-pool": "Willpower + Firewall",
+          "effect": "If host has 3 marks on target when Scramble hits: target reboots immediately (dumpshock if in VR)."
+        },
+        {
+          "ic-type": "Sparky (Psycho Killer)",
+          "attack-test": "Host Rating × 2 [Attack]",
+          "defense-dice-pool": "Intuition + Firewall",
+          "effect": "Causes (Attack) DV Matrix damage (+1 DV/net hit, +2 DV/mark) plus equal biofeedback damage."
+        },
+        {
+          "ic-type": "Tar Baby",
+          "attack-test": "Host Rating × 2 [Attack]",
+          "defense-dice-pool": "Logic + Firewall",
+          "effect": "Link-locks target on hit. If target is already link-locked, places a mark (up to maximum 3)."
+        },
+        {
+          "ic-type": "Track",
+          "attack-test": "Host Rating × 2 [Attack]",
+          "defense-dice-pool": "Willpower + Sleaze",
+          "effect": "If IC has 2+ marks on target and hits: host and owners discover target's physical location (reported to authorities)."
+        }
+      ]
+    },
+    "living-persona": {
+      "source": "SR5 Core Rulebook, p.251",
+      "description": "Technomancer living persona attribute mappings. The technomancer's Resonance attribute is the basis for all living persona values.",
+      "columns": ["matrix-attribute", "rating-source"],
+      "rows": [
+        { "matrix-attribute": "Device Rating", "rating-source": "Resonance" },
+        { "matrix-attribute": "Attack", "rating-source": "Charisma" },
+        { "matrix-attribute": "Sleaze", "rating-source": "Intuition" },
+        { "matrix-attribute": "Data Processing", "rating-source": "Logic" },
+        { "matrix-attribute": "Firewall", "rating-source": "Willpower" }
+      ]
+    },
+    "complex-forms": {
+      "source": "SR5 Core Rulebook, p.252–253",
+      "description": "All Resonance Library complex forms. Duration: I=Immediate, S=Sustained, P=Permanent. FV = Fading Value (expressed relative to L = chosen Level). Threading test is Software + Resonance [Level] unless otherwise noted.",
+      "columns": ["complex-form", "target", "duration", "fading-value", "test", "effect"],
+      "rows": [
+        {
+          "complex-form": "Cleaner",
+          "target": "Persona",
+          "duration": "P",
+          "fading-value": "L+1",
+          "test": "Simple Software + Resonance [Level]",
+          "effect": "Reduce target's Overwatch Score by 1 per hit"
+        },
+        {
+          "complex-form": "Diffusion of [Matrix Attribute]",
+          "target": "Device",
+          "duration": "S",
+          "fading-value": "L+1",
+          "test": "Opposed Software + Resonance [Level] v. Willpower + Firewall",
+          "effect": "Reduce target Matrix attribute by net hits (minimum 1); one entry for each of the 4 attributes"
+        },
+        {
+          "complex-form": "Editor",
+          "target": "File",
+          "duration": "P",
+          "fading-value": "L+2",
+          "test": "Software + Resonance [Level] v. owner's Intuition + Data Processing",
+          "effect": "Make changes to a file equal to net hits (same as Edit File)"
+        },
+        {
+          "complex-form": "Infusion of [Matrix Attribute]",
+          "target": "Device",
+          "duration": "S",
+          "fading-value": "L+1",
+          "test": "Software + Resonance [Level] (Simple)",
+          "effect": "Boost target Matrix attribute by hits (max 2× normal rating); one Infusion per attribute at a time; ends if attribute swapped in Reconfigure. One entry for each of the 4 attributes."
+        },
+        {
+          "complex-form": "Pulse Storm",
+          "target": "Persona",
+          "duration": "I",
+          "fading-value": "L+0",
+          "test": "Software + Resonance [Level] v. Logic + Data Processing",
+          "effect": "Each net hit adds 1 to target's noise"
+        },
+        {
+          "complex-form": "Puppeteer",
+          "target": "Device",
+          "duration": "I",
+          "fading-value": "L+4",
+          "test": "Software + Resonance [Level] v. Willpower + Firewall (threshold: 1 Free / 2 Simple / 3 Complex)",
+          "effect": "Force device to perform a specified Matrix action as its next available action"
+        },
+        {
+          "complex-form": "Resonance Channel",
+          "target": "Device",
+          "duration": "S",
+          "fading-value": "L-1",
+          "test": "Simple Software + Resonance [Level]",
+          "effect": "Communicate through Resonance channel; each net hit reduces distance noise to target device by 1"
+        },
+        {
+          "complex-form": "Resonance Spike",
+          "target": "Device",
+          "duration": "I",
+          "fading-value": "L+0",
+          "test": "Software + Resonance [Level] v. Willpower + Firewall",
+          "effect": "1 box Matrix damage per net hit (unresistable)"
+        },
+        {
+          "complex-form": "Resonance Veil",
+          "target": "Device",
+          "duration": "S",
+          "fading-value": "L-1",
+          "test": "Software + Resonance [Level] v. Intuition + Data Processing",
+          "effect": "Convincing illusion in the Matrix; target needs Matrix Perception (threshold = net hits) to see through even if suspicious"
+        },
+        {
+          "complex-form": "Static Bomb",
+          "target": "Self",
+          "duration": "I",
+          "fading-value": "L+2",
+          "test": "Software + Resonance [Level] v. Intuition + Data Processing (all icons spotting you)",
+          "effect": "Beat each spotting icon separately; any you beat lose spotting of you"
+        },
+        {
+          "complex-form": "Static Veil",
+          "target": "Persona",
+          "duration": "S",
+          "fading-value": "L-1",
+          "test": "Simple Software + Resonance [Level] (threshold: 1 on public grid, 2 on other grids)",
+          "effect": "Veiled persona's OS doesn't increase due to time; still increases from illegal actions; persona cannot hop to another grid while sustained"
+        },
+        {
+          "complex-form": "Stitches",
+          "target": "Sprite",
+          "duration": "P",
+          "fading-value": "L-2",
+          "test": "Simple Software + Resonance [Level]",
+          "effect": "Remove 1 box of Matrix damage per hit from target sprite"
+        },
+        {
+          "complex-form": "Tattletale",
+          "target": "Persona",
+          "duration": "P",
+          "fading-value": "L-2",
+          "test": "Simple Software + Resonance [Level]",
+          "effect": "Increase target's Overwatch Score by 1 per hit (only targets with an OS)"
+        },
+        {
+          "complex-form": "Transcendent Grid",
+          "target": "Self",
+          "duration": "I",
+          "fading-value": "L-3",
+          "test": "Simple Software + Resonance [Level]",
+          "effect": "Connect to all grids simultaneously for 1 minute per hit; no cross-grid or public-grid penalties for you (others targeting you do not receive this benefit)"
+        }
+      ]
+    },
+    "sprites": {
+      "source": "SR5 Core Rulebook, p.259",
+      "description": "All five sprite types with attribute arrays (expressed relative to L = sprite Level), initiative, Initiative Dice, skills, and powers. Sprite Resonance = compiler's Resonance at time of compilation. Matrix Condition Monitor = 8 + (Level / 2).",
+      "columns": [
+        "sprite-type",
+        "attack",
+        "sleaze",
+        "data-processing",
+        "firewall",
+        "initiative",
+        "initiative-dice",
+        "resonance",
+        "skills",
+        "powers"
+      ],
+      "rows": [
+        {
+          "sprite-type": "Courier",
+          "attack": "L",
+          "sleaze": "L+3",
+          "data-processing": "L+1",
+          "firewall": "L+2",
+          "initiative": "(L×2)+1",
+          "initiative-dice": "4D6",
+          "resonance": "L",
+          "skills": ["Computer", "Hacking"],
+          "powers": ["Cookie", "Hash"]
+        },
+        {
+          "sprite-type": "Crack",
+          "attack": "L",
+          "sleaze": "L+3",
+          "data-processing": "L+2",
+          "firewall": "L+1",
+          "initiative": "(L×2)+2",
+          "initiative-dice": "4D6",
+          "resonance": "L",
+          "skills": ["Computer", "Electronic Warfare", "Hacking"],
+          "powers": ["Suppression"]
+        },
+        {
+          "sprite-type": "Data",
+          "attack": "L-1",
+          "sleaze": "L",
+          "data-processing": "L+4",
+          "firewall": "L+1",
+          "initiative": "(L×2)+4",
+          "initiative-dice": "4D6",
+          "resonance": "L",
+          "skills": ["Computer", "Electronic Warfare"],
+          "powers": ["Camouflage", "Watermark"]
+        },
+        {
+          "sprite-type": "Fault",
+          "attack": "L+3",
+          "sleaze": "L",
+          "data-processing": "L+1",
+          "firewall": "L+2",
+          "initiative": "(L×2)+1",
+          "initiative-dice": "4D6",
+          "resonance": "L",
+          "skills": ["Computer", "Cybercombat", "Hacking"],
+          "powers": ["Electron Storm"]
+        },
+        {
+          "sprite-type": "Machine",
+          "attack": "L+1",
+          "sleaze": "L",
+          "data-processing": "L+3",
+          "firewall": "L+2",
+          "initiative": "(L×2)+3",
+          "initiative-dice": "4D6",
+          "resonance": "L",
+          "skills": ["Computer", "Electronic Warfare", "Hardware"],
+          "powers": ["Diagnostics", "Gremlins", "Stability"]
+        }
+      ]
+    },
+    "sprite-powers": {
+      "source": "SR5 Core Rulebook, p.256–257",
+      "description": "All sprite powers. Using a power is a Standard Resonance action (not a Matrix action). Each entry specifies which sprite type(s) have the power.",
+      "columns": ["power", "sprite-types", "test", "effect"],
+      "rows": [
+        {
+          "power": "Camouflage",
+          "sprite-types": ["Data"],
+          "test": "none (passive; requires Matrix Perception to find hidden file)",
+          "effect": "Conceal a file within another file; invisible to Matrix searches; only findable with Matrix Perception specifically looking for the hidden file"
+        },
+        {
+          "power": "Cookie",
+          "sprite-types": ["Courier"],
+          "test": "Hacking + Resonance [Sleaze] v. Intuition + Firewall",
+          "effect": "Tag target persona with a cookie file that logs all icon activity; transfers data to sprite at set duration; file runs silent at sprite Level rating; detected with Matrix Perception; removed by deleting protection"
+        },
+        {
+          "power": "Diagnostics",
+          "sprite-types": ["Machine"],
+          "test": "Simple Hardware + Level [Data Processing]",
+          "effect": "Evaluate device internals; each hit = +1 limit bonus to use/repair rolls for the device; takes sprite's entire attention while active"
+        },
+        {
+          "power": "Electron Storm",
+          "sprite-types": ["Fault"],
+          "test": "Cybercombat + Resonance [Attack] v. Intuition + Firewall",
+          "effect": "Sustained barrage; first attack and each subsequent while sustained: (Resonance) DV Matrix damage + 2 noise to target; all electron storms end immediately if sprite takes any Matrix damage"
+        },
+        {
+          "power": "Gremlins",
+          "sprite-types": ["Machine"],
+          "test": "Hardware + Level [Attack] v. Device Rating + Firewall",
+          "effect": "Causes device malfunction; 1–3 net hits = standard glitch; 4+ net hits = critical glitch (GM chooses type)"
+        },
+        {
+          "power": "Hash",
+          "sprite-types": ["Courier"],
+          "test": "none",
+          "effect": "Protect a file with unique Resonance algorithm; only sprite can unprotect; if sprite destroyed while carrying file, file is permanently corrupted; lasts up to Level × 10 Combat Turns"
+        },
+        {
+          "power": "Stability",
+          "sprite-types": ["Machine"],
+          "test": "none (passive while active on marked target)",
+          "effect": "Prevent normal malfunctions and accidents from afflicting marked target; ignore standard glitches; reduce critical glitches to standard glitches"
+        },
+        {
+          "power": "Suppression",
+          "sprite-types": ["Crack"],
+          "test": "none",
+          "effect": "While sprite is in a host using this power: any IC the host launches is delayed by (Level / 2) Combat Turns; delayed IC cannot act or be targeted"
+        },
+        {
+          "power": "Watermark",
+          "sprite-types": ["Data"],
+          "test": "none",
+          "effect": "Tag an icon with an invisible Resonance-only visible marking; sprite can leave secret messages on Matrix objects; can overwrite existing watermarks; erasable with Erase Matrix Signature; otherwise lasts as long as the icon does"
+        }
+      ]
+    },
+    "echoes": {
+      "source": "SR5 Core Rulebook, p.258",
+      "description": "Technomancer echoes gained through Submersion. One echo per Submersion grade. Cannot take the same echo twice unless noted.",
+      "columns": ["echo", "max-times", "effect"],
+      "rows": [
+        { "echo": "Attack Upgrade", "max-times": 2, "effect": "Living persona Attack +1" },
+        {
+          "echo": "Data Processing Upgrade",
+          "max-times": 2,
+          "effect": "Living persona Data Processing +1"
+        },
+        { "echo": "Firewall Upgrade", "max-times": 2, "effect": "Living persona Firewall +1" },
+        {
+          "echo": "Mind over Machine",
+          "max-times": 3,
+          "effect": "Benefit of a Rating 1 control rig (effective rating increases by 1 per additional take, max 3)"
+        },
+        {
+          "echo": "NeuroFilter",
+          "max-times": 2,
+          "effect": "+1 dice pool to resist biofeedback damage"
+        },
+        {
+          "echo": "Overclocking",
+          "max-times": 1,
+          "effect": "+1D6 Initiative Dice while in hot-sim VR"
+        },
+        {
+          "echo": "Resonance Link",
+          "max-times": 1,
+          "effect": "One-way empathic link with chosen technomancer; discern dominant mood/emotions and danger sense; two-way if both take it"
+        },
+        {
+          "echo": "Resonance [Program]",
+          "max-times": "unlimited (different program each time)",
+          "effect": "Copy effects of one common or hacking program; specify which program when taking this echo"
+        },
+        { "echo": "Sleaze Upgrade", "max-times": 2, "effect": "Living persona Sleaze +1" }
+      ]
+    }
+  }
+}

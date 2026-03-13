@@ -1,0 +1,200 @@
+{
+  "tables": {
+    "qualities-catalog": {
+      "source": "Run Faster, pp. 119-123",
+      "description": "Catalog of negative metagenic qualities for SURGE changelings",
+      "columns": ["name", "karma", "description", "restrictions"],
+      "rows": [
+        {
+          "name": "Adiposis",
+          "karma": 10,
+          "description": "Clinically obese. Walking=AGIx1, Running=AGIx2, Sprint=+0.5m/hit. -1 all physical activities. Double Fatigue DV. Halve duration between Resistance Tests.",
+          "restrictions": "None listed."
+        },
+        {
+          "name": "Astral Hazing (Non-Awakened)",
+          "karma": 5,
+          "description": "Generate Rating 3 background count extending Essence x 100m. Expands +1m per 4h if stationary (max +4).",
+          "restrictions": "None listed."
+        },
+        {
+          "name": "Astral Hazing (Awakened)",
+          "karma": 15,
+          "description": "Generate Rating 3 background count extending Essence x 100m. Also impairs own magical actions. Expands +1m per 4h if stationary (max +4).",
+          "restrictions": "None listed."
+        },
+        {
+          "name": "Berserker",
+          "karma": 6,
+          "description": "GM-triggered primal rage. Composure (3) to suppress. While enraged: +1 Physical attributes, -1 Mental attributes (min 1). Duration: 1D6 Combat Turns. Attacks anyone nearby.",
+          "restrictions": "Adrenaline pump always triggers during rage."
+        },
+        {
+          "name": "Bioluminescence",
+          "karma": 5,
+          "description": "Green-to-blue glow from hair/skin. In partial light or darkness, reduces visibility modifiers by 1 level (makes character easier to spot).",
+          "restrictions": "None listed."
+        },
+        {
+          "name": "Cephalopod Skull",
+          "karma": 6,
+          "description": "Kraken-like head with tentacles. Soft skull/upper torso: -3 dice pool modifier when resisting damage to head/upper torso.",
+          "restrictions": "Freaks social modifiers."
+        },
+        {
+          "name": "Cold-Blooded",
+          "karma": 5,
+          "description": "Temperature-dependent: <30C=-1 Physical, <20C=-3 Physical, <10C=-5 Physical, 0C=comatose. -2 vs thermographic/thermal detection.",
+          "restrictions": "None listed."
+        },
+        {
+          "name": "Critter Spook",
+          "karma": 5,
+          "description": "Animals within 5m react with fear/hostility. -2 to control/soothe/pacify animals. Critters attack this character first in combat.",
+          "restrictions": "None listed."
+        },
+        {
+          "name": "Cyclopean Eye",
+          "karma": 6,
+          "description": "Single eye, no binocular vision. -1 all Combat Tests and precision-requiring technical/physical tests. Cannot compensate with cybereye.",
+          "restrictions": "Freaks social modifiers."
+        },
+        {
+          "name": "Deformity (Picasso)",
+          "karma": 5,
+          "description": "Severe facial deformity. -2 Perception (sensory) or -2 Physical Active Tests (motor/Quasimodo variant).",
+          "restrictions": "Freaks social modifiers."
+        },
+        {
+          "name": "Deformity (Quasimodo)",
+          "karma": 15,
+          "description": "Significant physical deformity. -2 Perception or -2 Physical Active Tests. Double Freaks modifiers if not hidden. Cannot be surgically corrected.",
+          "restrictions": "Double Freaks social modifiers."
+        },
+        {
+          "name": "Feathers",
+          "karma": 3,
+          "description": "Body hair replaced by feathers. +1 to Matrix Search/identify/locate tests against character. No protective value.",
+          "restrictions": "Incompatible with Unusual Hair and Scales. Freaks social modifiers."
+        },
+        {
+          "name": "Impaired (Attribute)",
+          "karma": 8,
+          "description": "Permanently reduce one metatype attribute maximum by 2 (natural and augmented). Once per attribute. May reduce current rating if new max is lower.",
+          "restrictions": "Once per attribute."
+        },
+        {
+          "name": "Insectoid Features",
+          "karma": 6,
+          "description": "Compound eyes, mandibles, insect wings (cosmetic). Hostile social modifier. Attacked first in combat. +1 to Matrix Search/identify/locate tests.",
+          "restrictions": "Freaks social modifiers (seriously affects social interactions)."
+        },
+        {
+          "name": "Mood Hair",
+          "karma": 4,
+          "description": "Hair changes color by emotion (visible, cannot hide). +2 to Judge Intentions Tests against character (if observer aware).",
+          "restrictions": "Incompatible with hair modifications, Feathers, and Scales."
+        },
+        {
+          "name": "Neoteny",
+          "karma": 6,
+          "description": "Child/adolescent appearance. Physical Condition Monitor = 6 + (Body/2, round up). Custom armor/equipment +10% cost.",
+          "restrictions": "Freaks social modifiers."
+        },
+        {
+          "name": "Nocturnal",
+          "karma": 4,
+          "description": "Active at night, sleeps during day. All Mental attributes -1 during daylight hours.",
+          "restrictions": "None listed."
+        },
+        {
+          "name": "Progeria",
+          "karma": 9,
+          "description": "Accelerated aging. Few years to live (GM determines). Small stature, wrinkled skin. -2 all Physical Tests.",
+          "restrictions": "Can be halted by HMHVV infection or life-prolonging treatment."
+        },
+        {
+          "name": "Scales",
+          "karma": 5,
+          "description": "Scaly skin (lizard/snake). Periodically shed. No protective value. +2 to Matrix Search/identify/locate tests.",
+          "restrictions": "Incompatible with bioware skin augmentations and skin-related qualities. Freaks social modifiers."
+        },
+        {
+          "name": "Scent Glands",
+          "karma": 4,
+          "description": "Foul odor. +1 to locate by scent (+2 stressed). -1 all Social Tests (-2 stressed) when odor not masked.",
+          "restrictions": "None listed."
+        },
+        {
+          "name": "Slow Healer",
+          "karma": 3,
+          "description": "-2 all Healing Tests.",
+          "restrictions": "None listed."
+        },
+        {
+          "name": "Striking Skin Pigmentation",
+          "karma": 4,
+          "description": "Unusual skin color. +2 to Matrix Search/identify/locate tests.",
+          "restrictions": "Incompatible with bioware skin augmentations."
+        },
+        {
+          "name": "Stubby Arms",
+          "karma": 10,
+          "description": "-1 Reach for all Melee/Unarmed combat. -1 non-Combat Tests requiring arm/hand dexterity (GM discretion).",
+          "restrictions": "None listed."
+        },
+        {
+          "name": "Symbiosis",
+          "karma": 5,
+          "description": "Bond to location after >1 season. Body+Willpower (3) monthly to bond. Bonded: +1 Outdoor skills, +1 Social with locals, +1 Healing locally. Environmental problems cause Mild Allergy.",
+          "restrictions": "Bond broken by moving away 1 month + new Body+Willpower (3) Test."
+        },
+        {
+          "name": "Third Eye",
+          "karma": 3,
+          "description": "Third eye on forehead. No vision modifiers. Detectable with Perception (2) even when closed.",
+          "restrictions": "Incompatible with Cyclopean Eye. Freaks social modifiers."
+        },
+        {
+          "name": "Unusual Hair",
+          "karma": 3,
+          "description": "Unusual color/texture/pattern hair. +1 to Matrix Search/identify/locate tests.",
+          "restrictions": "Incompatible with other natural/artificial hair modifications."
+        },
+        {
+          "name": "Vestigial Tail",
+          "karma": 6,
+          "description": "Non-functional tail. -1 all Physical Tests involving balance/movement.",
+          "restrictions": "Incompatible with Functional Tail, cybernetic/bioware tails. Freaks social modifiers."
+        }
+      ]
+    },
+    "negative-qualities-random-table-3-to-5-karma": {
+      "source": "Run Faster, p. 111",
+      "description": "Random roll table for negative metagenic qualities costing 3 to 5 Karma bonus",
+      "columns": ["roll_3d6", "karma", "quality"],
+      "rows": [
+        { "roll_3d6": 3, "karma": 6, "quality": "Neoteny" },
+        { "roll_3d6": 4, "karma": 6, "quality": "Insectoid Features" },
+        { "roll_3d6": 5, "karma": 6, "quality": "Cephalopod Skull" },
+        { "roll_3d6": 6, "karma": 6, "quality": "Cyclopean Eye" },
+        { "roll_3d6": 7, "karma": 6, "quality": "Berserker" },
+        { "roll_3d6": 8, "karma": 8, "quality": "Impaired (Body or Strength, player's choice)" },
+        { "roll_3d6": 9, "karma": 8, "quality": "Impaired (Agility)" },
+        { "roll_3d6": 10, "karma": 8, "quality": "Impaired (Reaction)" },
+        {
+          "roll_3d6": 11,
+          "karma": 8,
+          "quality": "Impaired (Willpower or Charisma, player's choice)"
+        },
+        { "roll_3d6": 12, "karma": 8, "quality": "Impaired (Logic)" },
+        { "roll_3d6": 13, "karma": 8, "quality": "Impaired (Intuition)" },
+        { "roll_3d6": 14, "karma": 9, "quality": "Progeria" },
+        { "roll_3d6": 15, "karma": 10, "quality": "Adiposis" },
+        { "roll_3d6": 16, "karma": 10, "quality": "Stubby Arms" },
+        { "roll_3d6": 17, "karma": 15, "quality": "Astral Hazing (Awakened)" },
+        { "roll_3d6": 18, "karma": 15, "quality": "Deformity (Quasimodo)" }
+      ]
+    }
+  }
+}

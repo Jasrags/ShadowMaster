@@ -1,0 +1,142 @@
+{
+  "tables": {
+    "sample-character-corrections": {
+      "source": "SR5 Errata, p. 1",
+      "description": "Corrected limits for sample characters",
+      "columns": ["character", "field", "old_value", "new_value"],
+      "rows": [
+        {
+          "character": "Street Samurai",
+          "field": "contacts",
+          "old_value": "(missing)",
+          "new_value": "Fixer (Connection 4, Loyalty 2)"
+        },
+        {
+          "character": "Street Shaman",
+          "field": "social_limit",
+          "old_value": "7",
+          "new_value": "8"
+        },
+        {
+          "character": "Combat Mage",
+          "field": "physical_limit",
+          "old_value": "6",
+          "new_value": "5"
+        },
+        { "character": "Face", "field": "physical_limit", "old_value": "3", "new_value": "4" },
+        { "character": "Face", "field": "mental_limit", "old_value": "5", "new_value": "6" },
+        {
+          "character": "Tank",
+          "field": "physical_limit",
+          "old_value": "10",
+          "new_value": "9 (11)"
+        },
+        { "character": "Decker", "field": "mental_limit", "old_value": "6 (7)", "new_value": "7" },
+        {
+          "character": "Drone Rigger",
+          "field": "physical_limit",
+          "old_value": "6",
+          "new_value": "5 (6)"
+        },
+        {
+          "character": "Drone Rigger",
+          "field": "mental_limit",
+          "old_value": "5",
+          "new_value": "6"
+        },
+        {
+          "character": "Sprawl Ganger",
+          "field": "physical_limit",
+          "old_value": "8",
+          "new_value": "9"
+        },
+        {
+          "character": "Sprawl Ganger",
+          "field": "mental_limit",
+          "old_value": "4",
+          "new_value": "5"
+        },
+        {
+          "character": "Sprawl Ganger",
+          "field": "social_limit",
+          "old_value": "5",
+          "new_value": "6"
+        },
+        {
+          "character": "Bounty Hunter",
+          "field": "physical_limit",
+          "old_value": "7",
+          "new_value": "9"
+        },
+        {
+          "character": "Bounty Hunter",
+          "field": "social_limit",
+          "old_value": "4",
+          "new_value": "5"
+        }
+      ]
+    },
+    "npc-stat-corrections": {
+      "source": "SR5 Errata, p. 4",
+      "description": "Corrected skills for NPC stat blocks",
+      "columns": ["npc", "change_type", "old_value", "new_value"],
+      "rows": [
+        {
+          "npc": "Fixer",
+          "change_type": "skill_change",
+          "old_value": "Computer 6",
+          "new_value": "Computer 7"
+        },
+        {
+          "npc": "Fixer",
+          "change_type": "skill_remove",
+          "old_value": "Data Search 8",
+          "new_value": null
+        },
+        {
+          "npc": "Mafia Consiglieri",
+          "change_type": "skill_change",
+          "old_value": "Computer 4",
+          "new_value": "Computer 5"
+        },
+        {
+          "npc": "Mafia Consiglieri",
+          "change_type": "skill_remove",
+          "old_value": "Data Search 5",
+          "new_value": null
+        },
+        {
+          "npc": "Mr. Johnson",
+          "change_type": "skill_remove",
+          "old_value": "Data Search 5",
+          "new_value": null
+        }
+      ]
+    },
+    "autosoft-pricing": {
+      "source": "SR5 Errata, p. 4",
+      "description": "Autosoft entry to add to Software table",
+      "columns": ["program", "availability", "cost"],
+      "rows": [{ "program": "Autosoft", "availability": "Rating x 2", "cost": "Rating x 500¥" }]
+    },
+    "monocle-correction": {
+      "source": "SR5 Errata, p. 4",
+      "description": "Corrected monocle entry for Optical & Imaging Devices table",
+      "columns": ["device", "capacity", "availability", "cost"],
+      "rows": [
+        { "device": "Monocle", "capacity": "1-4", "availability": "—", "cost": "Rating x 120¥" }
+      ]
+    },
+    "removed-skills": {
+      "source": "SR5 Errata, pp. 1, 4",
+      "description": "Skills that should not exist in SR5",
+      "columns": ["skill", "reason"],
+      "rows": [
+        { "skill": "Herding", "reason": "Not a skill in SR5 (p. 90)" },
+        { "skill": "Lockpicking", "reason": "Not a skill in SR5 (p. 90)" },
+        { "skill": "Data Search", "reason": "Removed from NPC stat blocks (pp. 391-392)" },
+        { "skill": "Dodge", "reason": "Removed from devil rat stat block (p. 404)" }
+      ]
+    }
+  }
+}

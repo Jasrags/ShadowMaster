@@ -1,0 +1,43 @@
+{
+  "tables": {
+    "success-test-thresholds": {
+      "source": "SR5 Core Rulebook, p. 45",
+      "description": "Maps qualitative difficulty labels to the minimum hit count required to succeed on a Success (Simple) test",
+      "columns": ["difficulty", "threshold"],
+      "rows": [
+        { "difficulty": "Easy", "threshold": 1 },
+        { "difficulty": "Average", "threshold": 2 },
+        { "difficulty": "Hard", "threshold": 4 },
+        { "difficulty": "Very Hard", "threshold": 6 },
+        { "difficulty": "Extreme", "threshold": "8–10" }
+      ]
+    },
+    "extended-test-thresholds": {
+      "source": "SR5 Core Rulebook, p. 48",
+      "description": "Maps qualitative difficulty labels to the cumulative hit total required to complete an Extended test",
+      "columns": ["difficulty", "threshold"],
+      "rows": [
+        { "difficulty": "Easy", "threshold": 6 },
+        { "difficulty": "Average", "threshold": 12 },
+        { "difficulty": "Hard", "threshold": 18 },
+        { "difficulty": "Very Hard", "threshold": 24 },
+        { "difficulty": "Extreme", "threshold": "30+" }
+      ]
+    },
+    "extended-test-intervals": {
+      "source": "SR5 Core Rulebook, p. 48",
+      "description": "Maps task-scale labels to the in-game time that passes between each roll of an Extended test",
+      "columns": ["task", "timeInterval"],
+      "rows": [
+        { "task": "Fast", "timeInterval": "1 Combat Turn" },
+        { "task": "Quick", "timeInterval": "1 minute" },
+        { "task": "Short", "timeInterval": "10 minutes" },
+        { "task": "Average", "timeInterval": "30 minutes" },
+        { "task": "Long", "timeInterval": "1 hour" },
+        { "task": "Consuming", "timeInterval": "1 day" },
+        { "task": "Exhaustive", "timeInterval": "1 week" },
+        { "task": "Mammoth", "timeInterval": "1 month" }
+      ]
+    }
+  }
+}

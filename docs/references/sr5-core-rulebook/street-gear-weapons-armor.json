@@ -1,0 +1,1478 @@
+{
+  "tables": {
+    "delivery-times": {
+      "source": "SR5 Core Rulebook, p.418",
+      "description": "Delivery times for black market gear purchases based on gear cost bracket",
+      "columns": ["gearCost", "deliveryTime"],
+      "rows": [
+        { "gearCost": "Up to 100¥", "deliveryTime": "6 hours" },
+        { "gearCost": "101¥ to 1,000¥", "deliveryTime": "1 day" },
+        { "gearCost": "1,000¥ to 10,000¥", "deliveryTime": "2 days" },
+        { "gearCost": "10,001 to 100,000¥", "deliveryTime": "1 week" },
+        { "gearCost": "More than 100,000¥", "deliveryTime": "1 month" }
+      ]
+    },
+    "concealability-modifiers": {
+      "source": "SR5 Core Rulebook, p.420",
+      "description": "Concealability modifier applied to observer's Perception + Intuition test to spot a hidden item",
+      "columns": ["modifier", "exampleItems"],
+      "rows": [
+        { "modifier": -6, "exampleItems": "RFID tag, bug slap patch, microdrone, contact lenses" },
+        {
+          "modifier": -4,
+          "exampleItems": "Hold-out pistol, monowhip, ammo clip, credstick, chips/softs, sequencer/passkey, autopicker, lockpick set, commlink, glasses"
+        },
+        {
+          "modifier": -2,
+          "exampleItems": "Light pistol, knife, sap, minidrone, microgrenade, flash-pak, jammer, cyberdeck, rigger command console"
+        },
+        {
+          "modifier": 0,
+          "exampleItems": "Heavy pistol, machine pistol with folding stock collapsed, grenade, goggles, ammo belt/drum, club, extendable baton (collapsed)"
+        },
+        {
+          "modifier": 2,
+          "exampleItems": "SMG, machine pistol with folding stock extended, medkit, small drone, extendable baton (extended), stun baton"
+        },
+        { "modifier": 4, "exampleItems": "Sword, sawed-off shotgun, bullpup assault rifle" },
+        {
+          "modifier": 6,
+          "exampleItems": "Katana, monosword, shotgun, assault rifle, sport rifle, crossbow"
+        },
+        { "modifier": 8, "exampleItems": "Sniper rifle, bow, grenade launcher, medium drone" },
+        {
+          "modifier": 10,
+          "exampleItems": "Machine gun, rocket launcher, missile launcher, staff, claymore, metahuman body"
+        }
+      ]
+    },
+    "device-ratings": {
+      "source": "SR5 Core Rulebook, p.421",
+      "description": "Device Rating tiers 1-6 with type names and example devices",
+      "columns": ["type", "rating", "examples"],
+      "rows": [
+        {
+          "type": "Simple",
+          "rating": 1,
+          "examples": "General appliances, public terminals, entertainment systems"
+        },
+        {
+          "type": "Average",
+          "rating": 2,
+          "examples": "Standard personal electronics, basic cyberware, vehicles, drones, weapons, residential security devices"
+        },
+        {
+          "type": "Smart",
+          "rating": 3,
+          "examples": "Security vehicles, alphaware, corporate security devices"
+        },
+        {
+          "type": "Advanced",
+          "rating": 4,
+          "examples": "High-end devices, betaware, military vehicles, mil-spec security devices"
+        },
+        {
+          "type": "Cutting Edge",
+          "rating": 5,
+          "examples": "Deltaware, credsticks, black-ops vehicles and security devices"
+        },
+        {
+          "type": "Bleeding Edge",
+          "rating": 6,
+          "examples": "Billion-nuyen experimental devices, spacecraft"
+        }
+      ]
+    },
+    "melee-weapons": {
+      "source": "SR5 Core Rulebook, p.423",
+      "description": "Full stat blocks for all melee weapons: Blades, Clubs, and Other",
+      "columns": ["category", "name", "accuracy", "reach", "damage", "ap", "availability", "cost"],
+      "rows": [
+        {
+          "category": "Blades",
+          "name": "Combat axe",
+          "accuracy": 4,
+          "reach": 2,
+          "damage": "(STR+5)P",
+          "ap": -4,
+          "availability": "12R",
+          "cost": 4000
+        },
+        {
+          "category": "Blades",
+          "name": "Combat knife",
+          "accuracy": 6,
+          "reach": null,
+          "damage": "(STR+2)P",
+          "ap": -3,
+          "availability": "4",
+          "cost": 300
+        },
+        {
+          "category": "Blades",
+          "name": "Forearm snap-blades",
+          "accuracy": 4,
+          "reach": null,
+          "damage": "(STR+2)P",
+          "ap": -2,
+          "availability": "7R",
+          "cost": 200
+        },
+        {
+          "category": "Blades",
+          "name": "Katana",
+          "accuracy": 7,
+          "reach": 1,
+          "damage": "(STR+3)P",
+          "ap": -3,
+          "availability": "9R",
+          "cost": 1000
+        },
+        {
+          "category": "Blades",
+          "name": "Knife",
+          "accuracy": 5,
+          "reach": null,
+          "damage": "(STR+1)P",
+          "ap": -1,
+          "availability": "—",
+          "cost": 10
+        },
+        {
+          "category": "Blades",
+          "name": "Pole arm",
+          "accuracy": 5,
+          "reach": 3,
+          "damage": "(STR+3)P",
+          "ap": -2,
+          "availability": "6R",
+          "cost": 1000
+        },
+        {
+          "category": "Blades",
+          "name": "Survival knife",
+          "accuracy": 5,
+          "reach": null,
+          "damage": "(STR+2)P",
+          "ap": -1,
+          "availability": "—",
+          "cost": 100
+        },
+        {
+          "category": "Blades",
+          "name": "Sword",
+          "accuracy": 6,
+          "reach": 1,
+          "damage": "(STR+3)P",
+          "ap": -2,
+          "availability": "5R",
+          "cost": 500
+        },
+        {
+          "category": "Clubs",
+          "name": "Club",
+          "accuracy": 4,
+          "reach": 1,
+          "damage": "(STR+3)P",
+          "ap": null,
+          "availability": "—",
+          "cost": 30
+        },
+        {
+          "category": "Clubs",
+          "name": "Extendable baton",
+          "accuracy": 5,
+          "reach": 1,
+          "damage": "(STR+2)P",
+          "ap": null,
+          "availability": "4",
+          "cost": 100
+        },
+        {
+          "category": "Clubs",
+          "name": "Sap",
+          "accuracy": 5,
+          "reach": null,
+          "damage": "(STR+2)P",
+          "ap": null,
+          "availability": "2",
+          "cost": 30
+        },
+        {
+          "category": "Clubs",
+          "name": "Staff",
+          "accuracy": 6,
+          "reach": 2,
+          "damage": "(STR+3)P",
+          "ap": null,
+          "availability": "3",
+          "cost": 100
+        },
+        {
+          "category": "Clubs",
+          "name": "Stun baton",
+          "accuracy": 4,
+          "reach": 1,
+          "damage": "9S(e)",
+          "ap": -5,
+          "availability": "6R",
+          "cost": 750
+        },
+        {
+          "category": "Clubs",
+          "name": "Telescoping staff",
+          "accuracy": 4,
+          "reach": 2,
+          "damage": "(STR+2)P",
+          "ap": null,
+          "availability": "4",
+          "cost": 350
+        },
+        {
+          "category": "Other",
+          "name": "Knucks",
+          "accuracy": "Physical",
+          "reach": null,
+          "damage": "(STR+1)P",
+          "ap": null,
+          "availability": "2R",
+          "cost": 100
+        },
+        {
+          "category": "Other",
+          "name": "Monofilament whip",
+          "accuracy": "5 (7)",
+          "reach": 2,
+          "damage": "12P",
+          "ap": -8,
+          "availability": "12F",
+          "cost": 10000
+        },
+        {
+          "category": "Other",
+          "name": "Shock gloves",
+          "accuracy": "Physical",
+          "reach": null,
+          "damage": "8S(e)",
+          "ap": -5,
+          "availability": "6R",
+          "cost": 550
+        }
+      ]
+    },
+    "projectile-weapons": {
+      "source": "SR5 Core Rulebook, p.424",
+      "description": "Bows, crossbows, and throwing weapons with full stat blocks",
+      "columns": ["category", "name", "accuracy", "damage", "ap", "availability", "cost"],
+      "rows": [
+        {
+          "category": "Bows",
+          "name": "Bow",
+          "accuracy": 6,
+          "damage": "(Rating+2)P",
+          "ap": "-(Rating/4)",
+          "availability": "Rating",
+          "cost": "Rating × 100¥"
+        },
+        {
+          "category": "Bows",
+          "name": "Arrow",
+          "accuracy": null,
+          "damage": null,
+          "ap": null,
+          "availability": "Rating",
+          "cost": "Rating × 2¥"
+        },
+        {
+          "category": "Bows",
+          "name": "Injection arrow",
+          "accuracy": null,
+          "damage": null,
+          "ap": null,
+          "availability": "(Rating+2)R",
+          "cost": "Rating × 20¥"
+        },
+        {
+          "category": "Crossbows",
+          "name": "Light",
+          "accuracy": 7,
+          "damage": "5P",
+          "ap": -1,
+          "availability": "2",
+          "cost": 300
+        },
+        {
+          "category": "Crossbows",
+          "name": "Medium",
+          "accuracy": 6,
+          "damage": "7P",
+          "ap": -2,
+          "availability": "4R",
+          "cost": 500
+        },
+        {
+          "category": "Crossbows",
+          "name": "Heavy",
+          "accuracy": 5,
+          "damage": "10P",
+          "ap": -3,
+          "availability": "8R",
+          "cost": 1000
+        },
+        {
+          "category": "Crossbows",
+          "name": "Bolt",
+          "accuracy": null,
+          "damage": null,
+          "ap": null,
+          "availability": "2",
+          "cost": 5
+        },
+        {
+          "category": "Crossbows",
+          "name": "Injection bolt",
+          "accuracy": null,
+          "damage": null,
+          "ap": null,
+          "availability": "8R",
+          "cost": 50
+        },
+        {
+          "category": "Throwing Weapons",
+          "name": "Throwing knife/shuriken",
+          "accuracy": "Physical",
+          "damage": "(STR+1)P",
+          "ap": -1,
+          "availability": "4R",
+          "cost": 25
+        }
+      ]
+    },
+    "firearms-tasers": {
+      "source": "SR5 Core Rulebook, p.425",
+      "description": "Tasers and Hold-Out pistols with full stat blocks",
+      "columns": [
+        "category",
+        "name",
+        "accuracy",
+        "damage",
+        "ap",
+        "mode",
+        "rc",
+        "ammo",
+        "availability",
+        "cost"
+      ],
+      "rows": [
+        {
+          "category": "Tasers",
+          "name": "Defiance EX Shocker",
+          "accuracy": 4,
+          "damage": "9S(e)",
+          "ap": -5,
+          "mode": "SS",
+          "rc": null,
+          "ammo": "4 (m)",
+          "availability": "—",
+          "cost": 250
+        },
+        {
+          "category": "Tasers",
+          "name": "Yamaha Pulsar",
+          "accuracy": 5,
+          "damage": "7S(e)",
+          "ap": -5,
+          "mode": "SA",
+          "rc": null,
+          "ammo": "4 (m)",
+          "availability": "—",
+          "cost": 180
+        },
+        {
+          "category": "Hold-Outs",
+          "name": "Fichetti Tiffani Needler",
+          "accuracy": 5,
+          "damage": "8P(f)",
+          "ap": 5,
+          "mode": "SA",
+          "rc": null,
+          "ammo": "4 (c)",
+          "availability": "5R",
+          "cost": 1000
+        },
+        {
+          "category": "Hold-Outs",
+          "name": "Streetline Special",
+          "accuracy": 4,
+          "damage": "6P",
+          "ap": null,
+          "mode": "SA",
+          "rc": null,
+          "ammo": "6 (c)",
+          "availability": "4R",
+          "cost": 120
+        },
+        {
+          "category": "Hold-Outs",
+          "name": "Walther Palm Pistol",
+          "accuracy": 4,
+          "damage": "7P",
+          "ap": null,
+          "mode": "SS/BF",
+          "rc": null,
+          "ammo": "2 (b)",
+          "availability": "4R",
+          "cost": 180
+        }
+      ]
+    },
+    "firearms-light-pistols": {
+      "source": "SR5 Core Rulebook, p.426",
+      "description": "Light pistols with full stat blocks",
+      "columns": ["name", "accuracy", "damage", "ap", "mode", "rc", "ammo", "availability", "cost"],
+      "rows": [
+        {
+          "name": "Ares Light Fire 75",
+          "accuracy": "6 (8)",
+          "damage": "6P",
+          "ap": null,
+          "mode": "SA",
+          "rc": null,
+          "ammo": "16 (c)",
+          "availability": "6F",
+          "cost": 1250
+        },
+        {
+          "name": "Ares Light Fire 70",
+          "accuracy": 7,
+          "damage": "6P",
+          "ap": null,
+          "mode": "SA",
+          "rc": null,
+          "ammo": "16 (c)",
+          "availability": "3R",
+          "cost": 200
+        },
+        {
+          "name": "Beretta 201T",
+          "accuracy": 6,
+          "damage": "6P",
+          "ap": null,
+          "mode": "SA/BF",
+          "rc": "(1)",
+          "ammo": "21 (c)",
+          "availability": "4R",
+          "cost": 210
+        },
+        {
+          "name": "Colt America L36",
+          "accuracy": 7,
+          "damage": "7P",
+          "ap": null,
+          "mode": "SA",
+          "rc": null,
+          "ammo": "11 (c)",
+          "availability": "4R",
+          "cost": 320
+        },
+        {
+          "name": "Fichetti Security 600",
+          "accuracy": "6 (7)",
+          "damage": "7P",
+          "ap": null,
+          "mode": "SA",
+          "rc": "(1)",
+          "ammo": "30 (c)",
+          "availability": "6R",
+          "cost": 350
+        },
+        {
+          "name": "Taurus Omni-6",
+          "accuracy": "5 (6)",
+          "damage": "6P/7P",
+          "ap": "0/−1",
+          "mode": "SA/SS",
+          "rc": null,
+          "ammo": "6 (cy)",
+          "availability": "3R",
+          "cost": 300
+        }
+      ]
+    },
+    "firearms-heavy-pistols": {
+      "source": "SR5 Core Rulebook, p.426",
+      "description": "Heavy pistols with full stat blocks",
+      "columns": ["name", "accuracy", "damage", "ap", "mode", "rc", "ammo", "availability", "cost"],
+      "rows": [
+        {
+          "name": "Ares Predator V",
+          "accuracy": "5 (7)",
+          "damage": "8P",
+          "ap": -1,
+          "mode": "SA",
+          "rc": null,
+          "ammo": "15 (c)",
+          "availability": "5R",
+          "cost": 725
+        },
+        {
+          "name": "Ares Viper Slivergun",
+          "accuracy": 4,
+          "damage": "9P(f)",
+          "ap": 4,
+          "mode": "SA/BF",
+          "rc": null,
+          "ammo": "30 (c)",
+          "availability": "8F",
+          "cost": 380
+        },
+        {
+          "name": "Browning Ultra-Power",
+          "accuracy": "5 (6)",
+          "damage": "8P",
+          "ap": -1,
+          "mode": "SA",
+          "rc": null,
+          "ammo": "10 (c)",
+          "availability": "4R",
+          "cost": 640
+        },
+        {
+          "name": "Colt Government 2066",
+          "accuracy": 6,
+          "damage": "7P",
+          "ap": -1,
+          "mode": "SA",
+          "rc": null,
+          "ammo": "14 (c)",
+          "availability": "7R",
+          "cost": 425
+        },
+        {
+          "name": "Remington Roomsweeper",
+          "accuracy": 4,
+          "damage": "7P",
+          "ap": -1,
+          "mode": "SA",
+          "rc": null,
+          "ammo": "8 (m)",
+          "availability": "6R",
+          "cost": 250
+        },
+        {
+          "name": "Remington Roomsweeper w/ flechettes",
+          "accuracy": null,
+          "damage": "9P(f)",
+          "ap": 4,
+          "mode": null,
+          "rc": null,
+          "ammo": null,
+          "availability": null,
+          "cost": null
+        },
+        {
+          "name": "Ruger Super Warhawk",
+          "accuracy": 5,
+          "damage": "9P",
+          "ap": -2,
+          "mode": "SS",
+          "rc": null,
+          "ammo": "6 (cy)",
+          "availability": "4R",
+          "cost": 400
+        }
+      ]
+    },
+    "firearms-machine-pistols": {
+      "source": "SR5 Core Rulebook, p.427",
+      "description": "Machine pistols with full stat blocks",
+      "columns": ["name", "accuracy", "damage", "ap", "mode", "rc", "ammo", "availability", "cost"],
+      "rows": [
+        {
+          "name": "Ares Crusader II",
+          "accuracy": "5 (7)",
+          "damage": "7P",
+          "ap": null,
+          "mode": "SA/BF",
+          "rc": "2",
+          "ammo": "40 (c)",
+          "availability": "9R",
+          "cost": 830
+        },
+        {
+          "name": "Ceska Black Scorpion",
+          "accuracy": 5,
+          "damage": "6P",
+          "ap": null,
+          "mode": "SA/BF",
+          "rc": "(1)",
+          "ammo": "35 (c)",
+          "availability": "6R",
+          "cost": 270
+        },
+        {
+          "name": "Steyr TMP",
+          "accuracy": 4,
+          "damage": "7P",
+          "ap": null,
+          "mode": "SA/BF/FA",
+          "rc": null,
+          "ammo": "30 (c)",
+          "availability": "8R",
+          "cost": 350
+        }
+      ]
+    },
+    "firearms-submachine-guns": {
+      "source": "SR5 Core Rulebook, p.427",
+      "description": "Submachine guns with full stat blocks",
+      "columns": ["name", "accuracy", "damage", "ap", "mode", "rc", "ammo", "availability", "cost"],
+      "rows": [
+        {
+          "name": "Colt Cobra TZ-120",
+          "accuracy": "4 (5)",
+          "damage": "7P",
+          "ap": null,
+          "mode": "SA/BF/FA",
+          "rc": "2 (3)",
+          "ammo": "32 (c)",
+          "availability": "5R",
+          "cost": 660
+        },
+        {
+          "name": "FN P93 Praetor",
+          "accuracy": 6,
+          "damage": "8P",
+          "ap": null,
+          "mode": "SA/BF/FA",
+          "rc": "1 (2)",
+          "ammo": "50 (c)",
+          "availability": "11F",
+          "cost": 900
+        },
+        {
+          "name": "HK-227",
+          "accuracy": "5 (7)",
+          "damage": "7P",
+          "ap": null,
+          "mode": "SA/BF/FA",
+          "rc": "(1)",
+          "ammo": "28 (c)",
+          "availability": "8R",
+          "cost": 730
+        },
+        {
+          "name": "Ingram Smartgun X",
+          "accuracy": "4 (6)",
+          "damage": "8P",
+          "ap": null,
+          "mode": "BF/FA",
+          "rc": "2",
+          "ammo": "32 (c)",
+          "availability": "6R",
+          "cost": 800
+        },
+        {
+          "name": "SCK Model 100",
+          "accuracy": "5 (7)",
+          "damage": "8P",
+          "ap": null,
+          "mode": "SA/BF",
+          "rc": "(1)",
+          "ammo": "30 (c)",
+          "availability": "6R",
+          "cost": 875
+        },
+        {
+          "name": "Uzi IV",
+          "accuracy": "4 (5)",
+          "damage": "7P",
+          "ap": null,
+          "mode": "BF",
+          "rc": "(1)",
+          "ammo": "24 (c)",
+          "availability": "4R",
+          "cost": 450
+        }
+      ]
+    },
+    "firearms-assault-rifles": {
+      "source": "SR5 Core Rulebook, p.428",
+      "description": "Assault rifles with full stat blocks",
+      "columns": ["name", "accuracy", "damage", "ap", "mode", "rc", "ammo", "availability", "cost"],
+      "rows": [
+        {
+          "name": "AK-97",
+          "accuracy": 5,
+          "damage": "10P",
+          "ap": -2,
+          "mode": "SA/BF/FA",
+          "rc": null,
+          "ammo": "38 (c)",
+          "availability": "4R",
+          "cost": 950
+        },
+        {
+          "name": "Ares Alpha",
+          "accuracy": "5 (7)",
+          "damage": "11P",
+          "ap": -2,
+          "mode": "SA/BF/FA",
+          "rc": "2",
+          "ammo": "42 (c)",
+          "availability": "11F",
+          "cost": 2650
+        },
+        {
+          "name": "Ares Alpha (grenade launcher)",
+          "accuracy": "4 (6)",
+          "damage": "Grenade",
+          "ap": null,
+          "mode": "SS",
+          "rc": null,
+          "ammo": "6 (c)",
+          "availability": null,
+          "cost": null
+        },
+        {
+          "name": "Colt M23",
+          "accuracy": 4,
+          "damage": "9P",
+          "ap": -2,
+          "mode": "SA/BF/FA",
+          "rc": null,
+          "ammo": "40 (c)",
+          "availability": "4R",
+          "cost": 550
+        },
+        {
+          "name": "FN HAR",
+          "accuracy": "5 (6)",
+          "damage": "10P",
+          "ap": -2,
+          "mode": "SA/BF/FA",
+          "rc": "2",
+          "ammo": "35 (c)",
+          "availability": "8R",
+          "cost": 1500
+        },
+        {
+          "name": "Yamaha Raiden",
+          "accuracy": "6 (8)",
+          "damage": "11P",
+          "ap": -2,
+          "mode": "BF/FA",
+          "rc": "1",
+          "ammo": "60 (c)",
+          "availability": "14F",
+          "cost": 2600
+        }
+      ]
+    },
+    "firearms-sniper-rifles": {
+      "source": "SR5 Core Rulebook, p.428",
+      "description": "Sniper rifles with full stat blocks",
+      "columns": ["name", "accuracy", "damage", "ap", "mode", "rc", "ammo", "availability", "cost"],
+      "rows": [
+        {
+          "name": "Ares Desert Strike",
+          "accuracy": 7,
+          "damage": "13P",
+          "ap": -4,
+          "mode": "SA",
+          "rc": "(1)",
+          "ammo": "14 (c)",
+          "availability": "10F",
+          "cost": 17500
+        },
+        {
+          "name": "Cavalier Arms Crockett EBR",
+          "accuracy": 6,
+          "damage": "12P",
+          "ap": -3,
+          "mode": "SA/BF",
+          "rc": "(1)",
+          "ammo": "20 (c)",
+          "availability": "12F",
+          "cost": 10300
+        },
+        {
+          "name": "Ranger Arms SM-5",
+          "accuracy": 8,
+          "damage": "14P",
+          "ap": -5,
+          "mode": "SA",
+          "rc": "(1)",
+          "ammo": "15 (c)",
+          "availability": "16F",
+          "cost": 28000
+        },
+        {
+          "name": "Remington 950",
+          "accuracy": 7,
+          "damage": "12P",
+          "ap": -4,
+          "mode": "SS",
+          "rc": null,
+          "ammo": "5 (m)",
+          "availability": "4R",
+          "cost": 2100
+        },
+        {
+          "name": "Ruger 101",
+          "accuracy": 6,
+          "damage": "11P",
+          "ap": -3,
+          "mode": "SA",
+          "rc": "(1)",
+          "ammo": "8 (m)",
+          "availability": "4R",
+          "cost": 1300
+        }
+      ]
+    },
+    "firearms-shotguns": {
+      "source": "SR5 Core Rulebook, p.429",
+      "description": "Shotguns with full stat blocks (stats for normal slug rounds)",
+      "columns": ["name", "accuracy", "damage", "ap", "mode", "rc", "ammo", "availability", "cost"],
+      "rows": [
+        {
+          "name": "Defiance T-250",
+          "accuracy": 4,
+          "damage": "10P",
+          "ap": -1,
+          "mode": "SS/SA",
+          "rc": null,
+          "ammo": "5 (m)",
+          "availability": "4R",
+          "cost": 450
+        },
+        {
+          "name": "Enfield AS-7",
+          "accuracy": "4 (5)",
+          "damage": "13P",
+          "ap": null,
+          "mode": "SA/BF",
+          "rc": null,
+          "ammo": "10 (c) or 24 (d)",
+          "availability": "12F",
+          "cost": 1100
+        },
+        {
+          "name": "PJSS Model 55",
+          "accuracy": 6,
+          "damage": "11P",
+          "ap": -1,
+          "mode": "SS",
+          "rc": "(1)",
+          "ammo": "2 (b)",
+          "availability": "9R",
+          "cost": 1000
+        }
+      ]
+    },
+    "firearms-special-weapons": {
+      "source": "SR5 Core Rulebook, p.429",
+      "description": "Special weapons (use Exotic Ranged Weapon skill) with full stat blocks",
+      "columns": ["name", "accuracy", "damage", "ap", "mode", "rc", "ammo", "availability", "cost"],
+      "rows": [
+        {
+          "name": "Ares S-III Super Squirt",
+          "accuracy": 3,
+          "damage": "Chemical",
+          "ap": null,
+          "mode": "SA",
+          "rc": null,
+          "ammo": "20 (c)",
+          "availability": "7R",
+          "cost": 950
+        },
+        {
+          "name": "Fichetti Pain Inducer",
+          "accuracy": 3,
+          "damage": "Special",
+          "ap": null,
+          "mode": "SS",
+          "rc": null,
+          "ammo": "Special",
+          "availability": "11R",
+          "cost": 5000
+        },
+        {
+          "name": "Parashield Dart Pistol",
+          "accuracy": 5,
+          "damage": "as Drug/Toxin",
+          "ap": null,
+          "mode": "SA",
+          "rc": null,
+          "ammo": "5 (c)",
+          "availability": "4R",
+          "cost": 600
+        },
+        {
+          "name": "Parashield Dart Rifle",
+          "accuracy": 6,
+          "damage": "as Drug/Toxin",
+          "ap": null,
+          "mode": "SA",
+          "rc": null,
+          "ammo": "6 (m)",
+          "availability": "6R",
+          "cost": 1200
+        }
+      ]
+    },
+    "firearms-machine-guns": {
+      "source": "SR5 Core Rulebook, p.430",
+      "description": "Machine guns (use Heavy Weapons skill) with full stat blocks",
+      "columns": ["name", "accuracy", "damage", "ap", "mode", "rc", "ammo", "availability", "cost"],
+      "rows": [
+        {
+          "name": "Ingram Valiant",
+          "accuracy": "5 (6)",
+          "damage": "9P",
+          "ap": -2,
+          "mode": "BF/FA",
+          "rc": "2 (3)",
+          "ammo": "50 (c) or 100 (belt)",
+          "availability": "12F",
+          "cost": 5800
+        },
+        {
+          "name": "Stoner-Ares M202",
+          "accuracy": 5,
+          "damage": "10P",
+          "ap": -3,
+          "mode": "FA",
+          "rc": null,
+          "ammo": "50 (c) or 100 (belt)",
+          "availability": "12F",
+          "cost": 7000
+        },
+        {
+          "name": "RPK HMG",
+          "accuracy": 5,
+          "damage": "12P",
+          "ap": -4,
+          "mode": "FA",
+          "rc": "(6)",
+          "ammo": "50 (c) or 100 (belt)",
+          "availability": "16F",
+          "cost": 16300
+        }
+      ]
+    },
+    "firearms-cannons-launchers": {
+      "source": "SR5 Core Rulebook, p.431",
+      "description": "Cannons and launchers (use Heavy Weapons skill) with full stat blocks",
+      "columns": ["name", "accuracy", "damage", "ap", "mode", "rc", "ammo", "availability", "cost"],
+      "rows": [
+        {
+          "name": "Ares Antioch-2",
+          "accuracy": "4 (6)",
+          "damage": "Grenade",
+          "ap": null,
+          "mode": "SS",
+          "rc": null,
+          "ammo": "8 (m)",
+          "availability": "8F",
+          "cost": 3200
+        },
+        {
+          "name": "ArmTech MGL-12",
+          "accuracy": 4,
+          "damage": "Grenade",
+          "ap": null,
+          "mode": "SA",
+          "rc": null,
+          "ammo": "12 (c)",
+          "availability": "10F",
+          "cost": 5000
+        },
+        {
+          "name": "Aztechnology Striker",
+          "accuracy": 5,
+          "damage": "Missile",
+          "ap": null,
+          "mode": "SS",
+          "rc": null,
+          "ammo": "1 (ml)",
+          "availability": "10F",
+          "cost": 1200
+        },
+        {
+          "name": "Krime Cannon",
+          "accuracy": 4,
+          "damage": "16P",
+          "ap": -6,
+          "mode": "SA",
+          "rc": "(1)",
+          "ammo": "6 (m)",
+          "availability": "20F",
+          "cost": 21000
+        },
+        {
+          "name": "Onotari Interceptor",
+          "accuracy": "4 (6)",
+          "damage": "Missile",
+          "ap": null,
+          "mode": "SS",
+          "rc": null,
+          "ammo": "2 (ml)",
+          "availability": "18F",
+          "cost": 14000
+        },
+        {
+          "name": "Panther XXL",
+          "accuracy": "5 (7)",
+          "damage": "17P",
+          "ap": -6,
+          "mode": "SS",
+          "rc": null,
+          "ammo": "15 (c)",
+          "availability": "20F",
+          "cost": 43000
+        }
+      ]
+    },
+    "firearm-accessories": {
+      "source": "SR5 Core Rulebook, p.432",
+      "description": "Firearm accessories with mount type, availability, and cost",
+      "columns": ["name", "mount", "availability", "cost"],
+      "rows": [
+        { "name": "Airburst link", "mount": null, "availability": "6R", "cost": 600 },
+        { "name": "Bipod", "mount": "Under", "availability": "2", "cost": 200 },
+        { "name": "Concealable holster", "mount": null, "availability": "2", "cost": 150 },
+        {
+          "name": "Gas-vent system (Rating 1-3)",
+          "mount": "Barrel",
+          "availability": "(Rating × 3)R",
+          "cost": "Rating × 200¥"
+        },
+        { "name": "Gyro mount", "mount": "Under", "availability": "7", "cost": 1400 },
+        { "name": "Hidden arm slide", "mount": null, "availability": "4R", "cost": 350 },
+        { "name": "Imaging scope", "mount": "Top", "availability": "2", "cost": 300 },
+        { "name": "Laser sight", "mount": "Top or Under", "availability": "2", "cost": 125 },
+        { "name": "Periscope", "mount": "Top", "availability": "3", "cost": 70 },
+        { "name": "Quick-draw holster", "mount": null, "availability": "4", "cost": 175 },
+        { "name": "Shock pad", "mount": null, "availability": "2", "cost": 50 },
+        { "name": "Silencer/suppressor", "mount": "Barrel", "availability": "9F", "cost": 500 },
+        { "name": "Smart firing platform", "mount": "Under", "availability": "12F", "cost": 2500 },
+        {
+          "name": "Smartgun system, internal",
+          "mount": null,
+          "availability": "(+2)R",
+          "cost": "(Weapon Cost) × 2¥"
+        },
+        {
+          "name": "Smartgun system, external",
+          "mount": "Top or Under",
+          "availability": "4R",
+          "cost": 200
+        },
+        { "name": "Spare clip", "mount": null, "availability": "4", "cost": 5 },
+        { "name": "Speed loader", "mount": null, "availability": "2", "cost": 25 },
+        { "name": "Tripod", "mount": "Under", "availability": "4", "cost": 500 }
+      ]
+    },
+    "ammunition": {
+      "source": "SR5 Core Rulebook, p.433",
+      "description": "Ammunition types (per 10 shots) with damage modifier, AP modifier, availability, and cost",
+      "columns": ["name", "damageModifier", "apModifier", "availability", "cost"],
+      "rows": [
+        {
+          "name": "APDS",
+          "damageModifier": null,
+          "apModifier": -4,
+          "availability": "12F",
+          "cost": 120
+        },
+        {
+          "name": "Assault cannon",
+          "damageModifier": null,
+          "apModifier": null,
+          "availability": "12F",
+          "cost": 400
+        },
+        {
+          "name": "Explosive rounds",
+          "damageModifier": 1,
+          "apModifier": -1,
+          "availability": "9F",
+          "cost": 80
+        },
+        {
+          "name": "Flechette rounds",
+          "damageModifier": 2,
+          "apModifier": 5,
+          "availability": "6R",
+          "cost": 65
+        },
+        {
+          "name": "Gel rounds",
+          "damageModifier": "+0S",
+          "apModifier": 1,
+          "availability": "2R",
+          "cost": 25
+        },
+        {
+          "name": "Hollow points",
+          "damageModifier": 1,
+          "apModifier": 2,
+          "availability": "4F",
+          "cost": 70
+        },
+        {
+          "name": "Injection darts",
+          "damageModifier": null,
+          "apModifier": null,
+          "availability": "4R",
+          "cost": 75
+        },
+        {
+          "name": "Regular ammo",
+          "damageModifier": null,
+          "apModifier": null,
+          "availability": "2R",
+          "cost": 20
+        },
+        {
+          "name": "Stick-n-Shock",
+          "damageModifier": "-2S(e)",
+          "apModifier": -5,
+          "availability": "6R",
+          "cost": 80
+        },
+        {
+          "name": "Tracer",
+          "damageModifier": null,
+          "apModifier": null,
+          "availability": "6R",
+          "cost": 60
+        },
+        {
+          "name": "Taser dart",
+          "damageModifier": null,
+          "apModifier": null,
+          "availability": "3",
+          "cost": 50
+        }
+      ]
+    },
+    "grenades": {
+      "source": "SR5 Core Rulebook, p.434-435",
+      "description": "Grenade types with damage, AP, blast radius, availability, and cost",
+      "columns": ["name", "damage", "ap", "blast", "availability", "cost"],
+      "rows": [
+        {
+          "name": "Flash-bang",
+          "damage": "10S",
+          "ap": -4,
+          "blast": "10m Radius",
+          "availability": "6R",
+          "cost": 100
+        },
+        {
+          "name": "Flash-pak",
+          "damage": "Special",
+          "ap": null,
+          "blast": "Special",
+          "availability": "4",
+          "cost": 125
+        },
+        {
+          "name": "Fragmentation",
+          "damage": "18P(f)",
+          "ap": 5,
+          "blast": "-1/m",
+          "availability": "11F",
+          "cost": 100
+        },
+        {
+          "name": "High explosive",
+          "damage": "16P",
+          "ap": -2,
+          "blast": "-2/m",
+          "availability": "11F",
+          "cost": 100
+        },
+        {
+          "name": "Gas",
+          "damage": "as Chemical",
+          "ap": null,
+          "blast": "10m Radius",
+          "availability": "2 + Chemical Availability",
+          "cost": "40¥ + Chemical cost"
+        },
+        {
+          "name": "Smoke",
+          "damage": null,
+          "ap": null,
+          "blast": "10m Radius",
+          "availability": "4R",
+          "cost": 40
+        },
+        {
+          "name": "Thermal smoke",
+          "damage": null,
+          "ap": null,
+          "blast": "10m Radius",
+          "availability": "6R",
+          "cost": 60
+        }
+      ]
+    },
+    "rockets-missiles": {
+      "source": "SR5 Core Rulebook, p.435",
+      "description": "Rocket and missile types with damage, AP, blast radius, availability, and cost",
+      "columns": ["category", "name", "damage", "ap", "blast", "availability", "cost"],
+      "rows": [
+        {
+          "category": "Rockets",
+          "name": "Anti-vehicle",
+          "damage": "24P",
+          "ap": "-4/-10",
+          "blast": "-4/m",
+          "availability": "18F",
+          "cost": 2800
+        },
+        {
+          "category": "Rockets",
+          "name": "Fragmentation",
+          "damage": "23P(f)",
+          "ap": 5,
+          "blast": "-1/m",
+          "availability": "12F",
+          "cost": 2000
+        },
+        {
+          "category": "Rockets",
+          "name": "High-explosive",
+          "damage": "21P",
+          "ap": -2,
+          "blast": "-2/m",
+          "availability": "18F",
+          "cost": 2100
+        },
+        {
+          "category": "Missiles",
+          "name": "Missile (any type)",
+          "damage": "As Rocket",
+          "ap": "As Rocket",
+          "blast": "As Rocket",
+          "availability": "+4",
+          "cost": "+Sensor rating × 500¥"
+        }
+      ]
+    },
+    "explosives": {
+      "source": "SR5 Core Rulebook, p.436",
+      "description": "Explosive types and detonator cap with rating, availability, and cost per kg",
+      "columns": ["name", "rating", "availability", "cost"],
+      "rows": [
+        { "name": "Commercial", "rating": 5, "availability": "8R", "cost": "100¥ per kg" },
+        { "name": "Foam", "rating": "6-25", "availability": "12F", "cost": "Rating × 100¥ per kg" },
+        {
+          "name": "Plastic",
+          "rating": "6-25",
+          "availability": "16F",
+          "cost": "Rating × 100¥ per kg"
+        },
+        { "name": "Detonator cap", "rating": null, "availability": "8R", "cost": 75 }
+      ]
+    },
+    "clothing-and-armor": {
+      "source": "SR5 Core Rulebook, p.436-438",
+      "description": "Clothing items (with modifications) and armor pieces with armor rating, availability, and cost",
+      "columns": ["category", "name", "armorRating", "availability", "cost"],
+      "rows": [
+        {
+          "category": "Clothing",
+          "name": "Clothing",
+          "armorRating": 0,
+          "availability": "—",
+          "cost": "20¥-100,000¥"
+        },
+        {
+          "category": "Clothing",
+          "name": "Electrochromic modification",
+          "armorRating": null,
+          "availability": "+2",
+          "cost": "+500¥"
+        },
+        {
+          "category": "Clothing",
+          "name": "Feedback clothing",
+          "armorRating": null,
+          "availability": "8",
+          "cost": "+500¥"
+        },
+        {
+          "category": "Clothing",
+          "name": "(Synth)Leather",
+          "armorRating": 4,
+          "availability": "—",
+          "cost": "+200¥"
+        },
+        {
+          "category": "Armor",
+          "name": "Actioneer Business Clothes",
+          "armorRating": 8,
+          "availability": "8",
+          "cost": 1500
+        },
+        {
+          "category": "Armor",
+          "name": "Armor clothing",
+          "armorRating": 6,
+          "availability": "2",
+          "cost": 450
+        },
+        {
+          "category": "Armor",
+          "name": "Armor jacket",
+          "armorRating": 12,
+          "availability": "2",
+          "cost": 1000
+        },
+        {
+          "category": "Armor",
+          "name": "Armor vest",
+          "armorRating": 9,
+          "availability": "4",
+          "cost": 500
+        },
+        {
+          "category": "Armor",
+          "name": "Chameleon suit",
+          "armorRating": 9,
+          "availability": "10R",
+          "cost": 1700
+        },
+        {
+          "category": "Armor",
+          "name": "Full body armor",
+          "armorRating": 15,
+          "availability": "14R",
+          "cost": 2000
+        },
+        {
+          "category": "Armor",
+          "name": "Full body armor - Full helmet",
+          "armorRating": "+3",
+          "availability": "—",
+          "cost": "+500¥"
+        },
+        {
+          "category": "Armor",
+          "name": "Full body armor - Chemical seal",
+          "armorRating": null,
+          "availability": "+6",
+          "cost": "+6,000¥"
+        },
+        {
+          "category": "Armor",
+          "name": "Full body armor - Environment adaptation",
+          "armorRating": null,
+          "availability": "+3",
+          "cost": "+1,000¥"
+        },
+        {
+          "category": "Armor",
+          "name": "Lined coat",
+          "armorRating": 9,
+          "availability": "4",
+          "cost": 900
+        },
+        {
+          "category": "Armor",
+          "name": "Urban Explorer Jumpsuit",
+          "armorRating": 9,
+          "availability": "8",
+          "cost": 650
+        }
+      ]
+    },
+    "armor-modifications": {
+      "source": "SR5 Core Rulebook, p.437-438",
+      "description": "Armor modification upgrades with capacity cost, availability, and cost. Armor Capacity = Armor Rating.",
+      "columns": ["name", "capacity", "availability", "cost"],
+      "rows": [
+        {
+          "name": "Chemical Protection",
+          "capacity": "(Rating)",
+          "availability": "6",
+          "cost": "Rating × 250¥"
+        },
+        { "name": "Chemical Seal", "capacity": 6, "availability": "12R", "cost": 3000 },
+        {
+          "name": "Fire Resistance",
+          "capacity": "(Rating)",
+          "availability": "6",
+          "cost": "Rating × 250¥"
+        },
+        {
+          "name": "Insulation",
+          "capacity": "(Rating)",
+          "availability": "6",
+          "cost": "Rating × 250¥"
+        },
+        {
+          "name": "Nonconductivity",
+          "capacity": "(Rating)",
+          "availability": "6",
+          "cost": "Rating × 250¥"
+        },
+        { "name": "Shock Frills", "capacity": 2, "availability": "6R", "cost": 250 },
+        {
+          "name": "Thermal Damping",
+          "capacity": "(Rating)",
+          "availability": "10R",
+          "cost": "Rating × 500¥"
+        }
+      ]
+    },
+    "helmets-and-shields": {
+      "source": "SR5 Core Rulebook, p.438",
+      "description": "Helmets and shields — modify worn armor rating (not separate armor pieces). Exotic melee weapon stats included for shields.",
+      "columns": [
+        "name",
+        "armorRatingModifier",
+        "availability",
+        "cost",
+        "meleeAccuracy",
+        "meleeDamage",
+        "meleeAp"
+      ],
+      "rows": [
+        {
+          "name": "Helmet",
+          "armorRatingModifier": "+2",
+          "availability": "2",
+          "cost": 100,
+          "meleeAccuracy": null,
+          "meleeDamage": null,
+          "meleeAp": null
+        },
+        {
+          "name": "Ballistic shield",
+          "armorRatingModifier": "+6",
+          "availability": "12R",
+          "cost": 1200,
+          "meleeAccuracy": 4,
+          "meleeDamage": "(STR+2)S",
+          "meleeAp": null
+        },
+        {
+          "name": "Riot shield",
+          "armorRatingModifier": "+6",
+          "availability": "10R",
+          "cost": 1500,
+          "meleeAccuracy": 4,
+          "meleeDamage": "9S(e)",
+          "meleeAp": -5
+        }
+      ]
+    }
+  }
+}
