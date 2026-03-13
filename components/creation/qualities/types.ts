@@ -1,4 +1,4 @@
-import type { QualityData, SkillGroupData, SkillData } from "@/lib/rules";
+import type { QualityData, SkillGroupData, SkillData, InfectedCatalogData } from "@/lib/rules";
 
 export interface SelectedQuality {
   id: string;
@@ -37,6 +37,8 @@ export interface QualitySelectionModalProps {
   skills: SkillData[];
   existingSkillIds: string[]; // Skills currently selected by the user
   existingSkillGroupIds: string[]; // Skill groups currently selected by the user
+  /** Infected types catalog for HMHVV quality specification */
+  infectedCatalog?: InfectedCatalogData | null;
 }
 
 export interface SelectedQualityCardProps {

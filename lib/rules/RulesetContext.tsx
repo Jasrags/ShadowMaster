@@ -56,6 +56,7 @@ import type {
   DataSoftwareCatalogItemData,
   DrugCatalogItemData,
   ToxinCatalogItemData,
+  InfectedCatalogData,
 } from "./loader-types";
 export type {
   QualityData,
@@ -89,6 +90,7 @@ export type {
   DataSoftwareCatalogItemData,
   DrugCatalogItemData,
   ToxinCatalogItemData,
+  InfectedCatalogData,
 };
 
 // =============================================================================
@@ -665,6 +667,7 @@ export interface RulesetData {
   spirits: SpiritsCatalogData | null;
   actions: ActionsCatalogData | null;
   lifeModules: LifeModulesCatalog | null;
+  infectedCatalog: InfectedCatalogData | null;
 }
 
 /**
@@ -730,6 +733,7 @@ const defaultData: RulesetData = {
   spirits: null,
   actions: null,
   lifeModules: null,
+  infectedCatalog: null,
 };
 
 const defaultState: RulesetContextState = {
@@ -822,6 +826,7 @@ export function RulesetProvider({ children }: RulesetProviderProps) {
             spirits: extractedData.spirits || null,
             actions: extractedData.actions || null,
             lifeModules: extractedData.lifeModules || null,
+            infectedCatalog: extractedData.infectedCatalog || null,
           }
         : defaultData;
 
@@ -967,6 +972,14 @@ export function useQualities(): { positive: QualityData[]; negative: QualityData
 export function useLifeModules(): LifeModulesCatalog | null {
   const { data } = useRuleset();
   return data.lifeModules;
+}
+
+/**
+ * Hook to get the infected catalog from the ruleset
+ */
+export function useInfected(): InfectedCatalogData | null {
+  const { data } = useRuleset();
+  return data.infectedCatalog;
 }
 
 /**
