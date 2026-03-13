@@ -1,0 +1,745 @@
+{
+  "tables": {
+    "hermetic-tradition": {
+      "source": "SR5 Core Rulebook, p.279",
+      "description": "Element-to-spell-category mappings and Drain attributes for the Hermetic Mage tradition",
+      "columns": ["category", "element"],
+      "rows": [
+        { "category": "Combat", "element": "Fire" },
+        { "category": "Detection", "element": "Air" },
+        { "category": "Health", "element": "Man" },
+        { "category": "Illusion", "element": "Water" },
+        { "category": "Manipulation", "element": "Earth" }
+      ],
+      "drain": "Logic + Willpower"
+    },
+    "shamanic-tradition": {
+      "source": "SR5 Core Rulebook, p.280",
+      "description": "Element-to-spell-category mappings and Drain attributes for the Shaman tradition",
+      "columns": ["category", "element"],
+      "rows": [
+        { "category": "Combat", "element": "Beasts" },
+        { "category": "Detection", "element": "Water" },
+        { "category": "Health", "element": "Earth" },
+        { "category": "Illusion", "element": "Air" },
+        { "category": "Manipulation", "element": "Man" }
+      ],
+      "drain": "Charisma + Willpower"
+    },
+    "detection-spell-results": {
+      "source": "SR5 Core Rulebook, p.286",
+      "description": "Net hits on a Detection spell Spellcasting Test mapped to the quality of information received",
+      "columns": ["net_hits", "result"],
+      "rows": [
+        { "net_hits": 1, "result": "Only general knowledge, no details" },
+        { "net_hits": 2, "result": "Major details only, no minor details" },
+        {
+          "net_hits": 3,
+          "result": "Major and minor details, with some minor details obscured or missing"
+        },
+        { "net_hits": 4, "result": "Detailed information" }
+      ]
+    },
+    "mind-probe": {
+      "source": "SR5 Core Rulebook, p.287",
+      "description": "Net hits on a Mind Probe Spellcasting Test mapped to depth of information accessible",
+      "columns": ["net_hits_min", "net_hits_max", "result"],
+      "rows": [
+        {
+          "net_hits_min": 1,
+          "net_hits_max": 2,
+          "result": "Subject can read target's surface thoughts only"
+        },
+        {
+          "net_hits_min": 3,
+          "net_hits_max": 4,
+          "result": "Subject can find out anything target consciously knows and view recent memories (up to 72 hours)"
+        },
+        {
+          "net_hits_min": 5,
+          "net_hits_max": null,
+          "result": "Subject can probe target's subconscious, gaining information the target may not even be consciously aware of (psychological quirks, deep fears, hidden memories)"
+        }
+      ]
+    },
+    "object-resistance": {
+      "source": "SR5 Core Rulebook, p.295",
+      "description": "Resistance dice pool for inanimate objects in Detection spells, Physical Barrier penetration, and other tests against non-living objects",
+      "columns": ["category", "dice_pool", "examples"],
+      "rows": [
+        {
+          "category": "Natural Objects",
+          "dice_pool": 3,
+          "examples": "Trees, soil, unprocessed water, hand-carved wood, metal cold-worked by hand"
+        },
+        {
+          "category": "Manufactured Low-Tech Objects and Materials",
+          "dice_pool": 6,
+          "examples": "Brick, leather, simple plastics"
+        },
+        {
+          "category": "Manufactured High-Tech Objects and Materials",
+          "dice_pool": 9,
+          "examples": "Advanced plastics, alloys, electronic equipment, sensors"
+        },
+        {
+          "category": "Highly Processed Objects",
+          "dice_pool": 15,
+          "examples": "Computers, complex toxic wastes, drones, vehicles"
+        }
+      ]
+    },
+    "improved-reflexes": {
+      "source": "SR5 Core Rulebook, p.310",
+      "description": "Power Point cost per level of the Improved Reflexes adept power",
+      "columns": ["level", "pp_cost"],
+      "rows": [
+        { "level": 1, "pp_cost": 1.5 },
+        { "level": 2, "pp_cost": 2.5 },
+        { "level": 3, "pp_cost": 3.5 }
+      ]
+    },
+    "astral-attributes": {
+      "source": "SR5 Core Rulebook, p.314",
+      "description": "Mapping of physical attributes to their astral equivalents for astrally projecting characters",
+      "columns": ["physical_attribute", "astral_attribute"],
+      "rows": [
+        { "physical_attribute": "Agility", "astral_attribute": "Logic" },
+        { "physical_attribute": "Body", "astral_attribute": "Willpower" },
+        { "physical_attribute": "Reaction", "astral_attribute": "Intuition" },
+        { "physical_attribute": "Strength", "astral_attribute": "Charisma" },
+        { "physical_attribute": "Astral Initiative", "astral_attribute": "Intuition x 2" },
+        { "physical_attribute": "Initiative Dice", "astral_attribute": "+2D6 (3D6 total)" }
+      ]
+    },
+    "assensing": {
+      "source": "SR5 Core Rulebook, p.313",
+      "description": "Hits on an Assensing + Intuition [Astral] Test mapped to information revealed about the subject's aura",
+      "columns": ["hits", "information_gained"],
+      "rows": [
+        { "hits": 0, "information_gained": ["None"] },
+        {
+          "hits": 1,
+          "information_gained": [
+            "The general state of the subject's health (healthy, injured, ill, etc.)",
+            "The subject's general emotional state or impression (happy, sad, angry, etc.)",
+            "Whether the subject is mundane or Awakened"
+          ]
+        },
+        {
+          "hits": 2,
+          "information_gained": [
+            "The presence and location of cyberware implants",
+            "The class of a magical subject (fire elemental, manipulation spell, power focus, curse ritual, and so on)",
+            "If you have seen the subject's aura before, you may recognize it, regardless of physical disguises or alterations"
+          ]
+        },
+        {
+          "hits": 3,
+          "information_gained": [
+            "The presence and location of alphaware cyber implants",
+            "Whether the subject's Essence and Magic are higher, lower, or equal to your own",
+            "Whether the subject's Force is higher, lower, or equal to your Magic",
+            "A general diagnosis for any maladies (diseases or toxins) the subject suffers",
+            "Any astral signatures present on the subject"
+          ]
+        },
+        {
+          "hits": 4,
+          "information_gained": [
+            "The presence and location of betaware and bioware cyber implants",
+            "The exact Essence, Magic, and Force of the subject",
+            "The general cause of any astral signature (combat spell, alchemical combat spell, air spirit, and so on)"
+          ]
+        },
+        {
+          "hits": 5,
+          "information_gained": [
+            "The presence and location of deltaware implants, gene treatments, and nanotech",
+            "An accurate diagnosis of any disease or toxins which afflict the subject",
+            "The fact that a subject is a technomancer"
+          ]
+        }
+      ]
+    },
+    "astral-damage": {
+      "source": "SR5 Core Rulebook, p.315",
+      "description": "Attack tests and damage values for astral combat",
+      "columns": ["attack_type", "test", "attacker", "damage_value"],
+      "rows": [
+        {
+          "attack_type": "Unarmed",
+          "test": "Astral Combat + Willpower [Astral] v. Intuition + Logic",
+          "attacker": "Magician",
+          "damage_value": "Charisma"
+        },
+        {
+          "attack_type": "Weapon Focus",
+          "test": "Astral Combat + Willpower [Accuracy] v. Intuition + Logic",
+          "attacker": "Magician with Weapon Focus",
+          "damage_value": "By weapon (using Charisma instead of Strength)"
+        },
+        {
+          "attack_type": "Unarmed",
+          "test": "Astral Combat + Willpower [Astral] v. Intuition + Logic",
+          "attacker": "Spirit",
+          "damage_value": "Force"
+        },
+        {
+          "attack_type": "Unarmed",
+          "test": "Astral Combat + Willpower [Astral] v. Intuition + Logic",
+          "attacker": "Watcher",
+          "damage_value": "1"
+        }
+      ],
+      "notes": "Add 1 to DV per net hit on attack. Damage type (Stun or Physical) is attacker's choice. Astral barriers can only be affected by Physical damage."
+    },
+    "astral-tracking-modifiers": {
+      "source": "SR5 Core Rulebook, p.315",
+      "description": "Modifiers to the threshold of the Assensing + Intuition (5, 1 hour) [Astral] Extended Test required to track an astral link",
+      "columns": ["condition", "threshold_modifier"],
+      "rows": [
+        {
+          "condition": "Each hour passed since astral link was active",
+          "threshold_modifier": "+1"
+        },
+        { "condition": "Target behind mana barrier", "threshold_modifier": "+(Force of barrier)" },
+        { "condition": "Tracking master by spirit (bound spirit)", "threshold_modifier": "+0" },
+        { "condition": "Tracking master by spirit (unbound spirit)", "threshold_modifier": "+2" }
+      ]
+    },
+    "mana-barriers": {
+      "source": "SR5 Core Rulebook, p.315",
+      "description": "Sources of mana barriers and whether they exist on the astral plane, physical plane, or both",
+      "columns": ["mana_barrier", "astral_or_physical", "reference"],
+      "rows": [
+        {
+          "mana_barrier": "Circle of Protection ritual",
+          "astral_or_physical": "Both",
+          "reference": "p.298"
+        },
+        { "mana_barrier": "Magical Lodge", "astral_or_physical": "Both", "reference": "p.280" },
+        {
+          "mana_barrier": "Mana Barrier spell",
+          "astral_or_physical": "Either",
+          "reference": "p.294"
+        },
+        { "mana_barrier": "Ward ritual", "astral_or_physical": "Both", "reference": "p.297" }
+      ]
+    },
+    "spirit-services": {
+      "source": "SR5 Core Rulebook, p.302",
+      "description": "Services available from unbound and bound spirits",
+      "columns": ["service", "spirit_type", "description"],
+      "rows": [
+        {
+          "service": "Combat",
+          "spirit_type": "Unbound",
+          "description": "Spirit fights on summoner's side; entire fight = 1 service"
+        },
+        {
+          "service": "Power Use",
+          "spirit_type": "Unbound",
+          "description": "Spirit uses one of its powers on target(s); sustained power = 1 service regardless of duration"
+        },
+        {
+          "service": "Physical Task",
+          "spirit_type": "Unbound",
+          "description": "Spirit materializes to perform physical actions on the physical plane"
+        },
+        {
+          "service": "Remote Service",
+          "spirit_type": "Unbound",
+          "description": "Task beyond Magic × 100 meters; spirit is released after completing regardless of remaining services"
+        },
+        {
+          "service": "Any Unbound Spirit Service",
+          "spirit_type": "Bound",
+          "description": "Bound spirit can do everything an unbound spirit can; remote service does not consume extra services"
+        },
+        {
+          "service": "Aid Alchemy",
+          "spirit_type": "Bound",
+          "description": "Spirit adds Force dice to Alchemy tests if spirit type matches spell's tradition element"
+        },
+        {
+          "service": "Aid Sorcery",
+          "spirit_type": "Bound",
+          "description": "Spirit adds Force dice to Spellcasting and Ritual Spellcasting tests if type matches spell's element"
+        },
+        {
+          "service": "Aid Study",
+          "spirit_type": "Bound",
+          "description": "Spirit adds Force dice to Learning Tests for appropriate spells"
+        },
+        {
+          "service": "Spell Sustaining",
+          "spirit_type": "Bound",
+          "description": "Spirit sustains a spell for the summoner (takes −2 penalty); lasts Force Combat Turns per service spent"
+        },
+        {
+          "service": "Spell Binding",
+          "spirit_type": "Bound",
+          "description": "Spirit sustains spell indefinitely; spirit's Force reduced irrevocably by 1 per day (or part); Force 0 = permanent dissipation"
+        }
+      ]
+    },
+    "spirits": {
+      "source": "SR5 Core Rulebook, p.303-304",
+      "description": "Physical attributes, initiative, astral initiative, skills, powers, optional powers, weaknesses, and special traits for the six base spirit types when materialized",
+      "notes": "F = Force. All minimums are 1. Walking = Agility × 2; Running = Agility × 4. Optional powers: 1 per full 3 Force points.",
+      "spirits": {
+        "air": {
+          "attributes": {
+            "B": "F-2",
+            "A": "F+3",
+            "R": "F+4",
+            "S": "F-3",
+            "W": "F",
+            "L": "F",
+            "I": "F",
+            "C": "F",
+            "EDG": "F/2",
+            "ESS": "F",
+            "M": "F"
+          },
+          "initiative": "(F×2)+4+2D6",
+          "astral_initiative": "(F×2)+3D6",
+          "skills": [
+            "Assensing",
+            "Astral Combat",
+            "Exotic Ranged Weapon",
+            "Perception",
+            "Unarmed Combat"
+          ],
+          "powers": [
+            "Accident",
+            "Astral Form",
+            "Concealment",
+            "Confusion",
+            "Engulf",
+            "Materialization",
+            "Movement",
+            "Sapience",
+            "Search"
+          ],
+          "optional_powers": [
+            "Elemental Attack",
+            "Energy Aura",
+            "Fear",
+            "Guard",
+            "Noxious Breath",
+            "Psychokinesis"
+          ],
+          "special": "Spirits of Air get +10 meters per hit when Sprinting"
+        },
+        "beasts": {
+          "attributes": {
+            "B": "F+2",
+            "A": "F+1",
+            "R": "F",
+            "S": "F+2",
+            "W": "F",
+            "L": "F",
+            "I": "F",
+            "C": "F",
+            "EDG": "F/2",
+            "ESS": "F",
+            "M": "F"
+          },
+          "initiative": "(F×2)+2D6",
+          "astral_initiative": "(F×2)+3D6",
+          "skills": ["Assensing", "Astral Combat", "Perception", "Unarmed Combat"],
+          "powers": [
+            "Animal Control",
+            "Astral Form",
+            "Enhanced Senses (Hearing, Low-Light Vision, Smell)",
+            "Fear",
+            "Materialization",
+            "Sapience"
+          ],
+          "optional_powers": [
+            "Concealment",
+            "Confusion",
+            "Guard",
+            "Natural Weapon (DV=Force Physical, AP -)",
+            "Noxious Breath",
+            "Search",
+            "Venom"
+          ]
+        },
+        "earth": {
+          "attributes": {
+            "B": "F+4",
+            "A": "F-2",
+            "R": "F-1",
+            "S": "F+4",
+            "W": "F",
+            "L": "F-1",
+            "I": "F",
+            "C": "F",
+            "EDG": "F/2",
+            "ESS": "F",
+            "M": "F"
+          },
+          "initiative": "((F×2)-1)+2D6",
+          "astral_initiative": "(F×2)+3D6",
+          "skills": [
+            "Assensing",
+            "Astral Combat",
+            "Exotic Ranged Weapon",
+            "Perception",
+            "Unarmed Combat"
+          ],
+          "powers": [
+            "Astral Form",
+            "Binding",
+            "Guard",
+            "Materialization",
+            "Movement",
+            "Sapience",
+            "Search"
+          ],
+          "optional_powers": ["Concealment", "Confusion", "Engulf", "Elemental Attack", "Fear"]
+        },
+        "fire": {
+          "attributes": {
+            "B": "F+1",
+            "A": "F+2",
+            "R": "F+3",
+            "S": "F-2",
+            "W": "F",
+            "L": "F",
+            "I": "F+1",
+            "C": "F",
+            "EDG": "F/2",
+            "ESS": "F",
+            "M": "F"
+          },
+          "initiative": "((F×2)+3)+2D6",
+          "astral_initiative": "(F×2)+3D6",
+          "skills": [
+            "Assensing",
+            "Astral Combat",
+            "Exotic Ranged Weapon",
+            "Flight",
+            "Perception",
+            "Unarmed Combat"
+          ],
+          "powers": [
+            "Accident",
+            "Astral Form",
+            "Confusion",
+            "Elemental Attack",
+            "Energy Aura",
+            "Engulf",
+            "Materialization",
+            "Sapience"
+          ],
+          "optional_powers": ["Fear", "Guard", "Noxious Breath", "Search"],
+          "weaknesses": ["Allergy (Water, Severe)"],
+          "special": "Spirits of Fire get +5 meters per hit when Sprinting"
+        },
+        "man": {
+          "attributes": {
+            "B": "F+1",
+            "A": "F",
+            "R": "F+2",
+            "S": "F-2",
+            "W": "F",
+            "L": "F",
+            "I": "F+1",
+            "C": "F",
+            "EDG": "F/2",
+            "ESS": "F",
+            "M": "F"
+          },
+          "initiative": "((F×2)+2)+2D6",
+          "astral_initiative": "(F×2)+3D6",
+          "skills": ["Assensing", "Astral Combat", "Perception", "Spellcasting", "Unarmed Combat"],
+          "powers": [
+            "Accident",
+            "Astral Form",
+            "Concealment",
+            "Confusion",
+            "Enhanced Senses (Low-Light, Thermographic Vision)",
+            "Guard",
+            "Influence",
+            "Materialization",
+            "Sapience"
+          ],
+          "optional_powers": [
+            "Fear",
+            "Innate Spell (any one spell known by summoner; Force limited to spirit's Magic)",
+            "Movement",
+            "Psychokinesis"
+          ]
+        },
+        "water": {
+          "attributes": {
+            "B": "F",
+            "A": "F+1",
+            "R": "F+2",
+            "S": "F",
+            "W": "F",
+            "L": "F",
+            "I": "F",
+            "C": "F",
+            "EDG": "F/2",
+            "ESS": "F",
+            "M": "F"
+          },
+          "initiative": "((F×2)+2)+2D6",
+          "astral_initiative": "(F×2)+3D6",
+          "skills": [
+            "Assensing",
+            "Astral Combat",
+            "Exotic Ranged Weapon",
+            "Perception",
+            "Unarmed Combat"
+          ],
+          "powers": [
+            "Astral Form",
+            "Concealment",
+            "Confusion",
+            "Engulf",
+            "Materialization",
+            "Movement",
+            "Sapience",
+            "Search"
+          ],
+          "optional_powers": [
+            "Accident",
+            "Binding",
+            "Elemental Attack",
+            "Energy Aura",
+            "Guard",
+            "Weather Control"
+          ],
+          "weaknesses": ["Allergy (Fire, Severe)"],
+          "special": "Spirits of Water move twice as fast when in water"
+        }
+      }
+    },
+    "watchers-and-homunculi": {
+      "source": "SR5 Core Rulebook, p.298",
+      "description": "Stats for ritual-created minions: Watcher (astral) and Homunculus (physical)",
+      "watcher": {
+        "notes": "No corporeal body. Attributes marked * have no value.",
+        "attributes": {
+          "B": "*",
+          "A": "*",
+          "R": "*",
+          "S": "*",
+          "W": "F-2",
+          "L": "F-2",
+          "I": "F-2",
+          "C": "F-2"
+        },
+        "astral_initiative": "(F×2)+1D6",
+        "skills": ["Assensing", "Astral Combat", "Perception"],
+        "powers": ["Astral Form", "Manifest", "Search", "Sapience"],
+        "skill_rating": "Force / 2 (rounded up)",
+        "duration": "Force × net hits on sealing test (hours)"
+      },
+      "homunculus": {
+        "notes": "Body = Structure rating of material used. Minimum attribute value is 1.",
+        "attributes": {
+          "B": "*",
+          "A": "F-2",
+          "R": "F-2",
+          "S": "F",
+          "W": "1",
+          "L": "1",
+          "I": "1",
+          "C": "—"
+        },
+        "initiative": "(F+1)+1D6",
+        "movement": "×2/×4/+1",
+        "skills": ["Assensing", "Astral Combat", "Perception", "Unarmed Combat"],
+        "powers": ["Sapience"],
+        "max_mass_kg": "Force × 10",
+        "duration": "Force × net hits on sealing test (days)"
+      }
+    },
+    "foci-bonding": {
+      "source": "SR5 Core Rulebook, p.318",
+      "description": "Karma cost to bond each type of focus",
+      "columns": ["focus_type", "bonding_cost_karma"],
+      "rows": [
+        { "focus_type": "Enchanting Focus", "bonding_cost_karma": "Force × 3" },
+        { "focus_type": "Metamagic Focus", "bonding_cost_karma": "Force × 3" },
+        { "focus_type": "Power Focus", "bonding_cost_karma": "Force × 6" },
+        { "focus_type": "Qi Focus", "bonding_cost_karma": "Force × 2" },
+        { "focus_type": "Spell Focus", "bonding_cost_karma": "Force × 2" },
+        { "focus_type": "Spirit Focus", "bonding_cost_karma": "Force × 2" },
+        { "focus_type": "Weapon Focus", "bonding_cost_karma": "Force × 3" }
+      ],
+      "notes": "Max bonded foci = Magic attribute. Max total Force of bonded foci = Magic × 5. Only one focus adds Force to a dice pool per test. Bonding takes 1 hour per Force."
+    },
+    "magical-goods": {
+      "source": "SR5 Core Rulebook, p.326",
+      "description": "Availability and nuyen cost for foci, formulae, and magical supplies",
+      "columns": ["item", "availability", "cost"],
+      "rows": [
+        { "item": "Enchanting Focus", "availability": "(Force × 3)R", "cost": "Force × 5,000¥" },
+        { "item": "Metamagic Focus", "availability": "(Force × 3)R", "cost": "Force × 9,000¥" },
+        { "item": "Power Focus", "availability": "(Force × 4)R", "cost": "Force × 18,000¥" },
+        { "item": "Qi Focus", "availability": "(Force × 3)R", "cost": "Force × 3,000¥" },
+        { "item": "Spell Focus", "availability": "(Force × 3)R", "cost": "Force × 4,000¥" },
+        { "item": "Spirit Focus", "availability": "(Force × 3)R", "cost": "Force × 4,000¥" },
+        { "item": "Weapon Focus", "availability": "(Force × 4)R", "cost": "Force × 7,000¥" },
+        { "item": "Focus Formula", "availability": "as Focus", "cost": "Focus Cost × 0.25" },
+        { "item": "Spell Formula — Combat", "availability": "8R", "cost": "2,000¥" },
+        { "item": "Spell Formula — Detection", "availability": "4R", "cost": "500¥" },
+        { "item": "Spell Formula — Health", "availability": "4R", "cost": "500¥" },
+        { "item": "Spell Formula — Illusion", "availability": "8R", "cost": "1,000¥" },
+        { "item": "Spell Formula — Manipulation", "availability": "8R", "cost": "1,500¥" },
+        { "item": "Magical Lodge Materials", "availability": "Force × 2", "cost": "Force × 500¥" },
+        { "item": "Reagents (per dram)", "availability": "—", "cost": "20¥" }
+      ]
+    },
+    "mentor-spirits": {
+      "source": "SR5 Core Rulebook, pp.321-324",
+      "description": "Full listing of mentor spirits with advantages (All, Magician, Adept) and disadvantages",
+      "columns": [
+        "name",
+        "all_advantage",
+        "magician_advantage",
+        "adept_advantage",
+        "disadvantage",
+        "similar_archetypes"
+      ],
+      "rows": [
+        {
+          "name": "Bear",
+          "all_advantage": "+2 dice to resist damage (not Drain)",
+          "magician_advantage": "+2 dice for health spells, preparations, and health spell rituals",
+          "adept_advantage": "1 free level of Rapid Healing",
+          "disadvantage": "May go berserk when taking Physical damage in combat or when someone under care is badly injured. Make Charisma + Willpower Test (wound modifiers apply); go berserk for 3 turns minus 1 turn per hit (3+ hits averts entirely). While berserk, attack attacker(s) regardless of own safety.",
+          "similar_archetypes": ["Strength", "Protection"]
+        },
+        {
+          "name": "Cat",
+          "all_advantage": "+2 dice to either Gymnastics or Infiltration Tests (choose one)",
+          "magician_advantage": "+2 dice for illusion spells, preparations, and illusion spell rituals",
+          "adept_advantage": "2 free levels of Light Body",
+          "disadvantage": "Cannot make incapacitating attack unless Charisma + Willpower (3) Test succeeds at start of combat. This stops if Cat takes any Physical damage.",
+          "similar_archetypes": ["Mystery", "Stealth"]
+        },
+        {
+          "name": "Dog",
+          "all_advantage": "+2 dice for Tracking tests",
+          "magician_advantage": "+2 dice for Detection spells, preparations, and rituals",
+          "adept_advantage": "2 free Improved Sense powers",
+          "disadvantage": "Cannot leave someone behind, betray comrades, or let another sacrifice themselves without making a successful Charisma + Willpower (3) Test.",
+          "similar_archetypes": ["Friendship", "Loyalty"]
+        },
+        {
+          "name": "Dragonslayer",
+          "all_advantage": "+2 dice pool modifier for one social skill of choice",
+          "magician_advantage": "+2 dice for Combat spells, preparations, and rituals",
+          "adept_advantage": "1 free level of Enhanced Accuracy (skill) and 1 free level of Danger Sense",
+          "disadvantage": "Breaking a promise (by choice or accident): −1 dice pool modifier to all actions until promise is fulfilled.",
+          "similar_archetypes": ["Heroism", "Adventure"]
+        },
+        {
+          "name": "Eagle",
+          "all_advantage": "+2 dice to Perception Tests",
+          "magician_advantage": "+2 dice for summoning spirits of air",
+          "adept_advantage": "1 free level of Combat Sense",
+          "disadvantage": "Gains the Allergy (pollutants, mild) quality (no bonus Karma for this negative quality).",
+          "similar_archetypes": ["Nature", "Warding"]
+        },
+        {
+          "name": "Fire-Bringer",
+          "all_advantage": "+2 dice to Artisan skill tests or Alchemy skill tests (choose one)",
+          "magician_advantage": "+2 dice for Manipulation spells, preparations, and spell rituals",
+          "adept_advantage": "1 free level of Improved Ability on a non-combat skill",
+          "disadvantage": "Cannot refuse a sincere request for help without succeeding in a Simple Charisma + Willpower (3) Test.",
+          "similar_archetypes": ["Invention", "Generosity"]
+        },
+        {
+          "name": "Mountain",
+          "all_advantage": "+2 dice to Survival Tests",
+          "magician_advantage": "+2 dice for Counterspelling Tests and anchored rituals",
+          "adept_advantage": "1 free level of Mystic Armor",
+          "disadvantage": "Once a plan is decided on, must make Charisma + Willpower (3) Test to abandon it. Also must make the test to proceed in anything without a plan.",
+          "similar_archetypes": ["Endurance", "Stubbornness"]
+        },
+        {
+          "name": "Rat",
+          "all_advantage": "+2 dice for Sneaking Tests",
+          "magician_advantage": "+2 dice to Alchemy tests when harvesting reagents; may use reagents of any tradition at full strength",
+          "adept_advantage": "2 free levels of Natural Immunity",
+          "disadvantage": "Must make Charisma + Willpower (3) Test to not immediately flee or seek cover whenever caught in a combat situation. If nowhere to flee, forced to fight.",
+          "similar_archetypes": ["Survival", "Scavenging"]
+        },
+        {
+          "name": "Raven",
+          "all_advantage": "+2 dice for Con tests",
+          "magician_advantage": "+2 dice for Manipulation spells, preparations, and spell rituals",
+          "adept_advantage": "Free Traceless Walk and 1 level of Voice Control",
+          "disadvantage": "Must make Charisma + Willpower (3) Test to avoid exploiting someone else's misfortune to own advantage or pulling a clever trick or prank even if it's to the disadvantage of friends.",
+          "similar_archetypes": ["Deception", "Mischief"]
+        },
+        {
+          "name": "Sea",
+          "all_advantage": "+2 dice for Swimming Tests",
+          "magician_advantage": "+2 dice for summoning spirits of water",
+          "adept_advantage": "1 free Improved Ability on an athletic skill (selected when receiving bonus)",
+          "disadvantage": "Must make Charisma + Willpower (3) Test to give away something owned or be charitable in some way.",
+          "similar_archetypes": ["Chaos", "Greed"]
+        },
+        {
+          "name": "Seducer",
+          "all_advantage": "+2 dice for Con Tests",
+          "magician_advantage": "+2 dice for spells, preparations, and spell rituals of the Illusion category",
+          "adept_advantage": "1 free level of Improved Ability for a skill in the Acting or Influence skill group",
+          "disadvantage": "Must succeed in a Charisma + Willpower (3) Test to avoid pursuing a vice or indulgence (drugs, BTLs, sex, and so on) when it is made available.",
+          "similar_archetypes": ["Seductress", "Temptation"]
+        },
+        {
+          "name": "Shark",
+          "all_advantage": "+2 dice to Unarmed Combat tests",
+          "magician_advantage": "+2 dice for spells, preparations, and spell rituals of the Combat category",
+          "adept_advantage": "Free Killing Hands",
+          "disadvantage": "May go berserk when taking Physical damage in combat. Make Simple Charisma + Willpower Test (wound modifiers apply); go berserk for 3 turns minus 1 per hit. While berserk, attack attacker(s) without regard for own safety.",
+          "similar_archetypes": ["Hunger", "Violence"]
+        },
+        {
+          "name": "Snake",
+          "all_advantage": "+2 to Arcana tests",
+          "magician_advantage": "+2 dice for spells, preparations, and spell rituals of the Detection category",
+          "adept_advantage": "2 free levels of Kinesics",
+          "disadvantage": "Must succeed in a Charisma + Willpower (3) Test to avoid pursuing secrets or knowledge that few people know about when hints of its existence are received.",
+          "similar_archetypes": ["Knowledge", "Curiosity"]
+        },
+        {
+          "name": "Thunderbird",
+          "all_advantage": "+2 dice for Intimidation Tests",
+          "magician_advantage": "+2 dice for summoning spirits of air",
+          "adept_advantage": "1 free level of Critical Strike (skill)",
+          "disadvantage": "Must succeed in a Charisma + Willpower (3) Test to avoid responding to an insult in kind.",
+          "similar_archetypes": ["Anger", "War"]
+        },
+        {
+          "name": "Wise Warrior",
+          "all_advantage": "+2 dice to Leadership or Instruction skill tests (choose one)",
+          "magician_advantage": "+2 dice for spells, preparations, and spell rituals of the Combat category",
+          "adept_advantage": "1 free level of Improved Ability on a Combat skill",
+          "disadvantage": "Acting dishonorably or without courtesy (by choice or by accident): −1 dice pool modifier to all actions until behavior is atoned for.",
+          "similar_archetypes": ["Duty", "Wisdom"]
+        },
+        {
+          "name": "Wolf",
+          "all_advantage": "+2 dice to Tracking tests",
+          "magician_advantage": "+2 dice for spells, preparations, and rituals in the Combat category",
+          "adept_advantage": "2 free levels of Attribute Boost (Agility)",
+          "disadvantage": "Must succeed in a Charisma + Willpower (3) Test to retreat from a fight.",
+          "similar_archetypes": ["Hunting", "Fellowship"]
+        }
+      ]
+    }
+  }
+}

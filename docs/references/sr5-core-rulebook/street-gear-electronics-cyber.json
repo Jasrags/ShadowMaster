@@ -1,0 +1,1385 @@
+{
+  "tables": {
+    "commlinks": {
+      "source": "SR5 Core Rulebook, p.439",
+      "description": "Commlink models with Device Rating, Availability, and Cost.",
+      "columns": ["model", "device_rating", "avail", "cost"],
+      "rows": [
+        { "model": "Meta Link", "device_rating": 1, "avail": 2, "cost": 100 },
+        { "model": "Sony Emperor", "device_rating": 2, "avail": 4, "cost": 700 },
+        { "model": "Renraku Sensei", "device_rating": 3, "avail": 6, "cost": 1000 },
+        { "model": "Erika Elite", "device_rating": 4, "avail": 8, "cost": 2500 },
+        { "model": "Hermes Ikon", "device_rating": 5, "avail": 10, "cost": 3000 },
+        { "model": "Transys Avalon", "device_rating": 6, "avail": 12, "cost": 5000 },
+        { "model": "Fairlight Caliban", "device_rating": 7, "avail": 14, "cost": 8000 },
+        {
+          "model": "Sim module",
+          "device_rating": null,
+          "avail": null,
+          "cost": 100,
+          "note": "add-on; +4F Avail and +250Y for hot-sim modification"
+        }
+      ]
+    },
+    "cyberdecks": {
+      "source": "SR5 Core Rulebook, p.439",
+      "description": "Cyberdeck models with Device Rating, Attribute Array (four values assignable to Attack/Sleaze/Data Processing/Firewall), Programs slots, Availability, and Cost. All cyberdecks include illegal hot-sim modules.",
+      "columns": ["deck", "device_rating", "attribute_array", "programs", "avail", "cost"],
+      "rows": [
+        {
+          "deck": "Erika MCD-1",
+          "device_rating": 1,
+          "attribute_array": [4, 3, 2, 1],
+          "programs": 1,
+          "avail": "3R",
+          "cost": 49500
+        },
+        {
+          "deck": "Microdeck Summit",
+          "device_rating": 1,
+          "attribute_array": [4, 3, 3, 1],
+          "programs": 1,
+          "avail": "3R",
+          "cost": 58000
+        },
+        {
+          "deck": "Microtronica Azteca 200",
+          "device_rating": 2,
+          "attribute_array": [5, 4, 3, 2],
+          "programs": 2,
+          "avail": "6R",
+          "cost": 110250
+        },
+        {
+          "deck": "Hermes Chariot",
+          "device_rating": 2,
+          "attribute_array": [5, 4, 4, 2],
+          "programs": 2,
+          "avail": "6R",
+          "cost": 123000
+        },
+        {
+          "deck": "Novatech Navigator",
+          "device_rating": 3,
+          "attribute_array": [6, 5, 4, 3],
+          "programs": 3,
+          "avail": "9R",
+          "cost": 205750
+        },
+        {
+          "deck": "Renraku Tsurugi",
+          "device_rating": 3,
+          "attribute_array": [6, 5, 5, 3],
+          "programs": 3,
+          "avail": "9R",
+          "cost": 214125
+        },
+        {
+          "deck": "Sony CIY-720",
+          "device_rating": 4,
+          "attribute_array": [7, 6, 5, 4],
+          "programs": 4,
+          "avail": "12R",
+          "cost": 345000
+        },
+        {
+          "deck": "Shiawase Cyber-5",
+          "device_rating": 5,
+          "attribute_array": [8, 7, 6, 5],
+          "programs": 5,
+          "avail": "15R",
+          "cost": 549375
+        },
+        {
+          "deck": "Fairlight Excalibur",
+          "device_rating": 6,
+          "attribute_array": [9, 8, 7, 6],
+          "programs": 6,
+          "avail": "18R",
+          "cost": 823250
+        }
+      ]
+    },
+    "electronics-accessories": {
+      "source": "SR5 Core Rulebook, p.440",
+      "description": "Electronics accessories compatible with commlinks, cyberdecks, and other electronic devices.",
+      "columns": ["accessory", "device_rating", "avail", "cost"],
+      "rows": [
+        { "accessory": "AR Gloves", "device_rating": 3, "avail": "—", "cost": 150 },
+        { "accessory": "Biometric reader", "device_rating": 3, "avail": 4, "cost": 200 },
+        { "accessory": "Electronic paper", "device_rating": 1, "avail": "—", "cost": 5 },
+        { "accessory": "Printer", "device_rating": 3, "avail": "—", "cost": 25 },
+        { "accessory": "Satellite link", "device_rating": 4, "avail": 6, "cost": 500 },
+        { "accessory": "Simrig", "device_rating": 3, "avail": 12, "cost": 1000 },
+        { "accessory": "Subvocal mic", "device_rating": 3, "avail": 4, "cost": 50 },
+        { "accessory": "Trid projector", "device_rating": 3, "avail": "—", "cost": 200 },
+        { "accessory": "Trodes", "device_rating": 3, "avail": "—", "cost": 70 }
+      ]
+    },
+    "rfid-tags": {
+      "source": "SR5 Core Rulebook, p.440",
+      "description": "RFID tag types sold per 10 units. Device Rating, Availability, and Cost per 10 tags.",
+      "columns": ["tag_type", "device_rating", "avail", "cost_per_10"],
+      "rows": [
+        { "tag_type": "Standard Tags", "device_rating": 1, "avail": "—", "cost_per_10": 1 },
+        { "tag_type": "Datachip", "device_rating": 1, "avail": "—", "cost_per_10": 5 },
+        { "tag_type": "Security Tags", "device_rating": 3, "avail": 3, "cost_per_10": 5 },
+        { "tag_type": "Sensor Tags", "device_rating": 2, "avail": 5, "cost_per_10": 40 },
+        { "tag_type": "Stealth Tags", "device_rating": 3, "avail": "7R", "cost_per_10": 10 }
+      ]
+    },
+    "communications": {
+      "source": "SR5 Core Rulebook, p.441",
+      "description": "Communications and countermeasure devices with Availability and Cost.",
+      "columns": ["device", "avail", "cost"],
+      "rows": [
+        { "device": "Bug scanner (Rating 1-6)", "avail": "(Rating)R", "cost": "Rating x 100" },
+        { "device": "Data tap", "avail": "6R", "cost": 300 },
+        { "device": "Headjammer (Rating 1-6)", "avail": "(Rating)R", "cost": "Rating x 150" },
+        { "device": "Jammer, area (Rating 1-6)", "avail": "(Rating x 3)F", "cost": "Rating x 200" },
+        {
+          "device": "Jammer, directional (Rating 1-6)",
+          "avail": "(Rating x 2)F",
+          "cost": "Rating x 200"
+        },
+        { "device": "Micro-transceiver", "avail": 2, "cost": 100 },
+        { "device": "Tag eraser", "avail": "6R", "cost": 450 },
+        { "device": "White noise generator (Rating 1-6)", "avail": "Rating", "cost": "Rating x 50" }
+      ]
+    },
+    "software": {
+      "source": "SR5 Core Rulebook, p.442",
+      "description": "Software programs with Availability and Cost.",
+      "columns": ["program_software", "avail", "cost"],
+      "rows": [
+        {
+          "program_software": "Agent (Rating 1-3)",
+          "avail": "Rating x 3",
+          "cost": "Rating x 1000"
+        },
+        {
+          "program_software": "Agent (Rating 4-6)",
+          "avail": "Rating x 3",
+          "cost": "Rating x 2000"
+        },
+        { "program_software": "Autosoft", "avail": "Rating x 2", "cost": "Rating x 500" },
+        { "program_software": "Cyberprogram, common use", "avail": "—", "cost": 80 },
+        { "program_software": "Cyberprogram, hacking", "avail": "6R", "cost": 250 },
+        { "program_software": "Datasoft", "avail": 4, "cost": 120 },
+        { "program_software": "Mapsoft", "avail": 4, "cost": 100 },
+        { "program_software": "Shopsoft", "avail": 4, "cost": 150 },
+        { "program_software": "Tutorsoft (Rating 1-6)", "avail": "Rating", "cost": "Rating x 400" }
+      ]
+    },
+    "skillsofts": {
+      "source": "SR5 Core Rulebook, p.442",
+      "description": "Skillsoft types with Availability and Cost.",
+      "columns": ["skillsoft", "avail", "cost"],
+      "rows": [
+        { "skillsoft": "Activesofts (Rating 1-6)", "avail": 8, "cost": "Rating x 5000" },
+        { "skillsoft": "Knowsofts (Rating 1-6)", "avail": 4, "cost": "Rating x 2000" },
+        { "skillsoft": "Linguasofts (Rating 1-6)", "avail": 2, "cost": "Rating x 1000" }
+      ]
+    },
+    "credsticks": {
+      "source": "SR5 Core Rulebook, p.443",
+      "description": "Certified credstick types with maximum value, Availability, and Cost.",
+      "columns": ["type", "max_value", "avail", "cost"],
+      "rows": [
+        { "type": "Standard", "max_value": 5000, "avail": "—", "cost": 5 },
+        { "type": "Silver", "max_value": 20000, "avail": "—", "cost": 20 },
+        { "type": "Gold", "max_value": 100000, "avail": 5, "cost": 100 },
+        { "type": "Platinum", "max_value": 500000, "avail": 10, "cost": 500 },
+        { "type": "Ebony", "max_value": 1000000, "avail": 20, "cost": 1000 }
+      ]
+    },
+    "identification": {
+      "source": "SR5 Core Rulebook, p.443",
+      "description": "Fake SIN and fake license with Availability and Cost.",
+      "columns": ["type", "avail", "cost"],
+      "rows": [
+        { "type": "Fake SIN (Rating 1-6)", "avail": "(Rating x 3)F", "cost": "Rating x 2500" },
+        { "type": "Fake license (Rating 1-6)", "avail": "(Rating x 3)F", "cost": "Rating x 200" }
+      ]
+    },
+    "tools": {
+      "source": "SR5 Core Rulebook, p.443",
+      "description": "Tool categories (kit, shop, facility) with Availability and Cost.",
+      "columns": ["type", "avail", "cost"],
+      "rows": [
+        { "type": "Kit", "avail": "—", "cost": 500 },
+        { "type": "Shop", "avail": 8, "cost": 5000 },
+        { "type": "Facility", "avail": 12, "cost": 50000 }
+      ]
+    },
+    "optical-imaging-devices": {
+      "source": "SR5 Core Rulebook, p.444",
+      "description": "Optical and imaging devices with Availability and Cost.",
+      "columns": ["device", "avail", "cost"],
+      "rows": [
+        { "device": "Binoculars (Capacity 1-3)", "avail": "—", "cost": "Capacity x 50" },
+        { "device": "Binoculars, Optical", "avail": "—", "cost": 50 },
+        { "device": "Camera (Capacity 1-6)", "avail": "—", "cost": "Capacity x 100" },
+        { "device": "Micro-Camera (Capacity 1)", "avail": "—", "cost": 100 },
+        { "device": "Contacts (Capacity 1-3)", "avail": 6, "cost": "Capacity x 200" },
+        { "device": "Glasses (Capacity 1-4)", "avail": "—", "cost": "Capacity x 100" },
+        { "device": "Goggles (Capacity 1-6)", "avail": "—", "cost": "Capacity x 50" },
+        { "device": "Endoscope", "avail": 8, "cost": 250 },
+        { "device": "Imaging Scopes (Capacity 3)", "avail": 2, "cost": 300 },
+        { "device": "Periscope", "avail": 3, "cost": 50 },
+        { "device": "Mage Sight Goggles", "avail": "12R", "cost": 3000 },
+        { "device": "Monocle (Capacity 1-4)", "avail": "—", "cost": "Rating x 120" }
+      ]
+    },
+    "vision-enhancements": {
+      "source": "SR5 Core Rulebook, p.444",
+      "description": "Vision enhancements for optical and imaging devices. Capacity in brackets denotes capacity cost.",
+      "columns": ["enhancement", "capacity", "avail", "cost"],
+      "rows": [
+        { "enhancement": "Low-light vision", "capacity": "[1]", "avail": "+4", "cost": "+500" },
+        { "enhancement": "Flare compensation", "capacity": "[1]", "avail": "+1", "cost": "+250" },
+        { "enhancement": "Image link", "capacity": "[1]", "avail": "—", "cost": "+25" },
+        { "enhancement": "Smartlink", "capacity": "[1]", "avail": "+4R", "cost": "+2000" },
+        { "enhancement": "Thermographic vision", "capacity": "[1]", "avail": "+6", "cost": "+500" },
+        {
+          "enhancement": "Vision enhancement (Rating 1-3)",
+          "capacity": "[Rating]",
+          "avail": "+Rating x 2",
+          "cost": "+(Rating x 500)"
+        },
+        { "enhancement": "Vision magnification", "capacity": "[1]", "avail": "+2", "cost": "+250" }
+      ]
+    },
+    "audio-devices": {
+      "source": "SR5 Core Rulebook, p.445",
+      "description": "Audio devices with Availability and Cost.",
+      "columns": ["device", "avail", "cost"],
+      "rows": [
+        { "device": "Directional mic (Capacity 1-6)", "avail": 4, "cost": "Capacity x 50" },
+        { "device": "Ear buds (Capacity 1-3)", "avail": "—", "cost": "Capacity x 50" },
+        { "device": "Headphones (Capacity 1-6)", "avail": "—", "cost": "Capacity x 50" },
+        { "device": "Laser mic (Capacity 1-6)", "avail": "6R", "cost": "Capacity x 100" },
+        { "device": "Omni-directional mic (Capacity 1-6)", "avail": "—", "cost": "Capacity x 50" }
+      ]
+    },
+    "audio-enhancements": {
+      "source": "SR5 Core Rulebook, p.445",
+      "description": "Audio enhancements installable in audio devices. Capacity in brackets denotes capacity cost.",
+      "columns": ["enhancement", "capacity", "avail", "cost"],
+      "rows": [
+        {
+          "enhancement": "Audio enhancement (Rating 1-3)",
+          "capacity": "[Rating]",
+          "avail": "+Rating x 2",
+          "cost": "+(Rating x 500)"
+        },
+        {
+          "enhancement": "Select sound filter (Rating 1-3)",
+          "capacity": "[Rating]",
+          "avail": "+Rating x 3",
+          "cost": "+(Rating x 250)"
+        },
+        { "enhancement": "Spatial recognizer", "capacity": "[2]", "avail": "+4", "cost": "+1000" }
+      ]
+    },
+    "sensor-housings": {
+      "source": "SR5 Core Rulebook, p.446",
+      "description": "Sensor housing types with their maximum sensor rating.",
+      "columns": ["sensor_package", "max_sensor_rating"],
+      "rows": [
+        { "sensor_package": "RFID, audio or visual device, headware", "max_sensor_rating": 2 },
+        { "sensor_package": "Handheld device, small (or smaller) drone", "max_sensor_rating": 3 },
+        { "sensor_package": "Wall-mounted device, medium drone", "max_sensor_rating": 4 },
+        { "sensor_package": "Large drone, cyberlimb", "max_sensor_rating": 5 },
+        { "sensor_package": "Motorcycle", "max_sensor_rating": 6 },
+        { "sensor_package": "Vehicle (larger than a motorcycle)", "max_sensor_rating": 7 },
+        { "sensor_package": "Buildings, airports, etc.", "max_sensor_rating": 8 }
+      ]
+    },
+    "sensors": {
+      "source": "SR5 Core Rulebook, p.446",
+      "description": "Sensor array and single sensor with Capacity, Availability, and Cost.",
+      "columns": ["device", "capacity", "avail", "cost"],
+      "rows": [
+        { "device": "Handheld Housing", "capacity": "1-3", "avail": "—", "cost": "Capacity x 100" },
+        {
+          "device": "Wall-Mounted Housing",
+          "capacity": "1-6",
+          "avail": "—",
+          "cost": "Capacity x 250"
+        },
+        {
+          "device": "Sensor Array (Rating 2-8)",
+          "capacity": "[6]",
+          "avail": 7,
+          "cost": "Rating x 1000"
+        },
+        {
+          "device": "Single Sensor (Rating 2-8)",
+          "capacity": "[1]",
+          "avail": 5,
+          "cost": "Rating x 100"
+        }
+      ]
+    },
+    "sensor-functions": {
+      "source": "SR5 Core Rulebook, p.446",
+      "description": "Available sensor functions and their maximum operational range.",
+      "columns": ["function", "max_range"],
+      "rows": [
+        { "function": "Atmosphere sensor", "max_range": null },
+        { "function": "Camera", "max_range": null },
+        { "function": "Cyberware scanner", "max_range": "15 meters" },
+        { "function": "Directional microphone", "max_range": null },
+        { "function": "Geiger counter", "max_range": null },
+        { "function": "Laser microphone", "max_range": "100 meters" },
+        { "function": "Laser range finder", "max_range": "1000 meters" },
+        { "function": "MAD scanner", "max_range": "5 meters" },
+        { "function": "Motion sensor", "max_range": "25 meters" },
+        { "function": "Olfactory sensor", "max_range": null },
+        { "function": "Omni-directional microphone", "max_range": null },
+        { "function": "Radio signal scanner", "max_range": "20 meters" },
+        { "function": "Ultrasound", "max_range": "50 meters" }
+      ]
+    },
+    "security-and-restraints": {
+      "source": "SR5 Core Rulebook, p.447",
+      "description": "Security devices and restraints with Availability and Cost.",
+      "columns": ["device", "avail", "cost"],
+      "rows": [
+        { "device": "Key/combination lock (Rating 1-6)", "avail": "Rating", "cost": "Rating x 10" },
+        { "device": "Maglock", "avail": "Rating", "cost": "Rating x 100" },
+        { "device": "Keypad or card reader", "avail": "—", "cost": 50 },
+        {
+          "device": "Anti-tamper circuits (Rating 1-4)",
+          "avail": "+Rating",
+          "cost": "+(Rating x 250)"
+        },
+        { "device": "Biometric reader", "avail": "+4", "cost": 200 },
+        { "device": "Metal restraints", "avail": "—", "cost": 20 },
+        { "device": "Plasteel restraints", "avail": "6R", "cost": 50 },
+        { "device": "Plastic restraints (per 10)", "avail": "—", "cost": 5 },
+        { "device": "Containment manacles", "avail": "6R", "cost": 250 }
+      ]
+    },
+    "be-gear": {
+      "source": "SR5 Core Rulebook, p.448",
+      "description": "Breaking and entering gear with Availability and Cost.",
+      "columns": ["gear", "avail", "cost"],
+      "rows": [
+        { "gear": "Autopicker (Rating 1-6)", "avail": "8R", "cost": "Rating x 500" },
+        { "gear": "Cellular glove molder (Rating 1-4)", "avail": "12F", "cost": "Rating x 500" },
+        { "gear": "Chisel/crowbar", "avail": "—", "cost": 20 },
+        { "gear": "Keycard copier (Rating 1-6)", "avail": "8F", "cost": "Rating x 600" },
+        { "gear": "Lockpick set", "avail": "4R", "cost": 250 },
+        {
+          "gear": "Maglock passkey (Rating 1-4)",
+          "avail": "(Rating x 3)F",
+          "cost": "Rating x 2000"
+        },
+        { "gear": "Miniwelder", "avail": 2, "cost": 250 },
+        { "gear": "Miniwelder fuel canister", "avail": 2, "cost": 80 },
+        { "gear": "Monofilament chainsaw", "avail": 8, "cost": 500 },
+        { "gear": "Sequencer (Rating 1-6)", "avail": "(Rating x 3)F", "cost": "Rating x 250" }
+      ],
+      "exotic_melee_weapons": [
+        { "weapon": "Monofilament chainsaw", "accuracy": 3, "reach": 1, "damage": "8P", "ap": -6 }
+      ]
+    },
+    "industrial-chemicals": {
+      "source": "SR5 Core Rulebook, p.448",
+      "description": "Industrial chemicals with Availability and Cost.",
+      "columns": ["chemical", "avail", "cost"],
+      "rows": [
+        { "chemical": "Glue solvent", "avail": 2, "cost": 90 },
+        { "chemical": "Glue sprayer", "avail": 2, "cost": 150 },
+        { "chemical": "Thermite burning bar", "avail": "16R", "cost": 500 }
+      ]
+    },
+    "survival-gear": {
+      "source": "SR5 Core Rulebook, p.449",
+      "description": "Survival gear items with Availability and Cost.",
+      "columns": ["gear", "avail", "cost"],
+      "rows": [
+        { "gear": "Chemsuit (Rating 1-6)", "avail": "Rating x 2", "cost": "Rating x 150" },
+        { "gear": "Climbing gear", "avail": "—", "cost": 200 },
+        { "gear": "Diving gear", "avail": 6, "cost": 2000 },
+        { "gear": "Flashlight", "avail": "—", "cost": 25 },
+        { "gear": "Gas mask", "avail": "—", "cost": 200 },
+        { "gear": "Gecko tape gloves", "avail": 12, "cost": 250 },
+        { "gear": "Hazmat suit", "avail": 8, "cost": 3000 },
+        { "gear": "Light stick", "avail": "—", "cost": 25 },
+        { "gear": "Magnesium torch", "avail": "—", "cost": 5 },
+        { "gear": "Micro flare launcher", "avail": "—", "cost": 175 },
+        { "gear": "Micro flares", "avail": "—", "cost": 25 },
+        { "gear": "Rappelling gloves", "avail": "—", "cost": 50 },
+        { "gear": "Respirator (Rating 1-6)", "avail": "—", "cost": "Rating x 50" },
+        { "gear": "Survival Kit", "avail": 4, "cost": 200 }
+      ]
+    },
+    "grapple-gun": {
+      "source": "SR5 Core Rulebook, p.450",
+      "description": "Grapple gun and associated rope types and accessories with Availability and Cost.",
+      "columns": ["gear", "avail", "cost"],
+      "rows": [
+        { "gear": "Grapple gun", "avail": "8R", "cost": 500 },
+        { "gear": "Catalyst stick", "avail": "8F", "cost": 120 },
+        { "gear": "Microwire", "avail": 4, "cost": "50 per 100m" },
+        { "gear": "Myomeric rope", "avail": 10, "cost": "200 per 10m" },
+        { "gear": "Standard rope", "avail": "—", "cost": "50 per 100m" },
+        { "gear": "Stealth rope", "avail": "8F", "cost": "85 per 100m" }
+      ],
+      "weapon_stats": [
+        {
+          "weapon": "Micro flare launcher",
+          "accuracy": 3,
+          "damage": "5P (Fire)",
+          "ap": -5,
+          "mode": "SS",
+          "ammo": "1 (ml)"
+        },
+        {
+          "weapon": "Grapple gun",
+          "accuracy": 3,
+          "damage": "7S",
+          "ap": -2,
+          "mode": "SS",
+          "ammo": "1 (ml)"
+        }
+      ]
+    },
+    "biotech": {
+      "source": "SR5 Core Rulebook, p.450",
+      "description": "Biotech medical devices with Availability and Cost.",
+      "columns": ["device", "avail", "cost"],
+      "rows": [
+        { "device": "Biomonitor", "avail": 3, "cost": 300 },
+        { "device": "Disposable syringe", "avail": 3, "cost": 10 },
+        { "device": "Medkit (Rating 1-6)", "avail": "Rating", "cost": "Rating x 250" },
+        { "device": "Medkit supplies", "avail": "—", "cost": 100 }
+      ]
+    },
+    "docwagon-contract": {
+      "source": "SR5 Core Rulebook, p.450",
+      "description": "DocWagon contract service tiers with annual cost.",
+      "columns": ["contract", "avail", "cost_per_year"],
+      "rows": [
+        { "contract": "Basic", "avail": "—", "cost_per_year": 5000 },
+        { "contract": "Gold", "avail": "—", "cost_per_year": 25000 },
+        { "contract": "Platinum", "avail": "—", "cost_per_year": 50000 },
+        { "contract": "Super-platinum", "avail": "—", "cost_per_year": 100000 }
+      ]
+    },
+    "slap-patches": {
+      "source": "SR5 Core Rulebook, p.451",
+      "description": "Slap patch types with Availability and Cost.",
+      "columns": ["patch", "avail", "cost"],
+      "rows": [
+        { "patch": "Antidote patch (Rating 1-6)", "avail": "Rating", "cost": "Rating x 50" },
+        { "patch": "Chem patch", "avail": 6, "cost": 200 },
+        { "patch": "Stim patch (Rating 1-6)", "avail": "Rating x 2", "cost": "Rating x 25" },
+        { "patch": "Tranq patch (Rating 1-10)", "avail": "Rating x 2", "cost": "Rating x 20" },
+        { "patch": "Trauma patch", "avail": 6, "cost": 500 }
+      ]
+    },
+    "ware-grades": {
+      "source": "SR5 Core Rulebook, p.451",
+      "description": "Cyberware and bioware implant grades with Essence Cost Multiplier, Availability Modifier, and Cost Multiplier.",
+      "columns": ["grade", "ess_cost_multiplier", "avail_modifier", "cost_multiplier"],
+      "rows": [
+        {
+          "grade": "Standard",
+          "ess_cost_multiplier": 1.0,
+          "avail_modifier": 0,
+          "cost_multiplier": 1.0
+        },
+        {
+          "grade": "Alphaware",
+          "ess_cost_multiplier": 0.8,
+          "avail_modifier": 2,
+          "cost_multiplier": 1.2
+        },
+        {
+          "grade": "Betaware",
+          "ess_cost_multiplier": 0.7,
+          "avail_modifier": 4,
+          "cost_multiplier": 1.5
+        },
+        {
+          "grade": "Deltaware",
+          "ess_cost_multiplier": 0.5,
+          "avail_modifier": 8,
+          "cost_multiplier": 2.5
+        },
+        {
+          "grade": "Used",
+          "ess_cost_multiplier": 1.25,
+          "avail_modifier": -4,
+          "cost_multiplier": 0.75
+        }
+      ]
+    },
+    "headware": {
+      "source": "SR5 Core Rulebook, p.453",
+      "description": "Headware devices with Essence, Capacity, Availability, and Cost.",
+      "columns": ["device", "essence", "capacity", "avail", "cost"],
+      "rows": [
+        {
+          "device": "Commlink",
+          "essence": 0.2,
+          "capacity": "[2]",
+          "avail": "—",
+          "cost": "2000 + Commlink Cost"
+        },
+        {
+          "device": "Control Rig Rating 1",
+          "essence": 1,
+          "capacity": null,
+          "avail": "5R",
+          "cost": 43000
+        },
+        {
+          "device": "Control Rig Rating 2",
+          "essence": 2,
+          "capacity": null,
+          "avail": "10R",
+          "cost": 97000
+        },
+        {
+          "device": "Control Rig Rating 3",
+          "essence": 3,
+          "capacity": null,
+          "avail": "15R",
+          "cost": 208000
+        },
+        {
+          "device": "Cortex Bomb Kink",
+          "essence": 0,
+          "capacity": "[1]",
+          "avail": "12F",
+          "cost": 10000
+        },
+        {
+          "device": "Cortex Bomb Microbomb",
+          "essence": 0,
+          "capacity": "[2]",
+          "avail": "16F",
+          "cost": 25000
+        },
+        {
+          "device": "Cortex Bomb Area Bomb",
+          "essence": 0,
+          "capacity": "[3]",
+          "avail": "20F",
+          "cost": 40000
+        },
+        {
+          "device": "Cyberdeck",
+          "essence": 0.4,
+          "capacity": "[4]",
+          "avail": "5R",
+          "cost": "5000 + deck cost"
+        },
+        { "device": "Datajack", "essence": 0.1, "capacity": null, "avail": 2, "cost": 1000 },
+        {
+          "device": "Data Lock (Rating 1-12)",
+          "essence": 0.1,
+          "capacity": null,
+          "avail": "Rating x 2",
+          "cost": "Rating x 1000"
+        },
+        {
+          "device": "Olfactory Booster (Rating 1-6)",
+          "essence": 0.2,
+          "capacity": null,
+          "avail": "Rating x 3",
+          "cost": "Rating x 4000"
+        },
+        { "device": "Simrig", "essence": 0.2, "capacity": null, "avail": "12R", "cost": 4000 },
+        {
+          "device": "Skilljack (Rating 1-6)",
+          "essence": "Rating x 0.1",
+          "capacity": null,
+          "avail": "Rating x 2",
+          "cost": "Rating x 20000"
+        },
+        {
+          "device": "Taste Booster",
+          "essence": 0.2,
+          "capacity": null,
+          "avail": "Rating x 3",
+          "cost": "Rating x 3000"
+        },
+        {
+          "device": "Tooth Compartment",
+          "essence": null,
+          "capacity": null,
+          "avail": 8,
+          "cost": 800
+        },
+        {
+          "device": "Ultrasound Sensor (Rating 1-6)",
+          "essence": 0.25,
+          "capacity": "[2]",
+          "avail": 10,
+          "cost": "Rating x 12000"
+        },
+        {
+          "device": "Voice Modulator (Rating 1-6)",
+          "essence": 0.2,
+          "capacity": null,
+          "avail": "Rating x 3F",
+          "cost": "Rating x 5000"
+        }
+      ]
+    },
+    "eyeware": {
+      "source": "SR5 Core Rulebook, p.454",
+      "description": "Eyeware devices with Essence, Capacity, Availability, and Cost. Capacity marked * is included in the basic cybereyes system.",
+      "columns": ["device", "essence", "capacity", "avail", "cost"],
+      "rows": [
+        {
+          "device": "Cybereyes basic system Rating 1",
+          "essence": 0.2,
+          "capacity": 4,
+          "avail": 3,
+          "cost": 4000
+        },
+        {
+          "device": "Cybereyes basic system Rating 2",
+          "essence": 0.3,
+          "capacity": 8,
+          "avail": 6,
+          "cost": 6000
+        },
+        {
+          "device": "Cybereyes basic system Rating 3",
+          "essence": 0.4,
+          "capacity": 12,
+          "avail": 9,
+          "cost": 10000
+        },
+        {
+          "device": "Cybereyes basic system Rating 4",
+          "essence": 0.5,
+          "capacity": 16,
+          "avail": 12,
+          "cost": 14000
+        },
+        {
+          "device": "Flare compensation",
+          "essence": 0.1,
+          "capacity": "[1]",
+          "avail": 4,
+          "cost": 1000
+        },
+        { "device": "Image link", "essence": 0.1, "capacity": "*", "avail": 4, "cost": 1000 },
+        {
+          "device": "Low-light vision",
+          "essence": 0.1,
+          "capacity": "[2]",
+          "avail": 4,
+          "cost": 1500
+        },
+        { "device": "Ocular drone", "essence": null, "capacity": "[6]", "avail": 6, "cost": 6000 },
+        {
+          "device": "Retinal duplication (Rating 1-6)",
+          "essence": 0.1,
+          "capacity": "[1]",
+          "avail": "16F",
+          "cost": "Rating x 20000"
+        },
+        { "device": "Smartlink", "essence": 0.2, "capacity": "[3]", "avail": "8R", "cost": 4000 },
+        {
+          "device": "Thermographic vision",
+          "essence": 0.1,
+          "capacity": "[2]",
+          "avail": 4,
+          "cost": 1500
+        },
+        {
+          "device": "Vision enhancement (Rating 1-3)",
+          "essence": 0.1,
+          "capacity": "[Rating]",
+          "avail": "Rating x 3",
+          "cost": "Rating x 4000"
+        },
+        {
+          "device": "Vision magnification",
+          "essence": 0.1,
+          "capacity": "[2]",
+          "avail": 4,
+          "cost": 2000
+        }
+      ]
+    },
+    "earware": {
+      "source": "SR5 Core Rulebook, p.454",
+      "description": "Earware devices with Essence, Capacity, Availability, and Cost. Capacity marked * is included in the basic cyberears system.",
+      "columns": ["device", "essence", "capacity", "avail", "cost"],
+      "rows": [
+        { "device": "Cyberears Rating 1", "essence": 0.2, "capacity": 4, "avail": 3, "cost": 3000 },
+        { "device": "Cyberears Rating 2", "essence": 0.3, "capacity": 8, "avail": 6, "cost": 4500 },
+        {
+          "device": "Cyberears Rating 3",
+          "essence": 0.4,
+          "capacity": 12,
+          "avail": 9,
+          "cost": 7500
+        },
+        {
+          "device": "Cyberears Rating 4",
+          "essence": 0.5,
+          "capacity": 16,
+          "avail": 12,
+          "cost": 11000
+        },
+        {
+          "device": "Audio Enhancement (Rating 1-3)",
+          "essence": 0.1,
+          "capacity": "[Rating]",
+          "avail": "Rating x 3",
+          "cost": "Rating x 4000"
+        },
+        {
+          "device": "Balance Augmenter",
+          "essence": 0.1,
+          "capacity": "[4]",
+          "avail": 8,
+          "cost": 8000
+        },
+        { "device": "Damper", "essence": 0.1, "capacity": "[1]", "avail": 6, "cost": 2250 },
+        {
+          "device": "Select Sound Filter (Rating 1-6)",
+          "essence": 0.1,
+          "capacity": "[Rating]",
+          "avail": "Rating x 3",
+          "cost": "Rating x 3500"
+        },
+        { "device": "Sound Link", "essence": 0.1, "capacity": "*", "avail": 4, "cost": 1000 },
+        {
+          "device": "Spatial Recognizer",
+          "essence": 0.1,
+          "capacity": "[2]",
+          "avail": 8,
+          "cost": 4000
+        }
+      ]
+    },
+    "bodyware": {
+      "source": "SR5 Core Rulebook, p.456",
+      "description": "Bodyware devices with Essence, Capacity, Availability, and Cost.",
+      "columns": ["device", "essence", "capacity", "avail", "cost"],
+      "rows": [
+        {
+          "device": "Bone Lacing Plastic",
+          "essence": 0.5,
+          "capacity": null,
+          "avail": "8R",
+          "cost": 8000
+        },
+        {
+          "device": "Bone Lacing Aluminum",
+          "essence": 1,
+          "capacity": null,
+          "avail": "12R",
+          "cost": 18000
+        },
+        {
+          "device": "Bone Lacing Titanium",
+          "essence": 1.5,
+          "capacity": null,
+          "avail": "16R",
+          "cost": 30000
+        },
+        {
+          "device": "Dermal Plating (Rating 1-6)",
+          "essence": "Rating x 0.5",
+          "capacity": null,
+          "avail": "(Rating x 4)R",
+          "cost": "Rating x 3000"
+        },
+        {
+          "device": "Fingertip Compartment",
+          "essence": 0.1,
+          "capacity": "[1]",
+          "avail": 4,
+          "cost": 3000
+        },
+        { "device": "Grapple Gun", "essence": 0.5, "capacity": "[4]", "avail": 8, "cost": 5000 },
+        {
+          "device": "Internal Air Tank (Rating 1-3)",
+          "essence": 0.25,
+          "capacity": "[3]",
+          "avail": "Rating",
+          "cost": "Rating x 4500"
+        },
+        {
+          "device": "Muscle Replacement (Rating 1-4)",
+          "essence": "Rating x 1",
+          "capacity": null,
+          "avail": "(Rating x 5)R",
+          "cost": "Rating x 25000"
+        },
+        {
+          "device": "Reaction Enhancers (Rating 1-3)",
+          "essence": "Rating x 0.3",
+          "capacity": null,
+          "avail": "(Rating x 5)R",
+          "cost": "Rating x 13000"
+        },
+        {
+          "device": "Skillwires (Rating 1-6)",
+          "essence": "Rating x 0.1",
+          "capacity": null,
+          "avail": "Rating x 4",
+          "cost": "Rating x 20000"
+        },
+        {
+          "device": "Smuggling Compartment",
+          "essence": 0.2,
+          "capacity": "[2]",
+          "avail": 6,
+          "cost": 7500
+        },
+        {
+          "device": "Wired Reflexes Rating 1",
+          "essence": 2,
+          "capacity": null,
+          "avail": "8R",
+          "cost": 39000
+        },
+        {
+          "device": "Wired Reflexes Rating 2",
+          "essence": 3,
+          "capacity": null,
+          "avail": "12R",
+          "cost": 149000
+        },
+        {
+          "device": "Wired Reflexes Rating 3",
+          "essence": 5,
+          "capacity": null,
+          "avail": "20R",
+          "cost": 217000
+        }
+      ]
+    },
+    "bone-lacing": {
+      "source": "SR5 Core Rulebook, p.455",
+      "description": "Bone lacing materials with Body Boost, Armor bonus, and Unarmed Damage Value.",
+      "columns": ["material", "body_boost", "armor", "unarmed_damage"],
+      "rows": [
+        { "material": "Plastic", "body_boost": 1, "armor": 1, "unarmed_damage": "(STR+1)P" },
+        { "material": "Aluminum", "body_boost": 2, "armor": 2, "unarmed_damage": "(STR+2)P" },
+        { "material": "Titanium", "body_boost": 3, "armor": 3, "unarmed_damage": "(STR+3)P" }
+      ]
+    },
+    "cyberlimbs": {
+      "source": "SR5 Core Rulebook, p.457",
+      "description": "Cyberlimb types (obvious and synthetic) with Essence, Capacity, Availability, and Cost. All standard cyberlimbs have base STR 3 and AGI 3.",
+      "columns": ["limb_type", "subtype", "essence", "capacity", "avail", "cost"],
+      "rows": [
+        {
+          "limb_type": "Full arm",
+          "subtype": "Obvious",
+          "essence": 1,
+          "capacity": 15,
+          "avail": 4,
+          "cost": 15000
+        },
+        {
+          "limb_type": "Full leg",
+          "subtype": "Obvious",
+          "essence": 1,
+          "capacity": 20,
+          "avail": 4,
+          "cost": 15000
+        },
+        {
+          "limb_type": "Hand/foot",
+          "subtype": "Obvious",
+          "essence": 0.25,
+          "capacity": 4,
+          "avail": 2,
+          "cost": 5000
+        },
+        {
+          "limb_type": "Lower arm",
+          "subtype": "Obvious",
+          "essence": 0.45,
+          "capacity": 10,
+          "avail": 4,
+          "cost": 10000
+        },
+        {
+          "limb_type": "Lower leg",
+          "subtype": "Obvious",
+          "essence": 0.45,
+          "capacity": 12,
+          "avail": 4,
+          "cost": 10000
+        },
+        {
+          "limb_type": "Torso",
+          "subtype": "Obvious",
+          "essence": 1.5,
+          "capacity": 10,
+          "avail": 12,
+          "cost": 20000
+        },
+        {
+          "limb_type": "Skull",
+          "subtype": "Obvious",
+          "essence": 0.75,
+          "capacity": 4,
+          "avail": 16,
+          "cost": 10000
+        },
+        {
+          "limb_type": "Full arm",
+          "subtype": "Synthetic",
+          "essence": 1,
+          "capacity": 8,
+          "avail": 4,
+          "cost": 20000
+        },
+        {
+          "limb_type": "Full leg",
+          "subtype": "Synthetic",
+          "essence": 1,
+          "capacity": 10,
+          "avail": 4,
+          "cost": 20000
+        },
+        {
+          "limb_type": "Hand/foot",
+          "subtype": "Synthetic",
+          "essence": 0.25,
+          "capacity": 2,
+          "avail": 2,
+          "cost": 6000
+        },
+        {
+          "limb_type": "Lower arm",
+          "subtype": "Synthetic",
+          "essence": 0.45,
+          "capacity": 5,
+          "avail": 4,
+          "cost": 12000
+        },
+        {
+          "limb_type": "Lower leg",
+          "subtype": "Synthetic",
+          "essence": 0.45,
+          "capacity": 6,
+          "avail": 4,
+          "cost": 12000
+        },
+        {
+          "limb_type": "Torso",
+          "subtype": "Synthetic",
+          "essence": 1.5,
+          "capacity": 5,
+          "avail": 12,
+          "cost": 25000
+        },
+        {
+          "limb_type": "Skull",
+          "subtype": "Synthetic",
+          "essence": 0.75,
+          "capacity": 2,
+          "avail": 16,
+          "cost": 15000
+        }
+      ],
+      "customization": {
+        "description": "Each STR or AGI point above 3 increases Availability by 1 and Cost by 5000.",
+        "avail_modifier": "+1 per point above 3",
+        "cost_modifier": "+5000 per point above 3"
+      }
+    },
+    "cyberlimb-enhancements": {
+      "source": "SR5 Core Rulebook, p.457",
+      "description": "Cyberlimb enhancements (Agility, Armor, Strength) with Essence, Capacity, Availability, and Cost.",
+      "columns": ["enhancement", "essence", "capacity", "avail", "cost"],
+      "rows": [
+        {
+          "enhancement": "Agility (Rating 1-3)",
+          "essence": null,
+          "capacity": "Rating",
+          "avail": "(Rating x 3)R",
+          "cost": "Rating x 6500"
+        },
+        {
+          "enhancement": "Armor (Rating 1-3)",
+          "essence": null,
+          "capacity": "Rating",
+          "avail": "Rating x 5",
+          "cost": "Rating x 3000"
+        },
+        {
+          "enhancement": "Strength (Rating 1-3)",
+          "essence": null,
+          "capacity": "Rating",
+          "avail": "(Rating x 3)R",
+          "cost": "Rating x 6500"
+        }
+      ]
+    },
+    "cyberlimb-accessories": {
+      "source": "SR5 Core Rulebook, p.457",
+      "description": "Cyberlimb accessories with Essence, Capacity, Availability, and Cost.",
+      "columns": ["accessory", "essence", "capacity", "avail", "cost"],
+      "rows": [
+        {
+          "accessory": "Cyberarm gyromount",
+          "essence": null,
+          "capacity": "[8]",
+          "avail": "12F",
+          "cost": 6000
+        },
+        {
+          "accessory": "Cyberarm slide",
+          "essence": null,
+          "capacity": "[3]",
+          "avail": "12R",
+          "cost": 3000
+        },
+        {
+          "accessory": "Cyber holster",
+          "essence": null,
+          "capacity": "[5]",
+          "avail": "8R",
+          "cost": 2000
+        },
+        {
+          "accessory": "Hydraulic jacks (Rating 1-6)",
+          "essence": null,
+          "capacity": "[Rating]",
+          "avail": 9,
+          "cost": "Rating x 2500"
+        },
+        {
+          "accessory": "Large smuggling compartment",
+          "essence": null,
+          "capacity": "[5]",
+          "avail": 6,
+          "cost": 8000
+        }
+      ]
+    },
+    "implant-weapons-cyberguns": {
+      "source": "SR5 Core Rulebook, p.458",
+      "description": "Cybergun implant weapons with combat stats and implant installation stats.",
+      "weapon_stats_columns": ["weapon", "accuracy", "damage", "ap", "mode", "rc", "ammo"],
+      "weapon_stats": [
+        {
+          "weapon": "Cyber hold-out",
+          "accuracy": "4 (6)",
+          "damage": "6P",
+          "ap": null,
+          "mode": "SA",
+          "rc": null,
+          "ammo": "2 (m) / 6 (c)"
+        },
+        {
+          "weapon": "Light cyber pistol",
+          "accuracy": "6 (8)",
+          "damage": "7P",
+          "ap": null,
+          "mode": "SA",
+          "rc": null,
+          "ammo": "10 (m) / 15 (c)"
+        },
+        {
+          "weapon": "Cyber machine pistol",
+          "accuracy": "4 (6)",
+          "damage": "6P",
+          "ap": null,
+          "mode": "SA/BF",
+          "rc": 1,
+          "ammo": "18 (m) / 32 (c)"
+        },
+        {
+          "weapon": "Heavy cyber pistol",
+          "accuracy": "4 (6)",
+          "damage": "7P",
+          "ap": -1,
+          "mode": "SA",
+          "rc": null,
+          "ammo": "8 (m) / 12 (c)"
+        },
+        {
+          "weapon": "Cyber submachine gun",
+          "accuracy": "4 (6)",
+          "damage": "7P",
+          "ap": null,
+          "mode": "SA/BF",
+          "rc": 2,
+          "ammo": "18 (m) / 32 (c)"
+        },
+        {
+          "weapon": "Cyber shotgun",
+          "accuracy": "4 (6)",
+          "damage": "10P",
+          "ap": -1,
+          "mode": "SS",
+          "rc": null,
+          "ammo": "4 (m) / 10 (c)"
+        },
+        {
+          "weapon": "Cyber microgrenade launcher",
+          "accuracy": "4 (6)",
+          "damage": "as Grenade",
+          "ap": "as Grenade",
+          "mode": "SS",
+          "rc": null,
+          "ammo": "2 (m) / 6 (c)"
+        }
+      ],
+      "implant_stats_columns": ["weapon", "essence", "capacity", "avail", "cost"],
+      "implant_stats": [
+        {
+          "weapon": "Hold-out pistol",
+          "essence": 0.1,
+          "capacity": "[2]",
+          "avail": "8R",
+          "cost": 2000
+        },
+        {
+          "weapon": "Light pistol",
+          "essence": 0.25,
+          "capacity": "[4]",
+          "avail": "10R",
+          "cost": 3900
+        },
+        {
+          "weapon": "Machine pistol",
+          "essence": 0.5,
+          "capacity": "[6]",
+          "avail": "12R",
+          "cost": 3500
+        },
+        {
+          "weapon": "Heavy pistol",
+          "essence": 0.5,
+          "capacity": "[6]",
+          "avail": "12R",
+          "cost": 4300
+        },
+        {
+          "weapon": "Submachine gun",
+          "essence": 1,
+          "capacity": "[8]",
+          "avail": "12R",
+          "cost": 4800
+        },
+        { "weapon": "Shotgun", "essence": 1.25, "capacity": "[10]", "avail": "12R", "cost": 8500 },
+        {
+          "weapon": "Grenade launcher",
+          "essence": 1.5,
+          "capacity": "[15]",
+          "avail": "20F",
+          "cost": 30000
+        },
+        {
+          "weapon": "External clip port",
+          "essence": 0.1,
+          "capacity": "[1]",
+          "avail": "—",
+          "cost": 1000
+        },
+        { "weapon": "Laser sight", "essence": null, "capacity": "[1]", "avail": "—", "cost": 1000 },
+        {
+          "weapon": "Silencer/suppressor",
+          "essence": null,
+          "capacity": "[2]",
+          "avail": "—",
+          "cost": 1000
+        }
+      ]
+    },
+    "implant-weapons-cyber-melee": {
+      "source": "SR5 Core Rulebook, p.458",
+      "description": "Cyber melee weapon implant stats and combat stats.",
+      "implant_stats_columns": ["weapon", "essence", "capacity", "avail", "cost"],
+      "implant_stats": [
+        {
+          "weapon": "Hand blade (retractable)",
+          "essence": 0.25,
+          "capacity": "[2]",
+          "avail": "10F",
+          "cost": 2500
+        },
+        {
+          "weapon": "Hand razors (retractable)",
+          "essence": 0.2,
+          "capacity": "[2]",
+          "avail": "8F",
+          "cost": 1250
+        },
+        {
+          "weapon": "Spurs (retractable)",
+          "essence": 0.3,
+          "capacity": "[3]",
+          "avail": "12F",
+          "cost": 5000
+        },
+        { "weapon": "Shock hand", "essence": 0.25, "capacity": "[4]", "avail": "8R", "cost": 5000 }
+      ],
+      "combat_stats_columns": ["weapon", "reach", "damage", "ap"],
+      "combat_stats": [
+        { "weapon": "Hand blade", "reach": null, "damage": "(STR+2)P", "ap": -2 },
+        { "weapon": "Hand razors", "reach": null, "damage": "(STR+1)P", "ap": -3 },
+        { "weapon": "Spurs", "reach": null, "damage": "(STR+3)P", "ap": -2 },
+        { "weapon": "Shock hand", "reach": null, "damage": "9S(e)", "ap": -5 }
+      ]
+    },
+    "bioware": {
+      "source": "SR5 Core Rulebook, p.460",
+      "description": "Standard bioware with Essence, Availability, and Cost. Note: bioware has no wireless capability.",
+      "columns": ["device", "essence", "avail", "cost"],
+      "rows": [
+        {
+          "device": "Adrenaline pump (Rating 1-3)",
+          "essence": "Rating x 0.75",
+          "avail": "(Rating x 6)F",
+          "cost": "Rating x 55000"
+        },
+        {
+          "device": "Bone density augmentation (Rating 1-4)",
+          "essence": "Rating x 0.3",
+          "avail": "(Rating x 4)",
+          "cost": "Rating x 5000"
+        },
+        { "device": "Cat's eye", "essence": 0.1, "avail": 4, "cost": 4000 },
+        { "device": "Enhanced articulation", "essence": 0.3, "avail": 12, "cost": 24000 },
+        {
+          "device": "Muscle augmentation (Rating 1-4)",
+          "essence": "Rating x 0.2",
+          "avail": "(Rating x 5)R",
+          "cost": "Rating x 31000"
+        },
+        {
+          "device": "Muscle toner (Rating 1-4)",
+          "essence": "Rating x 0.2",
+          "avail": "(Rating x 5)R",
+          "cost": "Rating x 32000"
+        },
+        {
+          "device": "Orthoskin (Rating 1-4)",
+          "essence": "Rating x 0.25",
+          "avail": "(Rating x 4)R",
+          "cost": "Rating x 6000"
+        },
+        {
+          "device": "Pathogenic Defense (Rating 1-6)",
+          "essence": "Rating x 0.1",
+          "avail": "Rating x 2",
+          "cost": "Rating x 4500"
+        },
+        { "device": "Platelet factories", "essence": 0.2, "avail": 12, "cost": 17000 },
+        { "device": "Skin pocket", "essence": 0.1, "avail": 4, "cost": 12000 },
+        { "device": "Suprathyroid gland", "essence": 0.7, "avail": "20R", "cost": 140000 },
+        {
+          "device": "Symbiotes (Rating 1-4)",
+          "essence": "Rating x 0.2",
+          "avail": "(Rating x 5)",
+          "cost": "Rating x 3500"
+        },
+        {
+          "device": "Synthacardium (Rating 1-3)",
+          "essence": "Rating x 0.1",
+          "avail": "Rating x 4",
+          "cost": "Rating x 30000"
+        },
+        {
+          "device": "Tailored pheromones (Rating 1-3)",
+          "essence": "Rating x 0.2",
+          "avail": "(Rating x 4)R",
+          "cost": "Rating x 31000"
+        },
+        {
+          "device": "Toxin extractor (Rating 1-6)",
+          "essence": "Rating x 0.2",
+          "avail": "(Rating x 3)",
+          "cost": "Rating x 4800"
+        },
+        {
+          "device": "Tracheal filter (Rating 1-6)",
+          "essence": "Rating x 0.1",
+          "avail": "(Rating x 3)",
+          "cost": "Rating x 4500"
+        }
+      ],
+      "bone_density_unarmed_attacks": [
+        { "rating": 1, "damage": "(STR)P", "ap": null },
+        { "rating": 2, "damage": "(STR+1)P", "ap": null },
+        { "rating": 3, "damage": "(STR+2)P", "ap": null },
+        { "rating": 4, "damage": "(STR+3)P", "ap": null }
+      ]
+    },
+    "cultured-bioware": {
+      "source": "SR5 Core Rulebook, p.461",
+      "description": "Cultured bioware with Essence, Availability, and Cost. Must be tailor-made for the recipient.",
+      "columns": ["device", "essence", "avail", "cost"],
+      "rows": [
+        {
+          "device": "Cerebral booster (Rating 1-3)",
+          "essence": "Rating x 0.2",
+          "avail": "(Rating x 6)",
+          "cost": "Rating x 31500"
+        },
+        {
+          "device": "Damage compensators (Rating 1-12)",
+          "essence": "Rating x 0.1",
+          "avail": "(Rating x 3)F",
+          "cost": "Rating x 2000"
+        },
+        {
+          "device": "Mnemonic enhancer (Rating 1-3)",
+          "essence": "Rating x 0.1",
+          "avail": "(Rating x 5)",
+          "cost": "Rating x 9000"
+        },
+        { "device": "Pain editor", "essence": 0.3, "avail": "18F", "cost": 48000 },
+        { "device": "Reflex recorder (Skill)", "essence": 0.1, "avail": 10, "cost": 14000 },
+        { "device": "Sleep regulator", "essence": 0.1, "avail": 6, "cost": 12000 },
+        {
+          "device": "Synaptic booster (Rating 1-3)",
+          "essence": "Rating x 0.5",
+          "avail": "(Rating x 6)R",
+          "cost": "Rating x 95000"
+        }
+      ]
+    },
+    "magical-equipment": {
+      "source": "SR5 Core Rulebook, p.461",
+      "description": "Magical equipment including foci, formulae, and magical supplies with Availability and Cost.",
+      "foci_columns": ["focus_type", "avail", "cost"],
+      "foci": [
+        { "focus_type": "Enchanting Focus", "avail": "(Force x 3)R", "cost": "Force x 5000" },
+        { "focus_type": "Metamagic Focus", "avail": "(Force x 3)R", "cost": "Force x 9000" },
+        { "focus_type": "Power Focus", "avail": "(Force x 4)R", "cost": "Force x 18000" },
+        { "focus_type": "Qi Focus", "avail": "(Force x 3)R", "cost": "Force x 3000" },
+        { "focus_type": "Spell Focus", "avail": "(Force x 3)R", "cost": "Force x 4000" },
+        { "focus_type": "Spirit Focus", "avail": "(Force x 3)R", "cost": "Force x 4000" },
+        { "focus_type": "Weapon Focus", "avail": "(Force x 4)R", "cost": "Force x 7000" }
+      ],
+      "formulae_columns": ["formula_type", "avail", "cost"],
+      "formulae": [
+        { "formula_type": "Focus Formula", "avail": "as Focus", "cost": "Focus Cost x 0.25" },
+        { "formula_type": "Spell Formula — Combat", "avail": "8R", "cost": 2000 },
+        { "formula_type": "Spell Formula — Detection", "avail": "4R", "cost": 500 },
+        { "formula_type": "Spell Formula — Health", "avail": "4R", "cost": 500 },
+        { "formula_type": "Spell Formula — Illusion", "avail": "8R", "cost": 1000 },
+        { "formula_type": "Spell Formula — Manipulation", "avail": "8R", "cost": 1500 }
+      ],
+      "magical_supplies": [
+        { "item": "Magical Lodge Materials", "avail": "Force x 2", "cost": "Force x 500" },
+        { "item": "Reagents, per dram", "avail": "—", "cost": 20 }
+      ]
+    }
+  }
+}

@@ -106,6 +106,7 @@ Use skills for detailed domain knowledge (loaded on demand, not every session):
 - `/testing` - Test infrastructure, patterns, and file locations
 - `/mcp-guide` - MCP server selection and usage
 - `/github-issues` - GitHub issue management (epics, sub-issues, milestones)
+- `/extract-rulebook` - Extract entire sourcebooks into structured reference material (TOC discovery, manifest, sequential extraction)
 - `/edition-data-author` - Creating catalog items for edition JSON files
 - `/archetype-import` - Importing SR5 archetypes from sourcebook stat blocks
 - `/shadowrun-aesthetic` - UI styling guidelines

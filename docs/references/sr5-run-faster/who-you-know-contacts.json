@@ -1,0 +1,311 @@
+{
+  "tables": {
+    "currency-exchange-rates": {
+      "source": "Run Faster, p.174",
+      "description": "Hard currency exchange rates expressed in relationship to one nuyen",
+      "columns": ["currency", "rateToOneNuyen", "hardCurrencyAvailable"],
+      "rows": [
+        { "currency": "UCAS dollar bill", "rateToOneNuyen": "2:1", "hardCurrencyAvailable": true },
+        { "currency": "Tir ryal", "rateToOneNuyen": "0.9:1", "hardCurrencyAvailable": true },
+        {
+          "currency": "Southeast Asian ringgit",
+          "rateToOneNuyen": "50:1",
+          "hardCurrencyAvailable": false
+        },
+        { "currency": "Aztlan peso", "rateToOneNuyen": "60:1", "hardCurrencyAvailable": false }
+      ]
+    },
+    "corporate-scrip-rates": {
+      "source": "Run Faster, p.174",
+      "description": "Corporate scrip exchange rates expressed in relationship to one nuyen",
+      "columns": ["corporation", "rateToOneNuyen"],
+      "rows": [
+        { "corporation": "Saeder-Krupp", "rateToOneNuyen": "0.8:1" },
+        { "corporation": "Shiawase", "rateToOneNuyen": "1:1" },
+        { "corporation": "MCT", "rateToOneNuyen": "1.01:1" },
+        { "corporation": "Wuxing", "rateToOneNuyen": "3:1" },
+        { "corporation": "Ares", "rateToOneNuyen": "3.5:1" },
+        { "corporation": "Evo", "rateToOneNuyen": "5:1" },
+        { "corporation": "Renraku", "rateToOneNuyen": "10:1" },
+        { "corporation": "Horizon", "rateToOneNuyen": "15:1" },
+        { "corporation": "Aztechnology", "rateToOneNuyen": "20:1" }
+      ]
+    },
+    "organizational-contacts": {
+      "source": "Run Faster, p.177",
+      "description": "Organization contact options with Connection Bonus, Karma Cost, and whether SINner quality is required",
+      "columns": ["organization", "connectionBonus", "karmaCost", "sinnerRequired"],
+      "rows": [
+        {
+          "organization": "Street Gang",
+          "connectionBonus": 1,
+          "karmaCost": 5,
+          "sinnerRequired": false
+        },
+        {
+          "organization": "City Government",
+          "connectionBonus": 1,
+          "karmaCost": 3,
+          "sinnerRequired": true
+        },
+        {
+          "organization": "Humanis Policlub",
+          "connectionBonus": 2,
+          "karmaCost": 10,
+          "sinnerRequired": false
+        },
+        {
+          "organization": "Order of St. Sylvester",
+          "connectionBonus": 2,
+          "karmaCost": 8,
+          "sinnerRequired": true
+        },
+        {
+          "organization": "Lone Star/GOD",
+          "connectionBonus": 3,
+          "karmaCost": 12,
+          "sinnerRequired": true
+        }
+      ]
+    },
+    "repayment-timeframes": {
+      "source": "Run Faster, p.177",
+      "description": "Repayment amount ranges and corresponding time frames in weeks for paying off contact debt",
+      "columns": ["repaymentAmount", "timeFrameWeeks"],
+      "rows": [
+        {
+          "repaymentAmount": "Up to 100",
+          "repaymentAmountMin": 0,
+          "repaymentAmountMax": 100,
+          "timeFrameWeeks": 4
+        },
+        {
+          "repaymentAmount": "101 to 1,000",
+          "repaymentAmountMin": 101,
+          "repaymentAmountMax": 1000,
+          "timeFrameWeeks": 3
+        },
+        {
+          "repaymentAmount": "1,001 to 10,000",
+          "repaymentAmountMin": 1001,
+          "repaymentAmountMax": 10000,
+          "timeFrameWeeks": 2
+        },
+        {
+          "repaymentAmount": "10,001 to 100,000",
+          "repaymentAmountMin": 10001,
+          "repaymentAmountMax": 100000,
+          "timeFrameWeeks": 1
+        }
+      ]
+    },
+    "do-i-know-you-thresholds": {
+      "source": "Run Faster, p.179",
+      "description": "Memory Test thresholds for recognizing characters based on proximity and context. The highest of either Notoriety or Street Cred of the subject plus public awareness reduces the threshold.",
+      "note": "Only Public Awareness reduces threshold for the general public",
+      "columns": ["description", "threshold"],
+      "rows": [
+        {
+          "description": "Runners working in the same city region (Seattle, Denver, etc.)",
+          "threshold": 5
+        },
+        {
+          "description": "Runners working in the same country (AGS, UCAS, etc.), organized crime/law enforcement in the same city region",
+          "threshold": 7
+        },
+        {
+          "description": "Runners working on the same continent, organized crime/law enforcement in the same country",
+          "threshold": 9
+        },
+        { "description": "General public", "threshold": 10 }
+      ]
+    },
+    "contact-quickstats": {
+      "source": "Run Faster, p.180",
+      "description": "Connection Rating determines the amount of points for attributes, skills, and cash to represent the contact's talent and resources. The number after the slash is for special attribute points (cannot be used on regular attributes and vice versa).",
+      "columns": [
+        "connectionRating",
+        "bonusAttributePoints",
+        "totalSkillPoints",
+        "specialAttributePoints",
+        "nuyen"
+      ],
+      "rows": [
+        {
+          "connectionRating": 1,
+          "bonusAttributePoints": 0,
+          "totalSkillPoints": 14,
+          "specialAttributePoints": 0,
+          "nuyen": 6000
+        },
+        {
+          "connectionRating": 2,
+          "bonusAttributePoints": 1,
+          "totalSkillPoints": 18,
+          "specialAttributePoints": 0,
+          "nuyen": 50000
+        },
+        {
+          "connectionRating": 3,
+          "bonusAttributePoints": 2,
+          "totalSkillPoints": 22,
+          "specialAttributePoints": 2,
+          "nuyen": 140000
+        },
+        {
+          "connectionRating": 4,
+          "bonusAttributePoints": 2,
+          "totalSkillPoints": 26,
+          "specialAttributePoints": 4,
+          "nuyen": 175000
+        },
+        {
+          "connectionRating": 5,
+          "bonusAttributePoints": 3,
+          "totalSkillPoints": 26,
+          "specialAttributePoints": 4,
+          "nuyen": 225000
+        },
+        {
+          "connectionRating": 6,
+          "bonusAttributePoints": 3,
+          "totalSkillPoints": 30,
+          "specialAttributePoints": 5,
+          "nuyen": 250000
+        },
+        {
+          "connectionRating": 7,
+          "bonusAttributePoints": 2,
+          "totalSkillPoints": 34,
+          "specialAttributePoints": 5,
+          "nuyen": 275000
+        },
+        {
+          "connectionRating": 8,
+          "bonusAttributePoints": 3,
+          "totalSkillPoints": 34,
+          "specialAttributePoints": 5,
+          "nuyen": 275000
+        },
+        {
+          "connectionRating": 9,
+          "bonusAttributePoints": 3,
+          "totalSkillPoints": 38,
+          "specialAttributePoints": 5,
+          "nuyen": 300000
+        },
+        {
+          "connectionRating": 10,
+          "bonusAttributePoints": 4,
+          "totalSkillPoints": 38,
+          "specialAttributePoints": 5,
+          "nuyen": 375000
+        },
+        {
+          "connectionRating": 11,
+          "bonusAttributePoints": 2,
+          "totalSkillPoints": 42,
+          "specialAttributePoints": 8,
+          "nuyen": 450000
+        },
+        {
+          "connectionRating": 12,
+          "bonusAttributePoints": 3,
+          "totalSkillPoints": 46,
+          "specialAttributePoints": 10,
+          "nuyen": 500000
+        }
+      ]
+    },
+    "contact-gender": {
+      "source": "Run Faster, p.179",
+      "description": "Random contact gender determination (roll 1D6)",
+      "diceType": "1D6",
+      "columns": ["roll", "result"],
+      "rows": [
+        { "roll": "1-3", "result": "Male" },
+        { "roll": "4-6", "result": "Female" }
+      ]
+    },
+    "contact-age": {
+      "source": "Run Faster, p.179",
+      "description": "Random contact age bracket determination (roll 1D6)",
+      "diceType": "1D6",
+      "columns": ["roll", "result"],
+      "rows": [
+        { "roll": "1-2", "result": "Young (18-34)" },
+        { "roll": "3-4", "result": "Middle-Aged (35-55)" },
+        { "roll": "5-6", "result": "Old (55+)" }
+      ]
+    },
+    "contact-metatype-part1": {
+      "source": "Run Faster, p.179",
+      "description": "Random contact metatype primary roll (roll 1D6). Results of 5-6 go to Part 2 for metahuman subtype.",
+      "diceType": "1D6",
+      "columns": ["roll", "result"],
+      "rows": [
+        { "roll": "1", "result": "Human" },
+        { "roll": "2", "result": "Human" },
+        { "roll": "3", "result": "Human" },
+        { "roll": "4", "result": "Human" },
+        { "roll": "5", "result": "Metahuman (go to Part 2)" },
+        { "roll": "6", "result": "Metahuman (go to Part 2)" }
+      ]
+    },
+    "contact-metatype-part2": {
+      "source": "Run Faster, p.179",
+      "description": "Random metahuman subtype determination (roll 1D6), used when Part 1 result is Metahuman",
+      "diceType": "1D6",
+      "columns": ["roll", "result"],
+      "rows": [
+        { "roll": "1", "result": "Dwarf" },
+        { "roll": "2", "result": "Elf" },
+        { "roll": "3", "result": "Ork" },
+        { "roll": "4", "result": "Troll" },
+        { "roll": "5", "result": "Gamemaster's choice" },
+        { "roll": "6", "result": "Gamemaster's choice" }
+      ]
+    },
+    "contact-preferred-payment": {
+      "source": "Run Faster, p.180",
+      "description": "Random preferred payment type for contacts (roll 2D6)",
+      "diceType": "2D6",
+      "columns": ["roll", "result"],
+      "rows": [
+        { "roll": 2, "result": "Cash (hard currency)" },
+        { "roll": 3, "result": "Service (drek jobs)" },
+        { "roll": 4, "result": "Cash (corp scrip)" },
+        { "roll": 5, "result": "Barter (items needed for the profession)" },
+        { "roll": 6, "result": "Service (shadowrunner job)" },
+        { "roll": 7, "result": "Cash (credstick)" },
+        { "roll": 8, "result": "Cash (credstick)" },
+        { "roll": 9, "result": "Barter (easy-to-sell items)" },
+        { "roll": 10, "result": "Service (free-labor jobs)" },
+        { "roll": 11, "result": "Barter (hobby/vice items)" },
+        { "roll": 12, "result": "Cash (ECC or other foreign electronic currency)" }
+      ]
+    },
+    "contact-hobbies-vices": {
+      "source": "Run Faster, p.180",
+      "description": "Random hobbies/vices for contacts (roll 2D6)",
+      "diceType": "2D6",
+      "columns": ["roll", "result"],
+      "rows": [
+        { "roll": 2, "result": "Gamemaster's choice" },
+        { "roll": 3, "result": "Family obligations (children, parents, siblings, etc.)" },
+        { "roll": 4, "result": "Gambling (cards, horses, etc.)" },
+        { "roll": 5, "result": "Bad habits (illegal drugs, BTLs)" },
+        {
+          "roll": 6,
+          "result": "Personal grooming (clothes/fashion, shoes, perfumes, cosmetic treatments)"
+        },
+        { "roll": 7, "result": "Nothing of interest or of use" },
+        { "roll": 8, "result": "Social habits (drinking, smoking)" },
+        { "roll": 9, "result": "Entertainment (trid shows, movies, music)" },
+        { "roll": 10, "result": "Weapons (guns, blades, military, etc.)" },
+        { "roll": 11, "result": "Vehicles (cars, drones, etc.)" },
+        { "roll": 12, "result": "Gamemaster's choice" }
+      ]
+    }
+  }
+}

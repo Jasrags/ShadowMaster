@@ -1,0 +1,173 @@
+{
+  "tables": {
+    "engagement-lifecycle": {
+      "source": "Run Faster, pp.197–200",
+      "description": "Three-phase lifecycle of a shadowrun engagement with key rules and guidelines",
+      "columns": ["phase", "name", "keyRules", "warningSignsOrGuidance"],
+      "rows": [
+        {
+          "phase": 1,
+          "name": "The Meet",
+          "keyRules": [
+            "Project confidence, not bravado",
+            "Dress for the meeting location, not for the Johnson",
+            "Holster all weapons visibly; max outerwear is an armored jacket",
+            "Never use magic during meetings",
+            "Ask all mission questions now; do not ask about the Johnson or employer",
+            "Determine three things: job details, payment intent, kill intent",
+            "Never hand over goods until paid"
+          ],
+          "warningSignsOrGuidance": [
+            "Money is too good or Johnson does not negotiate",
+            "Johnson shows up with overwhelming bodyguards",
+            "Johnson acts aggressively during the meeting",
+            "Team has no established reputation",
+            "Johnson has a history of killing teams (check background)"
+          ]
+        },
+        {
+          "phase": 2,
+          "name": "The Run",
+          "keyRules": [
+            "Minimize contact with Mr. Johnson; default is 'don't call me'",
+            "Every communication risks exposure for both sides",
+            "Increase discretion as mission progresses",
+            "Only call Johnson if mission is fundamentally compromised",
+            "Solving problems independently is a mark of professionalism",
+            "Get paid almost entirely before completing irreversible actions (e.g., killing a target)",
+            "Aim for 80% payment before final action, not 20%"
+          ],
+          "warningSignsOrGuidance": [
+            "Targets may detect surveillance and begin counter-investigation",
+            "Contacting your Johnson may lead surveillance to the Johnson and back to you",
+            "Johnsons don't attack other Johnsons; shadowrunners are fair game",
+            "CFD complications are a valid reason to call"
+          ]
+        },
+        {
+          "phase": 3,
+          "name": "The Handoff",
+          "keyRules": [
+            "Never ask for more than was agreed",
+            "Control the environment: choose the meeting location",
+            "Set up tactical advantages (sniper overwatch, hacker scanning, visible weapons)",
+            "Use intimidation to ensure payment",
+            "Prefer runs where you hold a physical deliverable for leverage",
+            "Check Johnson's rep in the shadows before the handoff"
+          ],
+          "warningSignsOrGuidance": [
+            "Sabotage and assassination runs offer no physical leverage at handoff",
+            "Johnsons who don't pay get bad rep",
+            "Killing any team (even green runners) is taboo in the shadow community",
+            "Veteran teams can tolerate a Johnson not paying green runners, but killing is never acceptable"
+          ]
+        }
+      ]
+    },
+    "johnson-fixer-roles": {
+      "source": "Run Faster, pp.196–197",
+      "description": "Definitions and roles of Mr. Johnson and Fixers in the shadowrun ecosystem",
+      "columns": ["role", "definition", "keyAttributes", "relationship"],
+      "rows": [
+        {
+          "role": "Mr. Johnson",
+          "definition": "Anyone who hires a shadowrunner for a job",
+          "keyAttributes": [
+            "Becomes a criminal by hiring for illegal work",
+            "Personally at risk and self-protective",
+            "Behavior shaped by cultural background",
+            "May not intend to pay or may intend to liquidate the team"
+          ],
+          "relationship": "Employer of shadowrunners; client of fixers"
+        },
+        {
+          "role": "Fixer",
+          "definition": "Middleman providing goods and services to both Johnsons and shadowrunners",
+          "keyAttributes": [
+            "Builds a stable of reliable shadowrunners",
+            "Connects runners with Johnsons",
+            "Provides ancillary services (street docs, arms dealers, etc.)",
+            "Key attribute is reliability",
+            "Builds reputation through word-of-mouth"
+          ],
+          "relationship": "Intermediary between Johnsons and shadowrunners; talent agency"
+        }
+      ]
+    },
+    "fixer-payment-models": {
+      "source": "Run Faster, p.197",
+      "description": "How fixers get compensated for connecting Johnsons with shadowrunners",
+      "columns": ["model", "description", "advantage", "disadvantage", "prevalence"],
+      "rows": [
+        {
+          "model": "Full Payment",
+          "description": "Johnson pays entire sum to fixer; fixer pays runners whatever he can get away with. Fixer effectively becomes Mr. Johnson.",
+          "advantage": "Fixer can make more money",
+          "disadvantage": "Payment tied to mission completion; increased risk; incentivizes micro-management",
+          "prevalence": "Less common"
+        },
+        {
+          "model": "Fee-for-Service",
+          "description": "Fixer charges Johnson a fee for assembling a crew, then steps out of the equation.",
+          "advantage": "Fixer gets paid quickly and moves to next deal",
+          "disadvantage": "Less total money",
+          "prevalence": "Most fixers prefer this model"
+        },
+        {
+          "model": "Finder's Fee",
+          "description": "Fixer charges a finder's fee to both the supplier and the runner for connecting them.",
+          "advantage": "Additional revenue stream on top of core business",
+          "disadvantage": "Fee is negotiable; both parties may push back",
+          "prevalence": "Common for ancillary services"
+        },
+        {
+          "model": "Favor Trading",
+          "description": "Fixer trades for favors instead of liquid nuyen when cash-strapped.",
+          "advantage": "Builds social capital and long-term relationships",
+          "disadvantage": "No immediate monetary compensation",
+          "prevalence": "Situational"
+        }
+      ]
+    },
+    "meet-etiquette": {
+      "source": "Run Faster, pp.197–198",
+      "description": "Rules of etiquette for the initial meeting with Mr. Johnson",
+      "columns": ["category", "rule"],
+      "rows": [
+        { "category": "presentation", "rule": "Project confidence, not bravado" },
+        { "category": "presentation", "rule": "Demonstrate expertise by asking expert questions" },
+        { "category": "presentation", "rule": "Show backbone; do not be a pushover" },
+        { "category": "dress", "rule": "Dress for the meeting location, not for the Johnson" },
+        {
+          "category": "dress",
+          "rule": "Fancy restaurant: dress well. Alley meeting: dress normally"
+        },
+        {
+          "category": "dress",
+          "rule": "Exception: high-society infiltration jobs benefit from showing high-society appearance"
+        },
+        {
+          "category": "gear",
+          "rule": "Holster all weapons: pistols in holsters, SMGs in slings, rifles slung"
+        },
+        { "category": "gear", "rule": "Maximum outerwear: armored jacket and concealable weapons" },
+        {
+          "category": "gear",
+          "rule": "No need to actually conceal from Mr. J; just show effort to holster"
+        },
+        { "category": "magic", "rule": "Never use magic during meetings" },
+        {
+          "category": "magic",
+          "rule": "Johnsons are well-versed in magic and wary of mood/mind-control spells"
+        },
+        { "category": "magic", "rule": "Using magic earns a serious black mark if discovered" },
+        { "category": "questions", "rule": "Ask all mission questions during The Meet" },
+        { "category": "questions", "rule": "Do not ask about the Johnson, employer, or motives" },
+        {
+          "category": "questions",
+          "rule": "Focus on operational details: job specifics, guards, reinforcements, timing, security"
+        }
+      ]
+    }
+  }
+}

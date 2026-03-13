@@ -1,0 +1,834 @@
+{
+  "tables": {
+    "metavariant-attribute-table": {
+      "source": "Run Faster, p.104",
+      "description": "Attribute min/max ranges and racial traits for all metavariants. Columns: BOD, AGI, REA, STR, WIL, LOG, INT, CHA, EDG. Values are 'min/max' strings.",
+      "columns": [
+        "metavariant",
+        "parentMetatype",
+        "BOD",
+        "AGI",
+        "REA",
+        "STR",
+        "WIL",
+        "LOG",
+        "INT",
+        "CHA",
+        "EDG",
+        "racialTraits"
+      ],
+      "rows": [
+        {
+          "metavariant": "Gnome",
+          "parentMetatype": "Dwarf",
+          "BOD": "1/4",
+          "AGI": "2/7",
+          "REA": "1/6",
+          "STR": "1/4",
+          "WIL": "2/7",
+          "LOG": "2/7",
+          "INT": "1/6",
+          "CHA": "1/6",
+          "EDG": "1/6",
+          "racialTraits": ["Arcane Arrester (2)", "Neoteny", "Thermographic Vision"]
+        },
+        {
+          "metavariant": "Hanuman",
+          "parentMetatype": "Dwarf",
+          "BOD": "1/6",
+          "AGI": "2/7",
+          "REA": "1/6",
+          "STR": "2/7",
+          "WIL": "1/6",
+          "LOG": "1/5",
+          "INT": "2/7",
+          "CHA": "1/5",
+          "EDG": "1/6",
+          "racialTraits": [
+            "Low-Light Vision",
+            "Monkey Paws",
+            "Prehensile Tail",
+            "Unusual Hair (Body)"
+          ]
+        },
+        {
+          "metavariant": "Koborokuru",
+          "parentMetatype": "Dwarf",
+          "BOD": "2/7",
+          "AGI": "1/6",
+          "REA": "1/6",
+          "STR": "2/7",
+          "WIL": "2/7",
+          "LOG": "1/6",
+          "INT": "1/6",
+          "CHA": "1/6",
+          "EDG": "1/6",
+          "racialTraits": [
+            "Celerity",
+            "Resistance to Pathogens/Toxins",
+            "Thermographic Vision",
+            "Unusual Hair"
+          ]
+        },
+        {
+          "metavariant": "Menehune",
+          "parentMetatype": "Dwarf",
+          "BOD": "2/7",
+          "AGI": "2/7",
+          "REA": "1/5",
+          "STR": "2/7",
+          "WIL": "1/6",
+          "LOG": "1/6",
+          "INT": "1/6",
+          "CHA": "1/6",
+          "EDG": "1/6",
+          "racialTraits": [
+            "Resistance to Pathogens/Toxins",
+            "Thermographic Vision",
+            "Underwater Vision"
+          ]
+        },
+        {
+          "metavariant": "Hobgoblin",
+          "parentMetatype": "Ork",
+          "BOD": "1/6",
+          "AGI": "1/6",
+          "REA": "1/6",
+          "STR": "2/7",
+          "WIL": "1/6",
+          "LOG": "1/5",
+          "INT": "1/6",
+          "CHA": "2/7",
+          "EDG": "1/6",
+          "racialTraits": [
+            "Fangs",
+            "Low-Light Vision",
+            "Extravagant Eyes",
+            "Poor Self Control (Vindictive)"
+          ]
+        },
+        {
+          "metavariant": "Ogre",
+          "parentMetatype": "Ork",
+          "BOD": "4/9",
+          "AGI": "1/6",
+          "REA": "1/5",
+          "STR": "3/8",
+          "WIL": "2/7",
+          "LOG": "1/5",
+          "INT": "1/6",
+          "CHA": "1/4",
+          "EDG": "1/6",
+          "racialTraits": ["Low-Light Vision", "Ogre Stomach"]
+        },
+        {
+          "metavariant": "Oni",
+          "parentMetatype": "Ork",
+          "BOD": "3/8",
+          "AGI": "2/7",
+          "REA": "1/6",
+          "STR": "2/7",
+          "WIL": "1/6",
+          "LOG": "1/5",
+          "INT": "1/6",
+          "CHA": "2/7",
+          "EDG": "1/6",
+          "racialTraits": ["Low-Light Vision", "Striking Skin Pigmentation"]
+        },
+        {
+          "metavariant": "Satyr",
+          "parentMetatype": "Ork",
+          "BOD": "2/7",
+          "AGI": "1/6",
+          "REA": "2/7",
+          "STR": "2/7",
+          "WIL": "1/6",
+          "LOG": "1/6",
+          "INT": "1/6",
+          "CHA": "1/5",
+          "EDG": "1/6",
+          "racialTraits": ["Low-Light Vision", "Satyr Legs"]
+        },
+        {
+          "metavariant": "Cyclopean",
+          "parentMetatype": "Troll",
+          "BOD": "5/10",
+          "AGI": "1/5",
+          "REA": "1/6",
+          "STR": "6/11",
+          "WIL": "1/6",
+          "LOG": "1/4",
+          "INT": "1/5",
+          "CHA": "1/4",
+          "EDG": "1/6",
+          "racialTraits": ["Cyclopean Eye", "+1 Reach"]
+        },
+        {
+          "metavariant": "Fomorian",
+          "parentMetatype": "Troll",
+          "BOD": "4/9",
+          "AGI": "1/5",
+          "REA": "1/6",
+          "STR": "5/10",
+          "WIL": "1/5",
+          "LOG": "1/4",
+          "INT": "1/4",
+          "CHA": "1/5",
+          "EDG": "1/6",
+          "racialTraits": ["Arcane Arrester (1)", "Thermographic Vision", "+1 Reach"]
+        },
+        {
+          "metavariant": "Giant",
+          "parentMetatype": "Troll",
+          "BOD": "5/10",
+          "AGI": "1/5",
+          "REA": "1/5",
+          "STR": "5/10",
+          "WIL": "1/6",
+          "LOG": "1/5",
+          "INT": "1/5",
+          "CHA": "1/5",
+          "EDG": "1/6",
+          "racialTraits": ["Dermal Alteration (Bark)", "Thermographic Vision", "+1 Reach"]
+        },
+        {
+          "metavariant": "Minotaur",
+          "parentMetatype": "Troll",
+          "BOD": "6/11",
+          "AGI": "1/5",
+          "REA": "1/6",
+          "STR": "5/10",
+          "WIL": "1/6",
+          "LOG": "1/5",
+          "INT": "1/6",
+          "CHA": "1/4",
+          "EDG": "1/6",
+          "racialTraits": ["Goring Horns", "Thermographic Vision", "+1 Reach"]
+        },
+        {
+          "metavariant": "Dryad",
+          "parentMetatype": "Elf",
+          "BOD": "1/6",
+          "AGI": "2/7",
+          "REA": "1/6",
+          "STR": "1/5",
+          "WIL": "1/6",
+          "LOG": "1/6",
+          "INT": "1/6",
+          "CHA": "3/8",
+          "EDG": "1/6",
+          "racialTraits": ["Glamour", "Low-Light Vision", "Symbiosis"]
+        },
+        {
+          "metavariant": "Nocturna",
+          "parentMetatype": "Elf",
+          "BOD": "1/5",
+          "AGI": "3/8",
+          "REA": "1/6",
+          "STR": "1/6",
+          "WIL": "1/6",
+          "LOG": "1/6",
+          "INT": "2/7",
+          "CHA": "1/6",
+          "EDG": "1/6",
+          "racialTraits": [
+            "Allergy (Sunlight, Mild)",
+            "Low-Light Vision",
+            "Keen-eared",
+            "Nocturnal",
+            "Unusual Hair (Colored Fur)"
+          ]
+        },
+        {
+          "metavariant": "Wakyambi",
+          "parentMetatype": "Elf",
+          "BOD": "1/6",
+          "AGI": "2/7",
+          "REA": "1/6",
+          "STR": "1/6",
+          "WIL": "1/6",
+          "LOG": "1/5",
+          "INT": "2/7",
+          "CHA": "1/6",
+          "EDG": "2/7",
+          "racialTraits": ["Celerity", "Elongated Limbs", "Low-Light Vision"]
+        },
+        {
+          "metavariant": "Xapiri Thepe",
+          "parentMetatype": "Elf",
+          "BOD": "1/6",
+          "AGI": "2/7",
+          "REA": "1/6",
+          "STR": "1/6",
+          "WIL": "1/6",
+          "LOG": "1/5",
+          "INT": "1/6",
+          "CHA": "2/7",
+          "EDG": "1/6",
+          "racialTraits": ["Allergy (Pollutants, Mild)", "Low-Light Vision", "Photometabolism"]
+        },
+        {
+          "metavariant": "Nartaki",
+          "parentMetatype": "Human",
+          "BOD": "1/6",
+          "AGI": "1/6",
+          "REA": "1/6",
+          "STR": "1/6",
+          "WIL": "1/6",
+          "LOG": "1/6",
+          "INT": "1/6",
+          "CHA": "1/6",
+          "EDG": "1/6",
+          "racialTraits": ["Shiva Arms", "Striking Skin Pigmentation"]
+        }
+      ]
+    },
+    "metasapient-attribute-table": {
+      "source": "Run Faster, p.105",
+      "description": "Attribute min/max ranges, racial traits, and natural Magic for metasapient species.",
+      "columns": [
+        "metasapient",
+        "species",
+        "BOD",
+        "AGI",
+        "REA",
+        "STR",
+        "WIL",
+        "LOG",
+        "INT",
+        "CHA",
+        "EDG",
+        "MAG",
+        "racialTraits"
+      ],
+      "rows": [
+        {
+          "metasapient": "Centaur",
+          "species": "Equus sagittarius",
+          "BOD": "3/8",
+          "AGI": "1/6",
+          "REA": "1/6",
+          "STR": "3/8",
+          "WIL": "1/6",
+          "LOG": "1/6",
+          "INT": "1/5",
+          "CHA": "1/5",
+          "EDG": "1/5",
+          "MAG": 1,
+          "racialTraits": [
+            "Low-Light Vision",
+            "Thermographic Vision",
+            "Magic Sense",
+            "Natural Weapon (Kick: DV (STR + 2)P, AP +1, +1 Reach)",
+            "Search",
+            "Movement (x1/x4/+4)"
+          ]
+        },
+        {
+          "metasapient": "Naga",
+          "species": "Custos serpens",
+          "BOD": "3/8",
+          "AGI": "1/4",
+          "REA": "2/7",
+          "STR": "4/9",
+          "WIL": "2/7",
+          "LOG": "1/6",
+          "INT": "1/6",
+          "CHA": "2/7",
+          "EDG": "1/5",
+          "MAG": 1,
+          "racialTraits": [
+            "Armor 8",
+            "Cold-Blooded",
+            "Dual Natured",
+            "Guard",
+            "Natural Weapon (Bite: DV (STR + 1)P, AP -2, Reach -1)",
+            "Venom"
+          ]
+        },
+        {
+          "metasapient": "Pixie",
+          "species": "Insufficient Data for Classification",
+          "BOD": "1/2",
+          "AGI": "3/8",
+          "REA": "3/8",
+          "STR": "1/2",
+          "WIL": "3/8",
+          "LOG": "2/7",
+          "INT": "2/7",
+          "CHA": "3/8",
+          "EDG": "2/7",
+          "MAG": 1,
+          "racialTraits": [
+            "Astral Perception",
+            "Concealment (Self Only)",
+            "Vanishing",
+            "Uneducated",
+            "Movement (x1/x2/+1; x2/x6/+2m flight)"
+          ]
+        },
+        {
+          "metasapient": "Sasquatch",
+          "species": "Pesvastus pilosis",
+          "BOD": "6/11",
+          "AGI": "1/6",
+          "REA": "1/6",
+          "STR": "5/10",
+          "WIL": "1/6",
+          "LOG": "1/6",
+          "INT": "1/6",
+          "CHA": "1/6",
+          "EDG": "1/6",
+          "MAG": 1,
+          "racialTraits": [
+            "Dual Natured",
+            "Mimicry",
+            "Natural Weapon (Claws: DV (STR + 1)P, AP -, +1 Reach)",
+            "Uneducated"
+          ]
+        }
+      ]
+    },
+    "shapeshifter-attribute-table": {
+      "source": "Run Faster, p.105",
+      "description": "Animal form attribute min/max ranges, racial traits, initiative dice bonus, and natural Magic for shapeshifter breeds.",
+      "columns": [
+        "shapeshifter",
+        "BOD",
+        "AGI",
+        "REA",
+        "STR",
+        "WIL",
+        "LOG",
+        "INT",
+        "CHA",
+        "MAG",
+        "INI"
+      ],
+      "rows": [
+        {
+          "shapeshifter": "Bovine",
+          "BOD": "3/8",
+          "AGI": "1/4",
+          "REA": "1/4",
+          "STR": "4/9",
+          "WIL": "1/6",
+          "LOG": "1/5",
+          "INT": "1/6",
+          "CHA": "1/5",
+          "MAG": 1,
+          "INI": "+1D6",
+          "racialTraits": [
+            "Goring Horns",
+            "Shift (Metahuman Form)",
+            "Uneducated",
+            "Movement (x1/x4/+1m)"
+          ]
+        },
+        {
+          "shapeshifter": "Canine",
+          "BOD": "1/5",
+          "AGI": "1/6",
+          "REA": "2/7",
+          "STR": "1/5",
+          "WIL": "2/7",
+          "LOG": "1/5",
+          "INT": "2/7",
+          "CHA": "2/7",
+          "MAG": 1,
+          "INI": "+1D6",
+          "racialTraits": [
+            "Broadened Auditory Spectrum (Ultrasonic)",
+            "Low-Light Vision",
+            "Natural Weapon (Bite: DV [STR + 1]P, AP -1)",
+            "Shift (Metahuman Form)",
+            "Vomeronasal Organ",
+            "Movement (x2/x6/+3)"
+          ]
+        },
+        {
+          "shapeshifter": "Equine",
+          "BOD": "4/9",
+          "AGI": "1/4",
+          "REA": "1/6",
+          "STR": "5/10",
+          "WIL": "1/6",
+          "LOG": "1/6",
+          "INT": "1/6",
+          "CHA": "1/5",
+          "MAG": 1,
+          "INI": "+1D6",
+          "racialTraits": [
+            "Keen-eared",
+            "Shift (Metahuman Form)",
+            "Uneducated",
+            "Movement (x1/x4/+4)"
+          ]
+        },
+        {
+          "shapeshifter": "Falconine",
+          "BOD": "1/4",
+          "AGI": "2/7",
+          "REA": "3/8",
+          "STR": "1/4",
+          "WIL": "1/6",
+          "LOG": "1/5",
+          "INT": "2/7",
+          "CHA": "2/7",
+          "MAG": 1,
+          "INI": "+2D6",
+          "racialTraits": [
+            "Hawk Eyed",
+            "Natural Weapon (Bite: DV (STR + 2)P, AP -1, Reach -1; Talons: DV (STR)P, AP -)",
+            "Shift (Metahuman Form)",
+            "Movement (x1/x2/+0.5m; x2/x6/+2 flight)"
+          ]
+        },
+        {
+          "shapeshifter": "Leonine",
+          "BOD": "3/8",
+          "AGI": "1/6",
+          "REA": "2/7",
+          "STR": "4/9",
+          "WIL": "1/5",
+          "LOG": "1/4",
+          "INT": "2/7",
+          "CHA": "2/7",
+          "MAG": 1,
+          "INI": "+2D6",
+          "racialTraits": [
+            "Balance Receptor",
+            "Broadened Auditory Spectrum (Ultrasonic)",
+            "Low-Light Vision",
+            "Natural Weapon (Bite: DV (STR + 1)P, AP -1; Claws: DV (STR + 1)P, AP -1, Reach +1)",
+            "Shift (Metahuman Form)",
+            "Uneducated",
+            "Movement (x2/x5/+2)"
+          ]
+        },
+        {
+          "shapeshifter": "Lupine",
+          "BOD": "1/6",
+          "AGI": "2/7",
+          "REA": "1/6",
+          "STR": "1/6",
+          "WIL": "1/6",
+          "LOG": "1/5",
+          "INT": "2/7",
+          "CHA": "2/7",
+          "MAG": 1,
+          "INI": "+2D6",
+          "racialTraits": [
+            "Broadened Auditory Spectrum (Ultrasonic)",
+            "Low-Light Vision",
+            "Natural Weapon (Bite: DV (STR + 1)P, AP -1)",
+            "Shift (Metahuman Form)",
+            "Uneducated",
+            "Vomeronasal Organ",
+            "Movement (x1/x5/+3)"
+          ]
+        },
+        {
+          "shapeshifter": "Pantherine",
+          "BOD": "2/7",
+          "AGI": "2/7",
+          "REA": "2/7",
+          "STR": "1/6",
+          "WIL": "1/6",
+          "LOG": "1/5",
+          "INT": "3/8",
+          "CHA": "3/8",
+          "MAG": 1,
+          "INI": "+2D6",
+          "racialTraits": [
+            "Balance Receptor",
+            "Broadened Auditory Spectrum (Ultrasonic)",
+            "Low-Light Vision",
+            "Natural Weapon (Bite: DV (STR + 2)P, AP -3; Claws: DV (STR + 1)P, AP -)",
+            "Shift (Metahuman Form)",
+            "Uneducated",
+            "Movement (x1/x5/+2)"
+          ]
+        },
+        {
+          "shapeshifter": "Tigrine",
+          "BOD": "3/8",
+          "AGI": "2/7",
+          "REA": "2/7",
+          "STR": "3/8",
+          "WIL": "1/5",
+          "LOG": "1/4",
+          "INT": "3/8",
+          "CHA": "2/7",
+          "MAG": 1,
+          "INI": "+2D6",
+          "racialTraits": [
+            "Balance Receptor",
+            "Broadened Auditory Spectrum (Ultrasonic)",
+            "Low-Light Vision",
+            "Natural Weapon (Bite: DV (STR + 2)P, AP -2; Claws: DV (STR + 1)P, AP -1, Reach +1)",
+            "Shift (Metahuman Form)",
+            "Uneducated",
+            "Movement (x1/x5/+2)"
+          ]
+        },
+        {
+          "shapeshifter": "Ursine",
+          "BOD": "6/11",
+          "AGI": "1/5",
+          "REA": "1/5",
+          "STR": "7/12",
+          "WIL": "1/5",
+          "LOG": "1/6",
+          "INT": "1/6",
+          "CHA": "1/5",
+          "MAG": 1,
+          "INI": "+1D6",
+          "racialTraits": [
+            "Broadened Auditory Spectrum (Ultrasonic)",
+            "Keen-Eared",
+            "Low-Light Vision",
+            "Natural Weapon (Bite: DV (STR + 2)P, AP -2; Claws: DV (STR + 3)P, AP -1, Reach +1)",
+            "Shift (Metahuman Form)",
+            "Uneducated",
+            "Vomeronasal Organ",
+            "Movement (x1/x3/+2)"
+          ]
+        },
+        {
+          "shapeshifter": "Vulpine",
+          "BOD": "1/4",
+          "AGI": "2/7",
+          "REA": "1/6",
+          "STR": "1/4",
+          "WIL": "1/6",
+          "LOG": "1/5",
+          "INT": "2/7",
+          "CHA": "2/7",
+          "MAG": 1,
+          "INI": "+2D6",
+          "racialTraits": [
+            "Broadened Auditory Spectrum (Ultrasonic)",
+            "Keen-Eared",
+            "Low-Light Vision",
+            "Natural Weapon (Bite: DV (STR + 1)P, AP -)",
+            "Shift (Metahuman Form)",
+            "Uneducated",
+            "Vomeronasal Organ",
+            "Movement (x1/x3/+2)"
+          ]
+        }
+      ]
+    },
+    "extended-priority-chart-a": {
+      "source": "Run Faster, p.106",
+      "description": "Priority A metatype options for metavariants, metasapients, and shapeshifters. Special attribute points in parentheses after metatype name.",
+      "columns": ["metatype", "specialAttributePoints", "additionalKarmaCost"],
+      "rows": [
+        { "metatype": "Nartaki", "specialAttributePoints": 8, "additionalKarmaCost": 0 },
+        { "metatype": "Dryad", "specialAttributePoints": 8, "additionalKarmaCost": 0 },
+        { "metatype": "Nocturna", "specialAttributePoints": 8, "additionalKarmaCost": 0 },
+        { "metatype": "Wakyambi", "specialAttributePoints": 8, "additionalKarmaCost": 12 },
+        { "metatype": "Xapiri Thepe", "specialAttributePoints": 8, "additionalKarmaCost": 0 },
+        { "metatype": "Gnome", "specialAttributePoints": 7, "additionalKarmaCost": 7 },
+        { "metatype": "Hanuman", "specialAttributePoints": 7, "additionalKarmaCost": 5 },
+        { "metatype": "Koborokuru", "specialAttributePoints": 7, "additionalKarmaCost": 0 },
+        { "metatype": "Menehune", "specialAttributePoints": 7, "additionalKarmaCost": 2 },
+        { "metatype": "Hobgoblin", "specialAttributePoints": 7, "additionalKarmaCost": 5 },
+        { "metatype": "Ogre", "specialAttributePoints": 7, "additionalKarmaCost": 8 },
+        { "metatype": "Oni", "specialAttributePoints": 7, "additionalKarmaCost": 4 },
+        { "metatype": "Satyr", "specialAttributePoints": 7, "additionalKarmaCost": 10 },
+        { "metatype": "Cyclopean", "specialAttributePoints": 5, "additionalKarmaCost": 2 },
+        { "metatype": "Fomorian", "specialAttributePoints": 5, "additionalKarmaCost": 12 },
+        { "metatype": "Giant", "specialAttributePoints": 5, "additionalKarmaCost": 2 },
+        { "metatype": "Minotaur", "specialAttributePoints": 5, "additionalKarmaCost": 2 },
+        { "metatype": "Centaur", "specialAttributePoints": 6, "additionalKarmaCost": 25 },
+        { "metatype": "Naga", "specialAttributePoints": 4, "additionalKarmaCost": 25 },
+        { "metatype": "Pixie", "specialAttributePoints": 6, "additionalKarmaCost": 15 },
+        { "metatype": "Sasquatch", "specialAttributePoints": 5, "additionalKarmaCost": 20 },
+        {
+          "metatype": "Shapeshifter [Bovine; Vulpine]",
+          "specialAttributePoints": 8,
+          "additionalKarmaCost": 5
+        },
+        {
+          "metatype": "Shapeshifter [Canine; Falconine]",
+          "specialAttributePoints": 7,
+          "additionalKarmaCost": 10
+        },
+        {
+          "metatype": "Shapeshifter [Lupine; Equine]",
+          "specialAttributePoints": 6,
+          "additionalKarmaCost": 15
+        },
+        {
+          "metatype": "Shapeshifter [Ursine; Leonine]",
+          "specialAttributePoints": 4,
+          "additionalKarmaCost": 20
+        },
+        {
+          "metatype": "Shapeshifter [Pantherine; Tigrine]",
+          "specialAttributePoints": 4,
+          "additionalKarmaCost": 25
+        }
+      ]
+    },
+    "extended-priority-chart-b": {
+      "source": "Run Faster, p.106",
+      "description": "Priority B metatype options for metavariants, metasapients, and shapeshifters.",
+      "columns": ["metatype", "specialAttributePoints", "additionalKarmaCost"],
+      "rows": [
+        { "metatype": "Nartaki", "specialAttributePoints": 6, "additionalKarmaCost": 0 },
+        { "metatype": "Dryad", "specialAttributePoints": 6, "additionalKarmaCost": 0 },
+        { "metatype": "Nocturna", "specialAttributePoints": 6, "additionalKarmaCost": 0 },
+        { "metatype": "Wakyambi", "specialAttributePoints": 6, "additionalKarmaCost": 12 },
+        { "metatype": "Xapiri Thepe", "specialAttributePoints": 6, "additionalKarmaCost": 0 },
+        { "metatype": "Gnome", "specialAttributePoints": 4, "additionalKarmaCost": 7 },
+        { "metatype": "Hanuman", "specialAttributePoints": 4, "additionalKarmaCost": 5 },
+        { "metatype": "Koborokuru", "specialAttributePoints": 4, "additionalKarmaCost": 0 },
+        { "metatype": "Menehune", "specialAttributePoints": 4, "additionalKarmaCost": 2 },
+        { "metatype": "Hobgoblin", "specialAttributePoints": 4, "additionalKarmaCost": 5 },
+        { "metatype": "Ogre", "specialAttributePoints": 4, "additionalKarmaCost": 8 },
+        { "metatype": "Oni", "specialAttributePoints": 4, "additionalKarmaCost": 4 },
+        { "metatype": "Satyr", "specialAttributePoints": 4, "additionalKarmaCost": 10 },
+        { "metatype": "Cyclopean", "specialAttributePoints": 0, "additionalKarmaCost": 2 },
+        { "metatype": "Fomorian", "specialAttributePoints": 0, "additionalKarmaCost": 12 },
+        { "metatype": "Giant", "specialAttributePoints": 0, "additionalKarmaCost": 2 },
+        { "metatype": "Minotaur", "specialAttributePoints": 0, "additionalKarmaCost": 2 },
+        { "metatype": "Centaur", "specialAttributePoints": 3, "additionalKarmaCost": 25 },
+        { "metatype": "Naga", "specialAttributePoints": 2, "additionalKarmaCost": 25 },
+        { "metatype": "Pixie", "specialAttributePoints": 3, "additionalKarmaCost": 15 },
+        { "metatype": "Sasquatch", "specialAttributePoints": 2, "additionalKarmaCost": 20 },
+        {
+          "metatype": "Shapeshifter [Bovine; Vulpine]",
+          "specialAttributePoints": 6,
+          "additionalKarmaCost": 5
+        },
+        {
+          "metatype": "Shapeshifter [Canine; Falconine]",
+          "specialAttributePoints": 5,
+          "additionalKarmaCost": 10
+        },
+        {
+          "metatype": "Shapeshifter [Lupine; Equine]",
+          "specialAttributePoints": 4,
+          "additionalKarmaCost": 15
+        },
+        {
+          "metatype": "Shapeshifter [Ursine; Leonine]",
+          "specialAttributePoints": 2,
+          "additionalKarmaCost": 20
+        },
+        {
+          "metatype": "Shapeshifter [Pantherine; Tigrine]",
+          "specialAttributePoints": 2,
+          "additionalKarmaCost": 25
+        }
+      ]
+    },
+    "extended-priority-chart-c": {
+      "source": "Run Faster, p.107",
+      "description": "Priority C metatype options for metavariants, metasapients, and shapeshifters.",
+      "columns": ["metatype", "specialAttributePoints", "additionalKarmaCost"],
+      "rows": [
+        { "metatype": "Nartaki", "specialAttributePoints": 4, "additionalKarmaCost": 0 },
+        { "metatype": "Dryad", "specialAttributePoints": 3, "additionalKarmaCost": 0 },
+        { "metatype": "Nocturna", "specialAttributePoints": 3, "additionalKarmaCost": 0 },
+        { "metatype": "Wakyambi", "specialAttributePoints": 3, "additionalKarmaCost": 12 },
+        { "metatype": "Xapiri Thepe", "specialAttributePoints": 3, "additionalKarmaCost": 0 },
+        { "metatype": "Gnome", "specialAttributePoints": 1, "additionalKarmaCost": 7 },
+        { "metatype": "Hanuman", "specialAttributePoints": 1, "additionalKarmaCost": 5 },
+        { "metatype": "Koborokuru", "specialAttributePoints": 1, "additionalKarmaCost": 0 },
+        { "metatype": "Menehune", "specialAttributePoints": 1, "additionalKarmaCost": 2 },
+        { "metatype": "Hobgoblin", "specialAttributePoints": 0, "additionalKarmaCost": 5 },
+        { "metatype": "Ogre", "specialAttributePoints": 0, "additionalKarmaCost": 8 },
+        { "metatype": "Oni", "specialAttributePoints": 0, "additionalKarmaCost": 4 },
+        { "metatype": "Satyr", "specialAttributePoints": 0, "additionalKarmaCost": 10 },
+        { "metatype": "Centaur", "specialAttributePoints": 0, "additionalKarmaCost": 25 },
+        { "metatype": "Naga", "specialAttributePoints": 0, "additionalKarmaCost": 25 },
+        { "metatype": "Pixie", "specialAttributePoints": 0, "additionalKarmaCost": 15 },
+        { "metatype": "Sasquatch", "specialAttributePoints": 0, "additionalKarmaCost": 20 },
+        {
+          "metatype": "Shapeshifter [Bovine; Vulpine]",
+          "specialAttributePoints": 4,
+          "additionalKarmaCost": 5
+        },
+        {
+          "metatype": "Shapeshifter [Canine; Falconine]",
+          "specialAttributePoints": 3,
+          "additionalKarmaCost": 10
+        },
+        {
+          "metatype": "Shapeshifter [Lupine; Equine]",
+          "specialAttributePoints": 2,
+          "additionalKarmaCost": 15
+        },
+        {
+          "metatype": "Shapeshifter [Ursine; Leonine]",
+          "specialAttributePoints": 0,
+          "additionalKarmaCost": 20
+        },
+        {
+          "metatype": "Shapeshifter [Pantherine; Tigrine]",
+          "specialAttributePoints": 0,
+          "additionalKarmaCost": 25
+        }
+      ]
+    },
+    "extended-priority-chart-d": {
+      "source": "Run Faster, p.107",
+      "description": "Priority D metatype options. Only a subset of metavariants are available at this priority level.",
+      "columns": ["metatype", "specialAttributePoints", "additionalKarmaCost"],
+      "rows": [
+        { "metatype": "Nartaki", "specialAttributePoints": 2, "additionalKarmaCost": 0 },
+        { "metatype": "Dryad", "specialAttributePoints": 0, "additionalKarmaCost": 0 },
+        { "metatype": "Nocturna", "specialAttributePoints": 0, "additionalKarmaCost": 0 },
+        { "metatype": "Wakyambi", "specialAttributePoints": 0, "additionalKarmaCost": 12 },
+        { "metatype": "Xapiri Thepe", "specialAttributePoints": 0, "additionalKarmaCost": 0 }
+      ]
+    },
+    "extended-priority-chart-e": {
+      "source": "Run Faster, p.107",
+      "description": "Priority E metatype options. Only Nartaki is available at this priority level.",
+      "columns": ["metatype", "specialAttributePoints", "additionalKarmaCost"],
+      "rows": [{ "metatype": "Nartaki", "specialAttributePoints": 1, "additionalKarmaCost": 0 }]
+    },
+    "shapeshifter-metahuman-form-cost": {
+      "source": "Run Faster, p.108",
+      "description": "Karma cost for a shapeshifter to adopt a given metahuman form, and racial abilities from that form that are NOT present in the shapeshifter.",
+      "columns": ["form", "karmaCost", "abilitiesNotPresent"],
+      "rows": [
+        { "form": "Dwarf", "karmaCost": 8, "abilitiesNotPresent": "" },
+        { "form": "Gnome", "karmaCost": 0, "abilitiesNotPresent": "Arcane Arrester (2)" },
+        { "form": "Hanuman", "karmaCost": 13, "abilitiesNotPresent": "" },
+        { "form": "Koborokuru", "karmaCost": 8, "abilitiesNotPresent": "" },
+        { "form": "Menehune", "karmaCost": 10, "abilitiesNotPresent": "" },
+        { "form": "Elf", "karmaCost": 5, "abilitiesNotPresent": "" },
+        { "form": "Dryad", "karmaCost": 2, "abilitiesNotPresent": "Glamour" },
+        { "form": "Nocturna", "karmaCost": 5, "abilitiesNotPresent": "" },
+        { "form": "Wakyambi", "karmaCost": 15, "abilitiesNotPresent": "" },
+        { "form": "Xapiri Thepe", "karmaCost": 3, "abilitiesNotPresent": "Photometabolism" },
+        { "form": "Human", "karmaCost": 0, "abilitiesNotPresent": "" },
+        { "form": "Nartaki", "karmaCost": 0, "abilitiesNotPresent": "" },
+        { "form": "Ork", "karmaCost": 10, "abilitiesNotPresent": "" },
+        {
+          "form": "Hobgoblin",
+          "karmaCost": 10,
+          "abilitiesNotPresent": "Poor Self Control (Vindictive)"
+        },
+        { "form": "Ogre", "karmaCost": 13, "abilitiesNotPresent": "Ogre Stomach" },
+        { "form": "Oni", "karmaCost": 10, "abilitiesNotPresent": "" },
+        { "form": "Satyr", "karmaCost": 20, "abilitiesNotPresent": "" },
+        { "form": "Troll", "karmaCost": 20, "abilitiesNotPresent": "" },
+        { "form": "Cyclopean", "karmaCost": 15, "abilitiesNotPresent": "" },
+        { "form": "Fomorian", "karmaCost": 18, "abilitiesNotPresent": "Arcane Arrester (1)" },
+        { "form": "Giant", "karmaCost": 20, "abilitiesNotPresent": "Dermal Alteration (Bark)" },
+        {
+          "form": "Minotaur",
+          "karmaCost": 20,
+          "abilitiesNotPresent": "Goring Horns (except bovine shapeshifters)"
+        }
+      ]
+    }
+  }
+}

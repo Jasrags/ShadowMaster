@@ -1,0 +1,483 @@
+{
+  "johnsonGenesis": {
+    "source": "Run Faster, p.202-211",
+    "description": "GM tool for generating Mr. Johnson NPCs based on organizational background. Covers megacorporate, syndicate, extremist, and amateur Johnson types with behavioral profiles.",
+    "notorietyTriggers": {
+      "source": "Run Faster, p.202",
+      "crossReference": "SR5, p.372",
+      "description": "Actions that earn runners Notoriety when dealing with Johnsons",
+      "triggers": [
+        "Being noticed using Manipulation magic under normal circumstances",
+        "Showing up at a meet heavily armed in an environment that doesn't warrant it",
+        "Being caught hacking the Johnson's commlink under normal circumstances",
+        "Killing a Johnson who paid you"
+      ]
+    },
+    "megacorporateJohnsons": {
+      "source": "Run Faster, p.202-206",
+      "description": "Big Ten AAA megacorp Johnson profiles. Corporate Johnsons are full-time professionals trained for the role, typically former lawyers, project managers, consultants, or military/security officers.",
+      "generalTraits": {
+        "roleType": "full-time-professional",
+        "typicalBackground": [
+          "lawyer",
+          "project-manager",
+          "consultant",
+          "military-officer",
+          "security-officer"
+        ],
+        "workHours": "11-12 hours/day",
+        "personality": "alpha",
+        "moralCompass": "none",
+        "meetLocations": ["fancy-restaurants", "vip-booths", "exclusive-clubs"],
+        "retainerRisk": "Repeated success may lead to retainer offer (company suit)",
+        "obfuscation": "Johnsons always hide which corporation they work for"
+      },
+      "profiles": [
+        {
+          "id": "ares-macrotechnology",
+          "name": "Ares Macrotechnology",
+          "source": "Run Faster, p.204",
+          "recruitmentPool": ["military-officers", "security-officers"],
+          "personality": "crafty-out-of-the-box-thinkers",
+          "paymentStyle": {
+            "generosity": "generous",
+            "cashPayment": true,
+            "alternativePayment": ["milspec-gear", "ares-entertainment-lifestyle-perks"],
+            "notes": "Everything is 'just a figure' for them"
+          },
+          "meetPreferences": [],
+          "hiringBias": "none",
+          "reputation": "mostly-good",
+          "betrayalRisk": "moderate",
+          "betrayalNotes": "Know they have good rep; will use betrayal fully if situation requires it",
+          "specialWarnings": ["Excalibur fiasco has stirred distrust in the shadows"]
+        },
+        {
+          "id": "aztechnology",
+          "name": "Aztechnology",
+          "source": "Run Faster, p.204",
+          "recruitmentPool": [],
+          "personality": "excellent-employers-with-sinister-agenda",
+          "paymentStyle": {
+            "generosity": "fair-to-generous",
+            "cashPayment": true,
+            "alternativePayment": [],
+            "notes": "Provide lots of assistance to teams. May try to pay in Aztechnology scrip (decline and continue negotiating)"
+          },
+          "meetPreferences": [],
+          "hiringBias": "none",
+          "reputation": "worst-among-all-corps",
+          "betrayalRisk": "high",
+          "betrayalNotes": "Overall corporate plan to dominate/destroy the world colors all dealings",
+          "specialWarnings": [
+            "Tendency to hide affiliation by mimicking other corps' employment conditions"
+          ]
+        },
+        {
+          "id": "evo-corporation",
+          "name": "Evo Corporation",
+          "source": "Run Faster, p.204",
+          "recruitmentPool": [],
+          "personality": "paranoid-about-security",
+          "paymentStyle": {
+            "generosity": "standard",
+            "cashPayment": true,
+            "alternativePayment": ["cyberware", "bioware", "medical-facility-access"],
+            "notes": "Known to offer cyber/bioware with medical installation as payment"
+          },
+          "meetPreferences": ["wide-open-spaces-outside-city", "boats-on-ocean"],
+          "hiringBias": "pro-metahuman",
+          "reputation": "neutral",
+          "betrayalRisk": "moderate",
+          "betrayalNotes": "",
+          "specialWarnings": [
+            "Top security at every meet regardless of job size",
+            "Johnsons are usually metahumans who play up friendliness to metas"
+          ]
+        },
+        {
+          "id": "horizon",
+          "name": "Horizon",
+          "source": "Run Faster, p.204",
+          "recruitmentPool": [],
+          "personality": "amped-up-drug-users",
+          "paymentStyle": {
+            "generosity": "good",
+            "cashPayment": true,
+            "alternativePayment": [],
+            "notes": ""
+          },
+          "meetPreferences": [],
+          "hiringBias": "none",
+          "reputation": "great-to-work-with",
+          "betrayalRisk": "moderate",
+          "betrayalNotes": "Dawkins Group association -- can destroy anyone with minimal effort",
+          "specialWarnings": [
+            "Johnson doubles as a fixer",
+            "Team-oriented approach: consider whole op as single team",
+            "High drug use (mostly novacoke) and high burnout/cycling rate",
+            "Dawkins Group is the underlying bogeyman -- they erase people and convince them to give up everything"
+          ],
+          "roleOverlap": "fixer"
+        },
+        {
+          "id": "mitsuhama-computer-technologies",
+          "name": "Mitsuhama Computer Technologies",
+          "source": "Run Faster, p.204",
+          "recruitmentPool": [],
+          "personality": "insanely-precise-and-methodical",
+          "paymentStyle": {
+            "generosity": "all-or-nothing",
+            "cashPayment": true,
+            "alternativePayment": [],
+            "notes": "Failure means no payment AND refund of any advance. Success pays exceedingly well"
+          },
+          "meetPreferences": [],
+          "hiringBias": "none",
+          "reputation": "demanding",
+          "betrayalRisk": "very-high-on-failure",
+          "betrayalNotes": "May send kill squad if you fail and accepted money",
+          "specialWarnings": [
+            "Entire run pre-planned in detail (maps, covers, weapon caches, vehicles)",
+            "Demand plan is followed to the letter",
+            "Distinction: direct MCT Johnson vs MCT subcontracting through Yakuza -- if Yakuza, use Yakuza profile instead"
+          ]
+        },
+        {
+          "id": "neonet",
+          "name": "NeoNET",
+          "source": "Run Faster, p.205",
+          "recruitmentPool": [],
+          "personality": "highly-variable-no-central-culture",
+          "paymentStyle": {
+            "generosity": "standard",
+            "cashPayment": true,
+            "alternativePayment": [],
+            "notes": ""
+          },
+          "meetPreferences": [],
+          "hiringBias": "none",
+          "reputation": "variable",
+          "betrayalRisk": "very-low",
+          "betrayalNotes": "Building reliable teams is their priority",
+          "specialWarnings": [
+            "NeoNET lacks central corporate culture (Novatech + Erika + Transys + fuchi remnants)",
+            "Form webs of secret agents with fierce internal competition",
+            "Johnsons lend teams to colleagues to show off",
+            "Miles Lanier's back-channel network (now CFD-afflicted) works better than official channels",
+            "Expect to be shipped around the globe"
+          ]
+        },
+        {
+          "id": "renraku-computer-systems",
+          "name": "Renraku Computer Systems",
+          "source": "Run Faster, p.205",
+          "recruitmentPool": [],
+          "personality": "stability-focused",
+          "paymentStyle": {
+            "generosity": "predictable",
+            "cashPayment": true,
+            "alternativePayment": ["gear-access-on-retainer"],
+            "notes": "Predictable income and access to equipment if on retainer"
+          },
+          "meetPreferences": [],
+          "hiringBias": "prefer-company-suits",
+          "reputation": "stable",
+          "betrayalRisk": "moderate",
+          "betrayalNotes": "Internal politics mean Johnson's enemies become your enemies",
+          "specialWarnings": [
+            "First 2-3 runs are auditions; then retainer offer comes (they insist you accept)",
+            "Company teams get attached to one particular Johnson",
+            "Red Samurai hate company suits -- watch your back on joint ops"
+          ]
+        },
+        {
+          "id": "saeder-krupp",
+          "name": "Saeder-Krupp",
+          "source": "Run Faster, p.205",
+          "recruitmentPool": [
+            "field-experienced",
+            "adepts",
+            "mages",
+            "discreet-operatives",
+            "cyber-specialists"
+          ],
+          "personality": "misdirection-masters",
+          "paymentStyle": {
+            "generosity": "standard",
+            "cashPayment": true,
+            "alternativePayment": [],
+            "notes": ""
+          },
+          "meetPreferences": [],
+          "hiringBias": "none",
+          "reputation": "confusing",
+          "betrayalRisk": "uncertain",
+          "betrayalNotes": "S-K Johnsons are left alone a lot and quickly learn not to question missions",
+          "specialWarnings": [
+            "Don't advertise as S-K -- disguise as mob guys, other corps, amateur scientists",
+            "Odd jobs; never same kind of job you'd get from other corps",
+            "Hans Brackhaus exception: legendary shadow figure, played by many actors. If he hires you, life gets complicated"
+          ]
+        },
+        {
+          "id": "shiawase-corporation",
+          "name": "Shiawase Corporation",
+          "source": "Run Faster, p.205",
+          "recruitmentPool": [],
+          "personality": "stiff-bushido-adherent",
+          "paymentStyle": {
+            "generosity": "steady",
+            "cashPayment": true,
+            "alternativePayment": ["information"],
+            "notes": "Try asking for information as payment; Johnsons may share valuable intel if you prove your honor"
+          },
+          "meetPreferences": [],
+          "hiringBias": "none",
+          "reputation": "dry-but-reliable",
+          "betrayalRisk": "low",
+          "betrayalNotes": "Low if honor is maintained",
+          "specialWarnings": [
+            "Almost all Johnsons from Marketing and Intelligence Forecast Division (MIFD)",
+            "Stiff backs, no humor, Bushido all the way",
+            "No adaptability when problems arise -- Bushido does not permit surrender or defeat"
+          ],
+          "division": "MIFD"
+        },
+        {
+          "id": "wuxing-incorporated",
+          "name": "Wuxing Incorporated",
+          "source": "Run Faster, p.206",
+          "recruitmentPool": [],
+          "personality": "magical-duo",
+          "paymentStyle": {
+            "generosity": "lowest-among-megas",
+            "cashPayment": true,
+            "alternativePayment": ["smuggling-services", "shipping-logistics", "triad-connections"],
+            "notes": "Pays least among megas. Best alternative: smuggling/shipping services via their logistics network"
+          },
+          "meetPreferences": ["triad-owned-bars", "dockyards", "power-sites"],
+          "hiringBias": "none",
+          "reputation": "neutral",
+          "betrayalRisk": "moderate",
+          "betrayalNotes": "Magical member is always watching",
+          "specialWarnings": [
+            "Always two Johnsons at every meet; at least one Awakened",
+            "They will use magic on you (typically Analyze Truth)",
+            "Never use magic (especially Manipulation spells) at a Wuxing meet",
+            "Triad associations can provide smuggling and travel assistance"
+          ],
+          "uniqueMeetRequirement": "two-johnsons-one-awakened"
+        }
+      ]
+    },
+    "syndicateJohnsons": {
+      "source": "Run Faster, p.206-208",
+      "description": "Criminal syndicate Johnson profiles. Syndicate Johnsons are closer to the source of the run. You deal with the number two (Consigliere, Wakagashira, Lodge Master) not the boss.",
+      "generalTraits": {
+        "proximity": "closer-to-run-source-than-corporate",
+        "contactLevel": "number-two-guy",
+        "contactTitles": ["Consigliere", "Wakagashira", "Lodge Master"],
+        "prejudice": "strongly-encouraged-by-culture",
+        "postRunKillRisk": "second-highest-after-extremists",
+        "intimidation": "show-examples-of-failures",
+        "viceLure": "offer-vices-after-first-meet",
+        "trustWarning": "never-trust-a-syndicate-friend"
+      },
+      "profiles": [
+        {
+          "id": "mafia",
+          "name": "Mafia (Cosa Nostra)",
+          "source": "Run Faster, p.208",
+          "diversity": "Very diverse -- Jewish, Irish, Polish, Black, Italian, and more",
+          "coreValue": "respect",
+          "personality": "respect-above-all",
+          "meetPreferences": ["restaurants", "bars", "gambling-clubs", "docks", "alleys"],
+          "paymentStyle": {
+            "generosity": "reliable",
+            "notes": "Typically pays what it promises. Either pay you fully or kill you"
+          },
+          "hiringBias": "low",
+          "betrayalRisk": "low-for-payment-high-for-violence",
+          "betrayalNotes": "Low risk of not getting paid; high risk of violence if you show disrespect",
+          "specialWarnings": ["Any disrespect must be punished -- it is part of their rules"]
+        },
+        {
+          "id": "yakuza",
+          "name": "Yakuza",
+          "source": "Run Faster, p.208",
+          "diversity": "Strongly Japanese-centric",
+          "coreValue": "hierarchy-and-tradition",
+          "personality": "unpleasant-and-dismissive",
+          "meetPreferences": ["nice-venues-for-johnson-not-for-you"],
+          "paymentStyle": {
+            "generosity": "decent",
+            "notes": "Pay well enough; prefer payment in kind -- vices, cyberware, hacking gear, weapons"
+          },
+          "hiringBias": "very-high",
+          "hiringBiasDetails": [
+            "anti-non-japanese",
+            "anti-female",
+            "anti-metahuman",
+            "anti-gaijin"
+          ],
+          "betrayalRisk": "high",
+          "betrayalNotes": "Biggest hypocrites in shadows -- break all rules they insist you follow",
+          "specialWarnings": [
+            "Get to business quickly; assume you are an idiot",
+            "Don't ask too many questions",
+            "Have claws in many corps through extortion/blackmail -- runs may have inside help",
+            "All-Japanese-human-male teams have fewest issues"
+          ]
+        },
+        {
+          "id": "triads",
+          "name": "Triads",
+          "source": "Run Faster, p.208",
+          "diversity": "Chinese-centric",
+          "coreValue": "superstition-and-tradition",
+          "personality": "straightforward-but-metaphorical",
+          "meetPreferences": [],
+          "paymentStyle": {
+            "generosity": "decent",
+            "notes": ""
+          },
+          "hiringBias": "low",
+          "betrayalRisk": "high-if-crossed",
+          "betrayalNotes": "Payback will come using magic -- find a warded place and plan to stay there",
+          "specialWarnings": [
+            "Typically older gentlemen and ladies",
+            "Infuriatingly superstitious; talk in metaphors",
+            "Often pair runners with their own muscle as backup/diversion",
+            "You will never be a regular or a favorite -- purely mercenaries"
+          ]
+        },
+        {
+          "id": "vory",
+          "name": "Vory (Vory v Zakone)",
+          "source": "Run Faster, p.208",
+          "diversity": "Russian/Eastern European-centric",
+          "coreValue": "pragmatism-and-violence",
+          "personality": "cold-pragmatic-violent",
+          "meetPreferences": [],
+          "paymentStyle": {
+            "generosity": "fair",
+            "notes": "Good for a certain charge; very pragmatic"
+          },
+          "hiringBias": "low",
+          "hiringBiasDetails": ["feel-superior-to-outsiders-but-respect-delivery"],
+          "betrayalRisk": "moderate",
+          "betrayalNotes": "Good people to work for if you aren't looking to make friends",
+          "specialWarnings": [
+            "Rely on shadowrunners more than other syndicates",
+            "Epitome of violent men -- only problem-solving method is killing everyone involved",
+            "Cold people whose smiles never thaw the ice in their eyes"
+          ]
+        }
+      ]
+    },
+    "extremistJohnsons": {
+      "source": "Run Faster, p.208-211",
+      "description": "Extremist organization Johnson profiles. Includes terrorist groups, eco-terrorists, insurgents, rebels, secret societies, political organizations, and magical groups.",
+      "generalTraits": {
+        "johnsonRole": "always-the-boss",
+        "organizationStructure": "cell-based",
+        "honesty": "will-promise-anything-and-lie-about-everything",
+        "postRunKillRisk": "highest-of-all-employer-types",
+        "paranoia": "extremely-paranoid",
+        "reputationRespect": "none"
+      },
+      "profiles": [
+        {
+          "id": "humanis",
+          "name": "Humanis",
+          "source": "Run Faster, p.210",
+          "ideology": "anti-metahuman",
+          "personality": "rich-guys-assistant-smug",
+          "approach": "subtle-not-direct-violence",
+          "jobTypes": ["datasteal", "surveillance", "planting-evidence"],
+          "paymentStyle": {
+            "generosity": "middle-ground",
+            "notes": "Decent pay, no real perks"
+          },
+          "hiringBias": "none-ironic",
+          "hiringBiasNotes": "No qualms hiring metahumans -- getting caught proves their anti-meta narrative",
+          "betrayalRisk": "average",
+          "specialWarnings": [
+            "True agenda hidden behind 'pro-human not anti-metahuman' facade",
+            "Lazy -- like hiring same teams over and over",
+            "Example job: burn down orphanage for ork children"
+          ]
+        },
+        {
+          "id": "illuminates-of-the-new-dawn",
+          "name": "Illuminates of the New Dawn (IoND)",
+          "source": "Run Faster, p.210",
+          "ideology": "hermetic-magical-supremacy",
+          "personality": "smug-fascist-hermetic-mage",
+          "approach": "magic-and-manipulation-heavy-plans",
+          "jobTypes": ["mage-support", "street-muscle", "hacking", "rigging"],
+          "paymentStyle": {
+            "generosity": "below-average",
+            "notes": "Reputation for wealth is overstated. Have information (blackmail, intel) and arcane items instead of cash",
+            "alternativePayment": ["information", "blackmail-dirt", "arcane-items"]
+          },
+          "hiringBias": "none",
+          "betrayalRisk": "moderate",
+          "specialWarnings": [
+            "Plans rely too much on magic and human manipulation",
+            "Light on hacking and violence in plans",
+            "Evaluate and inject your own expertise -- they'll be offended but come around",
+            "Smart but not as capable as they think at shadow ops"
+          ]
+        },
+        {
+          "id": "neo-anarchists",
+          "name": "Neo-Anarchists",
+          "source": "Run Faster, p.211",
+          "ideology": "anarchism",
+          "personality": "natural-affinity-with-runners",
+          "approach": "straightforward-idealist",
+          "jobTypes": [],
+          "paymentStyle": {
+            "generosity": "poorest",
+            "notes": "Worst pay of any employer. Their own people are idealist dreamers who can't get things done"
+          },
+          "hiringBias": "none",
+          "betrayalRisk": "very-low",
+          "specialWarnings": [
+            "Get along well with shadowrunners",
+            "Have contacts among the poorest people but useful ones: street docs, hacker software, hardware, weapons, safehouses",
+            "Never a shortage of need for qualified runners"
+          ]
+        }
+      ]
+    },
+    "amateurJohnsons": {
+      "source": "Run Faster, p.211",
+      "description": "People who do not normally operate in the shadows. Don't know shadowrunners or shadow rules.",
+      "examples": [
+        "scientist-hiring-to-sabotage-rival",
+        "rich-mage-wanting-artifact-retrieval",
+        "parents-looking-for-missing-daughter"
+      ],
+      "traits": {
+        "dangerLevel": "low-direct-but-plans-are-silly",
+        "paymentStyle": {
+          "generosity": "very-poor",
+          "notes": "Few have thousands of nuyen. Cash plus something personally precious (family heirloom)"
+        },
+        "intelQuality": "worthless-biased-or-dangerously-wrong",
+        "shadowContacts": "none",
+        "reputationImpact": "minimal",
+        "betrayalRisk": "low-intentional-high-accidental"
+      },
+      "specialWarnings": [
+        "Intel is often completely wrong or wish-fulfillment thinking",
+        "Example: 'helpless missing girl' is actually an insect shaman",
+        "Two runner types: those who refuse most payment, those who exploit amateurs",
+        "Good karma but bad pay"
+      ]
+    }
+  }
+}

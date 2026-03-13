@@ -1,0 +1,2636 @@
+{
+  "tables": {
+    "npc-critter-stat-abbreviations": {
+      "source": "SR5 Core Rulebook, p.379",
+      "description": "Abbreviation key for all NPC and critter stat blocks used throughout Section 10.",
+      "columns": ["abbreviation", "attribute"],
+      "rows": [
+        { "abbreviation": "B", "attribute": "Body" },
+        { "abbreviation": "A", "attribute": "Agility" },
+        { "abbreviation": "R", "attribute": "Reaction" },
+        { "abbreviation": "S", "attribute": "Strength" },
+        { "abbreviation": "W", "attribute": "Willpower" },
+        { "abbreviation": "L", "attribute": "Logic" },
+        { "abbreviation": "I", "attribute": "Intuition" },
+        { "abbreviation": "C", "attribute": "Charisma" },
+        { "abbreviation": "E", "attribute": "Edge" },
+        { "abbreviation": "Ess", "attribute": "Essence" },
+        { "abbreviation": "M", "attribute": "Magic" },
+        { "abbreviation": "Res", "attribute": "Resonance" },
+        { "abbreviation": "Init", "attribute": "Initiative" }
+      ]
+    },
+    "metahuman-characteristics": {
+      "source": "SR5 Core Rulebook, p.380",
+      "description": "Average physical characteristics and lifespan for the five main metatypes.",
+      "columns": ["metatype", "averageHeight", "averageWeight", "averageLifespan"],
+      "rows": [
+        {
+          "metatype": "Dwarf",
+          "averageHeight": "120 cm",
+          "averageWeight": "54 kg",
+          "averageLifespan": "More than 100 years (projected)"
+        },
+        {
+          "metatype": "Elf",
+          "averageHeight": "190 cm",
+          "averageWeight": "80 kg",
+          "averageLifespan": "Two hundred years or more (estimated)"
+        },
+        {
+          "metatype": "Human",
+          "averageHeight": "175 cm",
+          "averageWeight": "78 kg",
+          "averageLifespan": "55-65 years"
+        },
+        {
+          "metatype": "Ork",
+          "averageHeight": "190 cm",
+          "averageWeight": "128 kg",
+          "averageLifespan": "35-45 years"
+        },
+        {
+          "metatype": "Troll",
+          "averageHeight": "250 cm",
+          "averageWeight": "335 kg",
+          "averageLifespan": "45-55 years"
+        }
+      ]
+    },
+    "metatype-attribute-modifiers": {
+      "source": "SR5 Core Rulebook, p.380",
+      "description": "Attribute modifiers applied to base human values when creating non-human metatype NPCs or grunts.",
+      "columns": ["metatype", "B", "A", "R", "S", "W", "L", "I", "C", "E", "Init", "Armor"],
+      "rows": [
+        {
+          "metatype": "Dwarf",
+          "B": "+2",
+          "A": null,
+          "R": "-1",
+          "S": "+2",
+          "W": "+1",
+          "L": null,
+          "I": null,
+          "C": null,
+          "E": "-1",
+          "Init": "-1",
+          "Armor": null
+        },
+        {
+          "metatype": "Elf",
+          "B": null,
+          "A": "+1",
+          "R": null,
+          "S": null,
+          "W": null,
+          "L": null,
+          "I": null,
+          "C": "+2",
+          "E": "-1",
+          "Init": null,
+          "Armor": null
+        },
+        {
+          "metatype": "Ork",
+          "B": "+3",
+          "A": null,
+          "R": null,
+          "S": "+2",
+          "W": null,
+          "L": "-1",
+          "I": null,
+          "C": "-1",
+          "E": "-1",
+          "Init": null,
+          "Armor": null
+        },
+        {
+          "metatype": "Troll",
+          "B": "+4",
+          "A": "-1",
+          "R": null,
+          "S": "+4",
+          "W": null,
+          "L": "-1",
+          "I": "-1",
+          "C": "-2",
+          "E": "-1",
+          "Init": null,
+          "Armor": "+1"
+        }
+      ]
+    },
+    "professional-rating": {
+      "source": "SR5 Core Rulebook, pp.379-380",
+      "description": "Professional Rating descriptions by tier (0–6), used as a dice pool modifier for resisting Social Skill Tests and as the Group Edge pool size.",
+      "columns": ["rating", "tier", "description", "examples"],
+      "rows": [
+        {
+          "rating": 0,
+          "tier": "Untrained",
+          "description": "No unit training, unfamiliar with combat as a unit, clumsy and slow reactions. Will turn tail and run when someone goes down.",
+          "examples": ["Mall cops", "Random street mobs"]
+        },
+        {
+          "rating": "1-2",
+          "tier": "Semi-trained",
+          "description": "Some combat experience, seen a little combat, act with purpose and a plan but haven't developed veteran coolness. Retreat if more than 25% of their team is taken out of the fight.",
+          "examples": ["Rookie beat cops", "Many gang members", "Corporate security teams"]
+        },
+        {
+          "rating": "3-4",
+          "tier": "Trained",
+          "description": "Well trained, fair amount of experience, don't take foolish chances. Withdraw if they take casualties over half their group.",
+          "examples": ["Professional bodyguards", "Experienced cops", "Typical mercenary units"]
+        },
+        {
+          "rating": "5-6",
+          "tier": "Elite",
+          "description": "Top professionals who will not break. Fight to the last man or until mission parameters say it is time to withdraw.",
+          "examples": ["HTR teams", "SWAT teams", "Military special forces units", "Fanatics"]
+        }
+      ]
+    },
+    "prime-runner-advancement": {
+      "source": "SR5 Core Rulebook, p.385",
+      "description": "Karma advancement multipliers for prime runners by level relative to PC power.",
+      "columns": ["level", "advancementKarma"],
+      "rows": [
+        { "level": "Inferior", "advancementKarma": "80 percent of PC's average Karma award" },
+        { "level": "Equal", "advancementKarma": "100 percent of PC's average Karma award" },
+        { "level": "Superior", "advancementKarma": "125 percent of PC's average Karma award" },
+        { "level": "Superhuman", "advancementKarma": "200 percent of PC's average Karma award" }
+      ]
+    },
+    "connection-rating": {
+      "source": "SR5 Core Rulebook, p.387",
+      "description": "Contact Connection Ratings 1–12 describing social influence and network reach. Characters cannot start the game with a contact whose Connection Rating exceeds 6.",
+      "columns": ["rating", "description"],
+      "rows": [
+        {
+          "rating": 1,
+          "description": "Virtually no social influence; useful only for their Knowledge skills."
+        },
+        {
+          "rating": 2,
+          "description": "Has one or two friends with some Knowledge skills, or some minor social influence."
+        },
+        { "rating": 3, "description": "Has a few friends, but not a lot of social influence." },
+        {
+          "rating": 4,
+          "description": "Knows several people in a neighborhood; a borough mayor or a gang leader."
+        },
+        {
+          "rating": 5,
+          "description": "Knows several people and has a moderate degree of social influence; a city councilman or a low-level executive it a small-to-medium corporation."
+        },
+        {
+          "rating": 6,
+          "description": "Known and connected across his state; a city/sprawl mayor or governor, notable fixer, or a mid-level executive in a medium-sized corporation."
+        },
+        {
+          "rating": 7,
+          "description": "Knows a lot of people over a large area, and has considerable social influence; often holds a leadership position in a national corporation."
+        },
+        {
+          "rating": 8,
+          "description": "Well-connected across a multi-state region; an executive in a state government or a national corporation."
+        },
+        {
+          "rating": 9,
+          "description": "Well-connected on his own continent, with considerable social influence; a mid-level executive in a small national government or AA megacorporation."
+        },
+        {
+          "rating": 10,
+          "description": "Well-connected worldwide, with significant social influence; a senior executive in a small national government or a AA megacorporation."
+        },
+        {
+          "rating": 11,
+          "description": "Extremely well-connected worldwide, with significant social influence; mid-level executive position in a major national government or AAA megacorporation."
+        },
+        {
+          "rating": 12,
+          "description": "Global power-player with extensive social influence; holds a key executive position in a major national government or AAA megacorporation."
+        }
+      ]
+    },
+    "loyalty-rating": {
+      "source": "SR5 Core Rulebook, p.387",
+      "description": "Contact Loyalty Ratings 1–6 describing the depth of trust and willingness to assist. Applied as bonus dice when a PC negotiates with the contact.",
+      "columns": ["rating", "tier", "description"],
+      "rows": [
+        {
+          "rating": 1,
+          "tier": "Just Biz",
+          "description": "The relationship is purely mercenary, based solely on economics. The people involved may not even like each other, and they won't offer any sort of preferential treatment."
+        },
+        {
+          "rating": 2,
+          "tier": "Regular",
+          "description": "The relationship is still all business, but the parties treat each other with a modicum of mutual respect."
+        },
+        {
+          "rating": 3,
+          "tier": "Acquaintance",
+          "description": "The people in the relationship are friendly, but calling them actual friends might be stretching it. The contact is willing to be inconvenienced in small ways for the character but won't take a fall for him."
+        },
+        {
+          "rating": 4,
+          "tier": "Buddy",
+          "description": "There's actual friendship here, or at least solid mutual respect. The contact will go out of his way for the character if needed."
+        },
+        {
+          "rating": 5,
+          "tier": "Got Your Back",
+          "description": "The parties know and trust each other, and have for some time. The contact will back the character even in risky situations."
+        },
+        {
+          "rating": 6,
+          "tier": "Friend for Life",
+          "description": "The contact and character will go to the wall for each other, if that's what it takes."
+        }
+      ]
+    },
+    "favor-rating": {
+      "source": "SR5 Core Rulebook, p.389",
+      "description": "Favor Ratings 1–6 describing the scope and risk of a personal favor a contact might render. Contacts normally agree to favors with a Favor Rating equal to or less than their Loyalty Rating.",
+      "columns": ["rating", "tier", "description"],
+      "rows": [
+        {
+          "rating": 1,
+          "tier": "Minor",
+          "description": "Deliver a message to someone. Provide access to a low-level restricted security area (airport boarding area, police station)."
+        },
+        {
+          "rating": 2,
+          "tier": "Low Risk",
+          "description": "Loan use of specialized equipment (up to 5,000 nuyen in value). Corporate action requiring the signature of a first-line supervisor."
+        },
+        {
+          "rating": 3,
+          "tier": "Medium",
+          "description": "Provide access to a mid-level restricted security area (standard corporate research lab)."
+        },
+        {
+          "rating": 4,
+          "tier": "Moderate Risk",
+          "description": "Loan use of specialized equipment (up to 50,000 nuyen in value). Corporate requisition requiring the signature of a middle manager."
+        },
+        {
+          "rating": 5,
+          "tier": "Serious",
+          "description": "Provide access to a high-level security area (FBI offices, AA megacorporate headquarters, AAA regional headquarters)."
+        },
+        {
+          "rating": 6,
+          "tier": "Major Risk",
+          "description": "Loan of specialized equipment (up to 500,000¥ in value). Corporate requisition requiring the signature of a senior manager or junior executive."
+        }
+      ]
+    },
+    "search-modifiers": {
+      "source": "SR5 Core Rulebook, p.401",
+      "description": "Threshold and dice pool modifiers for the Search critter power (Magic + Intuition Extended Test, threshold 5, interval 10 minutes).",
+      "columns": ["situationType", "situation", "modifier"],
+      "rows": [
+        {
+          "situationType": "threshold",
+          "situation": "Target is more than a kilometer away",
+          "modifier": "+kilometers"
+        },
+        {
+          "situationType": "threshold",
+          "situation": "Target is a nonliving object or place",
+          "modifier": "+5"
+        },
+        {
+          "situationType": "dicePool",
+          "situation": "Target hidden by Concealment power",
+          "modifier": "-concealer's Magic"
+        },
+        {
+          "situationType": "dicePool",
+          "situation": "Target hidden behind mana barrier",
+          "modifier": "-barrier Force"
+        }
+      ]
+    },
+    "toxin-drug-protection": {
+      "source": "SR5 Core Rulebook, p.408",
+      "description": "Protective gear and their effectiveness against toxin vectors. Protection listed as Immunity (complete protection) or +Rating (bonus dice to Toxin Resistance Test equal to gear's rating).",
+      "columns": ["gear", "protectsAgainst", "protection"],
+      "rows": [
+        {
+          "gear": "Chemical seal",
+          "protectsAgainst": "Contact, Inhalation",
+          "protection": "Immunity"
+        },
+        { "gear": "Chemical protection", "protectsAgainst": "Contact", "protection": "+Rating" },
+        { "gear": "Digestive expansion", "protectsAgainst": "Ingestion", "protection": "+2" },
+        {
+          "gear": "Dwarf natural resistance",
+          "protectsAgainst": "All toxins, diseases",
+          "protection": "+2"
+        },
+        { "gear": "Gas mask", "protectsAgainst": "Inhalation", "protection": "Immunity" },
+        { "gear": "Internal air tank", "protectsAgainst": "Inhalation", "protection": "Immunity" },
+        { "gear": "Pathogenic defense", "protectsAgainst": "Diseases", "protection": "+Rating" },
+        { "gear": "Respirator", "protectsAgainst": "Inhalation", "protection": "+Rating" },
+        { "gear": "Toxin extractor", "protectsAgainst": "All toxins", "protection": "+Rating" },
+        { "gear": "Tracheal filter", "protectsAgainst": "Inhalation", "protection": "+Rating" }
+      ]
+    },
+    "toxin-costs": {
+      "source": "SR5 Core Rulebook, p.409",
+      "description": "Availability and nuyen cost per dose for all sample toxins listed in the core rulebook.",
+      "columns": ["toxin", "availability", "costPerDose"],
+      "rows": [
+        { "toxin": "CS/Tear Gas", "availability": "4R", "costPerDose": 20 },
+        { "toxin": "Gamma-Scopolamine", "availability": "14F", "costPerDose": 200 },
+        { "toxin": "Narcoject", "availability": "8R", "costPerDose": 50 },
+        { "toxin": "Nausea Gas", "availability": "6R", "costPerDose": 25 },
+        { "toxin": "Neuro-Stun VIII", "availability": "12R", "costPerDose": 60 },
+        { "toxin": "Neuro-Stun IX", "availability": "13R", "costPerDose": 60 },
+        { "toxin": "Neuro-Stun X", "availability": "14R", "costPerDose": 100 },
+        { "toxin": "Pepper Punch", "availability": "-", "costPerDose": 5 },
+        { "toxin": "Seven-7", "availability": "20F", "costPerDose": 1000 }
+      ]
+    },
+    "toxin-stats": {
+      "source": "SR5 Core Rulebook, pp.409-410",
+      "description": "Full mechanical statistics for all sample toxins: vector, speed, penetration, power, and effect.",
+      "columns": ["toxin", "vector", "speed", "penetration", "power", "effect"],
+      "rows": [
+        {
+          "toxin": "cs-tear-gas",
+          "name": "CS/Tear Gas",
+          "vector": ["Contact", "Inhalation"],
+          "speed": "1 Combat Turn",
+          "penetration": 0,
+          "power": 8,
+          "effect": ["Disorientation", "Nausea", "Stun Damage"],
+          "notes": "Irritant. Washing with soap and water removes from skin, ending nausea prematurely. Becomes inert after 2 minutes of air contact."
+        },
+        {
+          "toxin": "gamma-scopolamine",
+          "name": "Gamma-Scopolamine",
+          "vector": ["Injection"],
+          "speed": "Immediate",
+          "penetration": 0,
+          "power": 12,
+          "effect": ["Paralysis", "Truth Serum"],
+          "notes": "Full effects last ~1 hour. After primary effects wear off, residue acts as truth serum for another hour: reduce target's Willpower by 3 (minimum 1) for remainder of effect."
+        },
+        {
+          "toxin": "narcoject",
+          "name": "Narcoject",
+          "vector": ["Injection"],
+          "speed": "Immediate",
+          "penetration": 0,
+          "power": 15,
+          "effect": ["Stun Damage"],
+          "notes": "Common tranquilizer for dart guns. No side effects."
+        },
+        {
+          "toxin": "nausea-gas",
+          "name": "Nausea Gas",
+          "vector": ["Inhalation"],
+          "speed": "3 Combat Turns",
+          "penetration": 0,
+          "power": 9,
+          "effect": ["Disorientation", "Nausea"],
+          "notes": "Riot control agent. Becomes inert after 2 minutes of air contact."
+        },
+        {
+          "toxin": "neuro-stun-viii",
+          "name": "Neuro-Stun VIII",
+          "vector": ["Contact", "Inhalation"],
+          "speed": "1 Combat Turn",
+          "penetration": 0,
+          "power": 15,
+          "effect": ["Disorientation", "Stun Damage"],
+          "notes": "Colorless, odorless. Becomes inert after 10 minutes of air contact."
+        },
+        {
+          "toxin": "neuro-stun-ix",
+          "name": "Neuro-Stun IX",
+          "vector": ["Contact", "Inhalation"],
+          "speed": "1 Combat Turn",
+          "penetration": 0,
+          "power": 15,
+          "effect": ["Disorientation", "Stun Damage"],
+          "notes": "Colorless, odorless. Becomes inert after 1 minute of air contact."
+        },
+        {
+          "toxin": "neuro-stun-x",
+          "name": "Neuro-Stun X",
+          "vector": ["Contact", "Inhalation"],
+          "speed": "1 Combat Turn",
+          "penetration": -2,
+          "power": 15,
+          "effect": ["Disorientation", "Stun Damage"],
+          "notes": "Colorless, odorless. Becomes inert after 1 minute of air contact."
+        },
+        {
+          "toxin": "pepper-punch",
+          "name": "Pepper Punch",
+          "vector": ["Contact", "Inhalation"],
+          "speed": "1 Combat Turn",
+          "penetration": 0,
+          "power": 11,
+          "effect": ["Nausea", "Stun Damage"],
+          "notes": "Combines CS and oleocapsicum. Liquid spray. Often tagged with RFID or dyes to identify victims."
+        },
+        {
+          "toxin": "seven-7",
+          "name": "Seven-7",
+          "vector": ["Contact", "Inhalation"],
+          "speed": "1 Combat Turn",
+          "penetration": -2,
+          "power": 12,
+          "effect": ["Physical Damage", "Disorientation", "Nausea"],
+          "notes": "Colorless, odorless. Developed to bypass chemical protection. Becomes inert after 10 minutes of air exposure."
+        }
+      ]
+    },
+    "drug-costs": {
+      "source": "SR5 Core Rulebook, p.411",
+      "description": "Availability and nuyen cost per dose for all drugs listed in the core rulebook.",
+      "columns": ["drug", "availability", "costPerDose"],
+      "rows": [
+        { "drug": "Bliss", "availability": "3F", "costPerDose": 15 },
+        { "drug": "Cram", "availability": "2R", "costPerDose": 10 },
+        { "drug": "Deepweed", "availability": "8F", "costPerDose": 400 },
+        { "drug": "Jazz", "availability": "2R", "costPerDose": 75 },
+        { "drug": "Kamikaze", "availability": "4R", "costPerDose": 100 },
+        { "drug": "Long Haul", "availability": "-", "costPerDose": 50 },
+        { "drug": "Nitro", "availability": "2R", "costPerDose": 50 },
+        { "drug": "Novacoke", "availability": "2R", "costPerDose": 10 },
+        { "drug": "Psyche", "availability": "-", "costPerDose": 200 },
+        { "drug": "Zen", "availability": "4R", "costPerDose": 5 }
+      ]
+    },
+    "drug-stats": {
+      "source": "SR5 Core Rulebook, pp.411-412",
+      "description": "Full mechanical statistics for all drugs: vector, speed, duration formula, addiction type, and effect.",
+      "columns": [
+        "drug",
+        "vector",
+        "speed",
+        "durationFormula",
+        "addictionType",
+        "effect",
+        "crashEffect"
+      ],
+      "rows": [
+        {
+          "drug": "bliss",
+          "name": "Bliss",
+          "vector": ["Inhalation", "Injection"],
+          "speed": "1 Combat Turn",
+          "durationFormula": "(6-Body) hours, minimum 1 hour",
+          "addictionType": "Both",
+          "effect": [
+            "-1 Reaction",
+            "+1 to all thresholds",
+            "-1 to all Limits",
+            "High Pain Tolerance 3"
+          ],
+          "crashEffect": null,
+          "notes": "Opiate from poppy plants."
+        },
+        {
+          "drug": "cram",
+          "name": "Cram",
+          "vector": ["Ingestion", "Inhalation"],
+          "speed": "10 minutes",
+          "durationFormula": "(12-Body) hours, minimum 1 hour",
+          "addictionType": "Psychological",
+          "effect": ["+1 Reaction", "+1D6 Initiative Dice"],
+          "crashEffect": "6 Stun damage (unresisted)",
+          "notes": "Stimulant. Crash is unresisted."
+        },
+        {
+          "drug": "deepweed",
+          "name": "Deepweed",
+          "vector": ["Ingestion", "Inhalation"],
+          "speed": "Immediate",
+          "durationFormula": "(6-Body) hours, minimum 1 hour",
+          "addictionType": "Physiological",
+          "effect": [
+            "+1 Willpower",
+            "+1 Mental limit",
+            "-1 Physical limit",
+            "Forces Awakened characters to astrally perceive"
+          ],
+          "crashEffect": "-1 to all dice pool modifiers and -1 to all limits for same duration as initial effect",
+          "notes": "Narcotic from Awakened Caribbean kelp. Forces astral perception even on adepts without the ability."
+        },
+        {
+          "drug": "jazz",
+          "name": "Jazz",
+          "vector": ["Inhalation"],
+          "speed": "Immediate",
+          "durationFormula": "10 x 1D6 minutes",
+          "addictionType": "Both",
+          "effect": ["+1 Reaction", "+1 Physical limit", "+2D6 Initiative Dice"],
+          "crashEffect": "Disorientation for duration equal to initial effect",
+          "notes": "Stimulant typically taken from single-dose inhaler."
+        },
+        {
+          "drug": "kamikaze",
+          "name": "Kamikaze",
+          "vector": ["Inhalation"],
+          "speed": "Immediate",
+          "durationFormula": "10 x 1D6 minutes",
+          "addictionType": "Physiological",
+          "effect": [
+            "+1 Body",
+            "+1 Agility",
+            "+2 Strength",
+            "+1 Willpower",
+            "+2 Physical limit",
+            "+2D6 Initiative Dice",
+            "High Pain Tolerance 3"
+          ],
+          "crashEffect": "-1 Reaction, -1 Willpower, -2 to all Limits for equal duration; 6 Stun damage (unresisted)",
+          "notes": "Tailored combat stimulant. Metabolically destructive with repeated use."
+        },
+        {
+          "drug": "long-haul",
+          "name": "Long Haul",
+          "vector": ["Injection"],
+          "speed": "10 minutes",
+          "durationFormula": "4 days",
+          "addictionType": "Psychological",
+          "effect": ["Alleviates need for sleep"],
+          "crashEffect": "Pass out for 8D6 hours. If kept awake during crash: Disorientation with hallucinations and inability to concentrate. Second dose extends wakefulness 1D6+2 additional days then 10 Stun damage (unresisted); cannot stay awake past that point regardless of additional doses.",
+          "notes": "Cannot keep character awake past second-dose crash with any further doses."
+        },
+        {
+          "drug": "nitro",
+          "name": "Nitro",
+          "vector": ["Inhalation"],
+          "speed": "1 Combat Turn",
+          "durationFormula": "10 x 1D6 minutes",
+          "addictionType": "Both",
+          "effect": [
+            "+2 Strength",
+            "+2 Willpower",
+            "+2 Perception",
+            "+2 Physical limit",
+            "High Pain Tolerance 6"
+          ],
+          "crashEffect": "-2 to all limits, 9 Stun damage (unresisted) for equal duration",
+          "notes": "Powerful stimulant favored by troll gangers."
+        },
+        {
+          "drug": "novacoke",
+          "name": "Novacoke",
+          "vector": ["Inhalation", "Injection"],
+          "speed": "1 Combat Turn",
+          "durationFormula": "(10-Body) hours, minimum 1 hour",
+          "addictionType": "Both",
+          "effect": [
+            "+1 Reaction",
+            "+1 Charisma",
+            "+1 Perception",
+            "+1 Social Limit",
+            "High Pain Tolerance 1"
+          ],
+          "crashEffect": "Charisma and Willpower both reduced to 1, all limits -1 for duration equal to initial effect",
+          "notes": "Stimulant from coca plants. Highly addictive social drug."
+        },
+        {
+          "drug": "psyche",
+          "name": "Psyche",
+          "vector": ["Ingestion"],
+          "speed": "10 minutes",
+          "durationFormula": "(12-Body) hours, minimum 1 hour",
+          "addictionType": "Psychological",
+          "effect": ["+1 Intuition", "+1 Logic", "+1 Mental limit"],
+          "crashEffect": null,
+          "notes": "Designer stimulant for magicians and technomancers. Awakened users suffer only -1 dice pool modifier per sustained spell instead of standard -2."
+        },
+        {
+          "drug": "zen",
+          "name": "Zen",
+          "vector": ["Inhalation"],
+          "speed": "5 minutes",
+          "durationFormula": "10 x 1D6 minutes",
+          "addictionType": "Psychological",
+          "effect": ["-2 Reaction", "+1 Willpower", "-1 physical action dice pool modifier"],
+          "crashEffect": null,
+          "notes": "Psychedelic hallucinogen. Popular among those seeking trance-like states."
+        }
+      ]
+    },
+    "btl-costs": {
+      "source": "SR5 Core Rulebook, p.413",
+      "description": "Availability and nuyen cost per dose for all BTL chip and download types.",
+      "columns": ["type", "availability", "costPerDose"],
+      "rows": [
+        { "type": "Dreamchip", "availability": "4F", "costPerDose": 20 },
+        { "type": "Moodchip", "availability": "4F", "costPerDose": 50 },
+        { "type": "Personafix", "availability": "4F", "costPerDose": 200 },
+        { "type": "Tripchip", "availability": "4F", "costPerDose": 100 }
+      ]
+    },
+    "addiction-table": {
+      "source": "SR5 Core Rulebook, p.414",
+      "description": "Addiction Rating and Addiction Threshold for all addictive substances. Addiction Test triggers every (11 - Addiction Rating) weeks of continuous use. Test uses Logic + Willpower (psychological), Body + Willpower (physiological), or both.",
+      "columns": [
+        "substance",
+        "category",
+        "addictionRating",
+        "addictionThreshold",
+        "addictionType"
+      ],
+      "rows": [
+        {
+          "substance": "Alcohol",
+          "category": "Drugs",
+          "addictionRating": 3,
+          "addictionThreshold": 2,
+          "addictionType": "Both"
+        },
+        {
+          "substance": "Bliss",
+          "category": "Drugs",
+          "addictionRating": 5,
+          "addictionThreshold": 3,
+          "addictionType": "Both"
+        },
+        {
+          "substance": "Cram",
+          "category": "Drugs",
+          "addictionRating": 4,
+          "addictionThreshold": 3,
+          "addictionType": "Psychological"
+        },
+        {
+          "substance": "Jazz",
+          "category": "Drugs",
+          "addictionRating": 8,
+          "addictionThreshold": 3,
+          "addictionType": "Both"
+        },
+        {
+          "substance": "Kamikaze",
+          "category": "Drugs",
+          "addictionRating": 9,
+          "addictionThreshold": 3,
+          "addictionType": "Physiological"
+        },
+        {
+          "substance": "Long Haul",
+          "category": "Drugs",
+          "addictionRating": 2,
+          "addictionThreshold": 1,
+          "addictionType": "Psychological"
+        },
+        {
+          "substance": "Nitro",
+          "category": "Drugs",
+          "addictionRating": 9,
+          "addictionThreshold": 3,
+          "addictionType": "Both"
+        },
+        {
+          "substance": "Novacoke",
+          "category": "Drugs",
+          "addictionRating": 7,
+          "addictionThreshold": 2,
+          "addictionType": "Both"
+        },
+        {
+          "substance": "Psyche",
+          "category": "Drugs",
+          "addictionRating": 6,
+          "addictionThreshold": 2,
+          "addictionType": "Psychological"
+        },
+        {
+          "substance": "Soykaf",
+          "category": "Drugs",
+          "addictionRating": 1,
+          "addictionThreshold": 2,
+          "addictionType": "Psychological"
+        },
+        {
+          "substance": "Zen",
+          "category": "Drugs",
+          "addictionRating": 3,
+          "addictionThreshold": 1,
+          "addictionType": "Psychological"
+        },
+        {
+          "substance": "BTL, Dreamchip",
+          "category": "Simsense",
+          "addictionRating": 6,
+          "addictionThreshold": 1,
+          "addictionType": "Psychological"
+        },
+        {
+          "substance": "BTL, Moodchip",
+          "category": "Simsense",
+          "addictionRating": 6,
+          "addictionThreshold": 2,
+          "addictionType": "Psychological"
+        },
+        {
+          "substance": "BTL, Personafix",
+          "category": "Simsense",
+          "addictionRating": 7,
+          "addictionThreshold": 2,
+          "addictionType": "Psychological"
+        },
+        {
+          "substance": "BTL, Tripchip",
+          "category": "Simsense",
+          "addictionRating": 8,
+          "addictionThreshold": 3,
+          "addictionType": "Psychological"
+        },
+        {
+          "substance": "Hot-Sim Simsense",
+          "category": "Simsense",
+          "addictionRating": 3,
+          "addictionThreshold": 1,
+          "addictionType": "Psychological"
+        },
+        {
+          "substance": "Legal-Strength Simsense",
+          "category": "Simsense",
+          "addictionRating": 2,
+          "addictionThreshold": 1,
+          "addictionType": "Psychological"
+        },
+        {
+          "substance": "Skillwires",
+          "category": "Simsense",
+          "addictionRating": 5,
+          "addictionThreshold": 2,
+          "addictionType": "Psychological"
+        },
+        {
+          "substance": "Focus Addiction",
+          "category": "Magical",
+          "addictionRating": "total Force of all active foci",
+          "addictionThreshold": 2,
+          "addictionType": "Psychological"
+        },
+        {
+          "substance": "Essence Drain",
+          "category": "Critter",
+          "addictionRating": "critter's Magic",
+          "addictionThreshold": 2,
+          "addictionType": "Psychological"
+        }
+      ]
+    },
+    "sample-grunts": {
+      "source": "SR5 Core Rulebook, pp.381-384",
+      "description": "Full stat blocks for sample grunts and their lieutenants at each Professional Rating (0–6).",
+      "columns": [
+        "professionalRating",
+        "name",
+        "role",
+        "B",
+        "A",
+        "R",
+        "S",
+        "W",
+        "L",
+        "I",
+        "C",
+        "ESS",
+        "Initiative",
+        "conditionMonitor",
+        "limits",
+        "armor",
+        "skills",
+        "qualities",
+        "augmentations",
+        "gear",
+        "spells",
+        "complexForms",
+        "programs",
+        "notes"
+      ],
+      "rows": [
+        {
+          "professionalRating": 0,
+          "name": "Thug",
+          "role": "grunt",
+          "B": 3,
+          "A": 3,
+          "R": 3,
+          "S": 3,
+          "W": 3,
+          "L": 2,
+          "I": 3,
+          "C": 2,
+          "ESS": 6,
+          "Initiative": "6+1D6",
+          "conditionMonitor": 10,
+          "limits": { "physical": 5, "mental": 4, "social": 5 },
+          "armor": 0,
+          "skills": ["Blades 3", "Clubs 3", "Intimidation 3", "Unarmed Combat 3"],
+          "qualities": [],
+          "augmentations": [],
+          "gear": [
+            "Club [Club, Acc 4, Reach 1, DV 6P]",
+            "Knife [Blade, Acc 5, Reach -, DV 4P, AP -1]",
+            "Meta Link commlink (Device Rating 1)"
+          ]
+        },
+        {
+          "professionalRating": 0,
+          "name": "Thug Lieutenant",
+          "role": "lieutenant",
+          "B": 3,
+          "A": 4,
+          "R": 3,
+          "S": 4,
+          "W": 3,
+          "L": 3,
+          "I": 3,
+          "C": 3,
+          "ESS": 6,
+          "Initiative": "6+1D6",
+          "conditionMonitor": 10,
+          "limits": { "physical": 5, "mental": 4, "social": 5 },
+          "armor": 0,
+          "skills": [
+            "(Organization-specific Street Knowledge) 3",
+            "Blades 3",
+            "Clubs 4",
+            "Intimidation 5",
+            "Pistols 3",
+            "Unarmed Combat 4"
+          ],
+          "qualities": [],
+          "augmentations": [],
+          "gear": [
+            "Club [Club, Acc 4, Reach 1, DV 7P]",
+            "Colt America L36 [Light Pistol, Acc 7, DV 7P, AP -, SA, RC -, 30(c)]",
+            "Knife [Blade, Acc 5, Reach -, DV 5P, AP -1]",
+            "Meta Link commlink (Device Rating 1)"
+          ]
+        },
+        {
+          "professionalRating": 1,
+          "name": "Ganger",
+          "role": "grunt",
+          "B": 4,
+          "A": 4,
+          "R": 3,
+          "S": 4,
+          "W": 3,
+          "L": 2,
+          "I": 3,
+          "C": 3,
+          "ESS": 6,
+          "Initiative": "6+1D6",
+          "conditionMonitor": 10,
+          "limits": { "physical": 5, "mental": 3, "social": 4 },
+          "armor": 9,
+          "skills": [
+            "Blades 4",
+            "Clubs 3",
+            "Etiquette (Street) 3 (+2)",
+            "Intimidation 4",
+            "Pistols 4",
+            "Unarmed Combat 3"
+          ],
+          "qualities": ["Toughness"],
+          "augmentations": [],
+          "gear": [
+            "Armor vest [9]",
+            "Browning Ultra-Power [Heavy Pistol, Acc 5 (6), DV 8P, AP -1, SA, RC -, 10(c)]",
+            "Knife [Blade, Acc 5, Reach -, DV 5P, AP -1]",
+            "Meta Link commlink (Device Rating 1)",
+            "1 dose of cram or jazz"
+          ]
+        },
+        {
+          "professionalRating": 1,
+          "name": "Ganger Lieutenant",
+          "role": "lieutenant",
+          "B": 4,
+          "A": 4,
+          "R": 4,
+          "S": 4,
+          "W": 4,
+          "L": 3,
+          "I": 4,
+          "C": 4,
+          "ESS": 5.7,
+          "Initiative": "8+1D6",
+          "conditionMonitor": 10,
+          "limits": { "physical": 6, "mental": 4, "social": 5 },
+          "armor": 12,
+          "skills": [
+            "Blades 3",
+            "Etiquette (Street) 4 (+2)",
+            "Intimidation 4",
+            "Leadership 1",
+            "Pistols (Semi-Automatics) 3 (+2)",
+            "Thrown Weapons 2",
+            "Unarmed Combat (Cyberimplants) 3 (+2)"
+          ],
+          "qualities": ["Toughness"],
+          "augmentations": ["Retractable spur [Acc 6, DV 7P, AP -2]"],
+          "gear": [
+            "Armor jacket [12]",
+            "Browning Ultra-Power [Heavy Pistol, Acc 5 (6), DV 8P, AP -1, SA, RC -, 10(c)]",
+            "Knife [Blade, Acc 5, Reach -, DV 5P, AP -1]",
+            "Sony Emperor commlink (Device Rating 2)",
+            "1 dose of cram or jazz"
+          ]
+        },
+        {
+          "professionalRating": 2,
+          "name": "Corporate Security Guard",
+          "role": "grunt",
+          "B": 4,
+          "A": 4,
+          "R": 4,
+          "S": 3,
+          "W": 3,
+          "L": 2,
+          "I": 3,
+          "C": 3,
+          "ESS": 6,
+          "Initiative": "7+1D6",
+          "conditionMonitor": 10,
+          "limits": { "physical": 5, "mental": 4, "social": 5 },
+          "armor": 12,
+          "skills": [
+            "Automatics 3",
+            "Etiquette 3",
+            "Perception 2",
+            "Pistols 4",
+            "Running 4",
+            "Unarmed Combat 3"
+          ],
+          "qualities": [],
+          "augmentations": [],
+          "gear": [
+            "Armor jacket [12]",
+            "Colt Cobra TZ-120 [SMG, Acc 4 (5), DV 7P, AP -, SA/BF/FA, RC 2 (3), 32(c)]",
+            "Fichetti Security 600 [Light Pistol, Acc 6 (7), DV 7P, SA, RC (1), 30(c)]",
+            "Renraku Sensei commlink (Device Rating 3)",
+            "Stun baton [Club, Acc 4, Reach 1, DV 9S(e), AP -5, 10 charges]"
+          ]
+        },
+        {
+          "professionalRating": 2,
+          "name": "Corporate Security Mage Lieutenant",
+          "role": "lieutenant",
+          "B": 3,
+          "A": 4,
+          "R": 4,
+          "S": 3,
+          "W": 4,
+          "L": 4,
+          "I": 4,
+          "C": 3,
+          "ESS": 6,
+          "M": 3,
+          "Initiative": "8+1D6",
+          "astralInitiative": "8+3D6",
+          "conditionMonitor": 10,
+          "limits": { "physical": 5, "mental": 6, "social": 6 },
+          "armor": 12,
+          "skills": [
+            "Assensing 4",
+            "Astral Combat 3",
+            "Conjuring skill group 3",
+            "Counterspelling 4",
+            "Leadership 3",
+            "Pistols 2",
+            "Spellcasting 4"
+          ],
+          "qualities": ["Magician (Hermetic)"],
+          "augmentations": [],
+          "gear": [
+            "Armor jacket [12]",
+            "Fichetti Security 600 [Light Pistol, Acc 6 (7), DV 7P, AP -, SA, RC (1), 30(c)]",
+            "Mage sight goggles (10m)",
+            "Renraku Sensei commlink (Rating 3)",
+            "Spellcasting (Combat) focus (Force 2)"
+          ],
+          "spells": ["Detect Life", "Light", "Physical Barrier", "Powerbolt", "Silence", "Stunball"]
+        },
+        {
+          "professionalRating": 3,
+          "name": "Police Officer",
+          "role": "grunt",
+          "B": 4,
+          "A": 3,
+          "R": 4,
+          "S": 3,
+          "W": 3,
+          "L": 2,
+          "I": 3,
+          "C": 3,
+          "ESS": 6,
+          "Initiative": "7+1D6",
+          "conditionMonitor": 10,
+          "limits": { "physical": 5, "mental": 4, "social": 5 },
+          "armor": 12,
+          "skills": ["Clubs 3", "Perception 3", "Pistols 4", "Running 3", "Unarmed Combat 4"],
+          "knowledgeSkills": ["Law Enforcement 4", "Local Crime 3"],
+          "qualities": [],
+          "augmentations": [],
+          "gear": [
+            "Ares Predator V [Heavy Pistol, Acc 5 (7), DV 8P, AP -1, SA, RC -, 15(c)]",
+            "Armor jacket [12]",
+            "Defiance EX Shocker [Taser, Acc 4, DV 11S(e), AP -5, SS, RC -, 4(m)]",
+            "Renraku Sensei commlink (Rating 3)",
+            "Sunglasses (image link, smartlink)",
+            "Stun baton [Club, Acc 4, Reach 1, DV 9S(e), AP -5, 10 charges]",
+            "2 doses of jazz"
+          ]
+        },
+        {
+          "professionalRating": 3,
+          "name": "Police Lieutenant",
+          "role": "lieutenant",
+          "B": 4,
+          "A": 4,
+          "R": "4 (6)",
+          "S": 3,
+          "W": 4,
+          "L": 3,
+          "I": 5,
+          "C": 4,
+          "ESS": 5.1,
+          "Initiative": "9+1D6 (11+1D6)",
+          "conditionMonitor": 10,
+          "limits": { "physical": "5 (6)", "mental": 5, "social": 6 },
+          "armor": 12,
+          "skills": [
+            "Automatics 4",
+            "Close Combat skill group 6",
+            "Intimidation 4",
+            "Leadership 5",
+            "Perception 5",
+            "Pistols 6",
+            "Sneaking 3"
+          ],
+          "knowledgeSkills": ["Law Enforcement 6"],
+          "qualities": [],
+          "augmentations": [
+            "Cybereyes [Rating 2, w/ flare compensation, image link, low-light vision, smartlink, thermographic vision]",
+            "Reaction enhancers 2"
+          ],
+          "gear": [
+            "Ares Predator V [Heavy Pistol, Acc 5 (7), DV 8P, AP -1, SA, RC -, 15(c)]",
+            "Armor jacket [12]",
+            "Defiance EX Shocker [Taser, Acc 4, DV 11S(e), AP -5, SS, RC -, 4(m)]",
+            "Erika Elite commlink (Device Rating 4)",
+            "Stun baton [Club, Acc 4, Reach 1, DV 9S(e), AP -5, 10 charges]",
+            "2 doses of jazz"
+          ]
+        },
+        {
+          "professionalRating": 4,
+          "name": "Organized Crime Soldier",
+          "role": "grunt",
+          "B": 4,
+          "A": 5,
+          "R": 4,
+          "S": 4,
+          "W": 3,
+          "L": 4,
+          "I": 3,
+          "C": 4,
+          "ESS": 6,
+          "Initiative": "8+1D6",
+          "conditionMonitor": 10,
+          "limits": { "physical": 5, "mental": 5, "social": 6 },
+          "armor": 9,
+          "skills": [
+            "Automatics 5",
+            "Blades 5",
+            "Intimidation 6",
+            "Perception 2",
+            "Pistols 4",
+            "Unarmed Combat 6"
+          ],
+          "qualities": ["Toughness"],
+          "augmentations": [],
+          "gear": [
+            "Ceska Black Scorpion [Machine Pistol, Acc 5, DV 6P, AP -, SA/BF, RC (1), 35(c)]",
+            "Knife [Blade, Acc 5, Reach -, DV 5P, AP -1] or sword [Blade, Acc 6, Reach 1, DV 7P, AP -2]",
+            "Lined coat [9]",
+            "Renraku Sensei commlink (Device Rating 3)"
+          ]
+        },
+        {
+          "professionalRating": 4,
+          "name": "Organized Crime Technomancer Lieutenant",
+          "role": "lieutenant",
+          "B": 3,
+          "A": 3,
+          "R": 4,
+          "S": 3,
+          "W": 5,
+          "L": 5,
+          "I": 5,
+          "C": 4,
+          "ESS": 6,
+          "RES": 5,
+          "Initiative": "9+1D6",
+          "matrixInitiativeHotSim": "9+3D6",
+          "conditionMonitor": 10,
+          "limits": { "physical": 5, "mental": 7, "social": 7 },
+          "armor": 9,
+          "skills": [
+            "Compiling 7",
+            "Computer 5",
+            "Cybercombat 6",
+            "Decompiling 6",
+            "Leadership 4",
+            "Perception 5",
+            "Pistols 3",
+            "Registering 7",
+            "Software 6"
+          ],
+          "qualities": ["Natural Hardening", "Technomancer"],
+          "augmentations": [],
+          "gear": [
+            "Beretta 201T [Light Pistol, Acc 6, DV 6P, AP -, SA/BF, RC (1), 21(c)]",
+            "Erika Elite commlink (Device Rating 4)",
+            "Lined coat [9]"
+          ],
+          "complexForms": [
+            "Cleaner",
+            "Diffusion of Data Processing",
+            "Diffusion of Firewall",
+            "Editor",
+            "Infusion of Attack",
+            "Infusion of Data Processing",
+            "Resonance Spike",
+            "Tattletale",
+            "Transcendent Grid"
+          ]
+        },
+        {
+          "professionalRating": 5,
+          "name": "Elite Corporate Security",
+          "role": "grunt",
+          "B": 6,
+          "A": "5 (7)",
+          "R": "4 (6)",
+          "S": 4,
+          "W": 4,
+          "L": 5,
+          "I": 3,
+          "C": null,
+          "ESS": 1.9,
+          "Initiative": "10 (12)+3D6",
+          "conditionMonitor": 11,
+          "limits": { "physical": "7 (9)", "mental": 6, "social": 4 },
+          "armor": 18,
+          "skills": [
+            "Athletics skill group 6",
+            "Close Combat skill group 7",
+            "Etiquette (Corporate) 6 (+2)",
+            "Firearms skill group 9",
+            "Perception 6",
+            "Sneaking 6"
+          ],
+          "qualities": [],
+          "augmentations": [
+            "Cybereyes [Rating 2, w/ flare compensation, image link, low-light vision, smartlink, thermographic vision]",
+            "Muscle augmentation 2",
+            "Muscle toner 2",
+            "Wired reflexes 2"
+          ],
+          "gear": [
+            "Ares Alpha [Assault Rifle, Acc 5 (7), DV 11P, AP -2, SA/BF/FA, RC 2, 42(c)]",
+            "Ares Predator V [Heavy Pistol, Acc 5 (7), DV 8P, AP -1, SA, RC -, 15(c)]",
+            "Erika Elite commlink (Device Rating 4)",
+            "Full body armor [15] & full helmet [+3] (w/ chemical seal)"
+          ]
+        },
+        {
+          "professionalRating": 5,
+          "name": "Elite Corporate Security Lieutenant",
+          "role": "lieutenant",
+          "B": 5,
+          "A": "6 (9)",
+          "R": "5 (7)",
+          "S": "4 (7)",
+          "W": 5,
+          "L": 5,
+          "I": 5,
+          "C": 4,
+          "ESS": 1.3,
+          "Initiative": "12+3D6",
+          "conditionMonitor": 11,
+          "limits": { "physical": "6 (8)", "mental": 7, "social": 5 },
+          "armor": 18,
+          "skills": [
+            "Athletics skill group 6",
+            "Close Combat skill group 7",
+            "Cracking skill group 7",
+            "Demolitions 5",
+            "Electronics skill group 6",
+            "Etiquette (Corporate) 4 (+2)",
+            "Firearms skill group 8",
+            "Leadership 6",
+            "Perception 6",
+            "Sneaking 6"
+          ],
+          "qualities": [],
+          "augmentations": [
+            "Cybereyes [Rating 3, w/ flare compensation, image link, low-light vision, smartlink, thermographic vision, and vision magnification]",
+            "Datajack",
+            "Muscle augmentation 3",
+            "Muscle toner 3",
+            "Wired reflexes 2"
+          ],
+          "gear": [
+            "Ares Alpha [Assault Rifle, Acc 5 (7), DV 11P, AP -2, SA/BF/FA, RC 2, 42(c)]",
+            "Ares Predator V [Heavy Pistol, Acc 5 (7), DV 8P, AP -1, SA, RC -, 15(c)]",
+            "Full body armor [15] & full helmet [+3] (w/ chemical seal)",
+            "Shiawase Cyber-5 cyberdeck [DR 5, Atts 8 7 6 5, Prog 5]"
+          ],
+          "programs": [
+            "Armor",
+            "Biofeedback",
+            "Configurator",
+            "Decryption",
+            "Encryption",
+            "Fork",
+            "Hammer",
+            "Lockdown"
+          ]
+        },
+        {
+          "professionalRating": 6,
+          "name": "Elite Special Forces",
+          "role": "grunt",
+          "B": 6,
+          "A": "6 (9)",
+          "R": "5 (8)",
+          "S": 5,
+          "W": 4,
+          "L": 6,
+          "I": 4,
+          "C": null,
+          "ESS": 2.3,
+          "Initiative": "14+4D6",
+          "conditionMonitor": 11,
+          "limits": { "physical": "7 (10)", "mental": 7, "social": 6 },
+          "armor": 18,
+          "skills": [
+            "Athletics skill group 7 (10)",
+            "Stealth skill group 6",
+            "Close Combat skill group 8",
+            "Demolitions 7",
+            "Firearms skill group 9",
+            "Perception 7"
+          ],
+          "qualities": [],
+          "augmentations": [],
+          "gear": [
+            "Full body armor [15] & full helmet [+3] (w/ chemical seal)",
+            "Grapple gun",
+            "Hermes Ikon commlink (Device Rating 5)",
+            "HK 227 [SMG, Acc 5 (7), DV 7P, AP -4, SA/BF/FA, RC (1), 28(c), w/ APDS ammo]",
+            "Smoke grenades (2) [Grenade, DV -, AP -, Blast 10m Radius]",
+            "Thermal smoke grenades (2) [Grenade, DV -, AP -, Blast 10m Radius]"
+          ]
+        },
+        {
+          "professionalRating": 6,
+          "name": "Elite Special Forces Adept Lieutenant",
+          "role": "lieutenant",
+          "B": 6,
+          "A": "6 (9)",
+          "R": "6 (9)",
+          "S": "5 (8)",
+          "W": 5,
+          "L": 5,
+          "I": 6,
+          "C": 5,
+          "ESS": 6,
+          "conditionMonitor": 11,
+          "limits": { "physical": "8 (11)", "mental": 7, "social": 7 },
+          "armor": 18,
+          "skills": [
+            "Athletics skill group 7 (10)",
+            "Stealth skill group 6",
+            "Close Combat skill group 8",
+            "Demolitions 7",
+            "Firearms skill group 9",
+            "Perception 7"
+          ],
+          "qualities": ["Adept"],
+          "initiateGrade": 2,
+          "adeptPowers": [
+            "Improved Reflexes 3",
+            "Improved Agility 3",
+            "Improved Ability (Automatics) 3"
+          ],
+          "augmentations": [],
+          "gear": [
+            "Full body armor [15] & full helmet [+3] (w/ chemical seal)",
+            "Grapple gun",
+            "Hermes Ikon commlink (Device Rating 5)",
+            "HK 227 [SMG, Acc 5 (7), DV 7P, AP -4, SA/BF/FA, RC (1), 28(c), w/ APDS ammo]",
+            "Smoke grenades (2)",
+            "Thermal smoke grenades (2)",
+            "Qi focus (Force 6, Improved Strength 3)",
+            "Sword weapon focus [Force 2, Blade, Acc 6, Reach 1, DV 11P, AP -2]"
+          ]
+        }
+      ]
+    },
+    "sample-contacts": {
+      "source": "SR5 Core Rulebook, pp.390-392",
+      "description": "Full stat blocks for eight sample contact archetypes.",
+      "columns": ["contact", "uses", "placesToMeet", "similarContacts", "stats"],
+      "rows": [
+        {
+          "contact": "bartender",
+          "name": "Bartender",
+          "uses": ["Information", "Additional contacts", "Back rooms for private meets"],
+          "placesToMeet": ["Any bar/nightclub"],
+          "similarContacts": ["Bar/nightclub owner", "Bouncer", "Waitress", "Stripper"],
+          "B": 3,
+          "A": 4,
+          "R": 3,
+          "S": 3,
+          "W": 4,
+          "L": 3,
+          "I": 3,
+          "C": 4,
+          "E": 2,
+          "ESS": 6,
+          "Initiative": "6+1D6",
+          "conditionMonitor": 10,
+          "limits": { "physical": 4, "mental": 5, "social": 6 },
+          "skills": [
+            "Etiquette (Street) 6 (+2)",
+            "Intimidation 5",
+            "Longarms (Shotguns) 4 (+2)",
+            "Negotiation 5",
+            "Pistols 4",
+            "Unarmed Combat 4"
+          ],
+          "knowledgeSkills": ["Alcohol 6", "Media Stars 5", "Sports 6", "Street Rumors 6"]
+        },
+        {
+          "contact": "beat-cop",
+          "name": "Beat Cop",
+          "uses": ["Information", "Additional contacts", "Gear"],
+          "placesToMeet": ["Streets of his beat", "Coffee shops"],
+          "similarContacts": ["Detective", "Snitch", "Undercover cop", "Rent-a-cop"],
+          "B": 4,
+          "A": 4,
+          "R": 4,
+          "S": 3,
+          "W": 3,
+          "L": 2,
+          "I": 3,
+          "C": 3,
+          "E": 3,
+          "ESS": 6,
+          "Initiative": "8+1D6",
+          "conditionMonitor": 10,
+          "limits": { "physical": 5, "mental": 5, "social": 5 },
+          "skills": [
+            "Automatics 4",
+            "Clubs 5",
+            "Etiquette (Street) 6 (+2)",
+            "Intimidation 5",
+            "Leadership 4",
+            "Perception 6",
+            "Pistols 6",
+            "Running 4",
+            "Unarmed Combat 5"
+          ],
+          "knowledgeSkills": [
+            "Crime Syndicates 7",
+            "Illegal Goods 6",
+            "Law Enforcement 4",
+            "Local Gangs 6",
+            "Police Procedures 8",
+            "Street Rumors 6"
+          ]
+        },
+        {
+          "contact": "fixer",
+          "name": "Fixer",
+          "uses": ["Jobs and cred", "Information", "Gear", "Additional contacts"],
+          "placesToMeet": [
+            "Local bars or clubs",
+            "Coffee shops",
+            "Street corners where surveillance is next to impossible"
+          ],
+          "similarContacts": ["Fence", "Loan shark", "Mr. Johnson"],
+          "B": 3,
+          "A": 3,
+          "R": 3,
+          "S": 3,
+          "W": 4,
+          "L": 4,
+          "I": 3,
+          "C": 5,
+          "E": 3,
+          "ESS": 6,
+          "Initiative": "8+1D6",
+          "conditionMonitor": 10,
+          "limits": { "physical": 4, "mental": 5, "social": 7 },
+          "skills": [
+            "Computer 7",
+            "Data Search 8",
+            "Etiquette (Street) 8 (+2)",
+            "Negotiation 9",
+            "Perception 6",
+            "Pistols 5"
+          ],
+          "knowledgeSkills": [
+            "Corporate Rumors 8",
+            "Fences 7",
+            "Gear Values 9",
+            "Shadowrunner Teams 8"
+          ]
+        },
+        {
+          "contact": "mafia-consiglieri",
+          "name": "Mafia Consiglieri",
+          "uses": ["Information", "Additional contacts"],
+          "placesToMeet": ["Restaurants", "Casinos", "Bars"],
+          "similarContacts": ["Yakuza wakagashira", "Triad Incense Master"],
+          "B": 3,
+          "A": 3,
+          "R": 3,
+          "S": 3,
+          "W": 4,
+          "L": 4,
+          "I": 4,
+          "C": 5,
+          "E": 3,
+          "ESS": 6,
+          "Initiative": "7+1D6",
+          "conditionMonitor": 10,
+          "limits": { "physical": 4, "mental": 6, "social": 7 },
+          "skills": [
+            "Computer 5",
+            "Etiquette (Mob) 7 (+2)",
+            "Instruction 6",
+            "Leadership 7",
+            "Negotiation 6",
+            "Perception 6",
+            "Pistols 3"
+          ],
+          "knowledgeSkills": [
+            "Business 6",
+            "Law 7",
+            "Local Politics 6",
+            "Mob Politics 9",
+            "Police Procedures 5",
+            "Psychology 7"
+          ]
+        },
+        {
+          "contact": "mechanic",
+          "name": "Mechanic",
+          "uses": ["Repair services", "Used wheels and other vehicles"],
+          "placesToMeet": [
+            "Local garage",
+            "Gas station",
+            "Automobile chop shop",
+            "Used car lot",
+            "Aircraft hangar"
+          ],
+          "similarContacts": ["Tech wizard"],
+          "B": 4,
+          "A": 3,
+          "R": 3,
+          "S": 4,
+          "W": 4,
+          "L": 4,
+          "I": 4,
+          "C": 3,
+          "E": 3,
+          "ESS": 6,
+          "Initiative": "7+1D6",
+          "conditionMonitor": 10,
+          "limits": { "physical": 5, "mental": 5, "social": 5 },
+          "skills": [
+            "Aeronautics Mechanic 6",
+            "Automotive Mechanic 8",
+            "Computer 4",
+            "Gunnery 3",
+            "Hardware 6",
+            "Industrial Mechanic 4",
+            "Pilot Ground Craft 6"
+          ],
+          "knowledgeSkills": ["Chop Shops 8", "Combat Biking 7", "Vehicles 8"]
+        },
+        {
+          "contact": "mr-johnson",
+          "name": "Mr. Johnson",
+          "uses": ["Shadowruns", "Job-related information", "Additional contacts"],
+          "placesToMeet": ["Just about anywhere he wants"],
+          "similarContacts": ["Company man", "Fixer", "Government agent"],
+          "B": 3,
+          "A": 3,
+          "R": 3,
+          "S": 3,
+          "W": 4,
+          "L": 4,
+          "I": 4,
+          "C": 5,
+          "E": 5,
+          "ESS": 6,
+          "Initiative": "8+1D6",
+          "conditionMonitor": 10,
+          "limits": { "physical": 4, "mental": 6, "social": 7 },
+          "skills": [
+            "Computer 6",
+            "Con 4",
+            "Etiquette (Corporate) 7 (+2)",
+            "Intimidation 4",
+            "Negotiation 8",
+            "Perception 5",
+            "Pistols 5"
+          ],
+          "knowledgeSkills": [
+            "Corporate Finances 5",
+            "Corporate Rumors 8",
+            "Psychology 5",
+            "SOTA Technology 6"
+          ]
+        },
+        {
+          "contact": "street-doc",
+          "name": "Street Doc",
+          "uses": ["Medical care", "Information", "Additional contacts", "Gear (drugs)"],
+          "placesToMeet": ["Local clinic", "Body shop"],
+          "similarContacts": ["EMT", "Ambulance driver", "Street mage/shaman"],
+          "B": 3,
+          "A": 5,
+          "R": 3,
+          "S": 3,
+          "W": 3,
+          "L": 5,
+          "I": 4,
+          "C": 3,
+          "E": 3,
+          "ESS": 6,
+          "Initiative": "7+1D6",
+          "conditionMonitor": 10,
+          "limits": { "physical": 4, "mental": 6, "social": 5 },
+          "skills": [
+            "Cybertechnology 7",
+            "First Aid 6",
+            "Medicine 8",
+            "Negotiation 4",
+            "Perception 6"
+          ],
+          "knowledgeSkills": [
+            "Biology 7",
+            "Medical Advances 5",
+            "Organleggers 4",
+            "Psychology 4",
+            "Smugglers 3"
+          ]
+        },
+        {
+          "contact": "talismonger",
+          "name": "Talismonger",
+          "uses": ["Magical items", "Magic-related information", "Additional contacts"],
+          "placesToMeet": ["Talismonger's shop", "Occult library", "Coffee shop"],
+          "similarContacts": ["Fixer", "Street mage/shaman", "Corporate wagemage"],
+          "B": 3,
+          "A": 3,
+          "R": 3,
+          "S": 3,
+          "W": 4,
+          "L": 5,
+          "I": 5,
+          "C": 4,
+          "E": 3,
+          "ESS": 6,
+          "M": 4,
+          "Initiative": "8+1D6",
+          "conditionMonitor": 11,
+          "limits": { "physical": 4, "mental": 6, "social": 7 },
+          "qualities": ["Aspected Magician (Enchanter)"],
+          "skills": [
+            "Arcana 5",
+            "Artisan 5",
+            "Assensing 6",
+            "Enchanting skill group 6",
+            "Etiquette (Magical) 5 (+2)",
+            "Negotiation 6",
+            "Perception 3"
+          ],
+          "knowledgeSkills": [
+            "Magical Background 5",
+            "Magical Goods 5",
+            "Metalworking 6",
+            "Woodworking 6"
+          ]
+        }
+      ]
+    },
+    "critter-powers": {
+      "source": "SR5 Core Rulebook, pp.394-401",
+      "description": "All critter powers with full mechanical details: type, action, range, duration, and effect.",
+      "columns": ["power", "type", "action", "range", "duration", "effect"],
+      "rows": [
+        {
+          "power": "accident",
+          "name": "Accident",
+          "type": "P",
+          "action": "Complex",
+          "range": "LOS",
+          "duration": "Instant",
+          "effect": "Opposed Test: critter Magic + Willpower vs. target Reaction + Intuition. Critter wins = accident occurs. 4+ net hits = critical glitch severity. Can target up to Magic targets simultaneously."
+        },
+        {
+          "power": "animal-control",
+          "name": "Animal Control",
+          "type": "M",
+          "action": "Complex",
+          "range": "LOS",
+          "duration": "Sustained",
+          "effect": "Controls mundane animals. Cannot be used on critters with Sapience. Continues following last orders after leaving LOS. Control: Charisma x 5 small animals OR Charisma large animals."
+        },
+        {
+          "power": "armor",
+          "name": "Armor",
+          "type": "P",
+          "action": "Auto",
+          "range": "Self",
+          "duration": "Always",
+          "effect": "Natural Armor rating equal to power's rating. Cumulative with worn armor."
+        },
+        {
+          "power": "astral-form",
+          "name": "Astral Form",
+          "type": "M",
+          "action": "Auto",
+          "range": "Self",
+          "duration": "Always",
+          "effect": "Critter exists only in astral plane. Can manifest physically like an astrally projecting magician (p.313). Physical attacks/spells have no effect on it."
+        },
+        {
+          "power": "binding",
+          "name": "Binding",
+          "type": "P",
+          "action": "Complex",
+          "range": "Special",
+          "duration": "Instant",
+          "effect": "Sticks target to any surface. Break free: Complex Action, Strength + Body vs. critter Magic + Willpower. Failure = immobilized. Range depends on binding method (LOS/Touch/Self)."
+        },
+        {
+          "power": "compulsion",
+          "name": "Compulsion",
+          "type": "M",
+          "action": "Complex",
+          "range": "LOS",
+          "duration": "Sustained",
+          "effect": "Opposed Test: critter Magic + Charisma vs. target Willpower + Logic. Target immediately performs compelled action. Cannot plant future-triggered suggestions."
+        },
+        {
+          "power": "concealment",
+          "name": "Concealment",
+          "type": "P",
+          "action": "Simple",
+          "range": "LOS",
+          "duration": "Sustained",
+          "effect": "Subtracts Magic dice from Perception Tests to locate target. Can conceal: Magic metahuman-sized targets, or Magic x 5 small targets."
+        },
+        {
+          "power": "confusion",
+          "name": "Confusion",
+          "type": "M",
+          "action": "Complex",
+          "range": "LOS",
+          "duration": "Sustained",
+          "effect": "Opposed Test: critter Magic + Willpower vs. target Willpower + Logic. Net hits = negative dice pool modifier for all target's actions."
+        },
+        {
+          "power": "corrosive-spit",
+          "name": "Corrosive Spit",
+          "type": "P",
+          "action": "Complex",
+          "range": "Special",
+          "duration": "Instant",
+          "effect": "Ranged attack: Exotic Ranged Weapon + Agility [Physical]. Range increments = Body meters. DV = (Magic x 2)P. AP = -(critter's Magic)."
+        },
+        {
+          "power": "dragonspeech",
+          "name": "Dragonspeech",
+          "type": "M",
+          "action": "Auto",
+          "range": "LOS",
+          "duration": "Instant",
+          "effect": "Telepathic communication within LOS regardless of Language skills. Cannot be picked up technologically. Targets cannot respond without their own telepathic ability."
+        },
+        {
+          "power": "dual-natured",
+          "name": "Dual Natured",
+          "type": "P",
+          "action": "Auto",
+          "range": "Self",
+          "duration": "Always",
+          "effect": "Active in both astral and physical planes simultaneously. No -2 dice pool modifier for interacting with physical world while astrally perceiving. Cannot shift between planes."
+        },
+        {
+          "power": "elemental-attack",
+          "name": "Elemental Attack",
+          "type": "P",
+          "action": "Complex",
+          "range": "Special",
+          "duration": "Instant",
+          "effect": "Ranged attack: Exotic Ranged Weapon + Agility [Physical]. Range increments = Magic meters. DV = (Magic x 2)P + AP -(critter's Magic) + elemental damage bonus (p.170)."
+        },
+        {
+          "power": "energy-aura",
+          "name": "Energy Aura",
+          "type": "P",
+          "action": "Auto",
+          "range": "Self",
+          "duration": "Always",
+          "effect": "Adds Magic to DV of all critter melee attacks (elemental type specified). Successful melee attacks against critter also deal damage to attacker: DRT, DV = critter's Magic x 2, AP -(critter's Magic)."
+        },
+        {
+          "power": "engulf",
+          "name": "Engulf",
+          "type": "P",
+          "action": "Complex",
+          "range": "Touch",
+          "duration": "Sustained",
+          "effect": "Melee attack; DV = Magic x 2. Once engulfed, target trapped and cannot move. Each Action Phase: critter auto-inflicts same damage (resisted with Body + Armor, AP -(critter's Magic)). Escape: Complex Action, Opposed Test target's Strength + Body vs. critter's Magic + Body."
+        },
+        {
+          "power": "enhanced-senses",
+          "name": "Enhanced Senses",
+          "type": "P",
+          "action": "Auto",
+          "range": "Self",
+          "duration": "Always",
+          "effect": "Improved sensory capabilities (low-light, thermographic, hearing, smell, sonar, etc.). Senses listed in critter description. If no specific effect for a sense: +2 dice pool modifier for tests using that sense, +1 to appropriate limit."
+        },
+        {
+          "power": "essence-drain",
+          "name": "Essence Drain",
+          "type": "P",
+          "action": "Complex",
+          "range": "Touch",
+          "duration": "Permanent",
+          "effect": "Permanently drains 1 Essence per Extended Test success from sapient physical being. Requires emotional connection (passion, anger, terror of the attacker). Extended Test: Charisma + Magic (10 - target's Essence, 1 minute). Interruption = no drain. Stolen Essence can boost attributes (Simple Action, +1 per Essence, max +4, lasts 12 hours). Willing victim may become addicted (Psychological Addiction Test, threshold 2)."
+        },
+        {
+          "power": "fear",
+          "name": "Fear",
+          "type": "M",
+          "action": "Complex",
+          "range": "LOS",
+          "duration": "Special",
+          "effect": "Opposed Test: critter Willpower + Magic vs. target Willpower + Logic. Terror lasts 1 Combat Turn per net hit. After fear ends, target must pass Willpower + Logic test (threshold = critter net hits) to face the critter again."
+        },
+        {
+          "power": "guard",
+          "name": "Guard",
+          "type": "P",
+          "action": "Complex",
+          "range": "LOS",
+          "duration": "Sustained",
+          "effect": "Protects against normal environmental accidents/hazards and Accident power effects, can prevent glitches. Can protect up to Magic targets simultaneously."
+        },
+        {
+          "power": "hardened-armor",
+          "name": "Hardened Armor",
+          "type": "P",
+          "action": "Auto",
+          "range": "Self",
+          "duration": "Always",
+          "effect": "If modified DV <= Hardened Armor rating (modified by AP): NO damage, no DRT required. If modified DV > rating: normal DRT applies, with (Hardened Armor / 2, rounded up) as automatic extra hits."
+        },
+        {
+          "power": "hardened-mystic-armor",
+          "name": "Hardened Mystic Armor",
+          "type": "M",
+          "action": "Auto",
+          "range": "Self",
+          "duration": "Always",
+          "effect": "Same as Hardened Armor but provides protection against attacks on the astral plane only."
+        },
+        {
+          "power": "immunity",
+          "name": "Immunity",
+          "type": "P",
+          "action": "Auto",
+          "range": "Self",
+          "duration": "Always",
+          "effect": "Hardened Armor equal to twice the critter's Essence against a specific damage type. Subtypes: Immunity to Age (does not age), Immunity to Normal Weapons (all non-magical attacks; does not apply against allergen-based attacks if critter has Allergy weakness)."
+        },
+        {
+          "power": "infection",
+          "name": "Infection",
+          "type": "P",
+          "action": "Auto",
+          "range": "Touch",
+          "duration": "Permanent",
+          "effect": "HMHVV vector. When Essence Drain reduces victim to Essence 0: Opposed Test critter Magic + Charisma vs. victim Body + Willpower. If critter wins: victim infected, enters coma-like state, rises 24 hours later as Infected (critter's original metatype), 1 Essence, insatiable hunger. PC victims become NPCs."
+        },
+        {
+          "power": "influence",
+          "name": "Influence",
+          "type": "M",
+          "action": "Complex",
+          "range": "LOS",
+          "duration": "Instant",
+          "effect": "Opposed Test: critter Magic + Charisma vs. target Willpower + Logic. Target acts on suggestion as own idea. Target can resist with Willpower Test (threshold = net hits) to recognize wrongness. Cannot plant future-triggered suggestions."
+        },
+        {
+          "power": "innate-spell",
+          "name": "Innate Spell",
+          "type": "As spell",
+          "action": "Complex",
+          "range": "As spell",
+          "duration": "As spell",
+          "effect": "Instinctively casts a specific spell. Requires Spellcasting skill. Magicians can counter with Counterspelling normally. Produces Drain as normal; -2 penalty for sustaining. Critters/Spirits resist Drain with Intuition or Charisma (GM's discretion)."
+        },
+        {
+          "power": "materialization",
+          "name": "Materialization",
+          "type": "M",
+          "action": "Complex",
+          "range": "Self",
+          "duration": "Sustained",
+          "effect": "Astral critter projects into physical world, forming a temporary body. Gains Immunity to Normal Weapons while materialized. Materializing and dematerializing each require a Complex Action."
+        },
+        {
+          "power": "mimicry",
+          "name": "Mimicry",
+          "type": "P",
+          "action": "Simple",
+          "range": "Self",
+          "duration": "Sustained",
+          "effect": "Exactly imitates sounds including speech. Memory-based imitation requires Memory Test (p.152). Detecting false sound: Perception Test, threshold = critter's Charisma + Magic hits."
+        },
+        {
+          "power": "mist-form",
+          "name": "Mist Form",
+          "type": "P",
+          "action": "Complex",
+          "range": "Self",
+          "duration": "Sustained",
+          "effect": "Transforms into a cloud of mist. Movement: 5 meters per Combat Turn. Cannot use other powers in mist form. Passes through any cracks not airtight. Immunity to Normal Weapons while in mist form. Allergen exposure forces immediate return to normal form."
+        },
+        {
+          "power": "movement",
+          "name": "Movement",
+          "type": "P",
+          "action": "Complex",
+          "range": "LOS",
+          "duration": "Sustained",
+          "effect": "Modifies target's movement rate by up to critter's Magic (multiply or divide). Only predisposed-to-locomotion targets. One instance per target. Vehicle targets: Magic + Willpower test (threshold = 1/2 vehicle Body, min 2); hits x Acceleration Rating added to/subtracted from Speed."
+        },
+        {
+          "power": "mystic-armor",
+          "name": "Mystic Armor",
+          "type": "M",
+          "action": "Auto",
+          "range": "Self",
+          "duration": "Always",
+          "effect": "Functions as Armor but only provides protection from attacks on the astral plane."
+        },
+        {
+          "power": "natural-weapon",
+          "name": "Natural Weapon",
+          "type": "P",
+          "action": "Auto",
+          "range": "Touch",
+          "duration": "Instant",
+          "effect": "Claws, teeth, tail, etc. DV and AP listed in critter description. Dual-natured critters can use natural melee weapons against astral targets within reach (uses Unarmed Combat, physical DV). Ranged natural weapons do not work on astral plane."
+        },
+        {
+          "power": "noxious-breath",
+          "name": "Noxious Breath",
+          "type": "P",
+          "action": "Complex",
+          "range": "Special",
+          "duration": "Instant",
+          "effect": "Ranged toxin attack: Exotic Ranged Weapon + Agility [Physical]. Vector: Inhalation. Speed: Immediate. Power: critter's Magic. Effect: Stun damage, nausea. Armor useless. Cone of (Body) meters; up to 2 targets within 1 meter of each other."
+        },
+        {
+          "power": "paralyzing-howl",
+          "name": "Paralyzing Howl",
+          "type": "P",
+          "action": "Complex",
+          "range": "Special",
+          "duration": "Special",
+          "effect": "Affects all within (Magic x 15) meters. Opposed Test: critter Magic + Charisma vs. target Intuition + Willpower. Sound-dampening ratings add to target's test. Each net hit: -1 Reaction and -1 Agility. Lasts (Magic + net hits) Combat Turns. If either drops to 0: target paralyzed (Magic + net hits) minutes. Recovery: 1 Reaction and 1 Agility per minute."
+        },
+        {
+          "power": "paralyzing-touch",
+          "name": "Paralyzing Touch",
+          "type": "P",
+          "action": "Complex",
+          "range": "Touch",
+          "duration": "Special",
+          "effect": "Touch-range version of Paralyzing Howl. Surprised/unaware target = automatic success as melee attack causing no damage. Opposed Test: critter Magic + Willpower vs. target Intuition + Willpower. Otherwise functions identically to Paralyzing Howl."
+        },
+        {
+          "power": "petrification",
+          "name": "Petrification",
+          "type": "P",
+          "action": "Complex",
+          "range": "LOS",
+          "duration": "Sustained",
+          "effect": "Opposed Test: critter Magic + Willpower vs. target Intuition + Willpower. Each net hit: -1 Reaction and -1 Agility. If either drops to 0: target turns to stone (Barrier Rating = critter Magic x 2), unaware of surroundings. Once power ends: normal state resumes, 1 Reaction and 1 Agility per minute."
+        },
+        {
+          "power": "psychokinesis",
+          "name": "Psychokinesis",
+          "type": "P",
+          "action": "Complex",
+          "range": "LOS",
+          "duration": "Sustained",
+          "effect": "Moves objects telekinetically. Strength and Agility = hits scored on Magic + Willpower test. Functions like Magic Fingers spell (p.294)."
+        },
+        {
+          "power": "regeneration",
+          "name": "Regeneration",
+          "type": "P",
+          "action": "Auto",
+          "range": "Self",
+          "duration": "Always",
+          "effect": "At end of each Combat Turn with any damage: Magic + Body Test; adds Body to hits. Heals that many boxes (Physical overflow first, then Physical, then Stun). Cannot heal: brain/spinal damage, weapon foci damage, combat spell damage, most critter/adept power damage, Drain, allergen damage (while in contact). Incompatible with augmentations."
+        },
+        {
+          "power": "sapience",
+          "name": "Sapience",
+          "type": "P",
+          "action": "Auto",
+          "range": "Self",
+          "duration": "Always",
+          "effect": "Critter is self-aware at or above Homo sapiens level. Skills without Sapience are Untrained (not Unaware). Can learn new skills. Can Awaken with a Magic attribute. Can learn any magical task."
+        },
+        {
+          "power": "search",
+          "name": "Search",
+          "type": "P",
+          "action": "Complex",
+          "range": "Special",
+          "duration": "Special",
+          "effect": "Extended Test: Magic + Intuition (5, 10 minutes). Critter must have previously seen the target. See Search Modifiers Table for modifier details. Spirits may search in astral space."
+        },
+        {
+          "power": "venom",
+          "name": "Venom",
+          "type": "P",
+          "action": "Auto",
+          "range": "Touch",
+          "duration": "Instant",
+          "effect": "Secretes a toxin. Default stats: Vector: Injection, Speed: 1 Combat Turn, Penetration: 0, Power: Magic, Effect: Physical damage. Individual critters may have different venom attributes."
+        },
+        {
+          "power": "weather-control",
+          "name": "Weather Control",
+          "type": "P",
+          "action": "Complex",
+          "range": "LOS",
+          "duration": "Sustained",
+          "effect": "Manipulates local weather conditions (only what is realistically possible in the environment). Peaks when critter completes Magic + Willpower (10, 30 minutes) Extended Test. Critter summons and pushes weather; cannot target specific effects (e.g., cannot aim lightning bolts)."
+        }
+      ]
+    },
+    "critter-weaknesses": {
+      "source": "SR5 Core Rulebook, pp.401-402",
+      "description": "Critter weaknesses with mechanical effects.",
+      "columns": ["weakness", "mechanic"],
+      "rows": [
+        { "weakness": "allergy", "mechanic": "Treat as the Allergy negative quality (p.78)." },
+        {
+          "weakness": "dietary-requirement",
+          "mechanic": "Critter must include specific substance in diet (at least one meal per day). Without it, critter eventually grows sick and dies."
+        },
+        {
+          "weakness": "essence-loss",
+          "mechanic": "No actual Essence; lose 1 Essence per lunar month naturally. At Essence 0: die within Body + Willpower days unless fed. Non-automatic power use: each use accelerates Essence loss by one week."
+        },
+        {
+          "weakness": "induced-dormancy",
+          "mechanic": "Specific condition (lack of air, orichalcum, etc.) forces critter into coma-like suspended animation. Wakes quickly (usually within a minute) once condition is removed."
+        },
+        {
+          "weakness": "reduced-senses",
+          "mechanic": "One or more senses function at half normal range/effectiveness or less; may be reduced to complete loss."
+        },
+        {
+          "weakness": "uneducated",
+          "mechanic": "Treat as the Uneducated negative quality (p.87)."
+        },
+        {
+          "weakness": "vulnerability",
+          "mechanic": "Substance/condition: Increase DV of all attacks with the substance by 3. Weapons made of it bypass any Immunities. Damage from it cannot be healed by Regeneration or healing magic; only by natural healing. Condition vulnerability: -3 dice pool modifier to Resistance Test to avoid the condition."
+        }
+      ]
+    },
+    "mundane-critters": {
+      "source": "SR5 Core Rulebook, pp.402-403",
+      "description": "Stat blocks for mundane critters: Dog, Great Cat, Horse, Shark, Wolf.",
+      "columns": [
+        "critter",
+        "B",
+        "A",
+        "R",
+        "S",
+        "W",
+        "L",
+        "I",
+        "C",
+        "ESS",
+        "Initiative",
+        "Movement",
+        "conditionMonitor",
+        "limits",
+        "armor",
+        "skills",
+        "powers"
+      ],
+      "rows": [
+        {
+          "critter": "dog",
+          "name": "Dog",
+          "B": 4,
+          "A": 3,
+          "R": 4,
+          "S": 3,
+          "W": 3,
+          "L": 2,
+          "I": 4,
+          "C": 3,
+          "ESS": 6,
+          "Initiative": "8+1D6",
+          "Movement": "x2/x8/+4",
+          "conditionMonitor": "10/10",
+          "limits": { "physical": 6, "mental": 4, "social": 5 },
+          "armor": 0,
+          "skills": [
+            "Intimidation 4",
+            "Perception (Smell) 5 (+2)",
+            "Running 5",
+            "Tracking 6",
+            "Unarmed Combat 5"
+          ],
+          "powers": [
+            "Enhanced Senses (Hearing, Smell)",
+            "Natural Weapon (Claws/Bite: DV (STR+1)P, AP -)"
+          ]
+        },
+        {
+          "critter": "great-cat",
+          "name": "Great Cat",
+          "B": 6,
+          "A": 5,
+          "R": 4,
+          "S": 5,
+          "W": 3,
+          "L": 2,
+          "I": 4,
+          "C": 3,
+          "ESS": 6,
+          "Initiative": "8+2D6",
+          "Movement": "x2/x6/+4",
+          "conditionMonitor": "11/10",
+          "limits": { "physical": 7, "mental": 4, "social": 5 },
+          "armor": 0,
+          "skills": ["Perception 5", "Running 5", "Sneaking 6", "Tracking 4", "Unarmed Combat 7"],
+          "powers": ["Natural Weapon (Claws/Bite: DV (STR+3)P, AP -1)"]
+        },
+        {
+          "critter": "horse",
+          "name": "Horse",
+          "B": 8,
+          "A": 5,
+          "R": 5,
+          "S": 8,
+          "W": 3,
+          "L": 2,
+          "I": 3,
+          "C": 4,
+          "ESS": 6,
+          "Initiative": "8+1D6",
+          "Movement": "x3/x10/+6",
+          "conditionMonitor": "12/10",
+          "limits": { "physical": 10, "mental": 4, "social": 6 },
+          "armor": 0,
+          "skills": ["Running 6", "Unarmed Combat 1"],
+          "powers": ["Natural Weapon (Kick: DV (STR+1)P, AP -, Reach 1)"]
+        },
+        {
+          "critter": "shark",
+          "name": "Shark",
+          "B": 5,
+          "A": 4,
+          "R": 5,
+          "S": 5,
+          "W": 3,
+          "L": 1,
+          "I": 4,
+          "C": 1,
+          "ESS": 6,
+          "Initiative": "9+1D6",
+          "Movement": "x3/x8/+4",
+          "conditionMonitor": "11/10",
+          "limits": { "physical": 7, "mental": 3, "social": 4 },
+          "armor": 2,
+          "skills": ["Perception (Smell) 6 (+2)", "Swimming 10", "Unarmed Combat 8"],
+          "powers": ["Armor 2", "Natural Weapon (Bite: DV (STR+2)P, AP -2)"]
+        },
+        {
+          "critter": "wolf",
+          "name": "Wolf",
+          "B": 6,
+          "A": 3,
+          "R": 5,
+          "S": 5,
+          "W": 3,
+          "L": 2,
+          "I": 4,
+          "C": 3,
+          "ESS": 6,
+          "Initiative": "9+2D6",
+          "Movement": "x2/x8/+4",
+          "conditionMonitor": "10/10",
+          "limits": { "physical": 6, "mental": 4, "social": 5 },
+          "armor": 0,
+          "skills": [
+            "Perception (Smell) 5 (+2)",
+            "Running 5",
+            "Sneaking 5",
+            "Tracking 6",
+            "Unarmed Combat 7"
+          ],
+          "powers": [
+            "Enhanced Senses (Hearing, Smell)",
+            "Natural Weapon (Claws/Bite: DV (STR+2)P, AP -1)"
+          ]
+        }
+      ]
+    },
+    "paracritters": {
+      "source": "SR5 Core Rulebook, pp.403-407",
+      "description": "Stat blocks for paracritters: Barghest, Basilisk, Cockatrice, Devil Rat, Ghoul, Hell Hound, Sasquatch, Vampire, Eastern Dragon (Sirrush), Feathered Serpent, Western Dragon.",
+      "columns": [
+        "critter",
+        "B",
+        "A",
+        "R",
+        "S",
+        "W",
+        "L",
+        "I",
+        "C",
+        "ESS",
+        "M",
+        "Initiative",
+        "Movement",
+        "conditionMonitor",
+        "limits",
+        "armor",
+        "skills",
+        "powers",
+        "weaknesses",
+        "notes"
+      ],
+      "rows": [
+        {
+          "critter": "barghest",
+          "name": "Barghest",
+          "B": 8,
+          "A": 5,
+          "R": 6,
+          "S": 6,
+          "W": 4,
+          "L": 2,
+          "I": 5,
+          "C": 5,
+          "ESS": 4,
+          "M": 6,
+          "Initiative": "11+2D6",
+          "Movement": "x2/x6/+4",
+          "conditionMonitor": "12/10",
+          "limits": { "physical": 9, "mental": 5, "social": 7 },
+          "armor": 3,
+          "skills": [
+            "Intimidation 7",
+            "Perception 6",
+            "Running 5",
+            "Tracking 6",
+            "Unarmed Combat 8"
+          ],
+          "powers": [
+            "Armor 3",
+            "Dual Natured",
+            "Enhanced Senses (Hearing, Smell, Sonar)",
+            "Fear",
+            "Immunity (Barghest Howls)",
+            "Natural Weapon (Bite: DV (STR+2)P, AP -1)",
+            "Paralyzing Howl"
+          ],
+          "weaknesses": [],
+          "notes": "Natural Habitat: Urban areas in North America and northern Europe, British Isles, Australia, Hong Kong, Nairobi."
+        },
+        {
+          "critter": "basilisk",
+          "name": "Basilisk",
+          "B": 6,
+          "A": 3,
+          "R": 3,
+          "S": 7,
+          "W": 5,
+          "L": 1,
+          "I": 3,
+          "C": 1,
+          "ESS": 1,
+          "M": 4,
+          "Initiative": "6+1D6",
+          "Movement": "x1/x5/+1 (x2/x8/+2 swimming)",
+          "conditionMonitor": "11/11",
+          "limits": { "physical": 8, "mental": 4, "social": 5 },
+          "armor": 7,
+          "skills": [
+            "Infiltrating 3",
+            "Perception 4",
+            "Running 2",
+            "Sneaking 3",
+            "Swimming 8",
+            "Unarmed Combat 6"
+          ],
+          "powers": ["Armor 7", "Natural Weapon (Bite, Reach -, DV 8P, AP -2)", "Petrification"],
+          "weaknesses": ["Vulnerability (Own Gaze)"],
+          "notes": "Natural Habitat: Native to Indonesia; found in temperate and tropical woodlands worldwide near running water."
+        },
+        {
+          "critter": "cockatrice",
+          "name": "Cockatrice",
+          "B": 4,
+          "A": 5,
+          "R": 4,
+          "S": 4,
+          "W": 4,
+          "L": 2,
+          "I": 3,
+          "C": 1,
+          "ESS": 1,
+          "M": 5,
+          "Initiative": "7+1D6",
+          "Movement": "x2/x2/+3",
+          "conditionMonitor": "10/10",
+          "limits": { "physical": 6, "mental": 4, "social": 4 },
+          "armor": 1,
+          "skills": ["Perception 3", "Running 7", "Sneaking 5", "Unarmed Combat 7"],
+          "powers": [
+            "Armor 1",
+            "Immunity (Own Touch)",
+            "Natural Weapon (Claws: DV (STR)P, AP -1)",
+            "Paralyzing Touch (Tail)"
+          ],
+          "weaknesses": [],
+          "notes": "Natural Habitat: Originally open grassland and scrubland in western Europe; now worldwide."
+        },
+        {
+          "critter": "devil-rat",
+          "name": "Devil Rat",
+          "B": 2,
+          "A": 5,
+          "R": 5,
+          "S": 1,
+          "W": 3,
+          "L": 2,
+          "I": 5,
+          "C": 5,
+          "ESS": 2,
+          "M": 4,
+          "Initiative": "10+1D6",
+          "Movement": "x1/x2/+1",
+          "conditionMonitor": "9/10",
+          "limits": { "physical": 3, "mental": 4, "social": 7 },
+          "armor": 0,
+          "skills": ["Climbing 5", "Perception 4", "Running 2", "Sneaking 6", "Unarmed Combat 5"],
+          "powers": [
+            "Animal Control (Ordinary Rats)",
+            "Concealment (Self Only)",
+            "Immunity (Toxins)",
+            "Natural Weapon (Bite: DV (STR+1)P, AP -, -1 Reach)"
+          ],
+          "weaknesses": ["Allergy (Sunlight, Mild)"],
+          "notes": "Natural Habitat: Urban areas worldwide."
+        },
+        {
+          "critter": "ghoul",
+          "name": "Ghoul",
+          "B": 7,
+          "A": 3,
+          "R": 5,
+          "S": 6,
+          "W": 5,
+          "L": 2,
+          "I": 4,
+          "C": 1,
+          "ESS": 3,
+          "M": 1,
+          "Initiative": "9+1D6",
+          "Movement": "As base metatype",
+          "conditionMonitor": "12/11",
+          "limits": { "physical": 8, "mental": 5, "social": 5 },
+          "armor": 1,
+          "skills": ["Assensing 4", "Perception 5", "Running 3", "Sneaking 6", "Unarmed Combat 6"],
+          "powers": [
+            "Armor 1",
+            "Dual Natured",
+            "Enhanced Senses (Hearing, Smell)",
+            "Natural Weapon (Claws: DV (STR+1)P, AP -1)",
+            "Sapience"
+          ],
+          "weaknesses": [
+            "Allergy (Sunlight, Moderate)",
+            "Dietary Requirement (Metahuman Flesh)",
+            "Reduced Senses (Blind)"
+          ],
+          "notes": "Statistics given for standard human ghoul. For other metatypes, use Metatype Attribute Modifiers table (p.66) and recalculate Condition Monitors and Limits. Some ghouls may have Adept, Magician, or Mystic Adept qualities."
+        },
+        {
+          "critter": "hell-hound",
+          "name": "Hell Hound",
+          "B": 6,
+          "A": 4,
+          "R": 5,
+          "S": 6,
+          "W": 4,
+          "L": 2,
+          "I": 4,
+          "C": 3,
+          "ESS": 3,
+          "M": 5,
+          "Initiative": "10+3D6",
+          "Movement": "x2/x6/+4",
+          "conditionMonitor": "11/10",
+          "limits": { "physical": 8, "mental": 4, "social": 6 },
+          "armor": 2,
+          "skills": [
+            "Exotic Ranged Weapon 4",
+            "Intimidation 3",
+            "Perception 3",
+            "Running 4",
+            "Sneaking 5",
+            "Tracking 5",
+            "Unarmed Combat 3"
+          ],
+          "powers": [
+            "Armor 2",
+            "Dual Natured",
+            "Elemental Attack (Fire)",
+            "Enhanced Senses (Hearing, Low-Light Vision, Smell)",
+            "Fear",
+            "Immunity to Fire",
+            "Natural Weapon (Bite: DV (STR+1)P, AP -1)"
+          ],
+          "weaknesses": [],
+          "notes": "Natural Habitat: Primarily woodland areas of North America; anywhere domesticated dogs are present."
+        },
+        {
+          "critter": "sasquatch",
+          "name": "Sasquatch",
+          "B": 8,
+          "A": 3,
+          "R": 4,
+          "S": 7,
+          "W": 3,
+          "L": 3,
+          "I": 5,
+          "C": 3,
+          "ESS": 4,
+          "M": 4,
+          "Initiative": "9+1D6",
+          "Movement": "x2/x4/+2",
+          "conditionMonitor": "12/10",
+          "limits": { "physical": 9, "mental": 5, "social": 5 },
+          "armor": 0,
+          "skills": [
+            "Assensing 6",
+            "Animal Calls (Professional Knowledge) 8",
+            "Artisan 4",
+            "Athletics skill group 3",
+            "Perception 6",
+            "Sneaking 8"
+          ],
+          "powers": ["Dual Natured", "Mimicry", "Sapience"],
+          "weaknesses": [],
+          "notes": "Reach +1. Some sasquatches may have Adept, Magician, or Mystic Adept qualities. Natural Habitat: Mountainous regions of North America and Asia; also Himalayan ranges (yeti — white fur, otherwise identical)."
+        },
+        {
+          "critter": "vampire",
+          "name": "Vampire",
+          "B": 4,
+          "A": 3,
+          "R": 5,
+          "S": 4,
+          "W": 3,
+          "L": 4,
+          "I": 5,
+          "C": 3,
+          "ESS": "2D6",
+          "M": null,
+          "Initiative": "9+2D6",
+          "Movement": "x3/x5/+3",
+          "conditionMonitor": "10/10",
+          "limits": { "physical": 6, "mental": 5, "social": "5-9 (depending on Essence)" },
+          "armor": 0,
+          "skills": ["Perception 5", "Running 4", "Sneaking 6", "Unarmed Combat 5"],
+          "powers": [
+            "Dual Natured",
+            "Enhanced Senses (Hearing, Smell, Thermographic Vision)",
+            "Essence Drain",
+            "Immunity (Age, Pathogens, Toxins)",
+            "Infection",
+            "Mist Form",
+            "Natural Weapon (Bite: DV (STR+1)P, AP -1, -1 Reach)",
+            "Regeneration",
+            "Sapience"
+          ],
+          "weaknesses": [
+            "Allergy (Sunlight, Severe)",
+            "Allergy (Wood, Severe)",
+            "Dietary Requirement (Metahuman Blood)",
+            "Essence Loss",
+            "Induced Dormancy (Lack of Air, Essence) (Minutes)"
+          ],
+          "notes": "ESS '2D6' represents variable Essence (not rolled for tests). Starting Magic = 6 or Essence, whichever is lower. Social Limit 5-9 depending on Essence. Cannot eat anything except metahuman blood. Allergy (Sunlight) damage cannot be healed by Regeneration. -4 dice pool modifier to swimming tests. Some vampires may have Adept, Magician, or Mystic Adept qualities."
+        },
+        {
+          "critter": "eastern-dragon",
+          "name": "Eastern Dragon",
+          "B": 17,
+          "A": 8,
+          "R": 8,
+          "S": 35,
+          "W": 9,
+          "L": 10,
+          "I": 8,
+          "C": 9,
+          "ESS": 6,
+          "M": 10,
+          "Initiative": "16+2D6",
+          "Movement": "x2/x4/+4 (x3/x7/+6 flight)",
+          "conditionMonitor": "17/13",
+          "limits": { "physical": 32, "mental": 13, "social": 13 },
+          "armor": "17H/9H",
+          "skills": [
+            "Assensing 14",
+            "Conjuring skill group 12",
+            "Exotic Ranged Weapon 12",
+            "Flight 12",
+            "Perception 12",
+            "Running 10",
+            "Sorcery skill group 12",
+            "Unarmed Combat 12"
+          ],
+          "powers": [
+            "Dragonspeech",
+            "Dual Natured",
+            "Elemental Attack (usually Fire)",
+            "Enhanced Senses (Hearing, Low-Light Vision, Thermographic Vision, Wide-Band Hearing, Smell)",
+            "Hardened Armor (BOD)",
+            "Hardened Mystic Armor (WIL)",
+            "Natural Weapon (Bite/Claws: DV (STR+2)P, AP -4)",
+            "Sapience"
+          ],
+          "individualPowers": [
+            "Animal Control",
+            "Compulsion",
+            "Corrosive Saliva",
+            "Fear",
+            "Influence",
+            "Noxious Breath",
+            "Venom"
+          ],
+          "qualities": ["Magician"],
+          "weaknesses": [],
+          "notes": "Always Superhuman Prime Runner. Reach +2. Skills are averages for typical adult. Sirrush is statistically identical to eastern dragon."
+        },
+        {
+          "critter": "feathered-serpent",
+          "name": "Feathered Serpent",
+          "B": 15,
+          "A": 9,
+          "R": 10,
+          "S": 30,
+          "W": 9,
+          "L": 9,
+          "I": 8,
+          "C": 6,
+          "ESS": 10,
+          "M": 10,
+          "Initiative": "19+3D6",
+          "Movement": "x3/x5/+5 (x4/x8/+7 flight)",
+          "conditionMonitor": "16/13",
+          "limits": { "physical": 29, "mental": 13, "social": 12 },
+          "armor": "15H/10H",
+          "skills": [
+            "Assensing 14",
+            "Conjuring skill group 12",
+            "Exotic Ranged Weapon 12",
+            "Flight 12",
+            "Perception 12",
+            "Running 10",
+            "Sorcery skill group 12",
+            "Unarmed Combat 12"
+          ],
+          "powers": [
+            "Dragonspeech",
+            "Dual Natured",
+            "Elemental Attack (usually Fire)",
+            "Enhanced Senses (Hearing, Low-Light Vision, Thermographic Vision, Wide-Band Hearing, Smell)",
+            "Hardened Armor (BOD)",
+            "Hardened Mystic Armor (WIL)",
+            "Natural Weapon (Bite/Claws: DV (STR+2)P, AP -4)",
+            "Sapience"
+          ],
+          "individualPowers": [
+            "Animal Control",
+            "Compulsion",
+            "Corrosive Saliva",
+            "Fear",
+            "Influence",
+            "Noxious Breath",
+            "Venom"
+          ],
+          "qualities": ["Magician"],
+          "weaknesses": [],
+          "notes": "Always Superhuman Prime Runner. Reach +2. Feathered serpents frequently have a tail stinger or fangs with potent venom."
+        },
+        {
+          "critter": "western-dragon",
+          "name": "Western Dragon",
+          "B": 18,
+          "A": 7,
+          "R": 8,
+          "S": 40,
+          "W": 8,
+          "L": 8,
+          "I": 8,
+          "C": 8,
+          "ESS": 6,
+          "M": 10,
+          "Initiative": "16+2D6",
+          "Movement": "x2/x4/+4 (x3/x7/+5 flight)",
+          "conditionMonitor": "17/12",
+          "limits": { "physical": 36, "mental": 11, "social": 12 },
+          "armor": "18H/8H",
+          "skills": [
+            "Assensing 14",
+            "Conjuring skill group 12",
+            "Exotic Ranged Weapon 12",
+            "Flight 12",
+            "Perception 12",
+            "Running 10",
+            "Sorcery skill group 12",
+            "Unarmed Combat 12"
+          ],
+          "powers": [
+            "Dragonspeech",
+            "Dual Natured",
+            "Elemental Attack (usually Fire)",
+            "Enhanced Senses (Hearing, Low-Light Vision, Thermographic Vision, Wide-Band Hearing, Smell)",
+            "Hardened Armor (BOD)",
+            "Hardened Mystic Armor (WIL)",
+            "Natural Weapon (Bite/Claws: DV (STR+2)P, AP -4)",
+            "Sapience"
+          ],
+          "individualPowers": [
+            "Animal Control",
+            "Compulsion",
+            "Corrosive Saliva",
+            "Fear",
+            "Influence",
+            "Noxious Breath",
+            "Venom"
+          ],
+          "qualities": ["Magician"],
+          "weaknesses": [],
+          "notes": "Always Superhuman Prime Runner. Reach +2. Largest dracoform species. Some specimens have bony plates acting as additional armor."
+        }
+      ]
+    }
+  }
+}

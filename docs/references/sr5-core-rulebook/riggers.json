@@ -1,0 +1,253 @@
+{
+  "tables": {
+    "command-console": {
+      "source": "SR5 Core Rulebook, p. 267",
+      "description": "Available Rigger Command Consoles with ratings and cost",
+      "columns": [
+        "console",
+        "device_rating",
+        "availability",
+        "cost_nuyen",
+        "data_processing",
+        "firewall"
+      ],
+      "rows": [
+        {
+          "console": "Scratch-Built Junk",
+          "device_rating": 1,
+          "availability": "2R",
+          "cost_nuyen": 1400,
+          "data_processing": 3,
+          "firewall": 2
+        },
+        {
+          "console": "Radio Shack Remote Controller",
+          "device_rating": 2,
+          "availability": "6R",
+          "cost_nuyen": 8000,
+          "data_processing": 3,
+          "firewall": 3
+        },
+        {
+          "console": "Essy Motors DroneMaster",
+          "device_rating": 3,
+          "availability": "6R",
+          "cost_nuyen": 16000,
+          "data_processing": 4,
+          "firewall": 4
+        },
+        {
+          "console": "CompuForce TaskMaster",
+          "device_rating": 4,
+          "availability": "8R",
+          "cost_nuyen": 32000,
+          "data_processing": 5,
+          "firewall": 4
+        },
+        {
+          "console": "Maersk Spider",
+          "device_rating": 4,
+          "availability": "8R",
+          "cost_nuyen": 34000,
+          "data_processing": 4,
+          "firewall": 5
+        },
+        {
+          "console": "Maser Industrial Electronics",
+          "device_rating": 5,
+          "availability": "8R",
+          "cost_nuyen": 64000,
+          "data_processing": 3,
+          "firewall": 4
+        },
+        {
+          "console": "Vulcan Liegelord",
+          "device_rating": 5,
+          "availability": "10R",
+          "cost_nuyen": 66000,
+          "data_processing": 5,
+          "firewall": 6
+        },
+        {
+          "console": "Proteus Poseidon",
+          "device_rating": 5,
+          "availability": "12R",
+          "cost_nuyen": 68000,
+          "data_processing": 5,
+          "firewall": 6
+        },
+        {
+          "console": "Lone Star Remote Commander",
+          "device_rating": 6,
+          "availability": "14R",
+          "cost_nuyen": 75000,
+          "data_processing": 6,
+          "firewall": 5
+        },
+        {
+          "console": "MCT Drone Web",
+          "device_rating": 6,
+          "availability": "16R",
+          "cost_nuyen": 95000,
+          "data_processing": 7,
+          "firewall": 6
+        },
+        {
+          "console": "Triox UberMensch",
+          "device_rating": 6,
+          "availability": "18R",
+          "cost_nuyen": 140000,
+          "data_processing": 8,
+          "firewall": 7
+        }
+      ]
+    },
+    "autosoft-types": {
+      "source": "SR5 Core Rulebook, p. 269–270",
+      "description": "Autosoft program types available for drones and their skill equivalents",
+      "columns": ["name", "model_specific", "skill_equivalent", "notes"],
+      "rows": [
+        {
+          "name": "Clearsight",
+          "model_specific": false,
+          "skill_equivalent": "Perception",
+          "notes": "Acts as the drone's Perception skill"
+        },
+        {
+          "name": "Electronic Warfare",
+          "model_specific": false,
+          "skill_equivalent": "Electronic Warfare",
+          "notes": "Exactly like the Electronic Warfare skill"
+        },
+        {
+          "name": "[Model] Evasion",
+          "model_specific": true,
+          "skill_equivalent": null,
+          "notes": "Teaches drone autopilot to avoid being locked onto by Sensors"
+        },
+        {
+          "name": "[Model] Maneuvering",
+          "model_specific": true,
+          "skill_equivalent": "Pilot [Vehicle type]",
+          "notes": "Pilot Vehicle-type skill for one specific drone model only"
+        },
+        {
+          "name": "[Model] Stealth",
+          "model_specific": true,
+          "skill_equivalent": "Infiltration",
+          "notes": "Helps drone operate with stealth; acts as Infiltration skill for that drone model"
+        },
+        {
+          "name": "[Weapon] Targeting",
+          "model_specific": true,
+          "skill_equivalent": "Gunnery",
+          "notes": "Gunnery skill for one specific mounted weapon model (e.g., Ingram Smartgun Targeting)"
+        }
+      ]
+    },
+    "rigger-cyberprograms": {
+      "source": "SR5 Core Rulebook, p. 269",
+      "description": "Cyberprograms available for RCCs (not compatible with cyberdecks). RCC cannot run more than one program of the same type.",
+      "columns": ["program", "effect"],
+      "rows": [
+        {
+          "program": "Encryption",
+          "effect": "+1 Firewall"
+        },
+        {
+          "program": "Signal Scrub",
+          "effect": "Rating 2 noise reduction"
+        },
+        {
+          "program": "Toolbox",
+          "effect": "+1 Data Processing"
+        },
+        {
+          "program": "Virtual Machine",
+          "effect": "2 extra program slots; take 1 extra box of unresisted Matrix damage when attacked"
+        },
+        {
+          "program": "Armor",
+          "effect": "+2 dice pool modifier to resist Matrix damage"
+        },
+        {
+          "program": "Biofeedback Filter",
+          "effect": "+2 dice pool modifier to resist biofeedback damage"
+        },
+        {
+          "program": "Guard",
+          "effect": "Reduce extra damage from marks by 1 DV per mark"
+        },
+        {
+          "program": "Shell",
+          "effect": "+1 dice pool modifier against Matrix and biofeedback damage, cumulative with other programs"
+        },
+        {
+          "program": "Sneak",
+          "effect": "+2 dice pool modifier to defend against Trace User actions"
+        },
+        {
+          "program": "Wrapper",
+          "effect": "Allows defying Matrix iconography rules"
+        }
+      ]
+    },
+    "control-override-priority": {
+      "source": "SR5 Core Rulebook, p. 265",
+      "description": "Priority order for device control methods; higher priority overrides lower",
+      "columns": ["priority", "method", "notes"],
+      "rows": [
+        {
+          "priority": 1,
+          "method": "Rigger control",
+          "notes": "Result of jumping into the device"
+        },
+        {
+          "priority": 2,
+          "method": "Remote control",
+          "notes": "Result of Control Device action (p. 238)"
+        },
+        {
+          "priority": 3,
+          "method": "Manual control",
+          "notes": "Physical controls (steering wheel, throttle, buttons, AR display)"
+        },
+        {
+          "priority": 4,
+          "method": "Autopilot",
+          "notes": "Requires the device to have a Pilot program"
+        }
+      ]
+    },
+    "vr-initiative-modes": {
+      "source": "SR5 Core Rulebook, p. 266",
+      "description": "Initiative and damage type for riggers operating in VR",
+      "columns": [
+        "mode",
+        "initiative_dice",
+        "fixed_component",
+        "total_dice",
+        "matrix_test_bonus",
+        "biofeedback_damage_type"
+      ],
+      "rows": [
+        {
+          "mode": "Cold-sim",
+          "initiative_dice": "2D6 bonus",
+          "fixed_component": "Reaction + Intuition (via VR base)",
+          "total_dice": "3D6",
+          "matrix_test_bonus": 0,
+          "biofeedback_damage_type": "Stun"
+        },
+        {
+          "mode": "Hot-sim",
+          "initiative_dice": "3D6 bonus",
+          "fixed_component": "Reaction + Intuition (via VR base)",
+          "total_dice": "4D6",
+          "matrix_test_bonus": 1,
+          "biofeedback_damage_type": "Physical"
+        }
+      ]
+    }
+  }
+}

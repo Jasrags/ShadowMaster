@@ -1,0 +1,93 @@
+{
+  "tables": {
+    "rank-table": {
+      "source": "Run Faster, p.86",
+      "description": "Rank quality tiers, karma costs, and equivalent titles across six career tracks",
+      "columns": [
+        "tier",
+        "points",
+        "nco",
+        "officer",
+        "beat",
+        "detectives",
+        "workers",
+        "management"
+      ],
+      "rows": [
+        {
+          "tier": 1,
+          "points": "5/20",
+          "pointsCivilian": 5,
+          "pointsMilitaryLawEnforcement": 20,
+          "nco": "[Lance] Corporal",
+          "officer": "Lieutenant",
+          "beat": "Officer",
+          "detectives": "Detective",
+          "workers": "5 Year",
+          "management": "Manager"
+        },
+        {
+          "tier": 2,
+          "points": "10/25",
+          "pointsCivilian": 10,
+          "pointsMilitaryLawEnforcement": 25,
+          "nco": "Sergeant",
+          "officer": "Captain",
+          "beat": "Corporal",
+          "detectives": "Detective Sergeant",
+          "workers": "10 Year",
+          "management": "Area Manager"
+        },
+        {
+          "tier": 3,
+          "points": "15/30",
+          "pointsCivilian": 15,
+          "pointsMilitaryLawEnforcement": 30,
+          "nco": "Sergeant Major",
+          "officer": "Major",
+          "beat": "Sergeant",
+          "detectives": "Captain",
+          "workers": "20 Year",
+          "management": "Regional Manager"
+        }
+      ]
+    },
+    "rank-tracks": {
+      "source": "Run Faster, p.86",
+      "description": "Classification of rank tracks by organization type",
+      "columns": ["track", "organizationType", "description"],
+      "rows": [
+        {
+          "track": "nco",
+          "organizationType": "military-law-enforcement",
+          "description": "Non-commissioned officer ranks"
+        },
+        {
+          "track": "officer",
+          "organizationType": "military-law-enforcement",
+          "description": "Commissioned officer ranks"
+        },
+        {
+          "track": "beat",
+          "organizationType": "military-law-enforcement",
+          "description": "Patrol/street-level law enforcement ranks"
+        },
+        {
+          "track": "detectives",
+          "organizationType": "military-law-enforcement",
+          "description": "Investigative law enforcement ranks"
+        },
+        {
+          "track": "workers",
+          "organizationType": "civilian",
+          "description": "Seniority-based civilian ranks (by years of service)"
+        },
+        {
+          "track": "management",
+          "organizationType": "civilian",
+          "description": "Corporate/business management hierarchy"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,822 @@
+{
+  "tables": {
+    "infected-metatype-attribute-table": {
+      "source": "Run Faster, p.135",
+      "description": "Minimum/maximum attributes for each Infected type, replacing the base metatype attribute table upon Infection",
+      "columns": ["metatype", "bod", "agi", "rea", "str", "wil", "log", "int", "cha"],
+      "notes": "Values are min/max pairs. Ghoul has separate entries per base metatype.",
+      "rows": [
+        {
+          "metatype": "Bandersnatch",
+          "bod": "6/12",
+          "agi": "1/6",
+          "rea": "2/7",
+          "str": "5/12",
+          "wil": "1/8",
+          "log": "1/5",
+          "int": "1/8",
+          "cha": "1/4"
+        },
+        {
+          "metatype": "Banshee",
+          "bod": "1/7",
+          "agi": "2/7",
+          "rea": "1/8",
+          "str": "1/7",
+          "wil": "1/7",
+          "log": "1/6",
+          "int": "1/7",
+          "cha": "1/9"
+        },
+        {
+          "metatype": "Dzoo-noo-qua",
+          "bod": "5/12",
+          "agi": "1/5",
+          "rea": "1/8",
+          "str": "5/12",
+          "wil": "1/7",
+          "log": "1/5",
+          "int": "1/7",
+          "cha": "1/4"
+        },
+        {
+          "metatype": "Fomoraig",
+          "bod": "5/13",
+          "agi": "1/5",
+          "rea": "1/7",
+          "str": "5/13",
+          "wil": "1/4",
+          "log": "1/4",
+          "int": "1/6",
+          "cha": "1/4"
+        },
+        {
+          "metatype": "Ghoul (Dwarf)",
+          "bod": "3/12",
+          "agi": "1/6",
+          "rea": "1/7",
+          "str": "3/11",
+          "wil": "2/9",
+          "log": "1/5",
+          "int": "1/7",
+          "cha": "1/4"
+        },
+        {
+          "metatype": "Ghoul (Elf)",
+          "bod": "1/10",
+          "agi": "2/7",
+          "rea": "1/8",
+          "str": "1/9",
+          "wil": "1/8",
+          "log": "1/5",
+          "int": "1/7",
+          "cha": "1/6"
+        },
+        {
+          "metatype": "Ghoul (Human)",
+          "bod": "1/10",
+          "agi": "1/6",
+          "rea": "1/8",
+          "str": "1/9",
+          "wil": "1/8",
+          "log": "1/5",
+          "int": "1/7",
+          "cha": "1/4"
+        },
+        {
+          "metatype": "Ghoul (Ork)",
+          "bod": "4/13",
+          "agi": "1/6",
+          "rea": "1/8",
+          "str": "3/11",
+          "wil": "1/8",
+          "log": "1/4",
+          "int": "1/7",
+          "cha": "1/3"
+        },
+        {
+          "metatype": "Ghoul (Sasquatch)",
+          "bod": "6/15",
+          "agi": "1/6",
+          "rea": "1/9",
+          "str": "5/13",
+          "wil": "1/8",
+          "log": "1/5",
+          "int": "3/9",
+          "cha": "1/4"
+        },
+        {
+          "metatype": "Ghoul (Troll)",
+          "bod": "5/14",
+          "agi": "1/5",
+          "rea": "1/8",
+          "str": "5/13",
+          "wil": "1/8",
+          "log": "1/4",
+          "int": "1/6",
+          "cha": "1/2"
+        },
+        {
+          "metatype": "Gnawer",
+          "bod": "3/9",
+          "agi": "1/6",
+          "rea": "1/7",
+          "str": "3/10",
+          "wil": "2/8",
+          "log": "1/5",
+          "int": "1/8",
+          "cha": "1/5"
+        },
+        {
+          "metatype": "Goblin",
+          "bod": "3/9",
+          "agi": "1/6",
+          "rea": "1/7",
+          "str": "3/9",
+          "wil": "2/8",
+          "log": "1/4",
+          "int": "1/8",
+          "cha": "1/5"
+        },
+        {
+          "metatype": "Grendel",
+          "bod": "4/11",
+          "agi": "1/6",
+          "rea": "1/7",
+          "str": "3/11",
+          "wil": "1/7",
+          "log": "1/4",
+          "int": "1/7",
+          "cha": "1/4"
+        },
+        {
+          "metatype": "Harvester",
+          "bod": "1/8",
+          "agi": "2/7",
+          "rea": "1/9",
+          "str": "1/9",
+          "wil": "1/7",
+          "log": "1/4",
+          "int": "1/8",
+          "cha": "1/4"
+        },
+        {
+          "metatype": "Loup-garou",
+          "bod": "1/7",
+          "agi": "1/6",
+          "rea": "1/8",
+          "str": "1/10",
+          "wil": "1/7",
+          "log": "1/5",
+          "int": "1/8",
+          "cha": "1/4"
+        },
+        {
+          "metatype": "Mutaqua",
+          "bod": "5/12",
+          "agi": "1/6",
+          "rea": "1/8",
+          "str": "5/13",
+          "wil": "1/8",
+          "log": "1/5",
+          "int": "1/7",
+          "cha": "1/4"
+        },
+        {
+          "metatype": "Nosferatu",
+          "bod": "1/7",
+          "agi": "1/7",
+          "rea": "1/7",
+          "str": "1/7",
+          "wil": "1/8",
+          "log": "1/8",
+          "int": "1/8",
+          "cha": "1/8"
+        },
+        {
+          "metatype": "Vampire",
+          "bod": "1/7",
+          "agi": "1/6",
+          "rea": "1/8",
+          "str": "1/7",
+          "wil": "1/7",
+          "log": "1/6",
+          "int": "1/7",
+          "cha": "1/8"
+        },
+        {
+          "metatype": "Wendigo",
+          "bod": "4/11",
+          "agi": "1/6",
+          "rea": "1/8",
+          "str": "3/9",
+          "wil": "1/7",
+          "log": "1/6",
+          "int": "1/7",
+          "cha": "1/7"
+        }
+      ]
+    },
+    "positive-infected-qualities": {
+      "source": "Run Faster, p.136",
+      "description": "Summary table of all positive Infected qualities with Karma cost and detail page reference",
+      "columns": ["quality", "karma", "page"],
+      "rows": [
+        { "quality": "Bandersnatch", "karma": 22, "page": 136 },
+        { "quality": "Banshee", "karma": 32, "page": 136 },
+        { "quality": "Dzoo-noo-qua", "karma": 43, "page": 137 },
+        { "quality": "Fomoraig", "karma": 22, "page": 138 },
+        { "quality": "Ghoul", "karma": 29, "page": 138 },
+        { "quality": "Gnawer", "karma": 29, "page": 138 },
+        { "quality": "Goblin", "karma": 27, "page": 138 },
+        { "quality": "Grendel", "karma": 32, "page": 139 },
+        { "quality": "Harvester", "karma": 29, "page": 139 },
+        { "quality": "Loup-garou", "karma": 30, "page": 139 },
+        {
+          "quality": "Mutaqua",
+          "karma": 54,
+          "page": 139,
+          "notes": "-10 Karma if already Awakened"
+        },
+        {
+          "quality": "Nosferatu",
+          "karma": 48,
+          "page": 139,
+          "notes": "-10 Karma if already Awakened"
+        },
+        { "quality": "Vampire", "karma": 27, "page": 140, "notes": "+10 Karma for non-humans" },
+        { "quality": "Wendigo", "karma": 47, "page": 140, "notes": "-10 Karma if already Awakened" }
+      ]
+    },
+    "negative-infected-qualities": {
+      "source": "Run Faster, p.136",
+      "description": "Summary table of negative Infected qualities",
+      "columns": ["quality", "karma", "page"],
+      "rows": [{ "quality": "Carrier", "karma": 10, "page": 141 }]
+    },
+    "infected-optional-powers": {
+      "source": "Run Faster, p.136",
+      "description": "Optional powers that Infected characters can purchase with Karma (one every two in-game months). Only powers listed for the character's Infected type may be purchased.",
+      "columns": ["power", "karma"],
+      "rows": [
+        { "power": "Armor (per point)", "karma": 6 },
+        { "power": "Compulsion", "karma": 9 },
+        { "power": "Enhanced Sense (Hearing)", "karma": 3 },
+        { "power": "Enhanced Sense (Low-Light Vision)", "karma": 3 },
+        { "power": "Enhanced Sense (Smell)", "karma": 3 },
+        { "power": "Enhanced Sense (Taste)", "karma": 3 },
+        { "power": "Enhanced Sense (Thermographic Vision)", "karma": 3 },
+        { "power": "Enhanced Sense (Visual Acuity)", "karma": 3 },
+        { "power": "Fear", "karma": 9 },
+        { "power": "Immunity (Fire)", "karma": 6 },
+        { "power": "Immunity (Pathogens)", "karma": 6 },
+        { "power": "Immunity (Toxins)", "karma": 6 },
+        { "power": "Influence", "karma": 9 },
+        { "power": "Magical Guard", "karma": 9 },
+        { "power": "Mist Form", "karma": 12 },
+        { "power": "Paralyzing Howl", "karma": 9 },
+        { "power": "Regeneration", "karma": 12 }
+      ]
+    },
+    "essence-drain-addiction-table": {
+      "source": "Run Faster, p.134",
+      "description": "Addiction ratings and thresholds for Essence Drain, both for the victim being drained and the Infected doing the draining",
+      "columns": ["substance", "addictionRating", "addictionThreshold"],
+      "rows": [
+        {
+          "substance": "Essence Drain (Victim)",
+          "addictionRating": "Draining critter's Magic",
+          "addictionThreshold": 2
+        },
+        {
+          "substance": "Essence Drain (Drainer)",
+          "addictionRating": "Target's Essence + 2",
+          "addictionThreshold": 2
+        }
+      ]
+    },
+    "hmhvv-strain-i": {
+      "source": "Run Faster, p.142",
+      "description": "Disease statistics for HMHVV Strain I (creates banshees, dzoo-noo-qua, goblins, mutaqua, nosferatu, vampires, wendigos)",
+      "columns": ["attribute", "value"],
+      "rows": [
+        { "attribute": "Vector", "value": "Infection power (p.398, SR5)" },
+        { "attribute": "Speed", "value": "1 minute (1)" },
+        { "attribute": "Penetration", "value": "-3" },
+        { "attribute": "Power", "value": "13" },
+        { "attribute": "Nature", "value": "Retroviral" },
+        { "attribute": "Effect (Final)", "value": "Coma, transformation" }
+      ]
+    },
+    "hmhvv-strain-ii": {
+      "source": "Run Faster, p.142-143",
+      "description": "Disease statistics for HMHVV Strain II (creates bandersnatches, fomoraig, gnawers, grendels, harvesters, loup-garou)",
+      "columns": ["attribute", "value"],
+      "rows": [
+        { "attribute": "Vector", "value": "Injection" },
+        { "attribute": "Speed", "value": "1 hour (3)" },
+        { "attribute": "Penetration", "value": "-3" },
+        { "attribute": "Power", "value": "10" },
+        { "attribute": "Nature", "value": "Retroviral" },
+        { "attribute": "Effect (Ongoing)", "value": "Nausea" },
+        { "attribute": "Effect (Final)", "value": "Essence loss, transformation" }
+      ]
+    },
+    "hmhvv-strain-iii": {
+      "source": "Run Faster, p.143",
+      "description": "Disease statistics for HMHVV Strain III / Krieger strain (creates ghouls)",
+      "columns": ["attribute", "value"],
+      "rows": [
+        { "attribute": "Vector", "value": "Injection" },
+        { "attribute": "Speed", "value": "12 hours (10)" },
+        { "attribute": "Penetration", "value": "-3" },
+        { "attribute": "Power", "value": "6" },
+        { "attribute": "Nature", "value": "Retroviral" },
+        { "attribute": "Effect (Ongoing)", "value": "Nausea" },
+        { "attribute": "Effect (Final)", "value": "Essence loss, transformation" }
+      ]
+    },
+    "infected-type-details": {
+      "source": "Run Faster, p.136-141",
+      "description": "Complete mechanical details for each Infected type including metatype restriction, HMHVV strain, gained powers, gained weaknesses, optional powers, and special notes",
+      "columns": [
+        "id",
+        "name",
+        "karma",
+        "metatype",
+        "strain",
+        "improvedPhysical",
+        "improvedMental",
+        "gainedPowers",
+        "gainedWeaknesses",
+        "optionalPowers",
+        "notes"
+      ],
+      "rows": [
+        {
+          "id": "bandersnatch",
+          "name": "Bandersnatch",
+          "karma": 22,
+          "metatype": "sasquatch",
+          "strain": "II",
+          "improvedPhysical": ["Body", "Reaction", "Strength"],
+          "improvedMental": ["Willpower", "Intuition"],
+          "gainedPowers": [
+            "Adaptive Coloration",
+            "Natural Weapon (Bite: (STR+1)P, AP -1, -1 Reach)",
+            "Natural Weapon (Claw: (STR+2)P, AP -1)"
+          ],
+          "gainedWeaknesses": [
+            "Allergy (Sunlight, Mild)",
+            "Dietary Requirement (Sasquatch Flesh)",
+            "-1 Logic",
+            "-1 Charisma"
+          ],
+          "optionalPowers": [],
+          "notes": "+1 Reach"
+        },
+        {
+          "id": "banshee",
+          "name": "Banshee",
+          "karma": 32,
+          "metatype": "elf",
+          "strain": "I",
+          "improvedPhysical": ["Body", "Reaction", "Strength"],
+          "improvedMental": ["Willpower", "Intuition", "Charisma"],
+          "gainedPowers": [
+            "Dual Natured",
+            "Essence Drain",
+            "Immunity (Age)",
+            "Infection",
+            "Natural Weapon (Bite: (STR+1)P, AP -1, -1 Reach)",
+            "+1 initiative die",
+            "+1 to all movement rates",
+            "One free Optional Power"
+          ],
+          "gainedWeaknesses": [
+            "Allergy (Sunlight, Severe)",
+            "Dietary Requirement (Metahuman Blood)",
+            "Essence Loss",
+            "Vulnerability (Silver)",
+            "Vulnerability (Wood)"
+          ],
+          "optionalPowers": [
+            "Enhanced Senses (Hearing)",
+            "Enhanced Senses (Smell)",
+            "Fear",
+            "Immunity (Pathogens)",
+            "Immunity (Toxins)",
+            "Mist Form",
+            "Paralyzing Howl",
+            "Regeneration"
+          ],
+          "notes": "Blood only diet; nausea from other food within 1 hour; alcohol triggers nausea within 15 min. Body + Willpower (3) to delay 10 min. Sunlight damage not healable by Regeneration."
+        },
+        {
+          "id": "dzoo-noo-qua",
+          "name": "Dzoo-noo-qua",
+          "karma": 43,
+          "metatype": "troll",
+          "strain": "I",
+          "improvedPhysical": ["Body", "Reaction", "Strength"],
+          "improvedMental": ["Willpower", "Intuition"],
+          "gainedPowers": [
+            "Armor +1 (cumulative with natural dermal armor)",
+            "Dual Natured",
+            "Essence Drain",
+            "Immunity (Age)",
+            "Infection",
+            "Natural Weapon (Bite: DV (STR+1)P, AP -1, -1 Reach)",
+            "Natural Weapon (Claw: DV (STR+2)P, AP -1)",
+            "+1 initiative die",
+            "+1 to all movement rates",
+            "One free Optional Power (Armor, Enhanced Senses (Hearing), or Immunity (Toxins))"
+          ],
+          "gainedWeaknesses": [
+            "Allergy (Sunlight, Moderate)",
+            "Dietary Requirement (Metahuman Flesh)",
+            "Essence Loss"
+          ],
+          "optionalPowers": [
+            "Armor",
+            "Enhanced Senses (Hearing)",
+            "Immunity (Toxins)",
+            "Magical Guard (self only)",
+            "Regeneration"
+          ],
+          "notes": "+1 Reach. Sunlight damage not healable by Regeneration."
+        },
+        {
+          "id": "fomoraig",
+          "name": "Fomoraig",
+          "karma": 22,
+          "metatype": "troll",
+          "strain": "II",
+          "improvedPhysical": ["Body", "Reaction", "Strength"],
+          "improvedMental": ["Willpower", "Intuition"],
+          "gainedPowers": [
+            "Armor +1 (cumulative with natural dermal armor)",
+            "Corrosive Secretions",
+            "Dual Natured",
+            "Magical Guard (self only)",
+            "Natural Weapon (Bite: DV (STR+1)P, AP -1, -1 Reach)",
+            "Natural Weapon (Claws: DV (STR+2)P, AP -1)"
+          ],
+          "gainedWeaknesses": [
+            "Allergy (Air Pollution, Moderate)",
+            "Allergy (Sunlight, Moderate)",
+            "Dietary Requirement (Metahuman Flesh)",
+            "-1 Logic"
+          ],
+          "optionalPowers": ["Armor"],
+          "notes": "+1 Reach. Cooked meat causes nausea."
+        },
+        {
+          "id": "ghoul",
+          "name": "Ghoul",
+          "karma": 29,
+          "metatype": "any",
+          "strain": "III",
+          "improvedPhysical": ["Body", "Reaction", "Strength"],
+          "improvedMental": ["Willpower", "Intuition"],
+          "gainedPowers": [
+            "Armor +1 (cumulative with natural dermal armor)",
+            "Dual Natured",
+            "Enhanced Senses (Hearing, Smell)",
+            "Natural Weapon (Bite: DV (STR+1)P, AP -1, -1 Reach)",
+            "Natural Weapon (Claws: DV (STR+1)P, AP -1)",
+            "Sapience"
+          ],
+          "gainedWeaknesses": [
+            "Allergy (Sunlight, Moderate)",
+            "Dietary Requirement (Metahuman Flesh)",
+            "Reduced Senses (Blind)",
+            "-1 Logic",
+            "-1 Charisma"
+          ],
+          "optionalPowers": [],
+          "notes": "Raw meat only; nausea from cooked/processed food within 1 hour. GM may allow Body + Willpower (3) to delay 10 min. Attribute min/max varies by base metatype (see attribute table)."
+        },
+        {
+          "id": "gnawer",
+          "name": "Gnawer",
+          "karma": 29,
+          "metatype": "dwarf",
+          "strain": "II",
+          "improvedPhysical": ["Body", "Reaction", "Strength"],
+          "improvedMental": ["Willpower", "Intuition"],
+          "gainedPowers": [
+            "Armor +1",
+            "Dual Natured",
+            "Immunity (Toxins)",
+            "Natural Weapon (Bite: DV (STR+2)P, AP--, -1 Reach)",
+            "Noxious Breath",
+            "Paralyzing Touch"
+          ],
+          "gainedWeaknesses": [
+            "Allergy (Sunlight, Moderate)",
+            "Dietary Requirement (Metahuman Bone)"
+          ],
+          "optionalPowers": ["Armor"],
+          "notes": "+2 dice for pathogen resistance. Bonus dice for toxin resistance replaced by Immunity (Toxins)."
+        },
+        {
+          "id": "goblin",
+          "name": "Goblin",
+          "karma": 27,
+          "metatype": "dwarf",
+          "strain": "I",
+          "improvedPhysical": ["Body", "Reaction", "Strength"],
+          "improvedMental": ["Willpower", "Intuition"],
+          "gainedPowers": [
+            "Dual Natured",
+            "Essence Drain",
+            "Immunity (Age)",
+            "Infection",
+            "Natural Weapon (Bite: DV (STR+1)P, AP -1, Reach -1)",
+            "Natural Weapon (Claws: DV (STR+2)P, AP -1)",
+            "+1 initiative die",
+            "+1 to all movement rates",
+            "One free Optional Power (any besides Regeneration)"
+          ],
+          "gainedWeaknesses": [
+            "Allergy (Sunlight, Moderate)",
+            "Dietary Requirement (Metahuman Flesh)",
+            "Essence Loss",
+            "Vulnerability (Iron)",
+            "-1 Logic",
+            "-1 Charisma"
+          ],
+          "optionalPowers": [
+            "Enhanced Senses (Smell)",
+            "Enhanced Senses (Taste)",
+            "Immunity (Fire)",
+            "Immunity (Toxins)",
+            "Regeneration"
+          ],
+          "notes": "Cannot digest heavily processed food; suffer nausea. Dwarf +2 dice for pathogen/toxin resistance; toxin resistance bonus lost when gaining Immunity (Toxins). Sunlight damage not healable by Regeneration."
+        },
+        {
+          "id": "grendel",
+          "name": "Grendel",
+          "karma": 32,
+          "metatype": "ork",
+          "strain": "II",
+          "improvedPhysical": ["Body", "Reaction", "Strength"],
+          "improvedMental": ["Willpower", "Intuition"],
+          "gainedPowers": [
+            "Animal Control (Subterranean Critters)",
+            "Concealment (self only)",
+            "Dual Natured",
+            "Enhanced Senses (Smell, Thermographic Vision)",
+            "Natural Weapon (Bite: DV (STR+1)P, AP -1, -1 Reach)",
+            "Natural Weapon (Claws: DV (STR+1)P, AP -1)",
+            "Paralyzing Touch"
+          ],
+          "gainedWeaknesses": [
+            "Allergy (Sunlight, Moderate)",
+            "Dietary Requirement (Metahuman Flesh)",
+            "-1 Logic",
+            "-1 Charisma"
+          ],
+          "optionalPowers": [],
+          "notes": "Charisma for Animal Control = character's Charisma + 3. +1 Reach."
+        },
+        {
+          "id": "harvester",
+          "name": "Harvester",
+          "karma": 29,
+          "metatype": "elf",
+          "strain": "II",
+          "improvedPhysical": ["Body", "Reaction", "Strength"],
+          "improvedMental": ["Willpower", "Intuition"],
+          "gainedPowers": [
+            "Armor +2",
+            "Dual Natured",
+            "Enhanced Senses (Thermographic Vision)",
+            "Movement (self only)",
+            "Natural Weapon (Bite: DV (STR+1)P, AP -1, -1 Reach)",
+            "Natural Weapon (Claws: DV (STR+3)P, AP -2)",
+            "+1 initiative die",
+            "+1 to all movement rates"
+          ],
+          "gainedWeaknesses": [
+            "Allergy (Silver, Moderate)",
+            "Allergy (Sunlight, Moderate)",
+            "Dietary Requirement (Metahuman Flesh)",
+            "-1 Logic",
+            "-1 Charisma"
+          ],
+          "optionalPowers": [],
+          "notes": ""
+        },
+        {
+          "id": "loup-garou",
+          "name": "Loup-garou",
+          "karma": 30,
+          "metatype": "human",
+          "strain": "II",
+          "improvedPhysical": ["Body", "Reaction", "Strength"],
+          "improvedMental": ["Willpower", "Intuition"],
+          "gainedPowers": [
+            "Armor +2",
+            "Dual Natured",
+            "Enhanced Senses (Hearing, Low-Light Vision, Smell, Thermographic Vision)",
+            "Natural Weapon (Bite: DV (STR+2)P, AP -2, -1 Reach)",
+            "Natural Weapon (Claw: DV (STR+3)P, AP -2)",
+            "+1 initiative die",
+            "+1 to all movement rates"
+          ],
+          "gainedWeaknesses": [
+            "Allergy (Aconite/Wolf's Bane, Moderate)",
+            "Allergy (Sunlight, Severe)",
+            "Dietary Requirement (Metahuman Flesh)",
+            "-1 Logic",
+            "-1 Charisma"
+          ],
+          "optionalPowers": [],
+          "notes": "28-day lunar cycle power fluctuation. During 4-day peak: goes berserk as Bear shaman (p.321, SR5) with rating 3 adrenaline pump (p.459, SR5)."
+        },
+        {
+          "id": "mutaqua",
+          "name": "Mutaqua",
+          "karma": 54,
+          "karmaAwakened": 44,
+          "metatype": "troll",
+          "strain": "Ia",
+          "improvedPhysical": ["Body", "Agility", "Reaction", "Strength"],
+          "improvedMental": ["Willpower", "Intuition"],
+          "gainedPowers": [
+            "Armor +1 (cumulative with natural dermal armor)",
+            "Dual Natured",
+            "Essence Drain",
+            "Immunity (Age)",
+            "Infection",
+            "Natural Weapon (Bite: DV (STR+1)P, AP -1, -1 Reach)",
+            "Natural Weapon (Claw: DV (STR+2)P, AP -1)",
+            "+1 initiative die",
+            "+1 to all movement rates",
+            "One free Optional Power (Enhanced Sense, Fear, or Immunity (Toxins))"
+          ],
+          "gainedWeaknesses": [
+            "Allergy (Sunlight, Extreme)",
+            "Allergy (Wood, Severe)",
+            "Dietary Requirement (Metahuman Flesh)",
+            "Essence Loss",
+            "Vulnerability (Fire)"
+          ],
+          "optionalPowers": [
+            "Armor",
+            "Enhanced Senses (Hearing)",
+            "Enhanced Senses (Low-Light Vision)",
+            "Fear",
+            "Immunity (Toxins)",
+            "Magical Guard (self only)",
+            "Regeneration"
+          ],
+          "notes": "+1 Reach. Can increase Essence up to 3x natural max. Loses 1 Essence every 2 months. All mutaqua Awaken as adepts if not Awakened; magicians become mystic adepts. Sunlight damage not healable by Regeneration."
+        },
+        {
+          "id": "nosferatu",
+          "name": "Nosferatu",
+          "karma": 48,
+          "karmaAwakened": 38,
+          "metatype": "human",
+          "strain": "Ia",
+          "improvedPhysical": ["Body", "Agility", "Reaction", "Strength"],
+          "improvedMental": ["Willpower", "Logic", "Intuition", "Charisma"],
+          "gainedPowers": [
+            "Dual Natured",
+            "Essence Drain",
+            "Immunity (Age)",
+            "Infection",
+            "Natural Weapon (Bite: (STR+1)P, AP -1, -1 Reach)",
+            "+1 initiative die",
+            "+1 to all movement rates",
+            "One free Optional Power (Enhanced Sense or Immunity)"
+          ],
+          "gainedWeaknesses": [
+            "Allergy (Sunlight, Severe)",
+            "Allergy (Wood, Severe)",
+            "Dietary Requirement (Metahuman Blood)",
+            "Essence Loss",
+            "Induced Dormancy (Lack of Air, (Essence) Minutes)"
+          ],
+          "optionalPowers": [
+            "Compulsion",
+            "Enhanced Senses (Hearing)",
+            "Enhanced Senses (Low-Light Vision)",
+            "Enhanced Senses (Thermographic Vision)",
+            "Fear",
+            "Immunity (Pathogens)",
+            "Immunity (Toxins)",
+            "Mist Form",
+            "Regeneration"
+          ],
+          "notes": "Can increase Essence up to 3x natural max. Loses 1 Essence every 4 months. All nosferatu Awaken as magicians if not Awakened; adepts become mystic adepts. Blood only diet; nausea rules same as banshee/vampire. -4 dice pool to water tests without flotation. Sunlight damage not healable by Regeneration."
+        },
+        {
+          "id": "vampire",
+          "name": "Vampire",
+          "karma": 27,
+          "karmaNonHuman": 37,
+          "metatype": "human",
+          "metatypeNotes": "Non-humans allowed at GM discretion (+10 Karma)",
+          "strain": "I",
+          "improvedPhysical": ["Body", "Reaction", "Strength"],
+          "improvedMental": ["Willpower", "Intuition", "Charisma"],
+          "gainedPowers": [
+            "Dual Natured",
+            "Essence Drain",
+            "Immunity (Age)",
+            "Infection",
+            "Natural Weapon (Bite: DV (STR+1)P, AP -1, -1 Reach)",
+            "+1 initiative die",
+            "+1 to all movement rates",
+            "One free Optional Power (Enhanced Sense or Immunity)"
+          ],
+          "gainedWeaknesses": [
+            "Allergy (Sunlight, Severe)",
+            "Allergy (Wood, Severe)",
+            "Dietary Requirement (Metahuman Blood)",
+            "Essence Loss",
+            "Induced Dormancy (Lack of Air, (Essence) Minutes)"
+          ],
+          "optionalPowers": [
+            "Enhanced Senses (Hearing)",
+            "Enhanced Senses (Smell)",
+            "Enhanced Senses (Thermographic Vision)",
+            "Immunity (Pathogens)",
+            "Immunity (Toxins)",
+            "Mist Form",
+            "Regeneration"
+          ],
+          "notes": "Blood only diet; nausea from other food within 1 hour; alcohol triggers nausea within 15 min. Body + Willpower (3) to delay 10 min. -4 dice pool to water tests without flotation. Sunlight damage not healable by Regeneration."
+        },
+        {
+          "id": "wendigo",
+          "name": "Wendigo",
+          "karma": 47,
+          "karmaAwakened": 37,
+          "metatype": "ork",
+          "strain": "I",
+          "improvedPhysical": ["Body", "Reaction", "Strength"],
+          "improvedMental": ["Willpower", "Logic", "Intuition", "Charisma"],
+          "gainedPowers": [
+            "Dual Natured",
+            "Essence Drain",
+            "Immunity (Age)",
+            "Infection",
+            "Natural Weapon (Bite: DV (STR+1)P, AP -1, -1 Reach)",
+            "Natural Weapon (Claw: DV (STR+2)P, AP -1)",
+            "+1 initiative die",
+            "+1 to all movement rates",
+            "One free Optional Power (Enhanced Sense or Immunity)"
+          ],
+          "gainedWeaknesses": [
+            "Allergy (Ferrous Metals, Moderate)",
+            "Allergy (Sunlight, Severe)",
+            "Dietary Requirement (Metahuman Flesh)",
+            "Essence Loss"
+          ],
+          "optionalPowers": [
+            "Enhanced Senses (Hearing)",
+            "Enhanced Senses (Smell)",
+            "Enhanced Senses (Visual Acuity)",
+            "Fear",
+            "Immunity (Pathogens)",
+            "Immunity (Toxins)",
+            "Influence",
+            "Regeneration"
+          ],
+          "notes": "All wendigos Awaken as magicians if not Awakened; adepts become mystic adepts. Sunlight damage not healable by Regeneration."
+        }
+      ]
+    },
+    "new-critter-powers": {
+      "source": "Run Faster, p.143",
+      "description": "New critter powers introduced for Infected characters",
+      "columns": ["id", "name", "type", "action", "range", "duration", "effect"],
+      "rows": [
+        {
+          "id": "adaptive-coloration",
+          "name": "Adaptive Coloration",
+          "type": "P",
+          "action": "Simple",
+          "range": "Self",
+          "duration": "Sustained",
+          "effect": "Immobile: -(Magic x 2) dice pool to Perception Tests to detect by sight. Moving: -(Magic) dice pool. Additional -2 dice pool to ranged attacks against critter. Agility + Intuition (2) Test net hits act as positive dice pool modifier for Infiltration/Sneaking. Works against normal and augmented thermographic vision only; not against sonar, radar, scent, or astral perception."
+        },
+        {
+          "id": "corrosive-secretions",
+          "name": "Corrosive Secretions",
+          "type": "P",
+          "action": "Auto",
+          "range": "Self",
+          "duration": "Always",
+          "effect": "Skin secretes caustic substance. Causes Acid damage: DV (Magic x 2)P, AP -(Magic). Affects anything touching or touched by the critter. Critter is immune to its own secretions."
+        }
+      ]
+    }
+  }
+}

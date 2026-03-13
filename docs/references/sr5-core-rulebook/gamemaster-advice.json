@@ -1,0 +1,710 @@
+{
+  "tables": {
+    "job-type": {
+      "source": "SR5 Core Rulebook, p.338",
+      "description": "Roll 1D6 to determine what kind of job the runners are doing.",
+      "columns": ["1d6_result", "job_type"],
+      "rows": [
+        { "1d6_result": 1, "job_type": "Datasteal" },
+        { "1d6_result": 2, "job_type": "Assassination or Destruction" },
+        { "1d6_result": 3, "job_type": "Extraction or Insertion" },
+        { "1d6_result": 4, "job_type": "Misdirection" },
+        { "1d6_result": 5, "job_type": "Protection" },
+        { "1d6_result": 6, "job_type": "Delivery" }
+      ]
+    },
+    "meet-location": {
+      "source": "SR5 Core Rulebook, p.338",
+      "description": "Roll 1D6 to determine where the initial meeting with the employer takes place.",
+      "columns": ["1d6_result", "location_type"],
+      "rows": [
+        { "1d6_result": 1, "location_type": "Bar, Club, or Restaurant" },
+        {
+          "1d6_result": 2,
+          "location_type": "Warehouse, Loading Dock, Factory, or Other Underused Site"
+        },
+        { "1d6_result": 3, "location_type": "Barrens District or Other Urban Hellhole" },
+        { "1d6_result": 4, "location_type": "Moving Vehicle" },
+        { "1d6_result": 5, "location_type": "Matrix Host" },
+        { "1d6_result": 6, "location_type": "Astral Space" }
+      ]
+    },
+    "macguffins": {
+      "source": "SR5 Core Rulebook, p.339",
+      "description": "Roll 1D6 to determine the central element of interest (target) to the story.",
+      "columns": ["1d6_result", "macguffin"],
+      "rows": [
+        { "1d6_result": 1, "macguffin": "A key employee" },
+        { "1d6_result": 2, "macguffin": "A prototype product" },
+        { "1d6_result": 3, "macguffin": "Cutting-edge tech research" },
+        { "1d6_result": 4, "macguffin": "Bioengineered life form" },
+        { "1d6_result": 5, "macguffin": "Magical object" },
+        { "1d6_result": 6, "macguffin": "Urban building, rural location or infrastructure object" }
+      ]
+    },
+    "employer": {
+      "source": "SR5 Core Rulebook, p.339",
+      "description": "Roll 2D6 and add together to determine who is employing the runners.",
+      "columns": ["2d6_result", "employer_type", "examples"],
+      "rows": [
+        {
+          "2d6_result": 2,
+          "employer_type": "Secrecy Society",
+          "examples": "Black Lodge, Human Nation"
+        },
+        {
+          "2d6_result": 3,
+          "employer_type": "Political or Activist Group",
+          "examples": "Humanis Policlub, Mothers of Metahumans"
+        },
+        { "2d6_result": 4, "employer_type": "Government Official or Agency", "examples": "" },
+        {
+          "2d6_result": "5-6",
+          "employer_type": "Minor Corporation",
+          "examples": "A-level or smaller"
+        },
+        {
+          "2d6_result": "7-8",
+          "employer_type": "Megacorporation",
+          "examples": "AA-level or larger"
+        },
+        { "2d6_result": 9, "employer_type": "Criminal Syndicate", "examples": "Yakuza, Mafia" },
+        {
+          "2d6_result": 10,
+          "employer_type": "Magical Group",
+          "examples": "Illuminates of the New Dawn"
+        },
+        { "2d6_result": 11, "employer_type": "Private Individual", "examples": "" },
+        {
+          "2d6_result": 12,
+          "employer_type": "Exotic or Mysterious Being",
+          "examples": "free spirit, dragon, AI"
+        }
+      ]
+    },
+    "twists": {
+      "source": "SR5 Core Rulebook, p.339",
+      "description": "Roll 1D6 to inject a complication into the run.",
+      "columns": ["1d6_result", "twist"],
+      "rows": [
+        { "1d6_result": 1, "twist": "Security is unexpectedly high" },
+        { "1d6_result": 2, "twist": "A third party is also interested" },
+        { "1d6_result": 3, "twist": "The target is not what it appears to be (group was lied to)" },
+        { "1d6_result": 4, "twist": "The job requires a rare piece of equipment" },
+        { "1d6_result": 5, "twist": "Target has been moved or is being moved" },
+        { "1d6_result": 6, "twist": "The employer decides to double-cross the runners" }
+      ]
+    },
+    "physical-traits": {
+      "source": "SR5 Core Rulebook, p.340",
+      "description": "Roll 1D6 to generate a physically distinctive trait for an NPC.",
+      "columns": ["1d6_result", "trait"],
+      "rows": [
+        { "1d6_result": 1, "trait": "Tattoos, piercing, or jewelry" },
+        { "1d6_result": 2, "trait": "Unique dress style" },
+        { "1d6_result": 3, "trait": "Unique hair style" },
+        { "1d6_result": 4, "trait": "Obvious or distinctive cybernetics" },
+        { "1d6_result": 5, "trait": "Dramatically high or low weight and/or height for metatype" },
+        { "1d6_result": 6, "trait": "Abnormally clean or dirty" }
+      ]
+    },
+    "personality-traits": {
+      "source": "SR5 Core Rulebook, p.340",
+      "description": "Roll 1D6 to generate a personality trait for an NPC.",
+      "columns": ["1d6_result", "trait"],
+      "rows": [
+        { "1d6_result": 1, "trait": "Hair-trigger temper" },
+        { "1d6_result": 2, "trait": "Very easily distracted" },
+        { "1d6_result": 3, "trait": "Racist" },
+        { "1d6_result": 4, "trait": "Chuckles constantly" },
+        { "1d6_result": 5, "trait": "Regularly high or drunk" },
+        { "1d6_result": 6, "trait": "Flirtatious with anyone/everyone" }
+      ]
+    },
+    "htr-team-response-time": {
+      "source": "SR5 Core Rulebook, p.352",
+      "description": "How quickly an HTR team responds based on the security level of the location.",
+      "columns": ["security_level", "example", "response_time"],
+      "rows": [
+        {
+          "security_level": "AAA",
+          "example": "Downtown Seattle, megacorp HQ, military installation",
+          "response_time": "1D6 minutes"
+        },
+        {
+          "security_level": "AA",
+          "example": "Luxury residential area",
+          "response_time": "1D6 + 4 minutes"
+        },
+        {
+          "security_level": "A",
+          "example": "Mid- to high-level residential, common corporations",
+          "response_time": "2D6 + 3 minutes"
+        },
+        {
+          "security_level": "B",
+          "example": "Mid-level residential, industrial",
+          "response_time": "1D6 x 5 minutes"
+        },
+        {
+          "security_level": "C",
+          "example": "Low-end residential, storage areas",
+          "response_time": "1D6 x 10 minutes"
+        },
+        {
+          "security_level": "Z",
+          "example": "Redmond Barrens, Chicago Containment Zone",
+          "response_time": "2D6 hours"
+        }
+      ]
+    },
+    "tactics-references": {
+      "source": "SR5 Core Rulebook, p.354",
+      "description": "Page references for security tactics used against intruders.",
+      "columns": ["security_tactic", "page"],
+      "rows": [
+        { "security_tactic": "Cover", "page": 190 },
+        { "security_tactic": "Smoke Grenade", "page": 435 },
+        { "security_tactic": "Flash Bang", "page": 435 },
+        { "security_tactic": "Suppression", "page": 179 }
+      ]
+    },
+    "device-ratings": {
+      "source": "SR5 Core Rulebook, p.356",
+      "description": "Standard Matrix Device Ratings for common security and infrastructure devices.",
+      "columns": ["device", "rating"],
+      "rows": [
+        { "device": "Vending Machine", "rating": 1 },
+        { "device": "Camera", "rating": 1 },
+        { "device": "Door Lock", "rating": 2 },
+        { "device": "Sensor", "rating": 2 },
+        { "device": "Common Drone", "rating": 3 },
+        { "device": "Security Drone", "rating": 3 },
+        { "device": "Workstation", "rating": 3 },
+        { "device": "Corporate Server", "rating": 4 },
+        { "device": "Security Controller", "rating": 5 }
+      ]
+    },
+    "cyberware-scanner": {
+      "source": "SR5 Core Rulebook, p.362",
+      "description": "Thresholds for millimeter wave/cyberware scanners detecting implants and prohibited items, plus situational modifiers.",
+      "columns": ["item_or_situation", "threshold_or_modifier"],
+      "rows": [
+        { "item_or_situation": "Standard cyberware, weapons", "threshold_or_modifier": 1 },
+        { "item_or_situation": "Alphaware, other items", "threshold_or_modifier": 2 },
+        { "item_or_situation": "Betaware", "threshold_or_modifier": 3 },
+        { "item_or_situation": "Deltaware", "threshold_or_modifier": "5+" },
+        {
+          "item_or_situation": "2 or more implants/items",
+          "threshold_or_modifier": "+1 (modifier)"
+        },
+        {
+          "item_or_situation": "4 or more implants/items",
+          "threshold_or_modifier": "+2 (modifier)"
+        },
+        { "item_or_situation": "6+ implants/items", "threshold_or_modifier": "+3 (modifier)" }
+      ]
+    },
+    "chemical-detection-modifiers": {
+      "source": "SR5 Core Rulebook, p.361",
+      "description": "Modifiers to olfactory scanner dice pools for detecting explosives and ammunition.",
+      "columns": ["situation", "modifier"],
+      "rows": [
+        { "situation": "Every 10 rounds of ammunition", "modifier": "+1" },
+        { "situation": "Every grenade", "modifier": "+1" },
+        { "situation": "Every 30 grams of (non-plastique) explosive", "modifier": "+1" },
+        { "situation": "Every 100 grams of plastique", "modifier": "+1" },
+        { "situation": "Item contained in plastic", "modifier": "-1" }
+      ]
+    },
+    "fencing": {
+      "source": "SR5 Core Rulebook, p.359",
+      "description": "Thresholds and damage for climbing past various types of fencing. Climbing + Agility (threshold) Test; failure causes listed damage.",
+      "columns": ["difficulty", "threshold", "damage"],
+      "rows": [
+        { "difficulty": "Barbed", "threshold": 1, "damage": "4P" },
+        { "difficulty": "Concertina", "threshold": 1, "damage": "5P" },
+        { "difficulty": "Monowire", "threshold": 3, "damage": "8P" },
+        { "difficulty": "Electrified", "threshold": 2, "damage": "6S" }
+      ]
+    },
+    "license-examples": {
+      "source": "SR5 Core Rulebook, p.363",
+      "description": "Common license types and the situations in which they are required.",
+      "columns": ["license", "situation"],
+      "rows": [
+        { "license": "Item", "situation": "Any item with Availability 'R'" },
+        {
+          "license": "Magic",
+          "situation": "License to practice magic; registered Awakened Individual"
+        },
+        { "license": "Spell Weapon", "situation": "Knowledge and use of a single Combat Spell" },
+        {
+          "license": "Technomancy",
+          "situation": "Registered technomancer; license to use Resonance abilities"
+        },
+        {
+          "license": "Occupational",
+          "situation": "Registered professional (doctor, nurse, electrician, private detective, etc.)"
+        }
+      ]
+    },
+    "fake-sin-details": {
+      "source": "SR5 Core Rulebook, p.363",
+      "description": "What data is present in a fake SIN at each Rating level.",
+      "columns": ["rating", "attributes"],
+      "rows": [
+        {
+          "rating": 1,
+          "attributes": "Random anybody; age, nationality, and sex may not match; no supporting data"
+        },
+        {
+          "rating": 2,
+          "attributes": "Rough match; sex matches, age and nationality 'pretty close'; no supporting data"
+        },
+        {
+          "rating": 3,
+          "attributes": "Good match; sex, age, and nationality match; supporting data, but obviously fake"
+        },
+        {
+          "rating": 4,
+          "attributes": "Casually plausible; sex, age, and nationality match; supporting data appears valid only on cursory checks"
+        },
+        {
+          "rating": 5,
+          "attributes": "Good fit; all statistics match; valid biometrics for another person (with samples); some supporting data and history"
+        },
+        {
+          "rating": 6,
+          "attributes": "Alternate life; all statistics match; valid biometrics with samples; complete and entirely believable history"
+        }
+      ]
+    },
+    "sin-verification-details": {
+      "source": "SR5 Core Rulebook, p.364",
+      "description": "What is checked at each SIN verification Rating level. Use Simple Device Rating x 2 Test, threshold = fake SIN Rating.",
+      "columns": ["rating", "what_is_checked"],
+      "rows": [
+        { "rating": 1, "what_is_checked": "Do you have a SIN?" },
+        {
+          "rating": 2,
+          "what_is_checked": "Basic redundancy check on the number and vital statistics"
+        },
+        {
+          "rating": 3,
+          "what_is_checked": "Redundancy check on number and statistics; query for external data attached to SIN"
+        },
+        {
+          "rating": 4,
+          "what_is_checked": "Verify all vital statistics; external data checked for obvious conflicts; biometric must be present"
+        },
+        {
+          "rating": 5,
+          "what_is_checked": "Full verification and consistency check; biometrics tested against sample"
+        },
+        {
+          "rating": 6,
+          "what_is_checked": "All possible verification; multiple biometric samples must match; random supporting data verified externally"
+        }
+      ]
+    },
+    "public-awareness": {
+      "source": "SR5 Core Rulebook, p.369",
+      "description": "What level of public recognition a runner has based on their Public Awareness score.",
+      "columns": ["rating_range", "awareness"],
+      "rows": [
+        { "rating_range": "0-3", "awareness": "Unheard of outside the shadow community" },
+        {
+          "rating_range": "4-6",
+          "awareness": "Known to those who watch the shadows — conspiracy theorists, specialty law enforcement"
+        },
+        {
+          "rating_range": "7-9",
+          "awareness": "Known by those in the know, investigative journalists, law enforcement, some government officials"
+        },
+        {
+          "rating_range": "10+",
+          "awareness": "Household name; sim and trid stars portray the character in movies"
+        }
+      ]
+    },
+    "lifestyles": {
+      "source": "SR5 Core Rulebook, p.369",
+      "description": "All lifestyle levels with monthly costs and brief descriptions.",
+      "columns": ["lifestyle", "monthly_cost_nuyen", "cost_note", "description"],
+      "rows": [
+        {
+          "lifestyle": "Luxury",
+          "monthly_cost_nuyen": 100000,
+          "cost_note": "100,000¥ and up",
+          "description": "Best of everything: ritzy digs, high-tech toys, best food and drink, household staff, maid service, sophisticated drones. Massive mansion, snazzy condo, or penthouse suite in top hotel. Home security is top-of-the-line with well-trained guards, astral security, and quick HTR response times. VIP list at exclusive clubs. High-level executives, government bigshots, Yakuza bigwigs, high-scoring shadowrunners."
+        },
+        {
+          "lifestyle": "High",
+          "monthly_cost_nuyen": 10000,
+          "cost_note": "10,000¥ a month",
+          "description": "Roomy house or condo, good food, technology that makes life easy. Well-to-do lifestyle: mid-level managers, senior Mob bosses. Home is in secure zone or protected by bribes to local police contractor and gang boss. Housekeeping service or tech. Secure zone or solid bribes."
+        },
+        {
+          "lifestyle": "Middle",
+          "monthly_cost_nuyen": 5000,
+          "cost_note": "5,000¥ a month",
+          "description": "Nice house or condo with lots of comforts. May eat nutrisoy as well as higher-priced natural food, but autocook has full suite of flavor faucets. Ordinary wage-earners or reasonably successful criminals."
+        },
+        {
+          "lifestyle": "Low",
+          "monthly_cost_nuyen": 2000,
+          "cost_note": "2,000¥ a month",
+          "description": "Apartment; nobody likely to bother the character as long as they keep the door bolted. Regular meals; power and water available during assigned rationing periods. Security depends on regular payments to local street gang. Factory workers, petty crooks, others just starting out or down on their luck."
+        },
+        {
+          "lifestyle": "Squatter",
+          "monthly_cost_nuyen": 500,
+          "cost_note": "500¥ a month",
+          "description": "Low-grade nutrisoy and yeast. Home is a squatted building, possibly converted to barracks or divided into closet-sized rooms. May share with other squatters. Only thing worse than Squatter is living on the streets."
+        },
+        {
+          "lifestyle": "Streets",
+          "monthly_cost_nuyen": 0,
+          "cost_note": "Free",
+          "description": "Character lives on streets, in sewers, steam tunnels, condemned buildings, or whatever temporary flop available. Food wherever found. Bathing is a thing of the past. Character's only security is what she creates herself. Down-and-outers of all stripes."
+        },
+        {
+          "lifestyle": "Hospitalized",
+          "monthly_cost_nuyen": null,
+          "cost_note": "500¥/day basic care; 1,000¥/day intensive care",
+          "description": "Special lifestyle that applies only when a character is sick or injured. Confined to a hospital, clinic equipped as a hospital, or a private location with necessary equipment. Characters cannot own this lifestyle — they only pay until they get well or go broke, whichever comes first."
+        }
+      ]
+    },
+    "lifestyle-options": {
+      "source": "SR5 Core Rulebook, p.370",
+      "description": "Optional modifiers to lifestyle cost and mechanical effect. Available for any lifestyle except Streets or Hospitalized.",
+      "columns": ["option", "cost_modifier", "mechanical_effect"],
+      "rows": [
+        {
+          "option": "Special Work Area",
+          "cost_modifier": "+1,000¥ per month",
+          "mechanical_effect": "Workshop, garage, office, studio, or large area for specialized work. Skill checks relevant to the setting have their Limit increased by 2 when performed in this space."
+        },
+        {
+          "option": "Extra Secure",
+          "cost_modifier": "+20% of lifestyle",
+          "mechanical_effect": "Neighborhood surrounded by wall, vigilant security contractors, patrolled by altruistic gang, or near powerful individual. All HTR Response (p.356) and other security response rolls made one level better than the area would normally be."
+        },
+        {
+          "option": "Obscure/Difficult to Find",
+          "cost_modifier": "+10% of lifestyle",
+          "mechanical_effect": "Particularly difficult to find or in an obscure location. Any Sneaking Skill checks (owner of property excluded) made in the vicinity of the residence are made with a -2 penalty."
+        },
+        {
+          "option": "Cramped",
+          "cost_modifier": "-10% of lifestyle",
+          "mechanical_effect": "Just enough space to live; no room for hobbies, work, or stretching legs. Skill checks tied to Logic have their Limit reduced by 2 (to a minimum of 1) when performed in this space."
+        },
+        {
+          "option": "Dangerous Area",
+          "cost_modifier": "-20% of lifestyle",
+          "mechanical_effect": "Area is particularly dangerous and prone to crime and violence. Security and law enforcement respond only to the most desperate need and will be slower to respond. Any HTR Response (p.356) or similar security response rolls are made as if this area were one security level lower than it actually is."
+        }
+      ]
+    },
+    "cash-rewards": {
+      "source": "SR5 Core Rulebook, p.371-372",
+      "description": "Cash reward calculation table for runs. Base cost 3,000¥ per player. Apply multiplier (Highest opposing Dice Pool / 4 rounded down + situational modifiers) then cost modifiers.",
+      "base_cost_nuyen": 3000,
+      "columns": ["situation", "modifier", "modifier_type"],
+      "rows": [
+        {
+          "situation": "Highest opposing Dice Pool",
+          "modifier": "+(Dice Pool / 4, rounded down)",
+          "modifier_type": "multiplier_base"
+        },
+        {
+          "situation": "Runners were outnumbered three to one in a combat situation",
+          "modifier": "+1",
+          "modifier_type": "multiplier_addition"
+        },
+        {
+          "situation": "Runners were outnumbered two to one in a combat situation by NPCs with Professional Rating 4 or higher (not cumulative with above)",
+          "modifier": "+1",
+          "modifier_type": "multiplier_addition"
+        },
+        {
+          "situation": "Runners faced a pack of at least six critters",
+          "modifier": "+1",
+          "modifier_type": "multiplier_addition"
+        },
+        {
+          "situation": "Runners encountered at least three different spirits (besides watchers) in a single encounter",
+          "modifier": "+1",
+          "modifier_type": "multiplier_addition"
+        },
+        {
+          "situation": "Runners accomplished the task with impressive speed and/or subtlety",
+          "modifier": "+1",
+          "modifier_type": "multiplier_addition"
+        },
+        {
+          "situation": "Runners risked public exposure or a raised profile as a natural part of the run",
+          "modifier": "+1",
+          "modifier_type": "multiplier_addition"
+        },
+        {
+          "situation": "Job brings runners into direct contact with a notably dangerous part or element of Sixth World lore (the Red Samurai, a Mitsuhama Zero Zone, etc.)",
+          "modifier": "+1",
+          "modifier_type": "multiplier_addition"
+        },
+        {
+          "situation": "Standard run (nothing special, normal work for a runner)",
+          "modifier": "0%",
+          "modifier_type": "cost_modifier"
+        },
+        {
+          "situation": "Run will make you a cold-hearted bastard (wetwork, helping corps oppress people, drug running, human trafficking)",
+          "modifier": "+10-20%",
+          "modifier_type": "cost_modifier"
+        },
+        {
+          "situation": "Run has good feelings as part of its reward (hooding, helping the little guy, taking some 'dys' out of 'dystopia')",
+          "modifier": "-10-20%",
+          "modifier_type": "cost_modifier"
+        }
+      ]
+    },
+    "karma-rewards": {
+      "source": "SR5 Core Rulebook, p.372",
+      "description": "Karma reward calculation table. Award to each player after a run. Add up applicable situations, then apply one Karma Modifier.",
+      "columns": ["situation", "karma"],
+      "rows": [
+        { "situation": "Character survived", "karma": 2 },
+        { "situation": "Group completed all objectives", "karma": 2 },
+        { "situation": "Group completed some objectives", "karma": 1 },
+        {
+          "situation": "Overall adventure challenge",
+          "karma": "Highest opposed Dice Pool / 6 (round down)"
+        }
+      ],
+      "karma_modifiers": [
+        { "situation": "Standard run", "modifier": 0 },
+        { "situation": "Cold-hearted bastard run", "modifier": -2 },
+        { "situation": "Good feelings run", "modifier": +2 }
+      ]
+    },
+    "security-critter-references": {
+      "source": "SR5 Core Rulebook, p.358",
+      "description": "Page references for Awakened critters commonly used in security roles.",
+      "columns": ["critter", "page"],
+      "rows": [
+        { "critter": "Barghest", "page": 403 },
+        { "critter": "Basilisk", "page": 403 },
+        { "critter": "Hellhound", "page": 405 }
+      ]
+    },
+    "drop-in-locations": {
+      "source": "SR5 Core Rulebook, p.364-368",
+      "description": "Pre-built generic location descriptions with typical security profiles for GM improvisation.",
+      "columns": [
+        "location",
+        "security_level_description",
+        "tech_level",
+        "notable_security_elements"
+      ],
+      "rows": [
+        {
+          "location": "Hell-Hole Bar",
+          "security_level_description": "Very light; rarely draws law enforcement",
+          "tech_level": "Minimal; Matrix access unlikely",
+          "notable_security_elements": "Possibly shotgun under the bar; local gang may keep trouble away"
+        },
+        {
+          "location": "Secret Research Station",
+          "security_level_description": "Extremely tight; corps don't use these without massive security",
+          "tech_level": "Top of the line internally; Matrix access extremely limited due to location (underground/underwater)",
+          "notable_security_elements": "High security; limited Matrix access is itself a security measure"
+        },
+        {
+          "location": "Nova-Hot Club",
+          "security_level_description": "Subtle but effective; trouble is bad for business",
+          "tech_level": "Top of the line wireless and virtual entertainment",
+          "notable_security_elements": "Security is subtle; Matrix is top of the line"
+        },
+        {
+          "location": "Mom-and-Pop Shop",
+          "security_level_description": "Light basics",
+          "tech_level": "Often basic; could be cutting-edge if run by a genius",
+          "notable_security_elements": "Maglocks, cameras, alarms; sometimes contracted security"
+        },
+        {
+          "location": "No-Tell Motel",
+          "security_level_description": "Passive and basic; increasingly automated",
+          "tech_level": "Basic; Matrix access area-dependent",
+          "notable_security_elements": "Maglocks on rooms, some cameras, sometimes one live staff member; PanicButton risk from residents"
+        },
+        {
+          "location": "Large Corp Office",
+          "security_level_description": "Crisp, professional, well-equipped; no obvious weak point",
+          "tech_level": "Sophisticated redundant systems; all devices tied to a spider-monitored Host loaded with IC",
+          "notable_security_elements": "HTR responds promptly; magical security; maglocks with any number of verification methods (keys, cards, biometrics); cameras, sensors, traps, drones; Host with IC and spider"
+        },
+        {
+          "location": "Hospital or Clinic",
+          "security_level_description": "Solid but practical; non-lethal methods preferred; sensitive to equipment needs",
+          "tech_level": "Top-of-the-line medical technology; good Matrix security",
+          "notable_security_elements": "Non-lethal methods; weapon checks; suspicious implant checks; unauthorized wireless signal checks; very private clinics may have tighter security"
+        },
+        {
+          "location": "High-End Residential",
+          "security_level_description": "Solid; comfort-focused but not lax; population small so faces are known",
+          "tech_level": "Solid but not necessarily cutting-edge",
+          "notable_security_elements": "HTR responds with priority on protecting residents; names/faces of residents known to security personnel"
+        },
+        {
+          "location": "Derelict Building",
+          "security_level_description": "Non-existent except for whatever residents bring",
+          "tech_level": "Usually absent; rare exceptions (e.g., technomancer occupation)",
+          "notable_security_elements": "May have holes in walls allowing easy entrance; residents may be hostile (squatters, gangers, Awakened predators, ghouls)"
+        }
+      ]
+    },
+    "reputation-notoriety-qualities": {
+      "source": "SR5 Core Rulebook, p.368",
+      "description": "Qualities that modify starting Notoriety at character creation. +1 per negative quality, -1 per positive quality.",
+      "positive_qualities": ["Blandness", "First Impression", "Lucky"],
+      "negative_qualities": [
+        "Addiction",
+        "Bad Luck",
+        "Combat Paralysis",
+        "Elf Poser",
+        "Gremlins",
+        "Incompetent (any skill)",
+        "Ork Poser",
+        "Scorched",
+        "SINner (criminal SIN only)",
+        "Spirit Bane",
+        "Uncouth",
+        "Uneducated",
+        "Weak Immune System"
+      ]
+    },
+    "notoriety-award-examples": {
+      "source": "SR5 Core Rulebook, p.368",
+      "description": "Examples of actions the GM may award a point of Notoriety for during play.",
+      "examples": [
+        "Refusing to finish a run",
+        "Insulting or otherwise pissing off a Mr. Johnson",
+        "Incredibly obnoxious or callous behavior",
+        "Betraying team members",
+        "Killing innocents",
+        "Earning a powerful enemy",
+        "Knowingly working for a dragon",
+        "Exceptional bad luck that leads to disaster"
+      ]
+    },
+    "public-awareness-award-examples": {
+      "source": "SR5 Core Rulebook, p.368-369",
+      "description": "Examples of actions the GM may award a point of Public Awareness for during play.",
+      "examples": [
+        "Fighting with law enforcement or some other High Threat Response team",
+        "Extracting a well-known person",
+        "Blowing something up in a populated area",
+        "Leaving significant physical evidence",
+        "Being seen by many eyewitnesses",
+        "Broadcasting or posting videos of your crimes on your Matrix fansite"
+      ]
+    }
+  },
+  "rules": {
+    "street-cred": {
+      "source": "SR5 Core Rulebook, p.368",
+      "formula": "floor(totalKarma / 10)",
+      "notes": "Additional Street Cred may be awarded by the GM for particularly noteworthy accomplishments. Street Cred applies as a positive Limit Modifier to all Social Tests where the character's reputation would be known."
+    },
+    "notoriety-starting-value": {
+      "source": "SR5 Core Rulebook, p.368",
+      "formula": "0 + (count of negative qualities from notoriety list) - (count of positive qualities from notoriety list)",
+      "notes": "Characters cannot earn Notoriety for something they already have a point for."
+    },
+    "street-cred-to-notoriety-trade": {
+      "source": "SR5 Core Rulebook, p.368",
+      "formula": "sacrifice 2 Street Cred → reduce Notoriety by 1",
+      "notes": "Permanently sacrifices Street Cred points."
+    },
+    "sin-verification": {
+      "source": "SR5 Core Rulebook, p.364",
+      "test": "Simple Device Rating x 2 Test",
+      "threshold": "Rating of the fake SIN",
+      "outcome_under_threshold": "System reports no problem",
+      "outcome_at_threshold": "System reports something 'odd'; operator may investigate further",
+      "outcome_exceeds_threshold": "System reports SIN as false; fake SIN is burned; may notify authorities immediately"
+    },
+    "burned-sin": {
+      "source": "SR5 Core Rulebook, p.364",
+      "notes": "Burned status is per-country/jurisdiction, not global. Data sharing between countries is imperfect and not always instantaneous. A SIN burned in one country may not be burned in another, at the GM's discretion."
+    },
+    "run-cash-formula": {
+      "source": "SR5 Core Rulebook, p.371-372",
+      "base_cost_nuyen": 3000,
+      "base_cost_notes": "May be increased by 100¥ per net hit on Negotiation Test at start of run.",
+      "multiplier_part_1": "floor(highestOpposingDicePool / 4)",
+      "multiplier_part_1_notes": "Must be an Active Skill used directly against the players. Use permanent enhancements only — no equipment bonuses, conditional or situational modifiers.",
+      "multiplier_part_2": "Sum of applicable situational modifiers from Cash Rewards table",
+      "final_calculation": "(baseCost) * (multiplierPart1 + multiplierPart2) * (1 + costModifierPercent / 100)"
+    },
+    "run-karma-formula": {
+      "source": "SR5 Core Rulebook, p.372",
+      "base_karma_situations": [
+        { "situation": "Character survived", "karma": 2 },
+        { "situation": "Group completed all objectives", "karma": 2 },
+        { "situation": "Group completed some objectives", "karma": 1 },
+        { "situation": "Overall adventure challenge", "karma": "floor(highestOpposedDicePool / 6)" }
+      ],
+      "modifiers": [
+        { "situation": "Standard run", "modifier": 0 },
+        { "situation": "Cold-hearted bastard run", "modifier": -2 },
+        { "situation": "Good feelings run", "modifier": +2 }
+      ],
+      "notes": "Karma is awarded to each player individually. Apply one modifier that corresponds to the same modifier category used for cash rewards."
+    },
+    "lifestyle-missed-payment": {
+      "source": "SR5 Core Rulebook, p.370",
+      "mechanic": "Each time a payment is missed, roll 1D6. If result > consecutive months missed: landlord lets it slide (payment still owed). If result <= consecutive months missed: character is evicted.",
+      "primary-lifestyle-consequence": "If primary lifestyle payment is missed: downgrade lifestyle one level. Character may owe back rent to bank, loan company, or loan shark.",
+      "non-primary-consequence": "Non-primary lifestyle unit is simply lost."
+    },
+    "lifestyle-permanent-purchase": {
+      "source": "SR5 Core Rulebook, p.370-371",
+      "formula": "100 * monthlyLifestyleCost",
+      "selling-with-time": "Roll 2D6 * 10% of purchase price (if character has couple months to broker)",
+      "selling-without-sinners-quality": "Roll only 1D6 instead of 2D6",
+      "selling-on-the-run": "Also roll 1D6 (must dump fast or through an agent)"
+    },
+    "team-lifestyle": {
+      "source": "SR5 Core Rulebook, p.371",
+      "extra_cost_per_person": "+10% of lifestyle cost",
+      "tenant_of_record_requirement": "For Low Lifestyle or higher, one member must be tenant of record — legally responsible for debt if team fails to pay."
+    },
+    "alternate-campaigns": {
+      "street-scum": {
+        "source": "SR5 Core Rulebook, p.350",
+        "priority-table-modification": "Select once from row B, once from row C, once from row D, and twice from row E; OR twice each from rows C and D and once from row E."
+      },
+      "high-life": {
+        "source": "SR5 Core Rulebook, p.350-351",
+        "priority-table-modification": "Select twice from row A, once from row B, and twice from row C. No Availability limits on equipment."
+      },
+      "military-or-mercenary": {
+        "source": "SR5 Core Rulebook, p.351",
+        "priority-table-modification": "Attribute Points and Skill Points near standard. Resources tripled or more; Availability limits on military equipment ignored. Alternatively, ignore equipment purchase and assign a pool of available equipment."
+      },
+      "docwagon": {
+        "source": "SR5 Core Rulebook, p.351",
+        "priority-table-modification": "Resources selected from GM-determined limited list or assigned based on role. Otherwise close to standard."
+      },
+      "criminal-syndicates": {
+        "source": "SR5 Core Rulebook, p.351",
+        "priority-table-modification": "Points remain the same as standard. GMs may restrict Availability on some equipment."
+      }
+    }
+  }
+}
