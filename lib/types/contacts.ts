@@ -215,6 +215,32 @@ export interface SocialContact {
 }
 
 /**
+ * High-level service type taxonomy (Run Faster p. 176)
+ */
+export type ContactServiceType =
+  | "swag"
+  | "legwork"
+  | "support"
+  | "shadow-service"
+  | "networking"
+  | "personal-favor";
+
+/**
+ * Preferred payment method (Run Faster p. 180-181)
+ */
+export type ContactPreferredPayment =
+  | "cash-credstick"
+  | "cash-corporate-scrip"
+  | "cash-hard-currency"
+  | "service-shadowrun-job"
+  | "service-drek-jobs"
+  | "service-free-labor"
+  | "barter-hobby-vice"
+  | "barter-easy-to-sell"
+  | "barter-profession-items"
+  | "barter-illegal-items";
+
+/**
  * Contact archetype definition from ruleset
  */
 export interface ContactArchetype {
@@ -231,6 +257,12 @@ export interface ContactArchetype {
 
   /** Suggested loyalty range [min, max] */
   suggestedLoyalty: [number, number];
+
+  /** High-level service type taxonomy from Run Faster */
+  serviceType?: ContactServiceType;
+
+  /** Preferred payment method from Run Faster */
+  preferredPayment?: ContactPreferredPayment;
 
   /** Common services this archetype can provide */
   commonServices: string[];
