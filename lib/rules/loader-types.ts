@@ -533,6 +533,7 @@ export interface GearCatalogData {
   security: GearItemData[];
   miscellaneous: GearItemData[];
   ammunition: GearItemData[];
+  explosives: GearItemData[];
   drugs?: DrugCatalogItemData[];
   toxins?: ToxinCatalogItemData[];
 }

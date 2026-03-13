@@ -89,6 +89,7 @@ const MOCK_GEAR_CATALOG: GearCatalogData = {
   security: [],
   miscellaneous: [],
   ammunition: [],
+  explosives: [],
 };
 
 // ---------------------------------------------------------------------------

@@ -136,6 +136,7 @@ const moduleExtractors: Record<string, ModuleExtractor> = {
       "commlinks",
       "cyberdecks",
       "electronics",
+      "explosives",
       "ammunition",
       "toxins",
       "drugs",

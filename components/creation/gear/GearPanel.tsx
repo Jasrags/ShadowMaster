@@ -50,6 +50,7 @@ type GearCategoryKey =
   | "survival"
   | "medical"
   | "security"
+  | "explosives"
   | "miscellaneous"
   | "rfidTags";
 
@@ -59,6 +60,7 @@ const GEAR_CATEGORY_LABELS: Record<GearCategoryKey, string> = {
   survival: "Survival",
   medical: "Medical",
   security: "Security",
+  explosives: "Explosives",
   miscellaneous: "Miscellaneous",
   rfidTags: "RFID Tags",
 };
@@ -71,6 +73,7 @@ function getGearCategory(gear: GearItem): GearCategoryKey {
   if (category === "survival") return "survival";
   if (category === "medical") return "medical";
   if (category === "security") return "security";
+  if (category === "explosives") return "explosives";
   if (category === "rfidtags" || category === "rfid-tags") return "rfidTags";
   return "miscellaneous";
 }
@@ -124,6 +127,7 @@ export function GearPanel({ state, updateState }: GearPanelProps) {
       survival: [],
       medical: [],
       security: [],
+      explosives: [],
       miscellaneous: [],
       rfidTags: [],
     };

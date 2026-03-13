@@ -449,4 +449,70 @@ describe("flattenModulesForSearch", () => {
       expect(BROWSABLE_CATEGORIES).not.toContain("priorities");
     });
   });
+
+  describe("gear gearArrayKeys completeness", () => {
+    it("indexes explosives subcategory", () => {
+      const modules = {
+        gear: makeModule({
+          explosives: [
+            { id: "plastic-explosives", name: "Plastic Explosives", description: "Moldable" },
+          ],
+        }),
+      };
+
+      const items = flattenModulesForSearch(modules, SOURCE);
+      expect(items).toHaveLength(1);
+      expect(items[0]).toMatchObject({
+        id: "plastic-explosives",
+        name: "Plastic Explosives",
+        category: "gear",
+        subcategory: "Explosives",
+      });
+    });
+
+    it("indexes all GearCatalogData sub-array keys", () => {
+      // Every non-weapon, non-armor, non-sensor sub-array key from GearCatalogData
+      // must be present in gearArrayKeys so items are discoverable via search.
+      const expectedKeys = [
+        "commlinks",
+        "cyberdecks",
+        "electronics",
+        "explosives",
+        "ammunition",
+        "accessories",
+        "armorModifications",
+        "audioEnhancements",
+        "industrialChemicals",
+        "medical",
+        "miscellaneous",
+        "restraints",
+        "rfidTags",
+        "security",
+        "securityDevices",
+        "survival",
+        "tools",
+        "visionEnhancements",
+        "toxins",
+        "drugs",
+      ];
+
+      // Build a payload with one item per key
+      const payload: Record<string, unknown[]> = {};
+      for (const key of expectedKeys) {
+        payload[key] = [{ id: `test-${key}`, name: `Test ${key}` }];
+      }
+
+      const modules = { gear: makeModule(payload) };
+      const items = flattenModulesForSearch(modules, SOURCE);
+
+      // Every key should have produced exactly one search result
+      const foundSubcategories = items.map((i) => i.subcategory);
+      for (const key of expectedKeys) {
+        const found = items.find((i) => i.id === `test-${key}`);
+        expect(found).toBeDefined();
+      }
+
+      expect(items).toHaveLength(expectedKeys.length);
+    });
+  });
 });

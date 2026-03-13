@@ -56,6 +56,7 @@ function findCatalogItem(catalog: GearCatalogData | null, name: string): GearIte
     catalog.security,
     catalog.miscellaneous,
     catalog.ammunition,
+    catalog.explosives,
     catalog.rfidTags,
     catalog.industrialChemicals,
     catalog.visionEnhancements,
@@ -121,7 +122,15 @@ function toggleGearWireless(
 // Category ordering
 // ---------------------------------------------------------------------------
 
-const CATEGORY_ORDER = ["electronics", "tools", "survival", "medical", "security", "miscellaneous"];
+const CATEGORY_ORDER = [
+  "electronics",
+  "tools",
+  "survival",
+  "medical",
+  "security",
+  "explosives",
+  "miscellaneous",
+];
 
 // ---------------------------------------------------------------------------
 // GearRow

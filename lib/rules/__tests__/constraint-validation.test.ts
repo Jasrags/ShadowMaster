@@ -8,7 +8,14 @@
  */
 
 import { describe, it, expect } from "vitest";
-import type { Character, MergedRuleset, CreationState, MagicalPath } from "@/lib/types";
+import type {
+  Character,
+  MergedRuleset,
+  CreationState,
+  CreationMethod,
+  MagicalPath,
+} from "@/lib/types";
+import { validateCharacter } from "../constraint-validation";
 
 // We'll test the internal logic by importing the validation functions
 // Since they're not exported, we test through the public API
@@ -638,5 +645,175 @@ describe("Aptitude Quality Effects", () => {
       (q) => (q.qualityId || q.id) === "aptitude"
     );
     expect(hasAptitude).toBe(true);
+  });
+});
+
+// =============================================================================
+// EQUIPMENT RATING VALIDATION (exercises findGearCatalogItem lookup)
+// =============================================================================
+
+describe("Equipment Rating Validation", () => {
+  const equipmentRatingMethod: CreationMethod = {
+    id: "test-method",
+    name: "Test",
+    description: "Test method",
+    steps: [],
+    constraints: [{ type: "equipment-rating" as never, params: {} }],
+  } as unknown as CreationMethod;
+
+  function makeRulesetWithGear(
+    gearSubcategory: string,
+    items: Array<{
+      id: string;
+      name: string;
+      hasRating?: boolean;
+      minRating?: number;
+      maxRating?: number;
+    }>
+  ): MergedRuleset {
+    return {
+      editionId: "sr5",
+      editionCode: "sr5",
+      editionName: "Shadowrun 5th Edition",
+      version: "1.0.0",
+      attachedBookIds: ["sr5-core"],
+      modules: {
+        gear: {
+          [gearSubcategory]: items.map((item) => ({
+            ...item,
+            category: "gear",
+            subcategory: gearSubcategory,
+            cost: 100,
+            availability: 4,
+          })),
+        },
+      },
+      createdAt: new Date().toISOString(),
+    } as unknown as MergedRuleset;
+  }
+
+  function makeCharacterWithGear(
+    gearItems: Array<{ id: string; name: string; rating?: number }>
+  ): Character {
+    return createTestCharacter({
+      status: "draft",
+      gear: gearItems.map((g) => ({
+        ...g,
+        category: "gear",
+        cost: 100,
+        quantity: 1,
+      })),
+    });
+  }
+
+  it("finds gear item in electronics subcategory", () => {
+    const ruleset = makeRulesetWithGear("electronics", [
+      { id: "area-jammer", name: "Area Jammer", hasRating: true, minRating: 1, maxRating: 6 },
+    ]);
+    const character = makeCharacterWithGear([
+      { id: "area-jammer", name: "Area Jammer", rating: 3 },
+    ]);
+
+    const result = validateCharacter({
+      character,
+      ruleset,
+      creationMethod: equipmentRatingMethod,
+    });
+
+    // Should not have equipment-rating-range errors (rating 3 is within 1-6)
+    const ratingErrors = result.errors.filter(
+      (e) => e.constraintId === "equipment-rating-range" && e.field?.includes("area-jammer")
+    );
+    expect(ratingErrors).toHaveLength(0);
+  });
+
+  it("finds gear item in explosives subcategory", () => {
+    const ruleset = makeRulesetWithGear("explosives", [
+      {
+        id: "foam-explosives",
+        name: "Foam Explosives",
+        hasRating: true,
+        minRating: 6,
+        maxRating: 25,
+      },
+    ]);
+    const character = makeCharacterWithGear([
+      { id: "foam-explosives", name: "Foam Explosives", rating: 10 },
+    ]);
+
+    const result = validateCharacter({
+      character,
+      ruleset,
+      creationMethod: equipmentRatingMethod,
+    });
+
+    const ratingErrors = result.errors.filter(
+      (e) => e.constraintId === "equipment-rating-range" && e.field?.includes("foam-explosives")
+    );
+    expect(ratingErrors).toHaveLength(0);
+  });
+
+  it("detects out-of-range rating for gear in any subcategory", () => {
+    const ruleset = makeRulesetWithGear("explosives", [
+      {
+        id: "foam-explosives",
+        name: "Foam Explosives",
+        hasRating: true,
+        minRating: 6,
+        maxRating: 25,
+      },
+    ]);
+    // Rating 3 is below minRating 6
+    const character = makeCharacterWithGear([
+      { id: "foam-explosives", name: "Foam Explosives", rating: 3 },
+    ]);
+
+    const result = validateCharacter({
+      character,
+      ruleset,
+      creationMethod: equipmentRatingMethod,
+    });
+
+    const ratingErrors = result.errors.filter(
+      (e) => e.constraintId === "equipment-rating-range" && e.field?.includes("foam-explosives")
+    );
+    expect(ratingErrors.length).toBeGreaterThan(0);
+  });
+
+  it.each([
+    "electronics",
+    "tools",
+    "survival",
+    "medical",
+    "security",
+    "explosives",
+    "miscellaneous",
+    "ammunition",
+    "rfidTags",
+  ])("finds rated gear in %s subcategory", (subcategory) => {
+    const ruleset = makeRulesetWithGear(subcategory, [
+      {
+        id: `test-${subcategory}`,
+        name: `Test ${subcategory}`,
+        hasRating: true,
+        minRating: 1,
+        maxRating: 6,
+      },
+    ]);
+    const character = makeCharacterWithGear([
+      { id: `test-${subcategory}`, name: `Test ${subcategory}`, rating: 3 },
+    ]);
+
+    const result = validateCharacter({
+      character,
+      ruleset,
+      creationMethod: equipmentRatingMethod,
+    });
+
+    // No range errors = the item was found and validated successfully
+    const ratingErrors = result.errors.filter(
+      (e) => e.constraintId === "equipment-rating-range" && e.field?.includes(`test-${subcategory}`)
+    );
+    expect(ratingErrors).toHaveLength(0);
   });
 });
