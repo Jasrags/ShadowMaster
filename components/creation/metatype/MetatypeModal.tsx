@@ -6,6 +6,7 @@ import { Heading } from "react-aria-components";
 import { BaseModalRoot, ModalFooter } from "@/components/ui/BaseModal";
 import { METATYPE_DESCRIPTIONS } from "./constants";
 import type { MetatypeModalProps, MetatypeOption } from "./types";
+import { isShapeshifterMetatype } from "@/lib/rules/shapeshifter";
 
 /** Group label for base metatypes and metasapients */
 const BASE_METATYPE_LABELS: Record<string, string> = {
@@ -24,6 +25,7 @@ const FILTER_OPTIONS = [
   { id: "dwarf", label: "Dwarf" },
   { id: "ork", label: "Ork" },
   { id: "troll", label: "Troll" },
+  { id: "shapeshifter", label: "Shapeshifter" },
   { id: "sapient", label: "Sapient" },
 ] as const;
 
@@ -51,7 +53,7 @@ const ATTRIBUTE_ABBREVS: Record<string, string> = {
   resonance: "RES",
 };
 
-/** Group metatypes: base types first, then variants nested under parent, then metasapients */
+/** Group metatypes: base types first, then variants nested under parent, then shapeshifters, then metasapients */
 function groupMetatypes(metatypes: readonly MetatypeOption[]): readonly MetatypeGroup[] {
   const baseTypes = metatypes.filter((m) => !m.baseMetatype);
   const variants = metatypes.filter((m) => !!m.baseMetatype);
@@ -66,7 +68,17 @@ function groupMetatypes(metatypes: readonly MetatypeOption[]): readonly Metatype
     }
   }
 
-  const metasapients = baseTypes.filter((m) => !BASE_METATYPE_LABELS[m.id]);
+  // Separate shapeshifters from other metasapients
+  const shapeshifters = baseTypes.filter(
+    (m) => !BASE_METATYPE_LABELS[m.id] && isShapeshifterMetatype(m.id)
+  );
+  if (shapeshifters.length > 0) {
+    groups.push({ id: "shapeshifter", label: "Shapeshifters", metatypes: shapeshifters });
+  }
+
+  const metasapients = baseTypes.filter(
+    (m) => !BASE_METATYPE_LABELS[m.id] && !isShapeshifterMetatype(m.id)
+  );
   if (metasapients.length > 0) {
     groups.push({ id: "sapient", label: "Metasapients", metatypes: metasapients });
   }
@@ -76,6 +88,9 @@ function groupMetatypes(metatypes: readonly MetatypeOption[]): readonly Metatype
 
 /** Get the group id a metatype belongs to (for filtering) */
 function getMetatypeGroupId(metatype: MetatypeOption): string {
+  if (!metatype.baseMetatype && isShapeshifterMetatype(metatype.id)) {
+    return "shapeshifter";
+  }
   if (!metatype.baseMetatype && !BASE_METATYPE_LABELS[metatype.id]) {
     return "sapient";
   }
@@ -95,6 +110,12 @@ function getTypeBadge(metatype: MetatypeOption): { label: string; className: str
     return {
       label: `${parentLabel} Variant`,
       className: "bg-sky-100 text-sky-700 dark:bg-sky-900/60 dark:text-sky-300",
+    };
+  }
+  if (isShapeshifterMetatype(metatype.id)) {
+    return {
+      label: "Shapeshifter",
+      className: "bg-amber-100 text-amber-700 dark:bg-amber-900/60 dark:text-amber-300",
     };
   }
   return {
@@ -159,6 +180,15 @@ function MetatypeDetailPanel({
           </span>
         </div>
       </div>
+
+      {/* Shapeshifter info box */}
+      {isShapeshifterMetatype(metatype.id) && (
+        <div className="rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800 dark:border-amber-800/60 dark:bg-amber-900/20 dark:text-amber-300">
+          <span className="font-semibold">Dual-Form:</span> Shapeshifters have a natural animal
+          form and must select a metahuman form (Human, Dwarf, Elf, Ork, or Troll). They cannot
+          be Technomancers.
+        </div>
+      )}
 
       {/* Description */}
       {description && (

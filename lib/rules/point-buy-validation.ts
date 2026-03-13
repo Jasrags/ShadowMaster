@@ -65,6 +65,17 @@ export const POINT_BUY_METATYPE_COSTS: Readonly<Record<string, number>> = {
   naga: 25,
   pixie: 15,
   sasquatch: 20,
+  // Shapeshifters (Run Faster pp. 101-107)
+  "shapeshifter-bovine": 5,
+  "shapeshifter-canine": 10,
+  "shapeshifter-equine": 15,
+  "shapeshifter-falconine": 10,
+  "shapeshifter-leonine": 20,
+  "shapeshifter-lupine": 15,
+  "shapeshifter-pantherine": 25,
+  "shapeshifter-tigrine": 25,
+  "shapeshifter-ursine": 20,
+  "shapeshifter-vulpine": 5,
 };
 
 /**

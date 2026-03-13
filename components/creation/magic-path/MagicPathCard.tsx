@@ -38,6 +38,7 @@ import { calculatePositiveKarmaSpent, type QualitySelection } from "./utils";
 import { MagicPathModal } from "./MagicPathModal";
 import { useCreationMethod } from "@/lib/rules/RulesetContext";
 import type { MagicPathCardProps } from "./types";
+import { isShapeshifterMetatype } from "@/lib/rules/shapeshifter";
 
 export function MagicPathCard({ state, updateState }: MagicPathCardProps) {
   const magicPaths = useMagicPaths();
@@ -79,27 +80,39 @@ export function MagicPathCard({ state, updateState }: MagicPathCardProps) {
       (typeof q === "object" && q.id === MENTOR_SPIRIT_QUALITY_ID)
   );
 
+  // Check if selected metatype is a shapeshifter (technomancer blocked)
+  const selectedMetatype = state.selections.metatype as string | undefined;
+  const isShapeshifter = selectedMetatype ? isShapeshifterMetatype(selectedMetatype) : false;
+
   // Get available magic options based on priority or creation method
   const availableOptions = useMemo(() => {
+    let options: Array<{ path: string; magicRating?: number; resonanceRating?: number }>;
+
     // Life Modules: all magic paths available (magic rating from modules)
     if (isLifeModules) {
-      return magicPaths
+      options = magicPaths
         .filter((p) => p.id !== "mundane")
         .map((p) => ({
           path: p.id,
           magicRating: p.hasMagic ? 1 : undefined,
           resonanceRating: p.hasResonance ? 1 : undefined,
         }));
+    } else if (!magicPriority || !priorityTable?.table[magicPriority]) {
+      options = [];
+    } else {
+      const magicData = priorityTable.table[magicPriority].magic as {
+        options: Array<{ path: string; magicRating?: number; resonanceRating?: number }>;
+      };
+      options = magicData?.options || [];
     }
 
-    if (!magicPriority || !priorityTable?.table[magicPriority]) {
-      return [];
+    // Shapeshifters cannot be technomancers
+    if (isShapeshifter) {
+      return options.filter((o) => o.path !== "technomancer");
     }
-    const magicData = priorityTable.table[magicPriority].magic as {
-      options: Array<{ path: string; magicRating?: number; resonanceRating?: number }>;
-    };
-    return magicData?.options || [];
-  }, [isLifeModules, magicPaths, magicPriority, priorityTable]);
+
+    return options;
+  }, [isLifeModules, isShapeshifter, magicPaths, magicPriority, priorityTable]);
 
   // Get selected path's rating and free skills
   const selectedOption = useMemo(() => {
