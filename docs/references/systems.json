@@ -1,0 +1,47 @@
+{
+  "gear": {
+    "description": "Weapons, armor, ammunition, electronics, tools, survival gear, medical supplies",
+    "prefixes": ["modules.gear", "modules.modifications"]
+  },
+  "matrix": {
+    "description": "Programs, cyberdecks, commlinks, RFIDs",
+    "prefixes": [
+      "modules.programs",
+      "modules.gear.payload.cyberdecks",
+      "modules.gear.payload.commlinks",
+      "modules.gear.payload.rfidTags"
+    ]
+  },
+  "vehicles": {
+    "description": "Vehicles, drones, vehicle mods, autosofts, RCCs",
+    "prefixes": ["modules.vehicles", "modules.modifications.payload.vehicleMods"]
+  },
+  "magic": {
+    "description": "Spells, complex forms, foci, mentor spirits, traditions",
+    "prefixes": ["modules.magic", "modules.foci"]
+  },
+  "combat": {
+    "description": "Combat rules, damage types, combat actions",
+    "prefixes": ["modules.combat"]
+  },
+  "qualities": {
+    "description": "Positive and negative qualities",
+    "prefixes": ["modules.qualities"]
+  },
+  "skills": {
+    "description": "Active skills, skill groups, knowledge skills",
+    "prefixes": ["modules.skills"]
+  },
+  "cyberware": {
+    "description": "Cyberware and bioware augmentations",
+    "prefixes": ["modules.cyberware", "modules.bioware"]
+  },
+  "critters": {
+    "description": "Critters, critter powers, critter weaknesses",
+    "prefixes": ["modules.critters", "modules.critterPowers", "modules.critterWeaknesses"]
+  },
+  "character": {
+    "description": "Metatypes, lifestyles, character creation options",
+    "prefixes": ["modules.metatypes", "modules.lifestyle"]
+  }
+}
