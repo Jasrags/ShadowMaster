@@ -1,0 +1,389 @@
+{
+  "referenceFile": "docs/references/sr5-core-rulebook/street-gear-electronics-cyber.json",
+  "dataFile": "data/editions/sr5/core-rulebook.json",
+  "description": "Maps electronics/cyber reference tables to core-rulebook.json data",
+  "mappings": [
+    {
+      "referenceTable": "commlinks",
+      "dataPath": ["modules", "gear", "payload", "commlinks"],
+      "matchField": "name",
+      "fieldMap": {
+        "model": "name",
+        "device_rating": "deviceRating",
+        "avail": "availability",
+        "cost": "cost"
+      },
+      "requiredDataFields": ["deviceRating", "availability", "cost"]
+    },
+    {
+      "referenceTable": "cyberdecks",
+      "dataPath": ["modules", "gear", "payload", "cyberdecks"],
+      "matchField": "name",
+      "fieldMap": {
+        "deck": "name",
+        "device_rating": "deviceRating",
+        "attribute_array": "attributes",
+        "programs": "programs",
+        "avail": "availability",
+        "cost": "cost"
+      },
+      "requiredDataFields": [
+        "deviceRating",
+        "attributes",
+        "programs",
+        "availability",
+        "cost",
+        "legality"
+      ]
+    },
+    {
+      "referenceTable": "electronics-accessories",
+      "dataPath": ["modules", "gear", "payload", "accessories"],
+      "matchField": "name",
+      "fieldMap": {
+        "accessory": "name",
+        "device_rating": "deviceRating",
+        "avail": "availability",
+        "cost": "cost"
+      },
+      "requiredDataFields": ["availability", "cost"]
+    },
+    {
+      "referenceTable": "rfid-tags",
+      "dataPath": ["modules", "gear", "payload", "rfidTags"],
+      "matchField": "name",
+      "fieldMap": {
+        "tag_type": "name",
+        "device_rating": "deviceRating",
+        "avail": "availability",
+        "cost_per_10": "cost"
+      },
+      "requiredDataFields": ["deviceRating", "cost"]
+    },
+    {
+      "referenceTable": "communications",
+      "dataPath": ["modules", "gear", "payload", "electronics"],
+      "matchField": "name",
+      "fieldMap": {
+        "device": "name",
+        "avail": "availability",
+        "cost": "cost"
+      },
+      "requiredDataFields": ["availability", "cost"],
+      "notes": "Communications devices (bug scanners, jammers, micro-transceivers, etc.) are stored in the electronics array"
+    },
+    {
+      "referenceTable": "credsticks",
+      "dataPath": ["modules", "gear", "payload", "miscellaneous"],
+      "matchField": "name",
+      "fieldMap": {
+        "type": "name",
+        "max_value": "maxValue",
+        "avail": "availability",
+        "cost": "cost"
+      },
+      "requiredDataFields": ["cost"],
+      "notes": "Credstick items have category 'credsticks' within the miscellaneous array"
+    },
+    {
+      "referenceTable": "identification",
+      "dataPath": ["modules", "gear", "payload", "miscellaneous"],
+      "matchField": "name",
+      "fieldMap": {
+        "type": "name",
+        "avail": "availability",
+        "cost": "cost"
+      },
+      "requiredDataFields": ["availability", "cost"],
+      "notes": "Identification items (Fake SIN, Fake License) have category 'identification' within the miscellaneous array"
+    },
+    {
+      "referenceTable": "tools",
+      "dataPath": ["modules", "gear", "payload", "tools"],
+      "matchField": "name",
+      "fieldMap": {
+        "type": "name",
+        "avail": "availability",
+        "cost": "cost"
+      },
+      "requiredDataFields": ["availability", "cost"]
+    },
+    {
+      "referenceTable": "optical-imaging-devices",
+      "dataPath": ["modules", "gear", "payload", "electronics"],
+      "matchField": "name",
+      "fieldMap": {
+        "device": "name",
+        "avail": "availability",
+        "cost": "cost"
+      },
+      "requiredDataFields": ["availability", "cost"],
+      "notes": "Optical imaging devices (binoculars, goggles, contacts, glasses, etc.) are stored in the electronics array"
+    },
+    {
+      "referenceTable": "vision-enhancements",
+      "dataPath": ["modules", "gear", "payload", "visionEnhancements"],
+      "matchField": "name",
+      "fieldMap": {
+        "enhancement": "name",
+        "capacity": "capacityCost",
+        "avail": "availability",
+        "cost": "cost"
+      },
+      "requiredDataFields": ["capacityCost", "availability", "cost"]
+    },
+    {
+      "referenceTable": "audio-devices",
+      "dataPath": ["modules", "gear", "payload", "electronics"],
+      "matchField": "name",
+      "fieldMap": {
+        "device": "name",
+        "avail": "availability",
+        "cost": "cost"
+      },
+      "requiredDataFields": ["availability", "cost"],
+      "notes": "Audio devices (directional mic, headphones, laser microphone, etc.) are stored in the electronics array"
+    },
+    {
+      "referenceTable": "audio-enhancements",
+      "dataPath": ["modules", "gear", "payload", "audioEnhancements"],
+      "matchField": "name",
+      "fieldMap": {
+        "enhancement": "name",
+        "capacity": "capacityCost",
+        "avail": "availability",
+        "cost": "cost"
+      },
+      "requiredDataFields": ["availability", "cost"]
+    },
+    {
+      "referenceTable": "sensors",
+      "dataPath": ["modules", "gear", "payload", "sensors", "housings"],
+      "matchField": "name",
+      "fieldMap": {
+        "device": "name",
+        "capacity": "capacity",
+        "avail": "availability",
+        "cost": "cost"
+      },
+      "requiredDataFields": ["availability", "cost"]
+    },
+    {
+      "referenceTable": "security-and-restraints",
+      "dataPath": ["modules", "gear", "payload", "securityDevices"],
+      "matchField": "name",
+      "fieldMap": {
+        "device": "name",
+        "avail": "availability",
+        "cost": "cost"
+      },
+      "requiredDataFields": ["availability", "cost"],
+      "notes": "Covers security devices (locks, maglocks, etc.); restraints are in a separate restraints array"
+    },
+    {
+      "referenceTable": "be-gear",
+      "dataPath": ["modules", "gear", "payload", "tools"],
+      "matchField": "name",
+      "fieldMap": {
+        "gear": "name",
+        "avail": "availability",
+        "cost": "cost"
+      },
+      "requiredDataFields": ["availability", "cost"],
+      "notes": "Breaking & entering gear (autopicker, sequencer, maglock passkey, etc.) is stored in the tools array"
+    },
+    {
+      "referenceTable": "industrial-chemicals",
+      "dataPath": ["modules", "gear", "payload", "industrialChemicals"],
+      "matchField": "name",
+      "fieldMap": {
+        "chemical": "name",
+        "avail": "availability",
+        "cost": "cost"
+      },
+      "requiredDataFields": ["availability", "cost"]
+    },
+    {
+      "referenceTable": "survival-gear",
+      "dataPath": ["modules", "gear", "payload", "survival"],
+      "matchField": "name",
+      "fieldMap": {
+        "gear": "name",
+        "avail": "availability",
+        "cost": "cost"
+      },
+      "requiredDataFields": ["availability", "cost"]
+    },
+    {
+      "referenceTable": "grapple-gun",
+      "dataPath": ["modules", "gear", "payload", "survival"],
+      "matchField": "name",
+      "fieldMap": {
+        "gear": "name",
+        "avail": "availability",
+        "cost": "cost"
+      },
+      "requiredDataFields": ["availability", "cost"],
+      "notes": "Grapple gun and accessories are stored in the survival array"
+    },
+    {
+      "referenceTable": "biotech",
+      "dataPath": ["modules", "gear", "payload", "medical"],
+      "matchField": "name",
+      "fieldMap": {
+        "device": "name",
+        "avail": "availability",
+        "cost": "cost"
+      },
+      "requiredDataFields": ["availability", "cost"],
+      "notes": "Biotech items (biomonitor, medkit, DocWagon contracts) are in the medical array"
+    },
+    {
+      "referenceTable": "slap-patches",
+      "dataPath": ["modules", "gear", "payload", "medical"],
+      "matchField": "name",
+      "fieldMap": {
+        "patch": "name",
+        "avail": "availability",
+        "cost": "cost"
+      },
+      "requiredDataFields": ["availability", "cost"]
+    },
+    {
+      "referenceTable": "ware-grades",
+      "dataPath": ["modules", "cyberware", "payload", "grades"],
+      "matchField": "name",
+      "fieldMap": {
+        "grade": "name",
+        "ess_cost_multiplier": "essenceMultiplier",
+        "avail_modifier": "availabilityModifier",
+        "cost_multiplier": "costMultiplier"
+      },
+      "requiredDataFields": ["essenceMultiplier", "availabilityModifier", "costMultiplier"]
+    },
+    {
+      "referenceTable": "headware",
+      "dataPath": ["modules", "cyberware", "payload", "catalog"],
+      "matchField": "name",
+      "fieldMap": {
+        "device": "name",
+        "essence": "essenceCost",
+        "capacity": "capacity",
+        "avail": "availability",
+        "cost": "cost"
+      },
+      "requiredDataFields": ["essenceCost", "availability", "cost"],
+      "notes": "Headware items have category 'headware' in the cyberware catalog"
+    },
+    {
+      "referenceTable": "eyeware",
+      "dataPath": ["modules", "cyberware", "payload", "catalog"],
+      "matchField": "name",
+      "fieldMap": {
+        "device": "name",
+        "essence": "essenceCost",
+        "capacity": "capacity",
+        "avail": "availability",
+        "cost": "cost"
+      },
+      "requiredDataFields": ["essenceCost", "availability", "cost"],
+      "notes": "Eyeware items have category 'eyeware' in the cyberware catalog"
+    },
+    {
+      "referenceTable": "earware",
+      "dataPath": ["modules", "cyberware", "payload", "catalog"],
+      "matchField": "name",
+      "fieldMap": {
+        "device": "name",
+        "essence": "essenceCost",
+        "capacity": "capacity",
+        "avail": "availability",
+        "cost": "cost"
+      },
+      "requiredDataFields": ["essenceCost", "availability", "cost"],
+      "notes": "Earware items have category 'earware' in the cyberware catalog"
+    },
+    {
+      "referenceTable": "bodyware",
+      "dataPath": ["modules", "cyberware", "payload", "catalog"],
+      "matchField": "name",
+      "fieldMap": {
+        "device": "name",
+        "essence": "essenceCost",
+        "capacity": "capacity",
+        "avail": "availability",
+        "cost": "cost"
+      },
+      "requiredDataFields": ["essenceCost", "availability", "cost"],
+      "notes": "Bodyware items have category 'bodyware' in the cyberware catalog"
+    },
+    {
+      "referenceTable": "cyberlimbs",
+      "dataPath": ["modules", "cyberware", "payload", "catalog"],
+      "matchField": "name",
+      "fieldMap": {
+        "limb_type": "name",
+        "essence": "essenceCost",
+        "capacity": "capacity",
+        "avail": "availability",
+        "cost": "cost"
+      },
+      "requiredDataFields": ["essenceCost", "capacity", "availability", "cost"],
+      "notes": "Cyberlimb items have category 'cyberlimb' in the cyberware catalog"
+    },
+    {
+      "referenceTable": "cyberlimb-enhancements",
+      "dataPath": ["modules", "cyberware", "payload", "catalog"],
+      "matchField": "name",
+      "fieldMap": {
+        "enhancement": "name",
+        "essence": "essenceCost",
+        "capacity": "capacityCost",
+        "avail": "availability",
+        "cost": "cost"
+      },
+      "requiredDataFields": ["capacityCost", "availability", "cost"],
+      "notes": "Cyberlimb enhancements have category 'cyberlimb-enhancement' in the cyberware catalog"
+    },
+    {
+      "referenceTable": "cyberlimb-accessories",
+      "dataPath": ["modules", "cyberware", "payload", "catalog"],
+      "matchField": "name",
+      "fieldMap": {
+        "accessory": "name",
+        "essence": "essenceCost",
+        "capacity": "capacityCost",
+        "avail": "availability",
+        "cost": "cost"
+      },
+      "requiredDataFields": ["capacityCost", "availability", "cost"],
+      "notes": "Cyberlimb accessories have category 'cyberlimb-accessory' in the cyberware catalog"
+    },
+    {
+      "referenceTable": "bioware",
+      "dataPath": ["modules", "bioware", "payload", "catalog"],
+      "matchField": "name",
+      "fieldMap": {
+        "device": "name",
+        "essence": "essenceCost",
+        "avail": "availability",
+        "cost": "cost"
+      },
+      "requiredDataFields": ["essenceCost", "availability", "cost"],
+      "notes": "Basic bioware items have category 'basic' in the bioware catalog"
+    },
+    {
+      "referenceTable": "cultured-bioware",
+      "dataPath": ["modules", "bioware", "payload", "catalog"],
+      "matchField": "name",
+      "fieldMap": {
+        "device": "name",
+        "essence": "essenceCost",
+        "avail": "availability",
+        "cost": "cost"
+      },
+      "requiredDataFields": ["essenceCost", "availability", "cost"],
+      "notes": "Cultured bioware items have category 'cultured' in the bioware catalog"
+    }
+  ]
+}

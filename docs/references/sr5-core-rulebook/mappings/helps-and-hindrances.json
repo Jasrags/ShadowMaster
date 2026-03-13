@@ -1,0 +1,155 @@
+{
+  "referenceFile": "docs/references/sr5-core-rulebook/helps-and-hindrances.json",
+  "dataFile": "data/editions/sr5/core-rulebook.json",
+  "description": "Maps helps-and-hindrances reference tables to core-rulebook.json data for critters, critter powers/weaknesses, toxins, drugs, and addiction stats",
+  "mappings": [
+    {
+      "referenceTable": "critter-powers",
+      "dataPath": ["modules", "critterPowers", "payload", "powers"],
+      "matchField": "name",
+      "fieldMap": {
+        "type": "type",
+        "action": "action",
+        "range": "range",
+        "duration": "duration"
+      },
+      "requiredDataFields": ["type", "action", "range", "duration", "description"]
+    },
+    {
+      "referenceTable": "critter-weaknesses",
+      "dataPath": ["modules", "critterWeaknesses", "payload", "weaknesses"],
+      "matchField": "name",
+      "fieldMap": {
+        "weakness": "name",
+        "mechanic": "description"
+      },
+      "requiredDataFields": ["name", "description"]
+    },
+    {
+      "referenceTable": "mundane-critters",
+      "dataPath": ["modules", "critters", "payload", "critters"],
+      "matchField": "name",
+      "filterField": "type",
+      "filterValue": "mundane",
+      "fieldMap": {
+        "B": "attributes.body",
+        "A": "attributes.agility",
+        "R": "attributes.reaction",
+        "S": "attributes.strength",
+        "W": "attributes.willpower",
+        "L": "attributes.logic",
+        "I": "attributes.intuition",
+        "C": "attributes.charisma",
+        "ESS": "attributes.essence",
+        "Initiative": "initiative",
+        "conditionMonitor": "conditionMonitor",
+        "limits": "limits",
+        "armor": "armor",
+        "skills": "skills",
+        "powers": "powers"
+      },
+      "requiredDataFields": [
+        "attributes",
+        "initiative",
+        "conditionMonitor",
+        "limits",
+        "armor",
+        "skills",
+        "powers"
+      ]
+    },
+    {
+      "referenceTable": "paracritters",
+      "dataPath": ["modules", "critters", "payload", "critters"],
+      "matchField": "name",
+      "filterField": "type",
+      "filterValue": "para",
+      "fieldMap": {
+        "B": "attributes.body",
+        "A": "attributes.agility",
+        "R": "attributes.reaction",
+        "S": "attributes.strength",
+        "W": "attributes.willpower",
+        "L": "attributes.logic",
+        "I": "attributes.intuition",
+        "C": "attributes.charisma",
+        "ESS": "attributes.essence",
+        "M": "attributes.magic",
+        "Initiative": "initiative",
+        "conditionMonitor": "conditionMonitor",
+        "limits": "limits",
+        "armor": "armor",
+        "skills": "skills",
+        "powers": "powers",
+        "weaknesses": "weaknesses"
+      },
+      "requiredDataFields": [
+        "attributes",
+        "initiative",
+        "conditionMonitor",
+        "limits",
+        "armor",
+        "skills",
+        "powers"
+      ]
+    },
+    {
+      "referenceTable": "toxin-stats",
+      "dataPath": ["modules", "gear", "payload", "toxins"],
+      "matchField": "name",
+      "fieldMap": {
+        "vector": "vector",
+        "speed": "speed",
+        "penetration": "penetration",
+        "power": "power",
+        "effect": "effects"
+      },
+      "requiredDataFields": ["vector", "speed", "penetration", "power", "effects"]
+    },
+    {
+      "referenceTable": "toxin-costs",
+      "dataPath": ["modules", "gear", "payload", "toxins"],
+      "matchField": "name",
+      "fieldMap": {
+        "availability": "availability",
+        "costPerDose": "cost"
+      },
+      "requiredDataFields": ["availability", "cost", "legality"]
+    },
+    {
+      "referenceTable": "drug-stats",
+      "dataPath": ["modules", "gear", "payload", "drugs"],
+      "matchField": "name",
+      "fieldMap": {
+        "vector": "vector",
+        "speed": "speed",
+        "durationFormula": "duration",
+        "addictionType": "addictionType",
+        "effect": "effects.active",
+        "crashEffect": "effects.crash"
+      },
+      "requiredDataFields": ["vector", "speed", "duration", "addictionType", "effects"]
+    },
+    {
+      "referenceTable": "drug-costs",
+      "dataPath": ["modules", "gear", "payload", "drugs"],
+      "matchField": "name",
+      "fieldMap": {
+        "availability": "availability",
+        "costPerDose": "cost"
+      },
+      "requiredDataFields": ["availability", "cost", "legality"]
+    },
+    {
+      "referenceTable": "addiction-table",
+      "dataPath": ["modules", "gear", "payload", "drugs"],
+      "matchField": "name",
+      "fieldMap": {
+        "addictionRating": "addictionRating",
+        "addictionThreshold": "addictionThreshold",
+        "addictionType": "addictionType"
+      },
+      "requiredDataFields": ["addictionRating", "addictionThreshold", "addictionType"]
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "referenceFile": "docs/references/sr5-run-faster/positive-qualities.json",
+  "dataFile": "data/editions/sr5/run-faster.json",
+  "description": "Maps Run Faster positive qualities reference table to run-faster.json data",
+  "mappings": [
+    {
+      "referenceTable": "qualities-catalog",
+      "dataPath": ["modules", "qualities", "payload", "positive"],
+      "matchField": "name",
+      "notes": "Most qualities match by name directly. 'Fame (Local/National/Megacorporate/Global)' in the reference are four separate rows but map to a single 'fame' entry in data using hasRating/ratings structure (rating 1=Local 4K, 2=National 8K, 3=Megacorporate 12K, 4=Global 16K). 'Jack of All Trades, Master of None' in the reference maps to 'Jack of All Trades' (id: jack-of-all-trades) in data. 'Solid/Legendary Rep' maps to id: solid-rep. The reference karma field is a string for tiered costs (e.g. '5 or 10', '10 per rating') while data uses karmaCost (integer) for fixed-cost qualities or hasRating/ratings for tiered ones.",
+      "fieldMap": {
+        "name": "name",
+        "karma": "karmaCost",
+        "description": "summary",
+        "restrictions": null
+      },
+      "requiredDataFields": ["id", "name", "karmaCost", "source"],
+      "unmappedReferenceRows": [
+        {
+          "referenceName": "Fame (Local)",
+          "dataId": "fame",
+          "dataRatingKey": "1",
+          "note": "Reference row for Local Fame maps to data entry id 'fame' at ratings.1 (karmaCost: 4)"
+        },
+        {
+          "referenceName": "Fame (National)",
+          "dataId": "fame",
+          "dataRatingKey": "2",
+          "note": "Reference row for National Fame maps to data entry id 'fame' at ratings.2 (karmaCost: 8)"
+        },
+        {
+          "referenceName": "Fame (Megacorporate)",
+          "dataId": "fame",
+          "dataRatingKey": "3",
+          "note": "Reference row for Megacorporate Fame maps to data entry id 'fame' at ratings.3 (karmaCost: 12)"
+        },
+        {
+          "referenceName": "Fame (Global)",
+          "dataId": "fame",
+          "dataRatingKey": "4",
+          "note": "Reference row for Global Fame maps to data entry id 'fame' at ratings.4 (karmaCost: 16)"
+        },
+        {
+          "referenceName": "Jack of All Trades, Master of None",
+          "dataId": "jack-of-all-trades",
+          "note": "Reference name includes ', Master of None' suffix; data entry uses shorter name 'Jack of All Trades'"
+        }
+      ]
+    }
+  ]
+}
