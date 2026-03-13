@@ -20,6 +20,8 @@ import { CreationCard } from "../shared";
 import { Lock, ChevronRight } from "lucide-react";
 import { MetatypeModal } from "./MetatypeModal";
 import { POINT_BUY_METATYPE_COSTS } from "@/lib/rules/point-buy-validation";
+import { isShapeshifterMetatype } from "@/lib/rules/shapeshifter";
+import { ShapeshifterMetahumanFormSelector } from "./ShapeshifterMetahumanFormSelector";
 import type { MetatypeCardProps, MetatypeOption } from "./types";
 
 export function MetatypeCard({ state, updateState }: MetatypeCardProps) {
@@ -106,21 +108,43 @@ export function MetatypeCard({ state, updateState }: MetatypeCardProps) {
     return availableMetatypes.find((m) => m.id === selectedMetatype);
   }, [availableMetatypes, selectedMetatype]);
 
+  // Whether the currently selected metatype is a shapeshifter
+  const isShapeshifter = selectedMetatype ? isShapeshifterMetatype(selectedMetatype) : false;
+  const selectedMetahumanForm = state.selections.shapeshifterMetahumanForm as string | undefined;
+
   // Handle metatype selection
   const handleSelect = useCallback(
     (metatypeId: string) => {
       const meta = metatypes.find((m) => m.id === metatypeId);
       const racialTraits = meta?.racialTraits || [];
 
+      const newSelections: Record<string, unknown> = {
+        ...state.selections,
+        metatype: metatypeId,
+        racialQualities: racialTraits,
+      };
+
+      // Clear shapeshifter metahuman form when switching away from a shapeshifter
+      if (!isShapeshifterMetatype(metatypeId)) {
+        delete newSelections.shapeshifterMetahumanForm;
+      }
+
+      updateState({ selections: newSelections });
+    },
+    [metatypes, state.selections, updateState]
+  );
+
+  // Handle shapeshifter metahuman form selection
+  const handleMetahumanFormSelect = useCallback(
+    (formId: string) => {
       updateState({
         selections: {
           ...state.selections,
-          metatype: metatypeId,
-          racialQualities: racialTraits,
+          shapeshifterMetahumanForm: formId,
         },
       });
     },
-    [metatypes, state.selections, updateState]
+    [state.selections, updateState]
   );
 
   // Get validation status
@@ -236,6 +260,14 @@ export function MetatypeCard({ state, updateState }: MetatypeCardProps) {
                     ))}
                   </ul>
                 </div>
+              )}
+
+              {/* Shapeshifter Metahuman Form Selector */}
+              {isShapeshifter && (
+                <ShapeshifterMetahumanFormSelector
+                  selectedForm={selectedMetahumanForm}
+                  onSelectForm={handleMetahumanFormSelect}
+                />
               )}
             </div>
           ) : (

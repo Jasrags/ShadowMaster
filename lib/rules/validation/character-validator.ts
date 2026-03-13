@@ -68,6 +68,7 @@ import { isGradeAvailableAtCreation, applyGradeToAvailability } from "../augment
 import { isCyberlimb } from "@/lib/types/cyberlimb";
 import { CREATION_CONSTRAINTS } from "../gear/validation";
 import type { ArmorItem } from "@/lib/types";
+import { shapeshifterValidator } from "./shapeshifter-validator";
 
 // =============================================================================
 // CONSTANTS
@@ -2409,6 +2410,7 @@ const karmaBudgetValidator: ValidatorDefinition = {
 const validators: ValidatorDefinition[] = [
   priorityConsistencyValidator,
   basicInfoValidator,
+  shapeshifterValidator,
   duplicateCharacterNameValidator,
   attributeValidator,
   identityValidator,

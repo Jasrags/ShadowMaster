@@ -68,6 +68,8 @@ export interface CharacterInfoSelections {
  */
 export interface MetatypeSelections {
   metatype?: string;
+  /** Selected metahuman form for shapeshifter species (human, dwarf, elf, ork, troll) */
+  shapeshifterMetahumanForm?: string;
 }
 
 /**
