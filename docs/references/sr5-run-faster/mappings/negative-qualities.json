@@ -1,0 +1,105 @@
+{
+  "referenceFile": "docs/references/sr5-run-faster/negative-qualities.json",
+  "dataFile": "data/editions/sr5/run-faster.json",
+  "description": "Maps Run Faster negative qualities reference table to run-faster.json data",
+  "mappings": [
+    {
+      "referenceTable": "qualities-catalog",
+      "dataPath": ["modules", "qualities", "payload", "negative"],
+      "matchField": "name",
+      "notes": "Most qualities match by name directly. Several reference rows are consolidated into single rated entries in data: 'Amnesia (Surface Loss)' and 'Amnesia (Neural Deletion)' map to id 'amnesia' (ratings 1 and 2 respectively). 'Poor Self Control (Braggart/Thrill-Seeker/Compulsive/Vindictive/Combat Monster)' all map to id 'poor-self-control' using requiresSpecification. 'Reduced (Smell/Taste/Hearing/Sight/Astral Sight/Touch)' all map to id 'reduced-sense' using requiresSpecification. 'Pie Iesu Domine. Dona Eis Requiem.' maps to id 'pie-iesu-domine' (data uses shorter name). The reference karma field is a string for tiered/formula costs while data uses karmaBonus (integer) for fixed-bonus qualities or hasRating/ratings for tiered ones.",
+      "fieldMap": {
+        "name": "name",
+        "karma": "karmaBonus",
+        "description": "summary",
+        "restrictions": null
+      },
+      "requiredDataFields": ["id", "name", "source"],
+      "unmappedReferenceRows": [
+        {
+          "referenceName": "Amnesia (Surface Loss)",
+          "dataId": "amnesia",
+          "dataRatingKey": "1",
+          "note": "Maps to data entry id 'amnesia' at ratings.1 (karmaCost: 4, name: 'Partial')"
+        },
+        {
+          "referenceName": "Amnesia (Neural Deletion)",
+          "dataId": "amnesia",
+          "dataRatingKey": "2",
+          "note": "Maps to data entry id 'amnesia' at ratings.2 (karmaCost: 8, name: 'Total')"
+        },
+        {
+          "referenceName": "Pie Iesu Domine. Dona Eis Requiem.",
+          "dataId": "pie-iesu-domine",
+          "note": "Reference name includes full Latin phrase with trailing period; data uses shorter name 'Pie Iesu Domine'"
+        },
+        {
+          "referenceName": "Poor Self Control (Braggart)",
+          "dataId": "poor-self-control",
+          "specificationOption": "Braggart",
+          "note": "Reference has separate row; data consolidates all Poor Self Control sub-types into one entry with requiresSpecification"
+        },
+        {
+          "referenceName": "Poor Self Control (Thrill-Seeker)",
+          "dataId": "poor-self-control",
+          "specificationOption": "Thrill Seeker",
+          "note": "Reference has separate row; data consolidates all Poor Self Control sub-types into one entry with requiresSpecification"
+        },
+        {
+          "referenceName": "Poor Self Control (Compulsive)",
+          "dataId": "poor-self-control",
+          "specificationOption": "Compulsive (Specific)",
+          "note": "Reference has separate row; data consolidates all Poor Self Control sub-types into one entry with requiresSpecification"
+        },
+        {
+          "referenceName": "Poor Self Control (Vindictive)",
+          "dataId": "poor-self-control",
+          "specificationOption": "Vindictive",
+          "note": "Reference has separate row; data consolidates all Poor Self Control sub-types into one entry with requiresSpecification"
+        },
+        {
+          "referenceName": "Poor Self Control (Combat Monster)",
+          "dataId": "poor-self-control",
+          "specificationOption": "Combat Monster",
+          "note": "Reference has separate row; data consolidates all Poor Self Control sub-types into one entry with requiresSpecification"
+        },
+        {
+          "referenceName": "Reduced (Smell)",
+          "dataId": "reduced-sense",
+          "specificationOption": "Smell",
+          "note": "Reference has separate row per sense; data consolidates into one 'reduced-sense' entry with requiresSpecification"
+        },
+        {
+          "referenceName": "Reduced (Taste)",
+          "dataId": "reduced-sense",
+          "specificationOption": "Taste",
+          "note": "Reference has separate row per sense; data consolidates into one 'reduced-sense' entry with requiresSpecification"
+        },
+        {
+          "referenceName": "Reduced (Hearing)",
+          "dataId": "reduced-sense",
+          "specificationOption": "Hearing",
+          "note": "Reference has separate row per sense; data consolidates into one 'reduced-sense' entry with requiresSpecification"
+        },
+        {
+          "referenceName": "Reduced (Sight)",
+          "dataId": "reduced-sense",
+          "specificationOption": "Sight",
+          "note": "Reference has separate row per sense; data consolidates into one 'reduced-sense' entry with requiresSpecification"
+        },
+        {
+          "referenceName": "Reduced (Astral Sight)",
+          "dataId": "reduced-sense",
+          "specificationOption": null,
+          "note": "Reference lists Astral Sight as a separate sense; data specificationOptions only lists Hearing/Sight/Smell/Taste/Touch — Astral Sight is not currently represented in data"
+        },
+        {
+          "referenceName": "Reduced (Touch)",
+          "dataId": "reduced-sense",
+          "specificationOption": "Touch",
+          "note": "Reference has separate row per sense; data consolidates into one 'reduced-sense' entry with requiresSpecification"
+        }
+      ]
+    }
+  ]
+}

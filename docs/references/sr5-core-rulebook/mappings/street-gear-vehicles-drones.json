@@ -1,0 +1,143 @@
+{
+  "referenceFile": "docs/references/sr5-core-rulebook/street-gear-vehicles-drones.json",
+  "dataFile": "data/editions/sr5/core-rulebook.json",
+  "description": "Maps vehicle/drone reference tables to core-rulebook.json data",
+  "mappings": [
+    {
+      "referenceTable": "groundcraft",
+      "dataPath": ["modules", "vehicles", "payload", "groundcraft"],
+      "matchField": "name",
+      "notes": "Handling is a nested object in data (handling.onRoad / handling.offRoad); reference exposes as handlingOnRoad / handlingOffRoad. accel in reference maps to acceleration in data.",
+      "fieldMap": {
+        "handlingOnRoad": "handling.onRoad",
+        "handlingOffRoad": "handling.offRoad",
+        "speedOnRoad": "speed",
+        "accel": "acceleration",
+        "body": "body",
+        "armor": "armor",
+        "pilot": "pilot",
+        "sensor": "sensor",
+        "seats": "seats",
+        "avail": "availability",
+        "cost": "cost"
+      },
+      "requiredDataFields": [
+        "handling",
+        "speed",
+        "acceleration",
+        "body",
+        "armor",
+        "pilot",
+        "sensor",
+        "seats",
+        "availability",
+        "cost"
+      ]
+    },
+    {
+      "referenceTable": "watercraft",
+      "dataPath": ["modules", "vehicles", "payload", "watercraft"],
+      "matchField": "name",
+      "notes": "Watercraft use a single handling value (no on/off road split). accel in reference maps to acceleration in data.",
+      "fieldMap": {
+        "handling": "handling",
+        "speed": "speed",
+        "accel": "acceleration",
+        "body": "body",
+        "armor": "armor",
+        "pilot": "pilot",
+        "sensor": "sensor",
+        "seats": "seats",
+        "avail": "availability",
+        "cost": "cost"
+      },
+      "requiredDataFields": [
+        "handling",
+        "speed",
+        "acceleration",
+        "body",
+        "armor",
+        "pilot",
+        "sensor",
+        "seats",
+        "availability",
+        "cost"
+      ]
+    },
+    {
+      "referenceTable": "aircraft",
+      "dataPath": ["modules", "vehicles", "payload", "aircraft"],
+      "matchField": "name",
+      "notes": "Aircraft use a single handling value. Reference type field (fixed-wing, rotorcraft, vtol, vstol) maps to category in data. accel in reference maps to acceleration in data.",
+      "fieldMap": {
+        "type": "category",
+        "handling": "handling",
+        "speed": "speed",
+        "accel": "acceleration",
+        "body": "body",
+        "armor": "armor",
+        "pilot": "pilot",
+        "sensor": "sensor",
+        "seats": "seats",
+        "avail": "availability",
+        "cost": "cost"
+      },
+      "requiredDataFields": [
+        "category",
+        "handling",
+        "speed",
+        "acceleration",
+        "body",
+        "armor",
+        "pilot",
+        "sensor",
+        "seats",
+        "availability",
+        "cost"
+      ]
+    },
+    {
+      "referenceTable": "drones",
+      "dataPath": ["modules", "vehicles", "payload", "drones"],
+      "matchField": "name",
+      "notes": "Reference size values (microdrone, minidrone, small, medium, large) may differ from data size values (micro, mini, small, medium, large). Reference pilotSkill is informational. accel maps to acceleration.",
+      "fieldMap": {
+        "size": "size",
+        "handling": "handling",
+        "speed": "speed",
+        "accel": "acceleration",
+        "body": "body",
+        "armor": "armor",
+        "pilot": "pilot",
+        "sensor": "sensor",
+        "avail": "availability",
+        "cost": "cost"
+      },
+      "requiredDataFields": [
+        "size",
+        "handling",
+        "speed",
+        "acceleration",
+        "body",
+        "armor",
+        "pilot",
+        "sensor",
+        "availability",
+        "cost"
+      ]
+    },
+    {
+      "referenceTable": "vehicle-modifications",
+      "dataPath": ["modules", "modifications", "payload", "vehicleMods"],
+      "matchField": "name",
+      "notes": "Reference uses 'modification' as the display name field; data uses 'name'. The Manual Operation entry in the reference has avail '+1' (a modifier string); data represents this as availabilityModifier: true.",
+      "fieldMap": {
+        "modification": "name",
+        "avail": "availability",
+        "cost": "cost",
+        "droneCompatible": "droneCompatible"
+      },
+      "requiredDataFields": ["availability", "cost"]
+    }
+  ]
+}

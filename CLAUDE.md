@@ -21,6 +21,7 @@ pnpm check            # Combined lint + type-check + knip
 pnpm format           # Prettier formatting
 pnpm knip             # Dead code detection
 pnpm verify-data      # Validate JSON data files
+pnpm verify-reference # Compare reference extractions against edition data
 pnpm docker:dev       # Build and start Docker containers
 ```
 
@@ -107,6 +108,7 @@ Use skills for detailed domain knowledge (loaded on demand, not every session):
 - `/mcp-guide` - MCP server selection and usage
 - `/github-issues` - GitHub issue management (epics, sub-issues, milestones)
 - `/extract-rulebook` - Extract entire sourcebooks into structured reference material (TOC discovery, manifest, sequential extraction)
+- `/verify-reference` - Compare extracted reference data against edition JSON files (structural + semantic gap analysis)
 - `/edition-data-author` - Creating catalog items for edition JSON files
 - `/archetype-import` - Importing SR5 archetypes from sourcebook stat blocks
 - `/shadowrun-aesthetic` - UI styling guidelines

@@ -1,0 +1,379 @@
+{
+  "referenceFile": "docs/references/sr5-core-rulebook/street-gear-weapons-armor.json",
+  "dataFile": "data/editions/sr5/core-rulebook.json",
+  "description": "Maps weapon/armor reference tables to core-rulebook.json gear data",
+  "mappings": [
+    {
+      "referenceTable": "melee-weapons",
+      "dataPath": ["modules", "gear", "payload", "weapons", "melee"],
+      "matchField": "name",
+      "fieldMap": {
+        "accuracy": "accuracy",
+        "reach": "reach",
+        "damage": "damage",
+        "ap": "ap",
+        "availability": "availability",
+        "cost": "cost"
+      },
+      "requiredDataFields": [
+        "accuracy",
+        "reach",
+        "damage",
+        "ap",
+        "availability",
+        "cost",
+        "legality"
+      ]
+    },
+    {
+      "referenceTable": "firearms-tasers",
+      "dataPath": ["modules", "gear", "payload", "weapons", "pistols"],
+      "matchField": "name",
+      "fieldMap": {
+        "accuracy": "accuracy",
+        "damage": "damage",
+        "ap": "ap",
+        "mode": "mode",
+        "rc": "recoilCompensation",
+        "ammo": "ammo",
+        "availability": "availability",
+        "cost": "cost"
+      },
+      "requiredDataFields": [
+        "accuracy",
+        "damage",
+        "ap",
+        "mode",
+        "ammo",
+        "availability",
+        "cost",
+        "legality",
+        "reloadMethod"
+      ]
+    },
+    {
+      "referenceTable": "firearms-light-pistols",
+      "dataPath": ["modules", "gear", "payload", "weapons", "pistols"],
+      "matchField": "name",
+      "fieldMap": {
+        "accuracy": "accuracy",
+        "damage": "damage",
+        "ap": "ap",
+        "mode": "mode",
+        "rc": "recoilCompensation",
+        "ammo": "ammo",
+        "availability": "availability",
+        "cost": "cost"
+      },
+      "requiredDataFields": [
+        "accuracy",
+        "damage",
+        "ap",
+        "mode",
+        "ammo",
+        "availability",
+        "cost",
+        "legality",
+        "reloadMethod"
+      ]
+    },
+    {
+      "referenceTable": "firearms-heavy-pistols",
+      "dataPath": ["modules", "gear", "payload", "weapons", "pistols"],
+      "matchField": "name",
+      "fieldMap": {
+        "accuracy": "accuracy",
+        "damage": "damage",
+        "ap": "ap",
+        "mode": "mode",
+        "rc": "recoilCompensation",
+        "ammo": "ammo",
+        "availability": "availability",
+        "cost": "cost"
+      },
+      "requiredDataFields": [
+        "accuracy",
+        "damage",
+        "ap",
+        "mode",
+        "ammo",
+        "availability",
+        "cost",
+        "legality",
+        "reloadMethod"
+      ]
+    },
+    {
+      "referenceTable": "firearms-machine-pistols",
+      "dataPath": ["modules", "gear", "payload", "weapons", "smgs"],
+      "matchField": "name",
+      "fieldMap": {
+        "accuracy": "accuracy",
+        "damage": "damage",
+        "ap": "ap",
+        "mode": "mode",
+        "rc": "recoilCompensation",
+        "ammo": "ammo",
+        "availability": "availability",
+        "cost": "cost"
+      },
+      "requiredDataFields": [
+        "accuracy",
+        "damage",
+        "ap",
+        "mode",
+        "ammo",
+        "availability",
+        "cost",
+        "legality",
+        "reloadMethod"
+      ]
+    },
+    {
+      "referenceTable": "firearms-submachine-guns",
+      "dataPath": ["modules", "gear", "payload", "weapons", "smgs"],
+      "matchField": "name",
+      "fieldMap": {
+        "accuracy": "accuracy",
+        "damage": "damage",
+        "ap": "ap",
+        "mode": "mode",
+        "rc": "recoilCompensation",
+        "ammo": "ammo",
+        "availability": "availability",
+        "cost": "cost"
+      },
+      "requiredDataFields": [
+        "accuracy",
+        "damage",
+        "ap",
+        "mode",
+        "ammo",
+        "availability",
+        "cost",
+        "legality",
+        "reloadMethod"
+      ]
+    },
+    {
+      "referenceTable": "firearms-assault-rifles",
+      "dataPath": ["modules", "gear", "payload", "weapons", "rifles"],
+      "matchField": "name",
+      "fieldMap": {
+        "accuracy": "accuracy",
+        "damage": "damage",
+        "ap": "ap",
+        "mode": "mode",
+        "rc": "recoilCompensation",
+        "ammo": "ammo",
+        "availability": "availability",
+        "cost": "cost"
+      },
+      "requiredDataFields": [
+        "accuracy",
+        "damage",
+        "ap",
+        "mode",
+        "ammo",
+        "availability",
+        "cost",
+        "legality",
+        "reloadMethod"
+      ]
+    },
+    {
+      "referenceTable": "firearms-sniper-rifles",
+      "dataPath": ["modules", "gear", "payload", "weapons", "sniperRifles"],
+      "matchField": "name",
+      "fieldMap": {
+        "accuracy": "accuracy",
+        "damage": "damage",
+        "ap": "ap",
+        "mode": "mode",
+        "rc": "recoilCompensation",
+        "ammo": "ammo",
+        "availability": "availability",
+        "cost": "cost"
+      },
+      "requiredDataFields": [
+        "accuracy",
+        "damage",
+        "ap",
+        "mode",
+        "ammo",
+        "availability",
+        "cost",
+        "legality",
+        "reloadMethod"
+      ]
+    },
+    {
+      "referenceTable": "firearms-shotguns",
+      "dataPath": ["modules", "gear", "payload", "weapons", "shotguns"],
+      "matchField": "name",
+      "fieldMap": {
+        "accuracy": "accuracy",
+        "damage": "damage",
+        "ap": "ap",
+        "mode": "mode",
+        "rc": "recoilCompensation",
+        "ammo": "ammo",
+        "availability": "availability",
+        "cost": "cost"
+      },
+      "requiredDataFields": [
+        "accuracy",
+        "damage",
+        "ap",
+        "mode",
+        "ammo",
+        "availability",
+        "cost",
+        "legality",
+        "reloadMethod"
+      ]
+    },
+    {
+      "referenceTable": "firearms-machine-guns",
+      "dataPath": ["modules", "gear", "payload", "weapons", "rifles"],
+      "matchField": "name",
+      "fieldMap": {
+        "accuracy": "accuracy",
+        "damage": "damage",
+        "ap": "ap",
+        "mode": "mode",
+        "rc": "recoilCompensation",
+        "ammo": "ammo",
+        "availability": "availability",
+        "cost": "cost"
+      },
+      "requiredDataFields": [
+        "accuracy",
+        "damage",
+        "ap",
+        "mode",
+        "ammo",
+        "availability",
+        "cost",
+        "legality",
+        "reloadMethod"
+      ]
+    },
+    {
+      "referenceTable": "firearms-cannons-launchers",
+      "dataPath": ["modules", "gear", "payload", "weapons", "rifles"],
+      "matchField": "name",
+      "fieldMap": {
+        "accuracy": "accuracy",
+        "damage": "damage",
+        "ap": "ap",
+        "mode": "mode",
+        "rc": "recoilCompensation",
+        "ammo": "ammo",
+        "availability": "availability",
+        "cost": "cost"
+      },
+      "requiredDataFields": [
+        "accuracy",
+        "damage",
+        "ap",
+        "mode",
+        "ammo",
+        "availability",
+        "cost",
+        "legality",
+        "reloadMethod"
+      ]
+    },
+    {
+      "referenceTable": "ammunition",
+      "dataPath": ["modules", "gear", "payload", "ammunition"],
+      "matchField": "name",
+      "fieldMap": {
+        "damageModifier": "damageModifier",
+        "apModifier": "apModifier",
+        "availability": "availability",
+        "cost": "cost"
+      },
+      "requiredDataFields": ["apModifier", "availability", "cost", "legality"]
+    },
+    {
+      "referenceTable": "grenades",
+      "dataPath": ["modules", "gear", "payload", "weapons", "grenades"],
+      "matchField": "name",
+      "fieldMap": {
+        "damage": "damage",
+        "ap": "ap",
+        "blast": "blast",
+        "availability": "availability",
+        "cost": "cost"
+      },
+      "requiredDataFields": ["damage", "ap", "blast", "availability", "cost", "legality"]
+    },
+    {
+      "referenceTable": "rockets-missiles",
+      "dataPath": ["modules", "gear", "payload", "weapons", "grenades"],
+      "matchField": "name",
+      "fieldMap": {
+        "damage": "damage",
+        "ap": "ap",
+        "blast": "blast",
+        "availability": "availability",
+        "cost": "cost"
+      },
+      "requiredDataFields": ["damage", "ap", "blast", "availability", "cost", "legality"]
+    },
+    {
+      "referenceTable": "explosives",
+      "dataPath": ["modules", "gear", "payload", "explosives"],
+      "matchField": "name",
+      "fieldMap": {
+        "rating": "rating",
+        "availability": "availability",
+        "cost": "cost"
+      },
+      "requiredDataFields": ["rating", "availability", "cost"]
+    },
+    {
+      "referenceTable": "clothing-and-armor",
+      "dataPath": ["modules", "gear", "payload", "armor"],
+      "matchField": "name",
+      "fieldMap": {
+        "armor": "armorRating",
+        "capacity": "capacity",
+        "availability": "availability",
+        "cost": "cost"
+      },
+      "requiredDataFields": [
+        "armorRating",
+        "capacity",
+        "availability",
+        "cost",
+        "legality",
+        "wirelessBonus"
+      ]
+    },
+    {
+      "referenceTable": "armor-modifications",
+      "dataPath": ["modules", "gear", "payload", "armorModifications"],
+      "matchField": "name",
+      "fieldMap": {
+        "capacity": "capacityCost",
+        "availability": "availability",
+        "cost": "cost"
+      },
+      "requiredDataFields": ["capacityCost", "availability", "cost"]
+    },
+    {
+      "referenceTable": "firearm-accessories",
+      "dataPath": ["modules", "modifications", "payload", "weaponMods"],
+      "matchField": "name",
+      "fieldMap": {
+        "mount": "mount",
+        "availability": "availability",
+        "cost": "cost"
+      },
+      "requiredDataFields": ["mount", "availability", "cost"]
+    }
+  ]
+}
