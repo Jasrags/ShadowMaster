@@ -117,7 +117,7 @@ describe("PUT /api/users/[id]", () => {
     vi.mocked(validationModule.isValidUsername).mockReturnValue(true);
   });
 
-  it("should return 403 when not authenticated", async () => {
+  it("should return 401 when not authenticated", async () => {
     vi.mocked(middlewareModule.requireAdmin).mockRejectedValue(
       new Error("Authentication required")
     );
@@ -127,7 +127,7 @@ describe("PUT /api/users/[id]", () => {
     const response = await PUT(request, { params });
     const data = await response.json();
 
-    expect(response.status).toBe(403);
+    expect(response.status).toBe(401);
     expect(data.success).toBe(false);
     expect(data.error).toBe("Authentication required");
   });
@@ -468,7 +468,7 @@ describe("DELETE /api/users/[id]", () => {
     vi.clearAllMocks();
   });
 
-  it("should return 403 when not authenticated", async () => {
+  it("should return 401 when not authenticated", async () => {
     vi.mocked(middlewareModule.requireAdmin).mockRejectedValue(
       new Error("Authentication required")
     );
@@ -478,7 +478,7 @@ describe("DELETE /api/users/[id]", () => {
     const response = await DELETE(request, { params });
     const data = await response.json();
 
-    expect(response.status).toBe(403);
+    expect(response.status).toBe(401);
     expect(data.success).toBe(false);
     expect(data.error).toBe("Authentication required");
   });

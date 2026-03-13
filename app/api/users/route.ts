@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { requireAdmin, toPublicUser } from "@/lib/auth/middleware";
+import { requireAdmin, toPublicUser, handleAdminAuthError } from "@/lib/auth/middleware";
 import { getAllUsers } from "@/lib/storage/users";
 import type { PublicUser } from "@/lib/types/user";
 
@@ -87,15 +87,8 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : "An error occurred";
-
-    // Check if it's an authentication/authorization error
-    if (
-      errorMessage === "Authentication required" ||
-      errorMessage === "Administrator access required"
-    ) {
-      return NextResponse.json({ success: false, error: errorMessage }, { status: 403 });
-    }
+    const authResponse = handleAdminAuthError(error);
+    if (authResponse) return authResponse;
 
     console.error("Get users error:", error);
     return NextResponse.json(

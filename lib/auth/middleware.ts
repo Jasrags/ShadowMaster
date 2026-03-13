@@ -1,3 +1,4 @@
+import { NextResponse } from "next/server";
 import { getSession } from "./session";
 import { getUserById } from "../storage/users";
 import type { User, PublicUser } from "../types/user";
@@ -73,4 +74,22 @@ export async function requireAdmin(): Promise<PublicUser> {
     throw new Error("Administrator access required");
   }
   return user;
+}
+
+/**
+ * Returns the appropriate error response for auth/admin errors.
+ * Use in catch blocks after requireAdmin() calls.
+ * Returns 401 for unauthenticated, 403 for unauthorized, or null if unrecognized.
+ */
+export function handleAdminAuthError(
+  error: unknown
+): NextResponse<{ success: false; error: string }> | null {
+  const message = error instanceof Error ? error.message : String(error);
+  if (message === "Authentication required") {
+    return NextResponse.json({ success: false, error: message }, { status: 401 });
+  }
+  if (message === "Administrator access required") {
+    return NextResponse.json({ success: false, error: message }, { status: 403 });
+  }
+  return null;
 }

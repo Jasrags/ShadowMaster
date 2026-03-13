@@ -225,7 +225,7 @@ describe("User Lockout API", () => {
       expect(data.success).toBe(false);
     });
 
-    it("should return 403 if not authenticated", async () => {
+    it("should return 401 if not authenticated", async () => {
       vi.mocked(middlewareModule.requireAdmin).mockRejectedValue(
         new Error("Authentication required")
       );
@@ -235,7 +235,7 @@ describe("User Lockout API", () => {
       const response = await DELETE(request, { params });
       const data = await response.json();
 
-      expect(response.status).toBe(403);
+      expect(response.status).toBe(401);
       expect(data.success).toBe(false);
     });
   });

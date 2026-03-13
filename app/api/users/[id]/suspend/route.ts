@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { requireAdmin, toPublicUser } from "@/lib/auth/middleware";
+import { requireAdmin, toPublicUser, handleAdminAuthError } from "@/lib/auth/middleware";
 import { getUserById, suspendUser, reactivateUser } from "@/lib/storage/users";
 import type { SuspendUserRequest, SuspendUserResponse } from "@/lib/types/user";
 
@@ -48,17 +48,11 @@ export async function POST(
       user: toPublicUser(updatedUser),
     });
   } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : "An error occurred";
-
-    // Check if it's an authentication/authorization error
-    if (
-      errorMessage === "Authentication required" ||
-      errorMessage === "Administrator access required"
-    ) {
-      return NextResponse.json({ success: false, error: errorMessage }, { status: 403 });
-    }
+    const authResponse = handleAdminAuthError(error);
+    if (authResponse) return authResponse;
 
     // Handle last-admin protection
+    const errorMessage = error instanceof Error ? error.message : "An error occurred";
     if (errorMessage.includes("last administrator")) {
       return NextResponse.json({ success: false, error: errorMessage }, { status: 400 });
     }
@@ -107,15 +101,8 @@ export async function DELETE(
       user: toPublicUser(updatedUser),
     });
   } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : "An error occurred";
-
-    // Check if it's an authentication/authorization error
-    if (
-      errorMessage === "Authentication required" ||
-      errorMessage === "Administrator access required"
-    ) {
-      return NextResponse.json({ success: false, error: errorMessage }, { status: 403 });
-    }
+    const authResponse = handleAdminAuthError(error);
+    if (authResponse) return authResponse;
 
     console.error("Reactivate user error:", error);
     return NextResponse.json(

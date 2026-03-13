@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { requireAdmin, toPublicUser } from "@/lib/auth/middleware";
+import { requireAdmin, toPublicUser, handleAdminAuthError } from "@/lib/auth/middleware";
 import { getUserById, markEmailVerified } from "@/lib/storage/users";
 import { createUserAuditEntry } from "@/lib/storage/user-audit";
 import type { PublicUser } from "@/lib/types/user";
@@ -59,15 +59,8 @@ export async function POST(
       user: toPublicUser(updatedUser),
     });
   } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : "An error occurred";
-
-    // Check if it's an authentication/authorization error
-    if (
-      errorMessage === "Authentication required" ||
-      errorMessage === "Administrator access required"
-    ) {
-      return NextResponse.json({ success: false, error: errorMessage }, { status: 403 });
-    }
+    const authResponse = handleAdminAuthError(error);
+    if (authResponse) return authResponse;
 
     console.error("Manual verify email error:", error);
     return NextResponse.json(

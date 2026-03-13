@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { requireAdmin, toPublicUser } from "@/lib/auth/middleware";
+import { requireAdmin, toPublicUser, handleAdminAuthError } from "@/lib/auth/middleware";
 import {
   getUserById,
   getAllUsers,
@@ -134,17 +134,11 @@ export async function PUT(
       user: toPublicUser(updatedUser),
     });
   } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : "An error occurred";
-
-    // Check if it's an authentication/authorization error
-    if (
-      errorMessage === "Authentication required" ||
-      errorMessage === "Administrator access required"
-    ) {
-      return NextResponse.json({ success: false, error: errorMessage }, { status: 403 });
-    }
+    const authResponse = handleAdminAuthError(error);
+    if (authResponse) return authResponse;
 
     // Handle last-admin protection errors
+    const errorMessage = error instanceof Error ? error.message : "An error occurred";
     if (errorMessage.includes("last administrator")) {
       return NextResponse.json({ success: false, error: errorMessage }, { status: 400 });
     }
@@ -194,15 +188,8 @@ export async function DELETE(
       success: true,
     });
   } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : "An error occurred";
-
-    // Check if it's an authentication/authorization error
-    if (
-      errorMessage === "Authentication required" ||
-      errorMessage === "Administrator access required"
-    ) {
-      return NextResponse.json({ success: false, error: errorMessage }, { status: 403 });
-    }
+    const authResponse = handleAdminAuthError(error);
+    if (authResponse) return authResponse;
 
     console.error("Delete user error:", error);
     return NextResponse.json(

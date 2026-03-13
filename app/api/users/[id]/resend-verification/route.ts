@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { requireAdmin } from "@/lib/auth/middleware";
+import { requireAdmin, handleAdminAuthError } from "@/lib/auth/middleware";
 import { getUserById } from "@/lib/storage/users";
 import { sendVerificationEmail } from "@/lib/auth/email-verification";
 import { createUserAuditEntry } from "@/lib/storage/user-audit";
@@ -86,15 +86,8 @@ export async function POST(
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : "An error occurred";
-
-    // Check if it's an authentication/authorization error
-    if (
-      errorMessage === "Authentication required" ||
-      errorMessage === "Administrator access required"
-    ) {
-      return NextResponse.json({ success: false, error: errorMessage }, { status: 403 });
-    }
+    const authResponse = handleAdminAuthError(error);
+    if (authResponse) return authResponse;
 
     console.error("Resend verification error:", error);
     return NextResponse.json(
