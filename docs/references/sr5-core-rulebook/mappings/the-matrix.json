@@ -1,0 +1,55 @@
+{
+  "referenceFile": "docs/references/sr5-core-rulebook/the-matrix.json",
+  "dataFile": "data/editions/sr5/core-rulebook.json",
+  "description": "Maps Matrix reference tables to core-rulebook.json data for programs, complex forms, and cyberdecks",
+  "mappings": [
+    {
+      "referenceTable": "programs",
+      "dataPath": ["modules", "programs", "payload", "common"],
+      "matchField": "name",
+      "referenceMatchField": "program",
+      "fieldMap": {
+        "program": "name",
+        "availability": "availability",
+        "cost-nuyen": "cost"
+      },
+      "requiredDataFields": ["name", "cost", "availability", "description"]
+    },
+    {
+      "referenceTable": "programs",
+      "dataPath": ["modules", "programs", "payload", "hacking"],
+      "matchField": "name",
+      "referenceMatchField": "program",
+      "fieldMap": {
+        "program": "name",
+        "availability": "availability",
+        "cost-nuyen": "cost"
+      },
+      "requiredDataFields": ["name", "cost", "availability", "legality", "description"]
+    },
+    {
+      "referenceTable": "complex-forms",
+      "dataPath": ["modules", "magic", "payload", "complexForms"],
+      "matchField": "name",
+      "referenceMatchField": "complex-form",
+      "fieldMap": {
+        "complex-form": "name",
+        "target": "target",
+        "fading-value": "fading"
+      },
+      "requiredDataFields": ["name", "target", "duration", "fading", "description"]
+    },
+    {
+      "referenceTable": "cyberdecks",
+      "dataPath": ["modules", "gear", "payload", "cyberdecks"],
+      "matchField": "name",
+      "fieldMap": {
+        "name": "name",
+        "device-rating": "deviceRating",
+        "availability": "availability",
+        "cost-nuyen": "cost"
+      },
+      "requiredDataFields": ["name", "deviceRating", "availability", "cost"]
+    }
+  ]
+}

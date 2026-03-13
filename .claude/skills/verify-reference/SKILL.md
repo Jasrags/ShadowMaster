@@ -101,7 +101,9 @@ Mapping configs exist for:
 
 - `sr5-core-rulebook/creating-a-shadowrunner` — 4 tables (qualities, metatypes, lifestyles)
 - `sr5-core-rulebook/skills` — 2 tables (active skills, skill groups)
-- `sr5-core-rulebook/magic` — 2 tables (foci bonding, magical goods)
+- `sr5-core-rulebook/magic` — 3 tables (foci bonding, magical goods, mentor spirits)
+- `sr5-core-rulebook/the-matrix` — 4 tables (programs common/hacking, complex forms, cyberdecks)
+- `sr5-core-rulebook/riggers` — 2 tables (RCCs, autosofts)
 - `sr5-core-rulebook/street-gear-weapons-armor` — 18 tables (melee, firearms, ammo, grenades, armor)
 - `sr5-core-rulebook/street-gear-electronics-cyber` — 30 tables (commlinks, cyberdecks, cyber/bioware)
 - `sr5-core-rulebook/street-gear-vehicles-drones` — 5 tables (ground, water, air, drones, mods)

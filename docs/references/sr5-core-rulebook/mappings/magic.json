@@ -31,6 +31,15 @@
         "cost": "costMultiplier"
       },
       "requiredDataFields": ["name", "costMultiplier", "availability", "legality"]
+    },
+    {
+      "referenceTable": "mentor-spirits",
+      "dataPath": ["modules", "magic", "payload", "mentorSpirits"],
+      "matchField": "name",
+      "fieldMap": {
+        "name": "name"
+      },
+      "requiredDataFields": ["name", "description", "advantages", "disadvantage", "karmaCost"]
     }
   ]
 }
