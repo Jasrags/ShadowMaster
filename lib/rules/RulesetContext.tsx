@@ -336,6 +336,7 @@ export interface GearCatalogData {
   security: GearItemData[];
   miscellaneous: GearItemData[];
   ammunition: GearItemData[];
+  explosives: GearItemData[];
   rfidTags: GearItemData[];
   industrialChemicals: GearItemData[];
   visionEnhancements?: GearItemData[];

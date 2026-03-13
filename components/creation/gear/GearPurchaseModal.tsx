@@ -35,6 +35,7 @@ type GearCategory =
   | "survival"
   | "medical"
   | "security"
+  | "explosives"
   | "miscellaneous"
   | "rfidTags";
 
@@ -45,6 +46,7 @@ const GEAR_CATEGORIES: Array<{ id: GearCategory; label: string }> = [
   { id: "medical", label: "Medical" },
   { id: "security", label: "Security" },
   { id: "survival", label: "Survival" },
+  { id: "explosives", label: "Explosives" },
   { id: "rfidTags", label: "RFID Tags" },
   { id: "miscellaneous", label: "Misc" },
 ];
@@ -57,6 +59,7 @@ const CATEGORY_LABELS: Record<GearCategory, string> = {
   survival: "Survival",
   medical: "Medical",
   security: "Security",
+  explosives: "Explosives",
   miscellaneous: "Miscellaneous",
   rfidTags: "RFID Tags",
 };
@@ -68,6 +71,7 @@ const CATEGORY_ORDER: GearCategory[] = [
   "medical",
   "security",
   "survival",
+  "explosives",
   "rfidTags",
   "miscellaneous",
 ];
@@ -90,6 +94,7 @@ function getDisplayCategory(category: string): GearCategory {
     case "medical":
     case "security":
     case "survival":
+    case "explosives":
     case "rfidTags":
       return category as GearCategory;
     default:
@@ -127,6 +132,7 @@ function getAllGear(catalog: GearCatalogData | null): GearItemData[] {
     ...catalog.survival,
     ...catalog.medical,
     ...catalog.security,
+    ...(catalog.explosives || []),
     ...catalog.miscellaneous,
     ...(catalog.rfidTags || []),
   ];
@@ -361,6 +367,9 @@ export function GearPurchaseModal({
         .length,
       security: gearCatalog.security.filter((g) => getMinimumAvailability(g) <= MAX_AVAILABILITY)
         .length,
+      explosives: (gearCatalog.explosives || []).filter(
+        (g) => getMinimumAvailability(g) <= MAX_AVAILABILITY
+      ).length,
       rfidTags: (gearCatalog.rfidTags || []).filter(
         (g) => getMinimumAvailability(g) <= MAX_AVAILABILITY
       ).length,
