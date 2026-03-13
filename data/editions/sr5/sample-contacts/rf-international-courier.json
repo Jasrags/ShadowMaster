@@ -1,0 +1,60 @@
+{
+  "id": "rf-sample-contact-international-courier",
+  "editionCode": "sr5",
+  "name": "International Courier",
+  "description": "Need pistols in Peoria? How about armored jackets in Amazonia or orichalcum in Hong Kong? The International Courier is a trusted transporter of various goods with the licensing and paperwork so he will not get stopped at checkpoints like other travelers. He's also good with alternative methods where bureaucracy fails. He is on the go 24/7 with some package. His time and services are valuable, so pricing goes up depending on the three words: what, where, and when.",
+  "uses": [
+    "International smuggling",
+    "Package delivery",
+    "Cross-border transport",
+    "Travel assistance"
+  ],
+  "meetingPlaces": ["Airports", "Shipping docks", "Hotel lobbies"],
+  "similarContacts": [],
+  "attributes": {
+    "body": 3,
+    "agility": 3,
+    "reaction": 5,
+    "strength": 4,
+    "willpower": 4,
+    "logic": 3,
+    "intuition": 3,
+    "charisma": 4
+  },
+  "specialAttributes": {
+    "edge": 2,
+    "essence": 6
+  },
+  "initiative": {
+    "base": 8,
+    "dice": 1
+  },
+  "limits": {
+    "physical": 6,
+    "mental": 5,
+    "social": 6
+  },
+  "conditionMonitor": 10,
+  "skills": [
+    { "name": "Con", "rating": 5 },
+    { "name": "Etiquette", "rating": 3, "specialization": "Corporate" },
+    { "name": "Impersonation", "rating": 4 },
+    { "name": "Longarms", "rating": 3 },
+    { "name": "Negotiation", "rating": 4 },
+    { "name": "Pistols", "rating": 4 },
+    { "name": "Running", "rating": 2 },
+    { "name": "Stealth skill group", "rating": 5 },
+    { "name": "Unarmed Combat", "rating": 4 }
+  ],
+  "knowledgeSkills": [
+    { "name": "Corporate Rumors", "rating": 2 },
+    { "name": "Geography", "rating": 2 },
+    { "name": "Language", "rating": 4 },
+    { "name": "Language", "rating": 4 }
+  ],
+  "metadata": {
+    "source": "Run Faster",
+    "page": "188",
+    "category": "Sample Contact"
+  }
+}

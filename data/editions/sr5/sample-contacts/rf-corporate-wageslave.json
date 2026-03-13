@@ -1,0 +1,58 @@
+{
+  "id": "rf-sample-contact-corporate-wageslave",
+  "editionCode": "sr5",
+  "name": "Corporate Wageslave",
+  "description": "He is one of the faceless masses that works ten or more hours a day, six or more days a week for the great corporation. The benefits, as the corporation cheerfully states, include a corporate home, access to corporate-sponsored food, and the luxurious twice-a-decade corporate-sponsored vacations. He may feel stifled, confined, and limited, but he keeps at it in pursuit of better things. He believes if he works hard and long enough, he will move up the corporate ladder.",
+  "uses": [
+    "Corporate access",
+    "Routine information",
+    "Cover identity support",
+    "Inside perspective"
+  ],
+  "meetingPlaces": ["Corporate cafeterias", "Commuter trains", "Suburban bars"],
+  "similarContacts": [],
+  "attributes": {
+    "body": 3,
+    "agility": 3,
+    "reaction": 3,
+    "strength": 3,
+    "willpower": 4,
+    "logic": 3,
+    "intuition": 4,
+    "charisma": 3
+  },
+  "specialAttributes": {
+    "edge": 2,
+    "essence": 6
+  },
+  "initiative": {
+    "base": 7,
+    "dice": 1
+  },
+  "limits": {
+    "physical": 4,
+    "mental": 4,
+    "social": 6
+  },
+  "conditionMonitor": 10,
+  "skills": [
+    { "name": "Clubs", "rating": 1 },
+    { "name": "Computers", "rating": 4 },
+    { "name": "Con", "rating": 2 },
+    { "name": "Etiquette", "rating": 4, "specialization": "Corp" },
+    { "name": "Running", "rating": 2 },
+    { "name": "Software", "rating": 3 }
+  ],
+  "knowledgeSkills": [
+    { "name": "City Knowledge", "rating": 3 },
+    { "name": "Corporate Rumor", "rating": 3 },
+    { "name": "Local Bars", "rating": 2 },
+    { "name": "Sports Cars", "rating": 3 },
+    { "name": "Trid Shows", "rating": 3 }
+  ],
+  "metadata": {
+    "source": "Run Faster",
+    "page": "186",
+    "category": "Sample Contact"
+  }
+}

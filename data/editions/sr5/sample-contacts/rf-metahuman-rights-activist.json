@@ -1,0 +1,58 @@
+{
+  "id": "rf-sample-contact-metahuman-rights-activist",
+  "editionCode": "sr5",
+  "name": "Metahuman Rights Activist",
+  "description": "Always fighting for equal rights, the Metahuman Rights Activist travels around to bring light on vital issues and shame to those denying rights to their fellow metahuman. While not as visibly present as they were twenty years ago, they are still around, and we're easy to spot during recent Seattle events involving the Ork Underground. Metahuman Rights Activists know people in various positions that can help them get around security, know where to set up a protest, or get critical information out there. Like-minded shadowrunners can exploit such information for their own ends, provided they fund the cause. Based on their relationship with the character, the Metahuman Rights Activist may be able to put together a protest as a distraction to other activities.",
+  "uses": [
+    "Protest organization",
+    "Community connections",
+    "Media attention",
+    "Distraction operations"
+  ],
+  "meetingPlaces": ["Community centers", "Underground bars", "Protest sites"],
+  "similarContacts": ["Green Peace", "Sapient Rights"],
+  "attributes": {
+    "body": 6,
+    "agility": 5,
+    "reaction": 5,
+    "strength": 5,
+    "willpower": 4,
+    "logic": 3,
+    "intuition": 3,
+    "charisma": 2
+  },
+  "specialAttributes": {
+    "edge": 1,
+    "essence": 6
+  },
+  "initiative": {
+    "base": 8,
+    "dice": 1
+  },
+  "limits": {
+    "physical": 7,
+    "mental": 5,
+    "social": 5
+  },
+  "conditionMonitor": 11,
+  "skills": [
+    { "name": "Clubs", "rating": 3 },
+    { "name": "Etiquette", "rating": 4, "specialization": "Media" },
+    { "name": "Leadership", "rating": 4 },
+    { "name": "Negotiation", "rating": 3 },
+    { "name": "Performance", "rating": 3, "specialization": "Acting" },
+    { "name": "Running", "rating": 3 },
+    { "name": "Stealth skill group", "rating": 2 }
+  ],
+  "knowledgeSkills": [
+    { "name": "[City] Knowledge", "rating": 3 },
+    { "name": "Local Gangs", "rating": 3 },
+    { "name": "Safehouses", "rating": 3 },
+    { "name": "Street Rumor", "rating": 3 }
+  ],
+  "metadata": {
+    "source": "Run Faster",
+    "page": "189",
+    "category": "Sample Contact"
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "id": "rf-sample-contact-border-patrol-agent",
+  "editionCode": "sr5",
+  "name": "Border Patrol Agent",
+  "description": "Every nation hires officers to keep the riffraff from other countries from commingling with their own riffraff. A Border Patrol Agent has access to scanned SINs and checks on their authenticity. They are also physically on duty watching the borders. Border Patrol Agents can do this by horse, car, boat, or with drones watching the skies above. Besides the intel on who's who moving in or out of a nation, he could also do the character a favor by helping him cross the very border he's supposed to be guarding.",
+  "uses": [
+    "Border crossing assistance",
+    "SIN verification",
+    "Smuggling routes",
+    "Geographic information"
+  ],
+  "meetingPlaces": ["Border checkpoints", "Rural diners", "Outdoor supply stores"],
+  "similarContacts": ["Travel Agent", "Tour Guide"],
+  "attributes": {
+    "body": 8,
+    "agility": 3,
+    "reaction": 5,
+    "strength": 5,
+    "willpower": 3,
+    "logic": 3,
+    "intuition": 5,
+    "charisma": 3
+  },
+  "specialAttributes": {
+    "edge": 1,
+    "essence": 6
+  },
+  "initiative": {
+    "base": 10,
+    "dice": 1
+  },
+  "limits": {
+    "physical": 8,
+    "mental": 5,
+    "social": 5
+  },
+  "conditionMonitor": 12,
+  "skills": [
+    { "name": "Intimidation", "rating": 3 },
+    { "name": "Longarms", "rating": 3, "specialization": "Long-Range Shots" },
+    { "name": "Perception", "rating": 5 },
+    { "name": "Survival", "rating": 2 },
+    { "name": "Tracking", "rating": 4 }
+  ],
+  "knowledgeSkills": [
+    { "name": "Botany", "rating": 3, "specialization": "Edible Wild Plants" },
+    { "name": "Border Security", "rating": 5 },
+    { "name": "Geology", "rating": 3, "specialization": "Terrain" },
+    { "name": "Local Border Language", "rating": 4 }
+  ],
+  "metadata": {
+    "source": "Run Faster",
+    "page": "183",
+    "category": "Sample Contact"
+  }
+}

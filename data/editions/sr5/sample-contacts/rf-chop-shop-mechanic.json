@@ -1,0 +1,51 @@
+{
+  "id": "rf-sample-contact-chop-shop-mechanic",
+  "editionCode": "sr5",
+  "name": "Chop Shop Mechanic",
+  "description": "She is gifted in taking apart and putting back together vehicles of various shapes and sizes. She takes advantage of her talent by selling parts of stolen vehicles on the black market and making illegal modifications to her clients' vehicles. For you, she can take out those bullet holes with no questions asked; she can also provide a loaner for the evening, provided you don't tell anyone where you got it and remember to ditch it as soon as possible.",
+  "uses": ["Vehicle repair", "Vehicle modifications", "Stolen vehicle parts", "Loaner vehicles"],
+  "meetingPlaces": ["Back-alley garages", "Industrial districts", "Junkyards"],
+  "similarContacts": [],
+  "attributes": {
+    "body": 3,
+    "agility": 5,
+    "reaction": 3,
+    "strength": 3,
+    "willpower": 4,
+    "logic": 5,
+    "intuition": 3,
+    "charisma": 2
+  },
+  "specialAttributes": {
+    "edge": 2,
+    "essence": 6
+  },
+  "initiative": {
+    "base": 6,
+    "dice": 1
+  },
+  "limits": {
+    "physical": 4,
+    "mental": 6,
+    "social": 5
+  },
+  "conditionMonitor": 10,
+  "skills": [
+    { "name": "Automotive Mechanic", "rating": 8 },
+    { "name": "Computers", "rating": 4 },
+    { "name": "Gunnery", "rating": 4 },
+    { "name": "Influence skill group", "rating": 2 },
+    { "name": "Pilot Ground Craft", "rating": 6 }
+  ],
+  "knowledgeSkills": [
+    { "name": "Car Dealers", "rating": 4 },
+    { "name": "Combat Biking", "rating": 4 },
+    { "name": "Junkyards", "rating": 4 },
+    { "name": "Vehicles", "rating": 4 }
+  ],
+  "metadata": {
+    "source": "Run Faster",
+    "page": "183",
+    "category": "Sample Contact"
+  }
+}

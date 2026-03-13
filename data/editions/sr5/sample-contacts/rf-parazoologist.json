@@ -1,0 +1,55 @@
+{
+  "id": "rf-sample-contact-parazoologist",
+  "editionCode": "sr5",
+  "name": "Parazoologist",
+  "description": "The Parazoologist has had his nose in the books since the Sixth World arrived, studying and cataloging all the various new critters and variations. His study includes their habits, abilities, weaknesses, and sometimes how to train them. Some Parazoologists work with zoos or review collected specimens, while others are out in the field collecting and observing critters in their natural habitat. He's always happy to help in identifying the next Awakened thing that the shadowrunner comes across. He also loves to get specimens from time to time.",
+  "uses": [
+    "Paracritter identification",
+    "Creature weaknesses",
+    "Field research",
+    "Animal training advice"
+  ],
+  "meetingPlaces": ["University labs", "Nature preserves", "Museums"],
+  "similarContacts": [],
+  "attributes": {
+    "body": 2,
+    "agility": 3,
+    "reaction": 3,
+    "strength": 3,
+    "willpower": 4,
+    "logic": 5,
+    "intuition": 3,
+    "charisma": 3
+  },
+  "specialAttributes": {
+    "edge": 2,
+    "essence": 6
+  },
+  "initiative": {
+    "base": 6,
+    "dice": 1
+  },
+  "limits": {
+    "physical": 4,
+    "mental": 6,
+    "social": 6
+  },
+  "conditionMonitor": 9,
+  "skills": [
+    { "name": "Animal Handling", "rating": 3 },
+    { "name": "Biotechnology", "rating": 4 },
+    { "name": "Instruction", "rating": 4 },
+    { "name": "Perception", "rating": 4 }
+  ],
+  "knowledgeSkills": [
+    { "name": "Law", "rating": 3 },
+    { "name": "Magic Theory", "rating": 2 },
+    { "name": "Parazoology", "rating": 6 },
+    { "name": "Wildlife Areas", "rating": 3 }
+  ],
+  "metadata": {
+    "source": "Run Faster",
+    "page": "190",
+    "category": "Sample Contact"
+  }
+}

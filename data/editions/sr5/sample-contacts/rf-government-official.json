@@ -1,0 +1,57 @@
+{
+  "id": "rf-sample-contact-government-official",
+  "editionCode": "sr5",
+  "name": "Government Official",
+  "description": "Sometimes called a Spook or Man in Black, the Government Official is annoyingly enigmatic about why or how he knows things. Rumors have him working for the CIA, FBI, or some other agency, but no one officially acknowledges his existence in any of those places. Even your relationship is somewhat of a mystery as he offers knowledge in exchange for odd jobs, which make you wonder if you're seeing the bigger picture.",
+  "uses": [
+    "Government intelligence",
+    "Classified information",
+    "Political connections",
+    "Odd jobs"
+  ],
+  "meetingPlaces": ["Anonymous locations", "Public parks", "Nondescript vehicles"],
+  "similarContacts": [],
+  "attributes": {
+    "body": 4,
+    "agility": 3,
+    "reaction": 4,
+    "strength": 3,
+    "willpower": 4,
+    "logic": 3,
+    "intuition": 3,
+    "charisma": 4
+  },
+  "specialAttributes": {
+    "edge": 3,
+    "essence": 6
+  },
+  "initiative": {
+    "base": 7,
+    "dice": 1
+  },
+  "limits": {
+    "physical": 5,
+    "mental": 5,
+    "social": 6
+  },
+  "conditionMonitor": 10,
+  "skills": [
+    { "name": "Con", "rating": 2 },
+    { "name": "Disguise", "rating": 4 },
+    { "name": "Etiquette", "rating": 5, "specialization": "Street" },
+    { "name": "Firearms skill group", "rating": 5 },
+    { "name": "Intimidation", "rating": 5 },
+    { "name": "Leadership", "rating": 4 },
+    { "name": "Negotiation", "rating": 5 },
+    { "name": "Sneaking", "rating": 4 }
+  ],
+  "knowledgeSkills": [
+    { "name": "Corporate Rumors", "rating": 6 },
+    { "name": "Street Rumors", "rating": 6 }
+  ],
+  "metadata": {
+    "source": "Run Faster",
+    "page": "186",
+    "category": "Sample Contact"
+  }
+}

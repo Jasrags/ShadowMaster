@@ -1,0 +1,55 @@
+{
+  "id": "rf-sample-contact-popular-mefeed-personality",
+  "editionCode": "sr5",
+  "name": "Popular MeFeed Personality",
+  "description": "Ranting and raving on the Matrix is nothing new. Popular MeFeed Personalities share photos, audio clips, and text from their grid subscription as they mingle with their public and bask in their adoring (though occasionally angry) glow. Subscriptions to dancing cats or lists of what's for dinner are cute and all, but some people are talented enough to find the right words and images to create a following. They are rarely anonymous and mostly harmless in what they do, but they can influence some opinions. Depending on the following, you can ask the contact if any of his subscribers can help. In the vast wasteland of Matrix entertainment, it's always possible that someone knows something.",
+  "uses": [
+    "Social media influence",
+    "Public opinion",
+    "Matrix connections",
+    "Information gathering"
+  ],
+  "meetingPlaces": ["Trendy cafes", "Public events", "Matrix streams"],
+  "similarContacts": [],
+  "attributes": {
+    "body": 3,
+    "agility": 3,
+    "reaction": 3,
+    "strength": 3,
+    "willpower": 4,
+    "logic": 3,
+    "intuition": 3,
+    "charisma": 4
+  },
+  "specialAttributes": {
+    "edge": 2,
+    "essence": 6
+  },
+  "initiative": {
+    "base": 6,
+    "dice": 1
+  },
+  "limits": {
+    "physical": 4,
+    "mental": 5,
+    "social": 6
+  },
+  "conditionMonitor": 10,
+  "skills": [
+    { "name": "Artisan", "rating": 3, "specialization": "Writing" },
+    { "name": "Computers", "rating": 4 },
+    { "name": "Etiquette", "rating": 3, "specialization": "Media" },
+    { "name": "Perception", "rating": 3 }
+  ],
+  "knowledgeSkills": [
+    { "name": "Local Bars", "rating": 3 },
+    { "name": "Local Restaurants", "rating": 3 },
+    { "name": "Sports", "rating": 3 },
+    { "name": "Street Rumors", "rating": 3 }
+  ],
+  "metadata": {
+    "source": "Run Faster",
+    "page": "191",
+    "category": "Sample Contact"
+  }
+}

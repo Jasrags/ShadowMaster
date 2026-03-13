@@ -1,0 +1,54 @@
+{
+  "id": "rf-sample-contact-script-kiddie",
+  "editionCode": "sr5",
+  "name": "Script Kiddie",
+  "description": "There are deckers, and then there are wannabe deckers, often known as Script Kiddies. They're clever, often using homemade decks assembled from commlink parts, sweat, and chutzpah. They load them up with malware programs and coded viruses, then set about causing chaos wherever they can. While not as sophisticated or dangerous as a decker, she can still surprise you with what she can access in the Matrix.",
+  "uses": ["Matrix reconnaissance", "Malware deployment", "Cheap hacking", "Matrix rumors"],
+  "meetingPlaces": ["Coffee shops", "Hacker spaces", "Matrix cafes"],
+  "similarContacts": [],
+  "attributes": {
+    "body": 2,
+    "agility": 2,
+    "reaction": 4,
+    "strength": 3,
+    "willpower": 4,
+    "logic": 5,
+    "intuition": 4,
+    "charisma": 3
+  },
+  "specialAttributes": {
+    "edge": 2,
+    "essence": 6
+  },
+  "initiative": {
+    "base": 8,
+    "dice": 1
+  },
+  "limits": {
+    "physical": 4,
+    "mental": 6,
+    "social": 6
+  },
+  "conditionMonitor": 9,
+  "skills": [
+    { "name": "Computers", "rating": 3 },
+    { "name": "Cybercombat", "rating": 1 },
+    { "name": "Electronic Warfare", "rating": 4 },
+    { "name": "Etiquette", "rating": 2, "specialization": "Matrix" },
+    { "name": "Hacking", "rating": 3 },
+    { "name": "Hardware", "rating": 2 },
+    { "name": "Negotiation", "rating": 2 }
+  ],
+  "knowledgeSkills": [
+    { "name": "[City] Knowledge", "rating": 3 },
+    { "name": "Decker Hangouts", "rating": 4 },
+    { "name": "Malware", "rating": 3 },
+    { "name": "Street Rumors", "rating": 4 },
+    { "name": "Trideos", "rating": 4 }
+  ],
+  "metadata": {
+    "source": "Run Faster",
+    "page": "192",
+    "category": "Sample Contact"
+  }
+}

@@ -6450,13 +6450,1022 @@
     "contactArchetypes": {
       "mergeStrategy": "append",
       "payload": {
-        "archetypes": []
+        "archetypes": [
+          {
+            "id": "rf-arms-dealer",
+            "name": "Arms Dealer",
+            "description": "A weapons supplier who offers firearms, ammunition, and military gear to those willing to barter.",
+            "suggestedConnection": [3, 5],
+            "suggestedLoyalty": [1, 3],
+            "commonServices": [
+              "weapon-procurement",
+              "ammunition-supply",
+              "military-gear",
+              "weapon-modification"
+            ],
+            "riskProfile": "medium",
+            "typicalCosts": {
+              "weapon-procurement": 500,
+              "ammunition-supply": 100,
+              "military-gear": 1000,
+              "weapon-modification": 300
+            },
+            "commonLocations": ["Gun ranges", "Military surplus stores", "Private warehouses"],
+            "commonOrganizations": []
+          },
+          {
+            "id": "rf-bartender",
+            "name": "Bartender",
+            "description": "A social hub who hears everything and knows everyone in the neighborhood. Run Faster expanded version.",
+            "suggestedConnection": [1, 2],
+            "suggestedLoyalty": [1, 4],
+            "commonServices": ["rumors", "introduction", "meeting-place", "street-intel"],
+            "riskProfile": "low",
+            "typicalCosts": {
+              "rumors": 20,
+              "introduction": 50,
+              "meeting-place": 0,
+              "street-intel": 30
+            },
+            "commonLocations": ["Any bar or nightclub"],
+            "commonOrganizations": []
+          },
+          {
+            "id": "rf-bodyguard",
+            "name": "Bodyguard",
+            "description": "A private sector security professional who provides physical protection and extra muscle.",
+            "suggestedConnection": [1, 3],
+            "suggestedLoyalty": [1, 3],
+            "commonServices": [
+              "physical-protection",
+              "security-assessment",
+              "extra-muscle",
+              "surveillance"
+            ],
+            "riskProfile": "medium",
+            "typicalCosts": {
+              "physical-protection": 500,
+              "security-assessment": 200,
+              "extra-muscle": 300
+            },
+            "commonLocations": ["Corporate lobbies", "Private security firms", "Gyms"],
+            "commonOrganizations": []
+          },
+          {
+            "id": "rf-bookie",
+            "name": "Bookie",
+            "description": "A gambling operator who takes bets, loans money, and knows the odds on everything.",
+            "suggestedConnection": [1, 3],
+            "suggestedLoyalty": [1, 3],
+            "commonServices": [
+              "gambling",
+              "loans",
+              "sports-information",
+              "underground-connections"
+            ],
+            "riskProfile": "medium",
+            "typicalCosts": {
+              "loans": 0,
+              "sports-information": 50,
+              "underground-connections": 100
+            },
+            "commonLocations": ["Sports bars", "Underground gambling dens", "Race tracks"],
+            "commonOrganizations": []
+          },
+          {
+            "id": "rf-border-patrol-agent",
+            "name": "Border Patrol Agent",
+            "description": "A border officer who can verify SINs, provide geographic intelligence, and assist with border crossings.",
+            "suggestedConnection": [1, 3],
+            "suggestedLoyalty": [1, 3],
+            "commonServices": [
+              "border-crossing",
+              "sin-verification",
+              "geographic-intel",
+              "smuggling-routes"
+            ],
+            "riskProfile": "medium",
+            "typicalCosts": {
+              "border-crossing": 500,
+              "sin-verification": 100,
+              "geographic-intel": 50
+            },
+            "commonLocations": ["Border checkpoints", "Rural areas"],
+            "commonOrganizations": []
+          },
+          {
+            "id": "rf-bounty-hunter",
+            "name": "Bounty Hunter",
+            "description": "A professional tracker who chases down subjects for the right price.",
+            "suggestedConnection": [2, 4],
+            "suggestedLoyalty": [1, 3],
+            "commonServices": ["tracking", "skip-tracing", "bounty-collection", "street-intel"],
+            "riskProfile": "high",
+            "typicalCosts": { "tracking": 1000, "skip-tracing": 500, "street-intel": 100 },
+            "commonLocations": ["Bail bond offices", "Dive bars"],
+            "commonOrganizations": []
+          },
+          {
+            "id": "rf-chop-shop-mechanic",
+            "name": "Chop Shop Mechanic",
+            "description": "A skilled vehicle mechanic who handles illegal modifications, repairs, and stolen parts.",
+            "suggestedConnection": [2, 4],
+            "suggestedLoyalty": [1, 3],
+            "commonServices": [
+              "vehicle-repair",
+              "vehicle-modification",
+              "stolen-parts",
+              "loaner-vehicle"
+            ],
+            "riskProfile": "medium",
+            "typicalCosts": {
+              "vehicle-repair": 300,
+              "vehicle-modification": 500,
+              "loaner-vehicle": 200
+            },
+            "commonLocations": ["Back-alley garages", "Industrial districts", "Junkyards"],
+            "commonOrganizations": []
+          },
+          {
+            "id": "rf-church-pastor",
+            "name": "Church Pastor",
+            "description": "A community spiritual leader who provides emotional support, counseling, and sanctuary.",
+            "suggestedConnection": [1, 3],
+            "suggestedLoyalty": [2, 5],
+            "commonServices": [
+              "counseling",
+              "sanctuary",
+              "community-connections",
+              "emotional-support"
+            ],
+            "riskProfile": "low",
+            "typicalCosts": { "counseling": 0, "sanctuary": 0, "community-connections": 50 },
+            "commonLocations": ["Churches", "Community centers", "Homeless shelters"],
+            "commonOrganizations": []
+          },
+          {
+            "id": "rf-city-official",
+            "name": "City Official",
+            "description": "A bureaucrat who leverages political power for personal gain and can offer government resources.",
+            "suggestedConnection": [5, 7],
+            "suggestedLoyalty": [1, 3],
+            "commonServices": [
+              "political-favors",
+              "government-info",
+              "legal-leverage",
+              "resource-allocation"
+            ],
+            "riskProfile": "high",
+            "typicalCosts": {
+              "political-favors": 2000,
+              "government-info": 500,
+              "legal-leverage": 1000
+            },
+            "commonLocations": ["City hall", "Upscale restaurants", "Private clubs"],
+            "commonOrganizations": []
+          },
+          {
+            "id": "rf-club-kid",
+            "name": "Club Kid",
+            "description": "A fashion-forward socialite who knows everyone on the club scene and can network with the powerful.",
+            "suggestedConnection": [2, 4],
+            "suggestedLoyalty": [1, 3],
+            "commonServices": [
+              "social-networking",
+              "fashion-trends",
+              "club-scene-intel",
+              "celebrity-connections"
+            ],
+            "riskProfile": "low",
+            "typicalCosts": {
+              "social-networking": 100,
+              "club-scene-intel": 50,
+              "celebrity-connections": 200
+            },
+            "commonLocations": ["Nightclubs", "Fashion boutiques", "Gallery openings"],
+            "commonOrganizations": []
+          },
+          {
+            "id": "rf-company-suit",
+            "name": "Company Suit",
+            "description": "A corporate executive agent with access to intelligence and dirty secrets, fiercely loyal to her company.",
+            "suggestedConnection": [3, 5],
+            "suggestedLoyalty": [1, 3],
+            "commonServices": [
+              "corporate-intel",
+              "corporate-access",
+              "legal-resources",
+              "corporate-connections"
+            ],
+            "riskProfile": "high",
+            "typicalCosts": {
+              "corporate-intel": 1000,
+              "corporate-access": 500,
+              "legal-resources": 800
+            },
+            "commonLocations": ["Corporate offices", "Executive lounges", "High-end bars"],
+            "commonOrganizations": ["Ares", "Aztechnology", "Renraku", "Saeder-Krupp"]
+          },
+          {
+            "id": "rf-con-fanatic",
+            "name": "Con Fanatic",
+            "description": "An obsessive convention-goer who can help with travel arrangements and cover stories through their fandom networks.",
+            "suggestedConnection": [1, 2],
+            "suggestedLoyalty": [1, 4],
+            "commonServices": [
+              "travel-arrangements",
+              "cover-stories",
+              "pop-culture-knowledge",
+              "convention-networking"
+            ],
+            "riskProfile": "low",
+            "typicalCosts": {
+              "travel-arrangements": 100,
+              "cover-stories": 50,
+              "convention-networking": 25
+            },
+            "commonLocations": ["Gaming stores", "Convention centers"],
+            "commonOrganizations": []
+          },
+          {
+            "id": "rf-corporate-administrator",
+            "name": "Corporate Administrator",
+            "description": "A corporate office scheduler and social hub who knows all the gossip and office politics.",
+            "suggestedConnection": [2, 4],
+            "suggestedLoyalty": [1, 4],
+            "commonServices": [
+              "corporate-gossip",
+              "office-access",
+              "schedule-info",
+              "internal-connections"
+            ],
+            "riskProfile": "low",
+            "typicalCosts": { "corporate-gossip": 50, "office-access": 200, "schedule-info": 100 },
+            "commonLocations": ["Corporate lobbies", "Break rooms", "Coffee shops"],
+            "commonOrganizations": []
+          },
+          {
+            "id": "rf-corporate-wageslave",
+            "name": "Corporate Wageslave",
+            "description": "A faceless corporate worker who can provide routine corporate access and an inside perspective.",
+            "suggestedConnection": [1, 3],
+            "suggestedLoyalty": [1, 4],
+            "commonServices": [
+              "corporate-access",
+              "routine-info",
+              "cover-identity",
+              "inside-perspective"
+            ],
+            "riskProfile": "low",
+            "typicalCosts": { "corporate-access": 100, "routine-info": 50, "cover-identity": 200 },
+            "commonLocations": ["Corporate cafeterias", "Commuter trains", "Suburban bars"],
+            "commonOrganizations": []
+          },
+          {
+            "id": "rf-coyote",
+            "name": "Coyote",
+            "description": "A smuggler who specializes in moving people across borders through tunnels, bribes, and alternative routes.",
+            "suggestedConnection": [2, 4],
+            "suggestedLoyalty": [1, 3],
+            "commonServices": [
+              "border-smuggling",
+              "safe-passage",
+              "fake-sin-connections",
+              "underground-routes"
+            ],
+            "riskProfile": "high",
+            "typicalCosts": {
+              "border-smuggling": 2000,
+              "safe-passage": 1000,
+              "fake-sin-connections": 500
+            },
+            "commonLocations": ["Border towns", "Safe houses", "Truck stops"],
+            "commonOrganizations": []
+          },
+          {
+            "id": "rf-cybernetic-technician",
+            "name": "Cybernetic Technician",
+            "description": "A body shop tech who repairs and installs cyberware, with discounts on used parts.",
+            "suggestedConnection": [3, 5],
+            "suggestedLoyalty": [1, 3],
+            "commonServices": [
+              "cyberware-installation",
+              "cyberware-repair",
+              "used-cyberware",
+              "tech-consultation"
+            ],
+            "riskProfile": "medium",
+            "typicalCosts": {
+              "cyberware-installation": 1000,
+              "cyberware-repair": 500,
+              "used-cyberware": 750
+            },
+            "commonLocations": ["Body shops", "Medical clinics", "Tech labs"],
+            "commonOrganizations": []
+          },
+          {
+            "id": "rf-gang-boss",
+            "name": "Gang Boss",
+            "description": "A criminal organization leader with an army of thugs and deep underworld knowledge.",
+            "suggestedConnection": [2, 4],
+            "suggestedLoyalty": [1, 3],
+            "commonServices": [
+              "muscle",
+              "criminal-info",
+              "territory-access",
+              "underground-connections"
+            ],
+            "riskProfile": "high",
+            "typicalCosts": { "muscle": 500, "criminal-info": 200, "territory-access": 100 },
+            "commonLocations": ["Gang hangouts", "Back alleys", "Abandoned buildings"],
+            "commonOrganizations": []
+          },
+          {
+            "id": "rf-government-official",
+            "name": "Government Official",
+            "description": "A mysterious spook with government connections who trades knowledge for odd jobs.",
+            "suggestedConnection": [5, 7],
+            "suggestedLoyalty": [1, 2],
+            "commonServices": [
+              "government-intel",
+              "classified-info",
+              "political-connections",
+              "odd-jobs"
+            ],
+            "riskProfile": "high",
+            "typicalCosts": {
+              "government-intel": 2000,
+              "classified-info": 3000,
+              "political-connections": 1500
+            },
+            "commonLocations": ["Anonymous locations", "Public parks"],
+            "commonOrganizations": []
+          },
+          {
+            "id": "rf-id-manufacturer",
+            "name": "ID Manufacturer",
+            "description": "A Matrix-savvy forger who creates fake SINs and data trails for the SINless.",
+            "suggestedConnection": [4, 6],
+            "suggestedLoyalty": [1, 3],
+            "commonServices": ["fake-sin", "fake-license", "identity-verification", "sin-analysis"],
+            "riskProfile": "high",
+            "typicalCosts": { "fake-sin": 2500, "fake-license": 200, "identity-verification": 500 },
+            "commonLocations": ["Matrix-only meetings", "Secure data havens"],
+            "commonOrganizations": []
+          },
+          {
+            "id": "rf-informant",
+            "name": "Informant",
+            "description": "A stool pigeon with privileged inside information about criminal organizations.",
+            "suggestedConnection": [1, 3],
+            "suggestedLoyalty": [1, 2],
+            "commonServices": [
+              "inside-info",
+              "organization-intel",
+              "undercover-access",
+              "criminal-connections"
+            ],
+            "riskProfile": "high",
+            "typicalCosts": {
+              "inside-info": 200,
+              "organization-intel": 500,
+              "criminal-connections": 100
+            },
+            "commonLocations": ["Discreet locations", "Public spaces"],
+            "commonOrganizations": []
+          },
+          {
+            "id": "rf-international-courier",
+            "name": "International Courier",
+            "description": "A trusted transporter with legitimate paperwork who moves goods across international borders.",
+            "suggestedConnection": [5, 7],
+            "suggestedLoyalty": [1, 3],
+            "commonServices": [
+              "international-smuggling",
+              "package-delivery",
+              "cross-border-transport",
+              "travel-assistance"
+            ],
+            "riskProfile": "high",
+            "typicalCosts": {
+              "international-smuggling": 5000,
+              "package-delivery": 2000,
+              "cross-border-transport": 3000
+            },
+            "commonLocations": ["Airports", "Shipping docks", "Hotel lobbies"],
+            "commonOrganizations": []
+          },
+          {
+            "id": "rf-knight-errant-dispatcher",
+            "name": "Knight Errant Dispatcher",
+            "description": "A law enforcement dispatcher who monitors security alarms and can warn runners of incoming responses.",
+            "suggestedConnection": [1, 3],
+            "suggestedLoyalty": [1, 3],
+            "commonServices": [
+              "law-enforcement-alerts",
+              "police-response-timing",
+              "security-monitoring",
+              "active-event-tracking"
+            ],
+            "riskProfile": "medium",
+            "typicalCosts": {
+              "law-enforcement-alerts": 200,
+              "police-response-timing": 300,
+              "security-monitoring": 150
+            },
+            "commonLocations": ["Off-duty cop bars", "Coffee shops near precincts"],
+            "commonOrganizations": ["Knight Errant"]
+          },
+          {
+            "id": "rf-lone-star-detective",
+            "name": "Lone Star Detective",
+            "description": "An investigator with access to criminal records, old cases, and cultivated sources.",
+            "suggestedConnection": [4, 6],
+            "suggestedLoyalty": [1, 3],
+            "commonServices": [
+              "criminal-investigation",
+              "evidence-examination",
+              "criminal-records",
+              "case-tracking"
+            ],
+            "riskProfile": "high",
+            "typicalCosts": {
+              "criminal-investigation": 500,
+              "evidence-examination": 300,
+              "criminal-records": 200
+            },
+            "commonLocations": ["Precinct offices", "Crime scenes", "Late-night diners"],
+            "commonOrganizations": ["Lone Star"]
+          },
+          {
+            "id": "rf-mafia-consigliere",
+            "name": "Mafia Consigliere",
+            "description": "A high-ranking Mafia advisor with legal knowledge and political influence.",
+            "suggestedConnection": [4, 6],
+            "suggestedLoyalty": [1, 3],
+            "commonServices": [
+              "organized-crime-connections",
+              "legal-advice",
+              "political-influence",
+              "protection"
+            ],
+            "riskProfile": "high",
+            "typicalCosts": {
+              "legal-advice": 1000,
+              "political-influence": 2000,
+              "protection": 1500
+            },
+            "commonLocations": ["Italian restaurants", "Private social clubs", "Luxury vehicles"],
+            "commonOrganizations": ["Mafia"]
+          },
+          {
+            "id": "rf-media-mogul",
+            "name": "Media Mogul",
+            "description": "A corporate media power broker who controls what information reaches the masses.",
+            "suggestedConnection": [4, 6],
+            "suggestedLoyalty": [1, 2],
+            "commonServices": [
+              "media-manipulation",
+              "news-suppression",
+              "corporate-intel",
+              "public-relations"
+            ],
+            "riskProfile": "medium",
+            "typicalCosts": {
+              "media-manipulation": 2000,
+              "news-suppression": 3000,
+              "public-relations": 1000
+            },
+            "commonLocations": ["Media studios", "Corporate towers", "Exclusive restaurants"],
+            "commonOrganizations": ["Horizon"]
+          },
+          {
+            "id": "rf-metahuman-rights-activist",
+            "name": "Metahuman Rights Activist",
+            "description": "A passionate activist who fights for metahuman equality and can organize protests as distractions.",
+            "suggestedConnection": [2, 4],
+            "suggestedLoyalty": [1, 4],
+            "commonServices": [
+              "protest-organization",
+              "community-connections",
+              "media-attention",
+              "distraction-ops"
+            ],
+            "riskProfile": "medium",
+            "typicalCosts": {
+              "protest-organization": 500,
+              "community-connections": 100,
+              "distraction-ops": 300
+            },
+            "commonLocations": ["Community centers", "Underground bars", "Protest sites"],
+            "commonOrganizations": ["Ork Rights Committee", "Mothers of Metahumans"]
+          },
+          {
+            "id": "rf-news-reporter",
+            "name": "News Reporter",
+            "description": "An aggressive journalist who trades information for scoops and has access to databases.",
+            "suggestedConnection": [1, 3],
+            "suggestedLoyalty": [1, 3],
+            "commonServices": [
+              "news-and-rumors",
+              "surveillance",
+              "information-trade",
+              "media-coverage"
+            ],
+            "riskProfile": "medium",
+            "typicalCosts": {
+              "news-and-rumors": 50,
+              "surveillance": 300,
+              "information-trade": 200
+            },
+            "commonLocations": ["News offices", "Crime scenes", "Local bars"],
+            "commonOrganizations": []
+          },
+          {
+            "id": "rf-parazoologist",
+            "name": "Parazoologist",
+            "description": "A scientist who studies Awakened creatures and can identify paracritter threats and weaknesses.",
+            "suggestedConnection": [1, 2],
+            "suggestedLoyalty": [1, 4],
+            "commonServices": [
+              "paracritter-identification",
+              "creature-weaknesses",
+              "field-research",
+              "training-advice"
+            ],
+            "riskProfile": "low",
+            "typicalCosts": {
+              "paracritter-identification": 50,
+              "creature-weaknesses": 100,
+              "field-research": 200
+            },
+            "commonLocations": ["University labs", "Nature preserves", "Museums"],
+            "commonOrganizations": []
+          },
+          {
+            "id": "rf-pawn-broker",
+            "name": "Pawn Broker",
+            "description": "A neighborhood trader who buys and sells used goods and knows everyone's routines.",
+            "suggestedConnection": [1, 3],
+            "suggestedLoyalty": [1, 4],
+            "commonServices": ["buy-sell-goods", "neighborhood-intel", "used-gear", "quick-cash"],
+            "riskProfile": "low",
+            "typicalCosts": { "neighborhood-intel": 20, "used-gear": 0, "quick-cash": 0 },
+            "commonLocations": ["Pawn shops", "Flea markets"],
+            "commonOrganizations": []
+          },
+          {
+            "id": "rf-pharmacy-tech",
+            "name": "Pharmacy Tech",
+            "description": "A chemical and pharmaceutical expert who can create, deconstruct, and supply drugs and medical supplies.",
+            "suggestedConnection": [2, 4],
+            "suggestedLoyalty": [1, 3],
+            "commonServices": [
+              "drug-procurement",
+              "pharmaceutical-knowledge",
+              "medkit-supplies",
+              "drug-analysis"
+            ],
+            "riskProfile": "medium",
+            "typicalCosts": {
+              "drug-procurement": 200,
+              "medkit-supplies": 100,
+              "drug-analysis": 150
+            },
+            "commonLocations": ["Pharmacies", "Clinics", "University labs"],
+            "commonOrganizations": []
+          },
+          {
+            "id": "rf-popular-mefeed-personality",
+            "name": "Popular MeFeed Personality",
+            "description": "A Matrix social media personality with a following who can influence opinions and gather information.",
+            "suggestedConnection": [1, 2],
+            "suggestedLoyalty": [1, 3],
+            "commonServices": [
+              "social-media-influence",
+              "public-opinion",
+              "matrix-connections",
+              "information-gathering"
+            ],
+            "riskProfile": "low",
+            "typicalCosts": {
+              "social-media-influence": 100,
+              "matrix-connections": 50,
+              "information-gathering": 75
+            },
+            "commonLocations": ["Trendy cafes", "Public events"],
+            "commonOrganizations": []
+          },
+          {
+            "id": "rf-recicladore",
+            "name": "Recicladore",
+            "description": "A trash dump scavenger who salvages low-tech goods and knows where to hide bodies.",
+            "suggestedConnection": [1, 2],
+            "suggestedLoyalty": [1, 3],
+            "commonServices": [
+              "salvaged-goods",
+              "body-disposal",
+              "low-tech-equipment",
+              "barter-goods"
+            ],
+            "riskProfile": "low",
+            "typicalCosts": { "salvaged-goods": 0, "body-disposal": 500, "low-tech-equipment": 0 },
+            "commonLocations": ["Trash dumps", "Recycling centers", "Barrens outskirts"],
+            "commonOrganizations": []
+          },
+          {
+            "id": "rf-rent-a-cop",
+            "name": "Rent-a-Cop",
+            "description": "A low-budget security guard with building access and eyes on his assigned beat.",
+            "suggestedConnection": [1, 2],
+            "suggestedLoyalty": [1, 3],
+            "commonServices": [
+              "security-patrol-info",
+              "building-access",
+              "local-intel",
+              "lookout-duty"
+            ],
+            "riskProfile": "low",
+            "typicalCosts": {
+              "security-patrol-info": 50,
+              "building-access": 100,
+              "lookout-duty": 75
+            },
+            "commonLocations": ["Shopping malls", "Corporate parking lots", "Fast food joints"],
+            "commonOrganizations": []
+          },
+          {
+            "id": "rf-rockstar",
+            "name": "Rockstar",
+            "description": "A wildly popular musician who can connect runners with influential people worldwide.",
+            "suggestedConnection": [3, 5],
+            "suggestedLoyalty": [1, 2],
+            "commonServices": [
+              "celebrity-access",
+              "social-influence",
+              "media-connections",
+              "vip-introductions"
+            ],
+            "riskProfile": "medium",
+            "typicalCosts": {
+              "celebrity-access": 500,
+              "social-influence": 1000,
+              "vip-introductions": 750
+            },
+            "commonLocations": ["Backstage areas", "Private parties", "Recording studios"],
+            "commonOrganizations": []
+          },
+          {
+            "id": "rf-safehouse-master",
+            "name": "Safehouse Master",
+            "description": "A disciplined protector who manages safehouses and keeps their residents hidden.",
+            "suggestedConnection": [2, 4],
+            "suggestedLoyalty": [1, 4],
+            "commonServices": [
+              "safe-lodging",
+              "security",
+              "low-profile-ops",
+              "fugitive-protection"
+            ],
+            "riskProfile": "medium",
+            "typicalCosts": { "safe-lodging": 300, "security": 200, "fugitive-protection": 500 },
+            "commonLocations": ["Safehouses", "Secure locations"],
+            "commonOrganizations": []
+          },
+          {
+            "id": "rf-script-kiddie",
+            "name": "Script Kiddie",
+            "description": "A wannabe decker with homemade gear who can provide cheap Matrix services.",
+            "suggestedConnection": [1, 3],
+            "suggestedLoyalty": [1, 4],
+            "commonServices": [
+              "matrix-recon",
+              "malware-deployment",
+              "cheap-hacking",
+              "matrix-rumors"
+            ],
+            "riskProfile": "medium",
+            "typicalCosts": {
+              "matrix-recon": 100,
+              "malware-deployment": 200,
+              "cheap-hacking": 150
+            },
+            "commonLocations": ["Coffee shops", "Hacker spaces", "Matrix cafes"],
+            "commonOrganizations": []
+          },
+          {
+            "id": "rf-sprawl-ganger",
+            "name": "Sprawl Ganger",
+            "description": "A street-tough gang member who can shake trees and see what falls out.",
+            "suggestedConnection": [1, 2],
+            "suggestedLoyalty": [1, 3],
+            "commonServices": ["street-muscle", "neighborhood-watch", "gang-intel", "intimidation"],
+            "riskProfile": "medium",
+            "typicalCosts": { "street-muscle": 100, "gang-intel": 50, "intimidation": 75 },
+            "commonLocations": ["Street corners", "Gang hangouts", "Barrens bars"],
+            "commonOrganizations": []
+          },
+          {
+            "id": "rf-squatter",
+            "name": "Squatter",
+            "description": "A SINless street dweller who leverages anonymity for surveillance and local intelligence.",
+            "suggestedConnection": [1, 2],
+            "suggestedLoyalty": [1, 3],
+            "commonServices": ["surveillance", "barrens-knowledge", "anonymity", "local-rumors"],
+            "riskProfile": "low",
+            "typicalCosts": { "surveillance": 50, "barrens-knowledge": 20, "local-rumors": 10 },
+            "commonLocations": ["Under bridges", "Abandoned buildings", "Soup kitchens"],
+            "commonOrganizations": []
+          },
+          {
+            "id": "rf-store-owner",
+            "name": "Store Owner",
+            "description": "A neighborhood fixture who observes comings and goings and provides friendly advice.",
+            "suggestedConnection": [1, 2],
+            "suggestedLoyalty": [1, 4],
+            "commonServices": [
+              "local-intel",
+              "meeting-point",
+              "small-goods",
+              "community-connections"
+            ],
+            "riskProfile": "low",
+            "typicalCosts": { "local-intel": 20, "meeting-point": 0, "small-goods": 0 },
+            "commonLocations": ["Their store", "Local markets"],
+            "commonOrganizations": []
+          },
+          {
+            "id": "rf-street-doc",
+            "name": "Street Doc",
+            "description": "An underground medical professional. Run Faster expanded version with different specializations.",
+            "suggestedConnection": [3, 5],
+            "suggestedLoyalty": [1, 3],
+            "commonServices": [
+              "medical-care",
+              "cyberware-installation",
+              "drug-knowledge",
+              "emergency-treatment"
+            ],
+            "riskProfile": "low",
+            "typicalCosts": {
+              "medical-care": 200,
+              "cyberware-installation": 1000,
+              "emergency-treatment": 500
+            },
+            "commonLocations": ["Back-alley clinics", "Body shops"],
+            "commonOrganizations": []
+          },
+          {
+            "id": "rf-street-kid",
+            "name": "Street Kid",
+            "description": "A young barrens survivor who is small enough to be ignored but useful for running messages and watching.",
+            "suggestedConnection": [1, 2],
+            "suggestedLoyalty": [1, 4],
+            "commonServices": ["surveillance", "message-running", "street-info", "distraction"],
+            "riskProfile": "low",
+            "typicalCosts": { "surveillance": 20, "message-running": 10, "street-info": 15 },
+            "commonLocations": ["Street corners", "Abandoned lots", "Soup kitchens"],
+            "commonOrganizations": []
+          },
+          {
+            "id": "rf-talismonger",
+            "name": "Talismonger",
+            "description": "A magical supplies dealer. Run Faster expanded version with alchemy and sorcery skills.",
+            "suggestedConnection": [2, 4],
+            "suggestedLoyalty": [1, 3],
+            "commonServices": [
+              "magical-supplies",
+              "arcane-knowledge",
+              "spell-components",
+              "magical-identification"
+            ],
+            "riskProfile": "low",
+            "typicalCosts": {
+              "magical-supplies": 100,
+              "spell-components": 200,
+              "magical-identification": 50
+            },
+            "commonLocations": ["Talismonger shops", "Magical supply stores"],
+            "commonOrganizations": []
+          },
+          {
+            "id": "rf-taxi-driver",
+            "name": "Taxi Driver",
+            "description": "A city navigator who works long hours and can provide transportation, even into dangerous areas.",
+            "suggestedConnection": [1, 3],
+            "suggestedLoyalty": [1, 4],
+            "commonServices": [
+              "transportation",
+              "city-navigation",
+              "surveillance-platform",
+              "quick-getaway"
+            ],
+            "riskProfile": "low",
+            "typicalCosts": {
+              "transportation": 50,
+              "quick-getaway": 200,
+              "surveillance-platform": 100
+            },
+            "commonLocations": ["Taxi stands", "Hotels", "Airports"],
+            "commonOrganizations": []
+          },
+          {
+            "id": "rf-terrafirst-activist",
+            "name": "TerraFirst! Activist",
+            "description": "An eco-terrorist devoted to opposing environmental destruction through extreme measures.",
+            "suggestedConnection": [3, 5],
+            "suggestedLoyalty": [1, 3],
+            "commonServices": [
+              "demolitions-expertise",
+              "eco-terrorism-connections",
+              "protest-organization",
+              "underground-networks"
+            ],
+            "riskProfile": "high",
+            "typicalCosts": {
+              "demolitions-expertise": 1000,
+              "protest-organization": 500,
+              "underground-networks": 300
+            },
+            "commonLocations": ["Nature preserves", "Underground bunkers", "Eco-communes"],
+            "commonOrganizations": ["TerraFirst!"]
+          },
+          {
+            "id": "rf-trid-pirate",
+            "name": "Trid Pirate",
+            "description": "An old-school Pink Mohawk rebel who disrupts corporate media and broadcasts hidden truths.",
+            "suggestedConnection": [1, 3],
+            "suggestedLoyalty": [1, 4],
+            "commonServices": [
+              "media-disruption",
+              "signal-jamming",
+              "propaganda-broadcasting",
+              "electronic-warfare"
+            ],
+            "riskProfile": "medium",
+            "typicalCosts": {
+              "media-disruption": 200,
+              "signal-jamming": 300,
+              "propaganda-broadcasting": 150
+            },
+            "commonLocations": ["Pirate radio stations", "Underground studios", "Hacker dens"],
+            "commonOrganizations": []
+          },
+          {
+            "id": "rf-used-car-salesman",
+            "name": "Used Car Salesman",
+            "description": "A smooth-talking vehicle dealer who sells anonymous vehicles and can switch grid IDs.",
+            "suggestedConnection": [1, 3],
+            "suggestedLoyalty": [1, 3],
+            "commonServices": [
+              "vehicle-sales",
+              "vehicle-rental",
+              "grid-id-switching",
+              "anonymous-transportation"
+            ],
+            "riskProfile": "low",
+            "typicalCosts": { "vehicle-sales": 0, "vehicle-rental": 200, "grid-id-switching": 500 },
+            "commonLocations": ["Used car lots", "Parking garages", "Auto repair shops"],
+            "commonOrganizations": []
+          }
+        ]
       }
     },
     "contactTemplates": {
       "mergeStrategy": "append",
       "payload": {
-        "templates": []
+        "templates": [],
+        "randomGeneratorTables": {
+          "source": "Run Faster",
+          "page": "180-181",
+          "gender": {
+            "diceFormula": "1d6",
+            "results": [
+              { "roll": [1, 3], "result": "Male" },
+              { "roll": [4, 6], "result": "Female" }
+            ]
+          },
+          "age": {
+            "diceFormula": "1d6",
+            "results": [
+              { "roll": [1, 2], "result": "Young" },
+              { "roll": [3, 4], "result": "Middle-aged" },
+              { "roll": [5, 6], "result": "Old" }
+            ]
+          },
+          "metatype": {
+            "diceFormula": "2d6",
+            "results": [
+              { "roll": [2, 5], "result": "Human" },
+              { "roll": [6, 7], "result": "Ork" },
+              { "roll": [8, 9], "result": "Elf" },
+              { "roll": [10, 11], "result": "Dwarf" },
+              { "roll": [12, 12], "result": "Troll" }
+            ]
+          },
+          "personalLife": {
+            "diceFormula": "1d6",
+            "results": [
+              { "roll": 1, "result": "Single" },
+              { "roll": 2, "result": "In a Relationship" },
+              { "roll": 3, "result": "Familial Relationships" },
+              { "roll": 4, "result": "Divorced" },
+              { "roll": 5, "result": "Widowed" },
+              { "roll": 6, "result": "None of Your Damn Business" }
+            ]
+          },
+          "preferredPayment": {
+            "diceFormula": "2d6",
+            "results": [
+              { "roll": 2, "result": "Cash (hard currency)" },
+              { "roll": 3, "result": "Service (drek jobs)" },
+              { "roll": 4, "result": "Cash (corp scrip)" },
+              { "roll": 5, "result": "Barter (items needed for the profession)" },
+              { "roll": 6, "result": "Service (shadowrunner job)" },
+              { "roll": 7, "result": "Cash (credstick)" },
+              { "roll": 8, "result": "Cash (credstick)" },
+              { "roll": 9, "result": "Barter (easy-to-sell items)" },
+              { "roll": 10, "result": "Service (free-labor jobs)" },
+              { "roll": 11, "result": "Barter (hobby/vice items)" },
+              { "roll": 12, "result": "Cash (ECC or other foreign electronic currency)" }
+            ]
+          },
+          "hobbiesVices": {
+            "diceFormula": "2d6",
+            "results": [
+              { "roll": 2, "result": "Gamemaster's choice" },
+              { "roll": 3, "result": "Family obligations (children, parents, siblings, etc.)" },
+              { "roll": 4, "result": "Gambling (cards, horses, etc.)" },
+              { "roll": 5, "result": "Bad habits (illegal drugs, BTLs)" },
+              {
+                "roll": 6,
+                "result": "Personal grooming (clothes/fashion, shoes, perfumes, cosmetic treatments)"
+              },
+              { "roll": 7, "result": "Nothing of interest or of use" },
+              { "roll": 8, "result": "Social habits (drinking, smoking)" },
+              { "roll": 9, "result": "Entertainment (trid shows, movies, music)" },
+              { "roll": 10, "result": "Weapons (guns, blades, military, etc.)" },
+              { "roll": 11, "result": "Vehicles (cars, drones, etc.)" },
+              { "roll": 12, "result": "Gamemaster's choice" }
+            ]
+          },
+          "mentalQuirks": [
+            "Absent-minded",
+            "Believes himself to be an expert in some trivia or another",
+            "Believes himself to be sexy and flirts constantly",
+            "Chauvinist (male or female)",
+            "Compulsive liar",
+            "Disdain for SINless",
+            "Disdain when working with someone from a specific lifestyle",
+            "Fear of touching people",
+            "Fear of trolls/orks, but tries not to show it",
+            "Hates to be corrected",
+            "Hoarder of materials",
+            "Illiterate, but won't admit it",
+            "Mistrusts technological devices (paranoid or too old school)",
+            "Nervous habits (bites fingernails, wrings hands together, flop sweat, fidgety, etc.)",
+            "Obsessive-compulsive habits",
+            "Paranoid habits (insists on sitting with back toward wall, constantly checks sensors linked to commlink, etc.)",
+            "Racist toward a specific metatype (gamemaster choice)",
+            "Suffering from some obvious phobia (agoraphobia, mysophobia, acrophobia, claustrophobia, etc.)",
+            "Talks to himself (and sometimes answers)",
+            "Thin skinned",
+            "Tightwad",
+            "Unusual food preferences"
+          ],
+          "verbalQuirks": [
+            "Mangles metaphors",
+            "Memorable voice (deep, gravelly, light accent, sultry)",
+            "Over-explains",
+            "Speaks too loudly, or mumbles",
+            "Speaks with a lisp",
+            "Speaks with a thick accent that makes it hard to understand",
+            "Sprinkles profanities in every sentence",
+            "Talks too much"
+          ],
+          "physicalQuirks": [
+            "Allergic to a team member's perfume/aftershave",
+            "Bad breath",
+            "Chromed or plated features (any cybernetics, teeth, etc.)",
+            "Clothes don't fit (like they were made for another person)",
+            "Constantly sick/death warmed over",
+            "Crushing handshake",
+            "Distinctive facial hair (bicycle handle mustache, braided beard, etc.)",
+            "Distinctive style of clothing",
+            "Exceptionally clean/hygienic",
+            "Exceptionally skinny or overweight",
+            "Exceptionally soiled (stained clothes, dirty hands, scuffed/sticky devices, etc.)",
+            "Facial tick",
+            "Habitually handles some small item on his person",
+            "Memorable/unique smell (exotic perfume, incense, etc.)",
+            "Strong odor (BO, aftershave, perfume, smoke, disinfectant, etc.)",
+            "Two different eye colors",
+            "Visible scarring (face, hands, etc.)",
+            "Visible tattoos/inserts",
+            "Walks with a limp",
+            "War wounds (lost fingers, cauliflower ear, bullet scars, etc.)"
+          ]
+        }
       }
     },
     "equipmentPacks": {

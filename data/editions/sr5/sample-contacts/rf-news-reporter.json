@@ -1,0 +1,51 @@
+{
+  "id": "rf-sample-contact-news-reporter",
+  "editionCode": "sr5",
+  "name": "News Reporter",
+  "description": "News Reporters are always in the face of newsworthy events with an electronic eye or ear, be it their own or a drone. And they don't take no for an answer, especially if pursuing the answer puts nuyen on the table. They have their own host of people and databases from which they can get rumors and statistics, but it's the real dirt, hidden in safes or behind closed doors, that they are after. So with a little trade in services, the news reporter may share vital intel in return for the runner's hand in retrieving paydata, tailing, or wiretapping a conversation.",
+  "uses": ["News and rumors", "Surveillance", "Information trade", "Media coverage"],
+  "meetingPlaces": ["News offices", "Crime scenes", "Local bars"],
+  "similarContacts": [],
+  "attributes": {
+    "body": 3,
+    "agility": 3,
+    "reaction": 4,
+    "strength": 3,
+    "willpower": 4,
+    "logic": 3,
+    "intuition": 3,
+    "charisma": 4
+  },
+  "specialAttributes": {
+    "edge": 2,
+    "essence": 6
+  },
+  "initiative": {
+    "base": 7,
+    "dice": 1
+  },
+  "limits": {
+    "physical": 5,
+    "mental": 5,
+    "social": 6
+  },
+  "conditionMonitor": 10,
+  "skills": [
+    { "name": "Computers", "rating": 2 },
+    { "name": "Etiquette", "rating": 3, "specialization": "Media" },
+    { "name": "Perception", "rating": 4 },
+    { "name": "Sneaking", "rating": 4 },
+    { "name": "Tracking", "rating": 3 }
+  ],
+  "knowledgeSkills": [
+    { "name": "[City] Knowledge", "rating": 3 },
+    { "name": "Gang Identification", "rating": 3 },
+    { "name": "Local Bars", "rating": 3 },
+    { "name": "Street Rumors", "rating": 3 }
+  ],
+  "metadata": {
+    "source": "Run Faster",
+    "page": "190",
+    "category": "Sample Contact"
+  }
+}

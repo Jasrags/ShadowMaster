@@ -1,0 +1,50 @@
+{
+  "id": "rf-sample-contact-church-pastor",
+  "editionCode": "sr5",
+  "name": "Church Pastor",
+  "description": "You always need someone to talk to just to get things off your chest. Maybe you question why you are shooting people in the face for money and want some sort of sign or guidance. Your local pastor can give you that help. Maybe not everything can be worked out, but if you are trying to kick the habit, he's got your back.",
+  "uses": ["Emotional support", "Counseling", "Community connections", "Sanctuary"],
+  "meetingPlaces": ["Churches", "Community centers", "Homeless shelters"],
+  "similarContacts": ["Life Coach", "Psychologist"],
+  "attributes": {
+    "body": 4,
+    "agility": 3,
+    "reaction": 3,
+    "strength": 3,
+    "willpower": 4,
+    "logic": 4,
+    "intuition": 5,
+    "charisma": 5
+  },
+  "specialAttributes": {
+    "edge": 2,
+    "essence": 6
+  },
+  "initiative": {
+    "base": 8,
+    "dice": 1
+  },
+  "limits": {
+    "physical": 5,
+    "mental": 6,
+    "social": 7
+  },
+  "conditionMonitor": 10,
+  "skills": [
+    { "name": "Computers", "rating": 2 },
+    { "name": "Etiquette", "rating": 4 },
+    { "name": "Leadership", "rating": 5 },
+    { "name": "Negotiation", "rating": 4 },
+    { "name": "Performance", "rating": 3 }
+  ],
+  "knowledgeSkills": [
+    { "name": "Magic Theory", "rating": 4 },
+    { "name": "Music", "rating": 4 },
+    { "name": "Religion", "rating": 8 }
+  ],
+  "metadata": {
+    "source": "Run Faster",
+    "page": "184",
+    "category": "Sample Contact"
+  }
+}

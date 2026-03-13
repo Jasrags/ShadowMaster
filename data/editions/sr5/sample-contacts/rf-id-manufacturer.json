@@ -1,0 +1,54 @@
+{
+  "id": "rf-sample-contact-id-manufacturer",
+  "editionCode": "sr5",
+  "name": "ID Manufacturer",
+  "description": "The ID Manufacturer works behind the scenes using agents to gather and create data trails as she codes new SINs for clients. With plenty of demand for people wanting to be able to have their existence acknowledged so they can buy those corporate-advertised toys and get out of the barrens, she can pick and choose her clientele. If you have her as a contact, you were one of the fortunate that she will work for. Besides Fake SINs and licenses, she knows how to get real licenses, and since behind every SIN there's an artist, she can probably tell you the general seller of a specific SIN.",
+  "uses": ["Fake SINs", "Fake licenses", "Identity verification", "SIN analysis"],
+  "meetingPlaces": ["Matrix-only meetings", "Secure data havens", "Anonymous drops"],
+  "similarContacts": [],
+  "attributes": {
+    "body": 3,
+    "agility": 4,
+    "reaction": 3,
+    "strength": 3,
+    "willpower": 4,
+    "logic": 5,
+    "intuition": 6,
+    "charisma": 4
+  },
+  "specialAttributes": {
+    "edge": 1,
+    "essence": 6
+  },
+  "initiative": {
+    "base": 9,
+    "dice": 1
+  },
+  "limits": {
+    "physical": 4,
+    "mental": 7,
+    "social": 6
+  },
+  "conditionMonitor": 10,
+  "skills": [
+    { "name": "Artisan", "rating": 4, "specialization": "Writing" },
+    { "name": "Con", "rating": 3 },
+    { "name": "Electronics skill group", "rating": 4 },
+    { "name": "Electronic Warfare", "rating": 5 },
+    { "name": "Etiquette", "rating": 3, "specialization": "Media" },
+    { "name": "Hacking", "rating": 5 },
+    { "name": "Negotiation", "rating": 4 }
+  ],
+  "knowledgeSkills": [
+    { "name": "Grids", "rating": 5 },
+    { "name": "Matrix Security", "rating": 4 },
+    { "name": "Organized Crime", "rating": 5 },
+    { "name": "SIN Databases", "rating": 4 },
+    { "name": "Software", "rating": 4 }
+  ],
+  "metadata": {
+    "source": "Run Faster",
+    "page": "187",
+    "category": "Sample Contact"
+  }
+}

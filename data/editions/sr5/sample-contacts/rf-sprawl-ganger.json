@@ -1,0 +1,49 @@
+{
+  "id": "rf-sample-contact-sprawl-ganger",
+  "editionCode": "sr5",
+  "name": "Sprawl Ganger",
+  "description": "The Sprawl Ganger survived the barrens and found a family in the form of a gang. He's uncouth and arrogant in the way of street toughs. He's also someone that you can trust to walk the streets, shake a few trees, and see what falls out.",
+  "uses": ["Street-level muscle", "Neighborhood watch", "Gang intelligence", "Intimidation"],
+  "meetingPlaces": ["Street corners", "Gang hangouts", "Barrens bars"],
+  "similarContacts": [],
+  "attributes": {
+    "body": 6,
+    "agility": 3,
+    "reaction": 5,
+    "strength": 5,
+    "willpower": 4,
+    "logic": 3,
+    "intuition": 3,
+    "charisma": 2
+  },
+  "specialAttributes": {
+    "edge": 1,
+    "essence": 6
+  },
+  "initiative": {
+    "base": 8,
+    "dice": 1
+  },
+  "limits": {
+    "physical": 7,
+    "mental": 5,
+    "social": 5
+  },
+  "conditionMonitor": 11,
+  "skills": [
+    { "name": "Clubs", "rating": 2 },
+    { "name": "Perception", "rating": 3 },
+    { "name": "Pistols", "rating": 3 },
+    { "name": "Survival", "rating": 3 },
+    { "name": "Unarmed Combat", "rating": 3 }
+  ],
+  "knowledgeSkills": [
+    { "name": "[City] Knowledge", "rating": 3 },
+    { "name": "Gang Territory", "rating": 3 }
+  ],
+  "metadata": {
+    "source": "Run Faster",
+    "page": "193",
+    "category": "Sample Contact"
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "id": "rf-sample-contact-used-car-salesman",
+  "editionCode": "sr5",
+  "name": "Used Car Salesman",
+  "description": "The Used Car Salesman has all kinds of used, anonymous vehicles for you to buy or rent. He has the charm of a low-budget trid star and can make you believe that you are getting a great deal. Careful, though, as he is a master of selling a sow's ear as a silk purse. Hot cars are not a problem—just slap on a new coat of paint and switch grid IDs. He doesn't remember faces too well unless they owe him money, but he never forgets a car.",
+  "uses": ["Vehicle sales", "Vehicle rental", "Grid ID switching", "Anonymous transportation"],
+  "meetingPlaces": ["Used car lots", "Parking garages", "Auto repair shops"],
+  "similarContacts": [],
+  "attributes": {
+    "body": 3,
+    "agility": 3,
+    "reaction": 3,
+    "strength": 3,
+    "willpower": 4,
+    "logic": 3,
+    "intuition": 3,
+    "charisma": 4
+  },
+  "specialAttributes": {
+    "edge": 2,
+    "essence": 6
+  },
+  "initiative": {
+    "base": 6,
+    "dice": 1
+  },
+  "limits": {
+    "physical": 4,
+    "mental": 5,
+    "social": 6
+  },
+  "conditionMonitor": 10,
+  "skills": [
+    { "name": "Automotive Mechanic", "rating": 3 },
+    { "name": "Con", "rating": 5 },
+    { "name": "Etiquette", "rating": 4, "specialization": "Street" },
+    { "name": "Negotiation", "rating": 6 },
+    { "name": "Perception", "rating": 3 }
+  ],
+  "knowledgeSkills": [
+    { "name": "Cars", "rating": 4 },
+    { "name": "Grid Guide", "rating": 4 },
+    { "name": "Street Rumors", "rating": 4 }
+  ],
+  "metadata": {
+    "source": "Run Faster",
+    "page": "195",
+    "category": "Sample Contact"
+  }
+}

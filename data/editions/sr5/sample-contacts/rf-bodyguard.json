@@ -1,0 +1,47 @@
+{
+  "id": "rf-sample-contact-bodyguard",
+  "editionCode": "sr5",
+  "name": "Bodyguard",
+  "description": "She has a job to do in protecting someone else's life even if it means taking a bullet for them. She works in the private sector, picking up temp jobs for visiting travelers or acting as extra security during events or private parties. While not in the shadowrunning business, she can always lend a pair of eyes or ears.",
+  "uses": ["Physical protection", "Security assessment", "Extra muscle"],
+  "meetingPlaces": ["Corporate lobbies", "Private security firms", "Gyms"],
+  "similarContacts": ["Bounty Hunter", "Rent-a-Cop"],
+  "attributes": {
+    "body": 4,
+    "agility": 3,
+    "reaction": 4,
+    "strength": 4,
+    "willpower": 3,
+    "logic": 3,
+    "intuition": 3,
+    "charisma": 2
+  },
+  "specialAttributes": {
+    "edge": 2,
+    "essence": 6
+  },
+  "initiative": {
+    "base": 7,
+    "dice": 1
+  },
+  "limits": {
+    "physical": 6,
+    "mental": 4,
+    "social": 5
+  },
+  "conditionMonitor": 10,
+  "skills": [
+    { "name": "Etiquette", "rating": 2, "specialization": "Corporate" },
+    { "name": "Leadership", "rating": 2 },
+    { "name": "Perception", "rating": 3 },
+    { "name": "Pistols", "rating": 4 },
+    { "name": "Running", "rating": 2 },
+    { "name": "Unarmed Combat", "rating": 4 }
+  ],
+  "knowledgeSkills": [],
+  "metadata": {
+    "source": "Run Faster",
+    "page": "182",
+    "category": "Sample Contact"
+  }
+}

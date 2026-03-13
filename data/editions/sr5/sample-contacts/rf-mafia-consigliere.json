@@ -1,0 +1,52 @@
+{
+  "id": "rf-sample-contact-mafia-consigliere",
+  "editionCode": "sr5",
+  "name": "Mafia Consigliere",
+  "description": "(p. 391, SR5)",
+  "uses": ["Organized crime connections", "Legal advice", "Political influence", "Protection"],
+  "meetingPlaces": ["Italian restaurants", "Private social clubs", "Luxury vehicles"],
+  "similarContacts": [],
+  "attributes": {
+    "body": 3,
+    "agility": 3,
+    "reaction": 3,
+    "strength": 3,
+    "willpower": 4,
+    "logic": 3,
+    "intuition": 3,
+    "charisma": 4
+  },
+  "specialAttributes": {
+    "edge": 2,
+    "essence": 6
+  },
+  "initiative": {
+    "base": 6,
+    "dice": 1
+  },
+  "limits": {
+    "physical": 4,
+    "mental": 5,
+    "social": 6
+  },
+  "conditionMonitor": 10,
+  "skills": [
+    { "name": "Electronics skill group", "rating": 4 },
+    { "name": "Etiquette", "rating": 4, "specialization": "Mafia" },
+    { "name": "Intimidation", "rating": 4 },
+    { "name": "Leadership", "rating": 6 },
+    { "name": "Perception", "rating": 4 },
+    { "name": "Pistols", "rating": 5 },
+    { "name": "Unarmed Combat", "rating": 2 }
+  ],
+  "knowledgeSkills": [
+    { "name": "Corporate Business", "rating": 4 },
+    { "name": "Law", "rating": 4 },
+    { "name": "Local Politics", "rating": 4 }
+  ],
+  "metadata": {
+    "source": "Run Faster",
+    "page": "189",
+    "category": "Sample Contact"
+  }
+}
