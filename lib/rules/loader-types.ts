@@ -413,6 +413,8 @@ export interface ArmorData extends GearItemData {
   capacity?: number;
   /** Weight in kilograms */
   weight?: number;
+  /** Wireless bonus description (human-readable) */
+  wirelessBonus?: string;
 }
 
 /**

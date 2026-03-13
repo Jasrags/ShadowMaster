@@ -90,6 +90,13 @@ const MOCK_GEAR_CATALOG: GearCatalogData = {
   miscellaneous: [],
   ammunition: [],
   explosives: [],
+  armorModifications: [],
+  accessories: [],
+  visionEnhancements: [],
+  audioEnhancements: [],
+  securityDevices: [],
+  restraints: [],
+  sensors: { housings: [], functions: [], maxRatingByHousing: {} },
 };
 
 // ---------------------------------------------------------------------------

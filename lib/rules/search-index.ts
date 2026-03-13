@@ -6,6 +6,7 @@
  */
 
 import type { ContentPreviewItem } from "@/lib/types";
+import { GEAR_SEARCH_KEYS } from "@/lib/rules/gear/catalog-helpers";
 
 /** Named item with at minimum an id and name */
 interface NamedItem {
@@ -132,30 +133,7 @@ const moduleExtractors: Record<string, ModuleExtractor> = {
     }
 
     // All other gear sub-arrays
-    const gearArrayKeys = [
-      "commlinks",
-      "cyberdecks",
-      "electronics",
-      "explosives",
-      "ammunition",
-      "toxins",
-      "drugs",
-      "accessories",
-      "armorModifications",
-      "audioEnhancements",
-      "industrialChemicals",
-      "medical",
-      "miscellaneous",
-      "restraints",
-      "rfidTags",
-      "security",
-      "securityDevices",
-      "sensors",
-      "survival",
-      "tools",
-      "visionEnhancements",
-    ];
-    for (const key of gearArrayKeys) {
+    for (const key of GEAR_SEARCH_KEYS) {
       if (Array.isArray(payload[key])) {
         items.push(...extractNamedArray(payload[key], "gear", keyToLabel(key), sourceBook));
       }

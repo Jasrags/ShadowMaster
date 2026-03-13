@@ -43,40 +43,12 @@ import { InfoTooltip } from "@/components/ui";
 
 const KARMA_TO_NUYEN_RATE = 2000;
 
-// Gear category keys and labels for grouped display
-type GearCategoryKey =
-  | "electronics"
-  | "tools"
-  | "survival"
-  | "medical"
-  | "security"
-  | "explosives"
-  | "miscellaneous"
-  | "rfidTags";
-
-const GEAR_CATEGORY_LABELS: Record<GearCategoryKey, string> = {
-  electronics: "Electronics",
-  tools: "Tools",
-  survival: "Survival",
-  medical: "Medical",
-  security: "Security",
-  explosives: "Explosives",
-  miscellaneous: "Miscellaneous",
-  rfidTags: "RFID Tags",
-};
-
-// Get category from gear item
-function getGearCategory(gear: GearItem): GearCategoryKey {
-  const category = gear.category?.toLowerCase() || "";
-  if (category === "electronics") return "electronics";
-  if (category === "tools") return "tools";
-  if (category === "survival") return "survival";
-  if (category === "medical") return "medical";
-  if (category === "security") return "security";
-  if (category === "explosives") return "explosives";
-  if (category === "rfidtags" || category === "rfid-tags") return "rfidTags";
-  return "miscellaneous";
-}
+import {
+  GEAR_BROWSABLE_KEYS,
+  GEAR_BROWSABLE_LABELS,
+  type GearBrowsableKey,
+  mapItemCategoryToKey,
+} from "@/lib/rules/gear/catalog-helpers";
 
 // =============================================================================
 // HELPERS
@@ -121,18 +93,11 @@ export function GearPanel({ state, updateState }: GearPanelProps) {
 
   // Group gear by category for display
   const gearByCategory = useMemo(() => {
-    const grouped: Record<GearCategoryKey, GearItem[]> = {
-      electronics: [],
-      tools: [],
-      survival: [],
-      medical: [],
-      security: [],
-      explosives: [],
-      miscellaneous: [],
-      rfidTags: [],
-    };
+    const grouped = Object.fromEntries(
+      GEAR_BROWSABLE_KEYS.map((key) => [key, [] as GearItem[]])
+    ) as Record<GearBrowsableKey, GearItem[]>;
     for (const gear of selectedGear) {
-      grouped[getGearCategory(gear)].push(gear);
+      grouped[mapItemCategoryToKey(gear.category)].push(gear);
     }
     Object.values(grouped).forEach((items) => {
       items.sort((a, b) => a.name.localeCompare(b.name));
@@ -557,12 +522,12 @@ export function GearPanel({ state, updateState }: GearPanelProps) {
                 Selected Gear ({selectedGear.length})
               </h4>
 
-              {(Object.entries(gearByCategory) as [GearCategoryKey, GearItem[]][]).map(
+              {(Object.entries(gearByCategory) as [GearBrowsableKey, GearItem[]][]).map(
                 ([category, items]) =>
                   items.length > 0 && (
                     <div key={category}>
                       <h5 className="mb-2 text-xs font-medium uppercase text-zinc-400 dark:text-zinc-500">
-                        {GEAR_CATEGORY_LABELS[category]}
+                        {GEAR_BROWSABLE_LABELS[category]}
                       </h5>
                       <div className="divide-y divide-zinc-100 rounded-lg border border-zinc-200 px-3 dark:divide-zinc-800 dark:border-zinc-700">
                         {items.map((gear) => (
