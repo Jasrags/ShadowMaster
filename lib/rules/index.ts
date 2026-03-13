@@ -39,6 +39,7 @@ export {
   useGameplayLevelModifiers,
   useGameplayLevels,
   useMaxAvailability,
+  useInfected,
 } from "./RulesetContext";
 
 export type {
@@ -73,6 +74,7 @@ export type {
   DroneCatalogItemData,
   RCCCatalogItemData,
   DroneWeaponMountsData,
+  InfectedCatalogData,
 } from "./RulesetContext";
 
 // Gameplay utilities - Client-safe

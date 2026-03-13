@@ -15,7 +15,7 @@
  */
 
 import { useMemo, useCallback, useState } from "react";
-import { useQualities, useSkills } from "@/lib/rules";
+import { useQualities, useSkills, useInfected } from "@/lib/rules";
 import type { CreationState, Contact } from "@/lib/types";
 import type { QualityData } from "@/lib/rules/loader-types";
 import { hasUnifiedRatings, getRatingTableValue } from "@/lib/types/ratings";
@@ -41,6 +41,7 @@ interface QualitiesCardProps {
 export function QualitiesCard({ state, updateState }: QualitiesCardProps) {
   const { positive: positiveQualities, negative: negativeQualities } = useQualities();
   const { skillGroups, activeSkills } = useSkills();
+  const infectedCatalog = useInfected();
   const { getBudget } = useCreationBudgets();
   const karmaBudget = getBudget("karma");
 
@@ -341,6 +342,7 @@ export function QualitiesCard({ state, updateState }: QualitiesCardProps) {
         skills={activeSkills}
         existingSkillIds={existingSkillIds}
         existingSkillGroupIds={existingSkillGroupIds}
+        infectedCatalog={infectedCatalog}
       />
     </CreationCard>
   );

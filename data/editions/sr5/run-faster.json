@@ -4118,6 +4118,20 @@
             "prerequisites": {
               "requiredAnyQualities": ["surge-class-i", "surge-class-ii", "surge-class-iii"]
             }
+          },
+          {
+            "id": "hmhvv-infected",
+            "name": "Infected (HMHVV)",
+            "karmaCost": 0,
+            "summary": "Character is infected with HMHVV, gaining critter powers and suffering weaknesses based on their infected type.",
+            "requiresSpecification": true,
+            "specificationLabel": "Infected Type",
+            "specificationSource": "infectedTypes",
+            "tags": ["infected", "magical"],
+            "source": {
+              "book": "run-faster",
+              "page": 148
+            }
           }
         ],
         "negative": [
@@ -6455,7 +6469,390 @@
     },
     "infected": {
       "mergeStrategy": "replace",
-      "payload": {}
+      "payload": {
+        "types": [
+          {
+            "id": "bandersnatch",
+            "name": "Bandersnatch",
+            "source": { "book": "run-faster", "page": 148 },
+            "hmhvvStrain": "hmhvv-ii",
+            "baseMetatypes": ["sasquatch"],
+            "karmaCost": 22,
+            "physicalAttributeBonus": 1,
+            "mentalAttributeBonus": 0,
+            "mandatoryPowers": ["enhanced-senses", "natural-weapon"],
+            "optionalPowers": ["concealment", "fear", "movement"],
+            "weaknesses": [
+              "allergy-sunlight-mild",
+              "dietary-requirement-metahuman-flesh",
+              "reduced-senses-blind"
+            ],
+            "essenceDrain": {
+              "method": "essence-drain",
+              "description": "Drains Essence through physical contact."
+            },
+            "notes": "Infected sasquatch. Blind but uses echolocation."
+          },
+          {
+            "id": "banshee",
+            "name": "Banshee",
+            "source": { "book": "run-faster", "page": 148 },
+            "hmhvvStrain": "hmhvv-i",
+            "baseMetatypes": ["elf"],
+            "karmaCost": 32,
+            "physicalAttributeBonus": 2,
+            "mentalAttributeBonus": 1,
+            "mandatoryPowers": [
+              "enhanced-senses",
+              "essence-drain",
+              "fear",
+              "mist-form",
+              "natural-weapon"
+            ],
+            "optionalPowers": ["compulsion", "concealment", "guard", "movement", "noxious-breath"],
+            "weaknesses": [
+              "allergy-sunlight-severe",
+              "dietary-requirement-metahuman-flesh",
+              "essence-loss"
+            ],
+            "essenceDrain": {
+              "method": "essence-drain",
+              "description": "Drains Essence through bite."
+            },
+            "notes": "Infected elf, vampire-like. Highly dangerous."
+          },
+          {
+            "id": "dzoo-noo-qua",
+            "name": "Dzoo-Noo-Qua",
+            "source": { "book": "run-faster", "page": 149 },
+            "hmhvvStrain": "hmhvv-i",
+            "baseMetatypes": ["troll"],
+            "karmaCost": 43,
+            "physicalAttributeBonus": 2,
+            "mentalAttributeBonus": 1,
+            "mandatoryPowers": [
+              "enhanced-senses",
+              "essence-drain",
+              "fear",
+              "mist-form",
+              "natural-weapon",
+              "sapience"
+            ],
+            "optionalPowers": ["compulsion", "concealment", "guard", "movement", "noxious-breath"],
+            "weaknesses": [
+              "allergy-sunlight-severe",
+              "dietary-requirement-metahuman-flesh",
+              "essence-loss"
+            ],
+            "essenceDrain": {
+              "method": "essence-drain",
+              "description": "Drains Essence through touch."
+            },
+            "notes": "Infected troll. Massive and terrifying."
+          },
+          {
+            "id": "fomoraig",
+            "name": "Fomoraig",
+            "source": { "book": "run-faster", "page": 149 },
+            "hmhvvStrain": "hmhvv-ii",
+            "baseMetatypes": ["troll"],
+            "karmaCost": 22,
+            "physicalAttributeBonus": 1,
+            "mentalAttributeBonus": 0,
+            "mandatoryPowers": ["enhanced-senses", "natural-weapon"],
+            "optionalPowers": ["compulsion", "fear", "movement"],
+            "weaknesses": ["allergy-sunlight-mild", "dietary-requirement-metahuman-flesh"],
+            "essenceDrain": {
+              "method": "essence-drain",
+              "description": "Drains Essence through physical contact."
+            },
+            "notes": "Infected troll. Hulking and aggressive."
+          },
+          {
+            "id": "ghoul",
+            "name": "Ghoul",
+            "source": { "book": "run-faster", "page": 150 },
+            "hmhvvStrain": "hmhvv-iii",
+            "baseMetatypes": ["any"],
+            "karmaCost": 29,
+            "physicalAttributeBonus": 1,
+            "mentalAttributeBonus": 0,
+            "mandatoryPowers": ["dual-natured", "enhanced-senses", "natural-weapon"],
+            "optionalPowers": ["concealment", "fear"],
+            "weaknesses": [
+              "allergy-sunlight-mild",
+              "dietary-requirement-metahuman-flesh",
+              "reduced-senses-blind"
+            ],
+            "essenceDrain": {
+              "method": "essence-drain",
+              "description": "Must consume metahuman flesh."
+            },
+            "notes": "Most common infected type. Can affect any metatype."
+          },
+          {
+            "id": "gnawer",
+            "name": "Gnawer",
+            "source": { "book": "run-faster", "page": 150 },
+            "hmhvvStrain": "hmhvv-ii",
+            "baseMetatypes": ["dwarf"],
+            "karmaCost": 29,
+            "physicalAttributeBonus": 1,
+            "mentalAttributeBonus": 0,
+            "mandatoryPowers": ["enhanced-senses", "natural-weapon"],
+            "optionalPowers": ["concealment", "fear", "movement", "guard"],
+            "weaknesses": ["allergy-sunlight-mild", "dietary-requirement-metahuman-flesh"],
+            "essenceDrain": {
+              "method": "essence-drain",
+              "description": "Drains Essence through bite."
+            },
+            "notes": "Infected dwarf. Feral and tenacious."
+          },
+          {
+            "id": "goblin",
+            "name": "Goblin",
+            "source": { "book": "run-faster", "page": 151 },
+            "hmhvvStrain": "hmhvv-i",
+            "baseMetatypes": ["dwarf"],
+            "karmaCost": 27,
+            "physicalAttributeBonus": 1,
+            "mentalAttributeBonus": 1,
+            "mandatoryPowers": ["enhanced-senses", "essence-drain", "natural-weapon"],
+            "optionalPowers": ["compulsion", "concealment", "fear", "movement"],
+            "weaknesses": [
+              "allergy-sunlight-severe",
+              "dietary-requirement-metahuman-flesh",
+              "essence-loss"
+            ],
+            "essenceDrain": {
+              "method": "essence-drain",
+              "description": "Drains Essence through bite."
+            },
+            "notes": "Infected dwarf. Cunning and predatory."
+          },
+          {
+            "id": "grendel",
+            "name": "Grendel",
+            "source": { "book": "run-faster", "page": 151 },
+            "hmhvvStrain": "hmhvv-ii",
+            "baseMetatypes": ["ork"],
+            "karmaCost": 32,
+            "physicalAttributeBonus": 2,
+            "mentalAttributeBonus": 0,
+            "mandatoryPowers": ["enhanced-senses", "natural-weapon"],
+            "optionalPowers": ["compulsion", "concealment", "fear", "movement"],
+            "weaknesses": ["allergy-sunlight-mild", "dietary-requirement-metahuman-flesh"],
+            "essenceDrain": {
+              "method": "essence-drain",
+              "description": "Drains Essence through bite."
+            },
+            "notes": "Infected ork. Powerful and brutal."
+          },
+          {
+            "id": "harvester",
+            "name": "Harvester",
+            "source": { "book": "run-faster", "page": 152 },
+            "hmhvvStrain": "hmhvv-ii",
+            "baseMetatypes": ["elf"],
+            "karmaCost": 29,
+            "physicalAttributeBonus": 1,
+            "mentalAttributeBonus": 1,
+            "mandatoryPowers": ["enhanced-senses", "natural-weapon"],
+            "optionalPowers": ["compulsion", "concealment", "fear", "movement"],
+            "weaknesses": ["allergy-sunlight-mild", "dietary-requirement-metahuman-flesh"],
+            "essenceDrain": {
+              "method": "essence-drain",
+              "description": "Drains Essence through physical contact."
+            },
+            "notes": "Infected elf. Eerily graceful predator."
+          },
+          {
+            "id": "loup-garou",
+            "name": "Loup-Garou",
+            "source": { "book": "run-faster", "page": 152 },
+            "hmhvvStrain": "hmhvv-ii",
+            "baseMetatypes": ["human"],
+            "karmaCost": 30,
+            "physicalAttributeBonus": 2,
+            "mentalAttributeBonus": 0,
+            "mandatoryPowers": ["enhanced-senses", "natural-weapon", "regeneration"],
+            "optionalPowers": ["concealment", "fear", "movement"],
+            "weaknesses": [
+              "allergy-silver",
+              "allergy-sunlight-mild",
+              "dietary-requirement-metahuman-flesh",
+              "essence-loss"
+            ],
+            "essenceDrain": {
+              "method": "essence-drain",
+              "description": "Drains Essence through bite."
+            },
+            "notes": "Infected human. Werewolf-like transformation."
+          },
+          {
+            "id": "mutaqua",
+            "name": "Mutaqua",
+            "source": { "book": "run-faster", "page": 153 },
+            "hmhvvStrain": "hmhvv-ia",
+            "baseMetatypes": ["troll"],
+            "karmaCost": 54,
+            "karmaCostAwakened": 44,
+            "physicalAttributeBonus": 2,
+            "mentalAttributeBonus": 2,
+            "mandatoryPowers": [
+              "dual-natured",
+              "enhanced-senses",
+              "essence-drain",
+              "fear",
+              "mist-form",
+              "natural-weapon",
+              "regeneration",
+              "sapience"
+            ],
+            "optionalPowers": ["compulsion", "concealment", "guard", "movement", "noxious-breath"],
+            "weaknesses": [
+              "allergy-sunlight-severe",
+              "dietary-requirement-metahuman-flesh",
+              "essence-loss"
+            ],
+            "essenceDrain": {
+              "method": "essence-drain",
+              "description": "Drains Essence through touch."
+            },
+            "notes": "Awakened infected troll. Retains magical ability."
+          },
+          {
+            "id": "nosferatu",
+            "name": "Nosferatu",
+            "source": { "book": "run-faster", "page": 153 },
+            "hmhvvStrain": "hmhvv-ia",
+            "baseMetatypes": ["human"],
+            "karmaCost": 48,
+            "karmaCostAwakened": 38,
+            "physicalAttributeBonus": 2,
+            "mentalAttributeBonus": 2,
+            "mandatoryPowers": [
+              "dual-natured",
+              "enhanced-senses",
+              "essence-drain",
+              "fear",
+              "mist-form",
+              "natural-weapon",
+              "regeneration",
+              "sapience"
+            ],
+            "optionalPowers": ["compulsion", "concealment", "guard", "movement", "noxious-breath"],
+            "weaknesses": [
+              "allergy-sunlight-severe",
+              "allergy-wood",
+              "dietary-requirement-metahuman-flesh",
+              "essence-loss"
+            ],
+            "essenceDrain": {
+              "method": "essence-drain",
+              "description": "Drains Essence through bite."
+            },
+            "notes": "Awakened infected human. Classic vampire archetype."
+          },
+          {
+            "id": "vampire",
+            "name": "Vampire",
+            "source": { "book": "run-faster", "page": 154 },
+            "hmhvvStrain": "hmhvv-i",
+            "baseMetatypes": ["human"],
+            "karmaCost": 27,
+            "karmaCostAwakened": 37,
+            "physicalAttributeBonus": 2,
+            "mentalAttributeBonus": 1,
+            "mandatoryPowers": [
+              "enhanced-senses",
+              "essence-drain",
+              "fear",
+              "mist-form",
+              "natural-weapon",
+              "regeneration"
+            ],
+            "optionalPowers": ["compulsion", "concealment", "guard", "movement", "noxious-breath"],
+            "weaknesses": [
+              "allergy-sunlight-severe",
+              "allergy-wood",
+              "dietary-requirement-metahuman-flesh",
+              "essence-loss"
+            ],
+            "essenceDrain": {
+              "method": "essence-drain",
+              "description": "Drains Essence through bite."
+            },
+            "notes": "Infected human. The iconic HMHVV strain I creature."
+          },
+          {
+            "id": "wendigo",
+            "name": "Wendigo",
+            "source": { "book": "run-faster", "page": 155 },
+            "hmhvvStrain": "hmhvv-i",
+            "baseMetatypes": ["ork"],
+            "karmaCost": 47,
+            "karmaCostAwakened": 37,
+            "physicalAttributeBonus": 2,
+            "mentalAttributeBonus": 1,
+            "mandatoryPowers": [
+              "dual-natured",
+              "enhanced-senses",
+              "essence-drain",
+              "fear",
+              "mist-form",
+              "natural-weapon",
+              "regeneration",
+              "sapience"
+            ],
+            "optionalPowers": ["compulsion", "concealment", "guard", "movement", "noxious-breath"],
+            "weaknesses": [
+              "allergy-sunlight-severe",
+              "dietary-requirement-metahuman-flesh",
+              "essence-loss"
+            ],
+            "essenceDrain": {
+              "method": "essence-drain",
+              "description": "Drains Essence through touch or bite."
+            },
+            "notes": "Infected ork. Cannibalistic and powerful."
+          }
+        ],
+        "diseaseStrains": [
+          {
+            "id": "hmhvv-i",
+            "name": "HMHVV Strain I",
+            "vector": "blood-to-blood",
+            "speed": "1d6-days",
+            "power": 8,
+            "description": "The original Human-Metahuman Vampiric Virus. Creates the most powerful infected types including vampires, banshees, and wendigos."
+          },
+          {
+            "id": "hmhvv-ii",
+            "name": "HMHVV Strain II",
+            "vector": "blood-to-blood",
+            "speed": "1d6-weeks",
+            "power": 6,
+            "description": "A weaker strain creating loup-garou, grendels, harvesters, and similar infected. Less powerful but still dangerous."
+          },
+          {
+            "id": "hmhvv-iii",
+            "name": "HMHVV Strain III",
+            "vector": "saliva-or-blood",
+            "speed": "1d6-months",
+            "power": 4,
+            "description": "The weakest and most common strain, responsible for ghouls. Can infect any metatype."
+          }
+        ],
+        "optionalPowerCosts": {
+          "compulsion": 7,
+          "concealment": 5,
+          "fear": 6,
+          "guard": 4,
+          "movement": 5,
+          "noxious-breath": 8
+        }
+      }
     },
     "lifeModules": {
       "mergeStrategy": "replace",

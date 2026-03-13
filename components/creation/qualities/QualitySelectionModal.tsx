@@ -28,6 +28,7 @@ import {
 import { QUALITY_CATEGORIES, CATEGORY_LABELS, type QualityCategory } from "./constants";
 import { getQualityCategory, getQualityCost, hasLevels, getQualityLevels } from "./utils";
 import type { QualitySelectionModalProps } from "./types";
+import { InfectedTypeDetails } from "./InfectedTypeDetails";
 
 export function QualitySelectionModal({
   isOpen,
@@ -47,6 +48,7 @@ export function QualitySelectionModal({
   skills,
   existingSkillIds,
   existingSkillGroupIds,
+  infectedCatalog,
 }: QualitySelectionModalProps) {
   // Internal state
   const [activeType, setActiveType] = useState<"positive" | "negative">(defaultType);
@@ -515,6 +517,40 @@ export function QualitySelectionModal({
                             </select>
                             <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
                           </div>
+                        ) : selectedQuality.specificationSource === "infectedTypes" &&
+                          infectedCatalog ? (
+                          // Dynamic options from infected types catalog
+                          <>
+                            <div className="relative mt-2">
+                              <select
+                                value={specification}
+                                onChange={(e) => setSpecification(e.target.value)}
+                                className={`w-full appearance-none rounded-lg border border-zinc-200 bg-white py-2 pl-3 pr-10 text-sm focus:outline-none focus:ring-1 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 ${
+                                  isPositive
+                                    ? "focus:border-blue-500 focus:ring-blue-500"
+                                    : "focus:border-orange-500 focus:ring-orange-500"
+                                }`}
+                              >
+                                <option value="">
+                                  Select {selectedQuality.specificationLabel}...
+                                </option>
+                                {infectedCatalog.types.map((infType) => (
+                                  <option key={infType.id} value={infType.id}>
+                                    {infType.name} ({infType.karmaCost} karma)
+                                  </option>
+                                ))}
+                              </select>
+                              <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
+                            </div>
+                            {specification &&
+                              (() => {
+                                const selectedInfected = infectedCatalog.types.find(
+                                  (t) => t.id === specification
+                                );
+                                if (!selectedInfected) return null;
+                                return <InfectedTypeDetails infectedType={selectedInfected} />;
+                              })()}
+                          </>
                         ) : selectedQuality.specificationSource === "skillGroups" ? (
                           // Dynamic options from skill groups
                           <>

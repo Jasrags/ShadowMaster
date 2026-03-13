@@ -918,6 +918,22 @@ export function extractAdvancement(ruleset: LoadedRuleset): AdvancementRulesData
 // ACTION DATA EXTRACTORS
 // =============================================================================
 
+import type { InfectedCatalogData } from "./infected/types";
+
+/**
+ * Load infected catalog from a ruleset
+ */
+export function extractInfected(ruleset: LoadedRuleset): InfectedCatalogData | null {
+  const ruleModule = extractModule<InfectedCatalogData>(ruleset, "infected");
+  if (!ruleModule) return null;
+
+  return {
+    types: ruleModule.types || [],
+    diseaseStrains: ruleModule.diseaseStrains || [],
+    optionalPowerCosts: ruleModule.optionalPowerCosts || {},
+  };
+}
+
 import type { ActionDefinition } from "../types";
 
 /**

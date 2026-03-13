@@ -1590,3 +1590,9 @@ export interface ActionsCatalogData {
   social: ActionDefinition[];
   vehicle: ActionDefinition[];
 }
+
+// =============================================================================
+// INFECTED DATA TYPES (re-exported from infected module)
+// =============================================================================
+
+export type { InfectedTypeData, DiseaseStrainData, InfectedCatalogData } from "./infected/types";
