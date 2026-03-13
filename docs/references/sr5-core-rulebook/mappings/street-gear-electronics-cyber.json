@@ -13,7 +13,8 @@
         "avail": "availability",
         "cost": "cost"
       },
-      "requiredDataFields": ["deviceRating", "availability", "cost"]
+      "requiredDataFields": ["deviceRating", "availability", "cost"],
+      "referenceMatchField": "model"
     },
     {
       "referenceTable": "cyberdecks",
@@ -34,7 +35,8 @@
         "availability",
         "cost",
         "legality"
-      ]
+      ],
+      "referenceMatchField": "deck"
     },
     {
       "referenceTable": "electronics-accessories",
@@ -46,7 +48,8 @@
         "avail": "availability",
         "cost": "cost"
       },
-      "requiredDataFields": ["availability", "cost"]
+      "requiredDataFields": ["availability", "cost"],
+      "referenceMatchField": "accessory"
     },
     {
       "referenceTable": "rfid-tags",
@@ -58,7 +61,8 @@
         "avail": "availability",
         "cost_per_10": "cost"
       },
-      "requiredDataFields": ["deviceRating", "cost"]
+      "requiredDataFields": ["deviceRating", "cost"],
+      "referenceMatchField": "tag_type"
     },
     {
       "referenceTable": "communications",
@@ -70,7 +74,8 @@
         "cost": "cost"
       },
       "requiredDataFields": ["availability", "cost"],
-      "notes": "Communications devices (bug scanners, jammers, micro-transceivers, etc.) are stored in the electronics array"
+      "notes": "Communications devices (bug scanners, jammers, micro-transceivers, etc.) are stored in the electronics array",
+      "referenceMatchField": "device"
     },
     {
       "referenceTable": "credsticks",
@@ -83,7 +88,8 @@
         "cost": "cost"
       },
       "requiredDataFields": ["cost"],
-      "notes": "Credstick items have category 'credsticks' within the miscellaneous array"
+      "notes": "Credstick items have category 'credsticks' within the miscellaneous array",
+      "referenceMatchField": "type"
     },
     {
       "referenceTable": "identification",
@@ -95,7 +101,8 @@
         "cost": "cost"
       },
       "requiredDataFields": ["availability", "cost"],
-      "notes": "Identification items (Fake SIN, Fake License) have category 'identification' within the miscellaneous array"
+      "notes": "Identification items (Fake SIN, Fake License) have category 'identification' within the miscellaneous array",
+      "referenceMatchField": "type"
     },
     {
       "referenceTable": "tools",
@@ -106,7 +113,8 @@
         "avail": "availability",
         "cost": "cost"
       },
-      "requiredDataFields": ["availability", "cost"]
+      "requiredDataFields": ["availability", "cost"],
+      "referenceMatchField": "type"
     },
     {
       "referenceTable": "optical-imaging-devices",
@@ -118,7 +126,8 @@
         "cost": "cost"
       },
       "requiredDataFields": ["availability", "cost"],
-      "notes": "Optical imaging devices (binoculars, goggles, contacts, glasses, etc.) are stored in the electronics array"
+      "notes": "Optical imaging devices (binoculars, goggles, contacts, glasses, etc.) are stored in the electronics array",
+      "referenceMatchField": "device"
     },
     {
       "referenceTable": "vision-enhancements",
@@ -130,7 +139,8 @@
         "avail": "availability",
         "cost": "cost"
       },
-      "requiredDataFields": ["capacityCost", "availability", "cost"]
+      "requiredDataFields": ["capacityCost", "availability", "cost"],
+      "referenceMatchField": "enhancement"
     },
     {
       "referenceTable": "audio-devices",
@@ -142,7 +152,8 @@
         "cost": "cost"
       },
       "requiredDataFields": ["availability", "cost"],
-      "notes": "Audio devices (directional mic, headphones, laser microphone, etc.) are stored in the electronics array"
+      "notes": "Audio devices (directional mic, headphones, laser microphone, etc.) are stored in the electronics array",
+      "referenceMatchField": "device"
     },
     {
       "referenceTable": "audio-enhancements",
@@ -154,7 +165,8 @@
         "avail": "availability",
         "cost": "cost"
       },
-      "requiredDataFields": ["availability", "cost"]
+      "requiredDataFields": ["availability", "cost"],
+      "referenceMatchField": "enhancement"
     },
     {
       "referenceTable": "sensors",
@@ -166,7 +178,8 @@
         "avail": "availability",
         "cost": "cost"
       },
-      "requiredDataFields": ["availability", "cost"]
+      "requiredDataFields": ["availability", "cost"],
+      "referenceMatchField": "device"
     },
     {
       "referenceTable": "security-and-restraints",
@@ -178,7 +191,8 @@
         "cost": "cost"
       },
       "requiredDataFields": ["availability", "cost"],
-      "notes": "Covers security devices (locks, maglocks, etc.); restraints are in a separate restraints array"
+      "notes": "Covers security devices (locks, maglocks, etc.); restraints are in a separate restraints array",
+      "referenceMatchField": "device"
     },
     {
       "referenceTable": "be-gear",
@@ -190,7 +204,8 @@
         "cost": "cost"
       },
       "requiredDataFields": ["availability", "cost"],
-      "notes": "Breaking & entering gear (autopicker, sequencer, maglock passkey, etc.) is stored in the tools array"
+      "notes": "Breaking & entering gear (autopicker, sequencer, maglock passkey, etc.) is stored in the tools array",
+      "referenceMatchField": "gear"
     },
     {
       "referenceTable": "industrial-chemicals",
@@ -201,7 +216,8 @@
         "avail": "availability",
         "cost": "cost"
       },
-      "requiredDataFields": ["availability", "cost"]
+      "requiredDataFields": ["availability", "cost"],
+      "referenceMatchField": "chemical"
     },
     {
       "referenceTable": "survival-gear",
@@ -212,7 +228,8 @@
         "avail": "availability",
         "cost": "cost"
       },
-      "requiredDataFields": ["availability", "cost"]
+      "requiredDataFields": ["availability", "cost"],
+      "referenceMatchField": "gear"
     },
     {
       "referenceTable": "grapple-gun",
@@ -224,7 +241,8 @@
         "cost": "cost"
       },
       "requiredDataFields": ["availability", "cost"],
-      "notes": "Grapple gun and accessories are stored in the survival array"
+      "notes": "Grapple gun and accessories are stored in the survival array",
+      "referenceMatchField": "gear"
     },
     {
       "referenceTable": "biotech",
@@ -236,7 +254,8 @@
         "cost": "cost"
       },
       "requiredDataFields": ["availability", "cost"],
-      "notes": "Biotech items (biomonitor, medkit, DocWagon contracts) are in the medical array"
+      "notes": "Biotech items (biomonitor, medkit, DocWagon contracts) are in the medical array",
+      "referenceMatchField": "device"
     },
     {
       "referenceTable": "slap-patches",
@@ -247,7 +266,8 @@
         "avail": "availability",
         "cost": "cost"
       },
-      "requiredDataFields": ["availability", "cost"]
+      "requiredDataFields": ["availability", "cost"],
+      "referenceMatchField": "patch"
     },
     {
       "referenceTable": "ware-grades",
@@ -259,7 +279,8 @@
         "avail_modifier": "availabilityModifier",
         "cost_multiplier": "costMultiplier"
       },
-      "requiredDataFields": ["essenceMultiplier", "availabilityModifier", "costMultiplier"]
+      "requiredDataFields": ["essenceMultiplier", "availabilityModifier", "costMultiplier"],
+      "referenceMatchField": "grade"
     },
     {
       "referenceTable": "headware",
@@ -273,7 +294,8 @@
         "cost": "cost"
       },
       "requiredDataFields": ["essenceCost", "availability", "cost"],
-      "notes": "Headware items have category 'headware' in the cyberware catalog"
+      "notes": "Headware items have category 'headware' in the cyberware catalog",
+      "referenceMatchField": "device"
     },
     {
       "referenceTable": "eyeware",
@@ -287,7 +309,8 @@
         "cost": "cost"
       },
       "requiredDataFields": ["essenceCost", "availability", "cost"],
-      "notes": "Eyeware items have category 'eyeware' in the cyberware catalog"
+      "notes": "Eyeware items have category 'eyeware' in the cyberware catalog",
+      "referenceMatchField": "device"
     },
     {
       "referenceTable": "earware",
@@ -301,7 +324,8 @@
         "cost": "cost"
       },
       "requiredDataFields": ["essenceCost", "availability", "cost"],
-      "notes": "Earware items have category 'earware' in the cyberware catalog"
+      "notes": "Earware items have category 'earware' in the cyberware catalog",
+      "referenceMatchField": "device"
     },
     {
       "referenceTable": "bodyware",
@@ -315,7 +339,8 @@
         "cost": "cost"
       },
       "requiredDataFields": ["essenceCost", "availability", "cost"],
-      "notes": "Bodyware items have category 'bodyware' in the cyberware catalog"
+      "notes": "Bodyware items have category 'bodyware' in the cyberware catalog",
+      "referenceMatchField": "device"
     },
     {
       "referenceTable": "cyberlimbs",
@@ -329,7 +354,8 @@
         "cost": "cost"
       },
       "requiredDataFields": ["essenceCost", "capacity", "availability", "cost"],
-      "notes": "Cyberlimb items have category 'cyberlimb' in the cyberware catalog"
+      "notes": "Cyberlimb items have category 'cyberlimb' in the cyberware catalog",
+      "referenceMatchField": "limb_type"
     },
     {
       "referenceTable": "cyberlimb-enhancements",
@@ -343,7 +369,8 @@
         "cost": "cost"
       },
       "requiredDataFields": ["capacityCost", "availability", "cost"],
-      "notes": "Cyberlimb enhancements have category 'cyberlimb-enhancement' in the cyberware catalog"
+      "notes": "Cyberlimb enhancements have category 'cyberlimb-enhancement' in the cyberware catalog",
+      "referenceMatchField": "enhancement"
     },
     {
       "referenceTable": "cyberlimb-accessories",
@@ -357,7 +384,8 @@
         "cost": "cost"
       },
       "requiredDataFields": ["capacityCost", "availability", "cost"],
-      "notes": "Cyberlimb accessories have category 'cyberlimb-accessory' in the cyberware catalog"
+      "notes": "Cyberlimb accessories have category 'cyberlimb-accessory' in the cyberware catalog",
+      "referenceMatchField": "accessory"
     },
     {
       "referenceTable": "bioware",
@@ -370,7 +398,8 @@
         "cost": "cost"
       },
       "requiredDataFields": ["essenceCost", "availability", "cost"],
-      "notes": "Basic bioware items have category 'basic' in the bioware catalog"
+      "notes": "Basic bioware items have category 'basic' in the bioware catalog",
+      "referenceMatchField": "device"
     },
     {
       "referenceTable": "cultured-bioware",
@@ -383,7 +412,8 @@
         "cost": "cost"
       },
       "requiredDataFields": ["essenceCost", "availability", "cost"],
-      "notes": "Cultured bioware items have category 'cultured' in the bioware catalog"
+      "notes": "Cultured bioware items have category 'cultured' in the bioware catalog",
+      "referenceMatchField": "device"
     }
   ]
 }

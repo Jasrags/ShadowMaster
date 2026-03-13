@@ -1,0 +1,36 @@
+{
+  "referenceFile": "docs/references/sr5-core-rulebook/magic.json",
+  "dataFile": "data/editions/sr5/core-rulebook.json",
+  "description": "Maps magic reference tables to core-rulebook.json data for foci, magical goods, and mentor spirits",
+  "mappings": [
+    {
+      "referenceTable": "foci-bonding",
+      "dataPath": ["modules", "foci", "payload", "foci"],
+      "matchField": "name",
+      "referenceMatchField": "focus_type",
+      "fieldMap": {
+        "focus_type": "name"
+      },
+      "requiredDataFields": [
+        "name",
+        "type",
+        "costMultiplier",
+        "bondingKarmaMultiplier",
+        "availability",
+        "legality"
+      ]
+    },
+    {
+      "referenceTable": "magical-goods",
+      "dataPath": ["modules", "foci", "payload", "foci"],
+      "matchField": "name",
+      "referenceMatchField": "item",
+      "fieldMap": {
+        "item": "name",
+        "availability": "availability",
+        "cost": "costMultiplier"
+      },
+      "requiredDataFields": ["name", "costMultiplier", "availability", "legality"]
+    }
+  ]
+}

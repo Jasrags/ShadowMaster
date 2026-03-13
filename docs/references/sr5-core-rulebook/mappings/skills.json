@@ -1,0 +1,29 @@
+{
+  "referenceFile": "docs/references/sr5-core-rulebook/skills.json",
+  "dataFile": "data/editions/sr5/core-rulebook.json",
+  "description": "Maps skills reference tables to core-rulebook.json data for active skills and skill groups",
+  "mappings": [
+    {
+      "referenceTable": "active-skill-list",
+      "dataPath": ["modules", "skills", "payload", "activeSkills"],
+      "matchField": "name",
+      "referenceMatchField": "skill",
+      "fieldMap": {
+        "skill": "name",
+        "linkedAttribute": "linkedAttribute",
+        "skillGroup": "group"
+      },
+      "requiredDataFields": ["name", "linkedAttribute", "canDefault", "category"]
+    },
+    {
+      "referenceTable": "skill-groups",
+      "dataPath": ["modules", "skills", "payload", "skillGroups"],
+      "matchField": "name",
+      "referenceMatchField": "group",
+      "fieldMap": {
+        "group": "name"
+      },
+      "requiredDataFields": ["name", "skills"]
+    }
+  ]
+}

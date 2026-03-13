@@ -23,6 +23,7 @@ interface MappingEntry {
   referenceTable: string;
   dataPath: string[];
   matchField: string;
+  referenceMatchField?: string;
   fieldMap: Record<string, string>;
   requiredDataFields: string[];
 }
@@ -256,6 +257,122 @@ function valuesMatch(refVal: unknown, dataVal: unknown): boolean {
   // Capacity: "(Rating)" bracket notation vs "[Rating]"
   if (refStr.replace(/[()[\]]/g, "") === dataStr.replace(/[()[\]]/g, "")) return true;
 
+  // Critter type abbreviation: "P" → "physical", "M" → "mana"
+  const typeAbbrevMap: Record<string, string> = {
+    p: "physical",
+    m: "mana",
+    s: "special",
+  };
+  if (typeAbbrevMap[refStr.toLowerCase()] === dataStr.toLowerCase()) return true;
+
+  // "As spell" → "special" equivalence (Innate Spell fields)
+  if (refStr.toLowerCase() === "as spell" && dataStr.toLowerCase() === "special") return true;
+
+  // Condition monitor: "10/10" → {"physical":10,"stun":10}
+  if (typeof dataVal === "object" && dataVal !== null && !Array.isArray(dataVal)) {
+    const cmMatch = refStr.match(/^(\d+)\/(\d+)$/);
+    if (cmMatch) {
+      const obj = dataVal as Record<string, unknown>;
+      if (Number(cmMatch[1]) === Number(obj.physical) && Number(cmMatch[2]) === Number(obj.stun))
+        return true;
+    }
+    // Armor object: "17H/9H" → {"physical":"17H","mystic":"9H"}
+    const armorObjMatch = refStr.match(/^(.+?)\/(.+)$/);
+    if (armorObjMatch) {
+      const obj = dataVal as Record<string, unknown>;
+      if (
+        String(armorObjMatch[1]).trim() === String(obj.physical ?? "").trim() &&
+        String(armorObjMatch[2]).trim() === String(obj.mystic ?? "").trim()
+      )
+        return true;
+    }
+  }
+
+  // Skills array: ["Perception 5","Running 5"] → [{"name":"Perception","rating":5}]
+  if (Array.isArray(refVal) && Array.isArray(dataVal)) {
+    const refItems = refVal as unknown[];
+    const dataItems = dataVal as unknown[];
+    if (refItems.length === dataItems.length && refItems.length > 0) {
+      // String skills → object skills
+      if (typeof refItems[0] === "string" && typeof dataItems[0] === "object") {
+        const allMatch = refItems.every((refItem) => {
+          const refSkillStr = String(refItem);
+          // Parse "Perception 5" or "Athletics skill group 3"
+          const match = refSkillStr.match(/^(.+?)\s+(\d+)$/);
+          if (!match) return false;
+          const [, skillName, rating] = match;
+          return dataItems.some((dataItem) => {
+            const obj = dataItem as Record<string, unknown>;
+            return (
+              normalizeName(String(obj.name ?? "")) === normalizeName(skillName) &&
+              Number(obj.rating) === Number(rating)
+            );
+          });
+        });
+        if (allMatch) return true;
+      }
+      // String powers → object powers: ["Armor 7","Petrification"] → [{"id":"armor","rating":7}]
+      if (typeof refItems[0] === "string" && typeof dataItems[0] === "object") {
+        const allMatch = refItems.every((refItem) => {
+          const refPowerStr = String(refItem);
+          // Parse "Armor 7" (with optional rating) or "Petrification" (no rating)
+          // Also handles complex: "Natural Weapon (Bite, Reach -, DV 8P, AP -2)"
+          const simpleMatch = refPowerStr.match(/^([A-Za-z][A-Za-z ]+?)(?:\s+(\d+))?$/);
+          if (simpleMatch) {
+            const [, powerName, rating] = simpleMatch;
+            return dataItems.some((dataItem) => {
+              const obj = dataItem as Record<string, unknown>;
+              const nameMatch =
+                normalizeName(String(obj.id ?? "").replace(/-/g, " ")) ===
+                  normalizeName(powerName) ||
+                normalizeName(String(obj.name ?? "")) === normalizeName(powerName);
+              if (rating !== undefined) {
+                return nameMatch && Number(obj.rating) === Number(rating);
+              }
+              return nameMatch;
+            });
+          }
+          // Complex powers with details in parens: "Natural Weapon (Claws: DV (STR)P, AP -1)"
+          const complexMatch = refPowerStr.match(/^([A-Za-z][A-Za-z ]+?)\s*\((.+)\)$/);
+          if (complexMatch) {
+            const [, powerName] = complexMatch;
+            return dataItems.some((dataItem) => {
+              const obj = dataItem as Record<string, unknown>;
+              return (
+                normalizeName(String(obj.id ?? "").replace(/-/g, " ")) ===
+                  normalizeName(powerName) ||
+                normalizeName(String(obj.name ?? "")) === normalizeName(powerName)
+              );
+            });
+          }
+          return false;
+        });
+        if (allMatch) return true;
+      }
+    }
+  }
+
+  // String arrays with kebab-case normalization: ["Stun Damage"] vs ["stun-damage"]
+  if (Array.isArray(refVal) && Array.isArray(dataVal)) {
+    const refItems = (refVal as unknown[]).map((v) => normalizeName(String(v)));
+    const dataItems = (dataVal as unknown[]).map((v) =>
+      normalizeName(String(v).replace(/-/g, " "))
+    );
+    if (refItems.length === dataItems.length && refItems.every((r) => dataItems.includes(r)))
+      return true;
+  }
+
+  // Kebab-case to Title Case normalization: "close-combat" matches "Close Combat"
+  if (normalizeName(refStr) === normalizeName(dataStr.replace(/-/g, " "))) return true;
+
+  // Drone/vehicle size: "microdrone" contains "micro", "minidrone" contains "mini"
+  if (
+    refStr.toLowerCase().includes(dataStr.toLowerCase()) ||
+    dataStr.toLowerCase().includes(refStr.toLowerCase())
+  ) {
+    return true;
+  }
+
   return false;
 }
 
@@ -356,7 +473,8 @@ function verifyMapping(config: MappingConfig): VerificationReport {
 
     // Check each reference item
     for (const refRow of refTable.rows) {
-      const refName = String(refRow[mapping.matchField] ?? refRow.name ?? "");
+      const refMatchField = mapping.referenceMatchField ?? mapping.matchField;
+      const refName = String(refRow[refMatchField] ?? refRow.name ?? "");
       if (!refName) continue;
 
       const dataItem = findMatch(refName, dataItems, mapping.matchField);
