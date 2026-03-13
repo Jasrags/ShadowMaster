@@ -83,7 +83,22 @@ export async function POST(request: NextRequest): Promise<NextResponse<AuthRespo
       return failResponse();
     }
 
-    // 8. Check lockout status
+    // 8. Check if account is suspended
+    if (user.accountStatus === "suspended") {
+      await AuditLogger.log({
+        event: "signin.failure",
+        userId: user.id,
+        email,
+        ip,
+        metadata: { reason: "account_suspended" },
+      });
+      return NextResponse.json(
+        { success: false, error: "Your account has been suspended." },
+        { status: 403 }
+      );
+    }
+
+    // 9. Check lockout status
     if (user.lockoutUntil && new Date(user.lockoutUntil) > new Date()) {
       await AuditLogger.log({ event: "lockout.triggered", userId: user.id, email, ip });
       return NextResponse.json(
@@ -92,7 +107,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<AuthRespo
       );
     }
 
-    // 9. Check password validity
+    // 10. Check password validity
     if (!valid) {
       await incrementFailedAttempts(user.id);
       await AuditLogger.log({
@@ -105,7 +120,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<AuthRespo
       return failResponse();
     }
 
-    // 10. Success - Reset attempts and create session
+    // 11. Success - Reset attempts and create session
     await resetFailedAttempts(user.id);
     const updatedUser = await updateUser(user.id, {
       lastLogin: new Date().toISOString(),
