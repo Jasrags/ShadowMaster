@@ -12750,7 +12750,7 @@
             "stackable": true,
             "consumable": true,
             "damageModifier": "+0S",
-            "apModifier": 2,
+            "apModifier": 1,
             "availability": 2,
             "legality": "restricted",
             "description": "Non-lethal rounds (Stun damage).",
