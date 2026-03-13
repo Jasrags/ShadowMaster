@@ -1165,7 +1165,7 @@
       "columns": ["name", "damage", "ap", "blast", "availability", "cost"],
       "rows": [
         {
-          "name": "Flash-bang",
+          "name": "Flash-Bang Grenade",
           "damage": "10S",
           "ap": -4,
           "blast": "10m Radius",
@@ -1181,7 +1181,7 @@
           "cost": 125
         },
         {
-          "name": "Fragmentation",
+          "name": "Fragmentation Grenade",
           "damage": "18P(f)",
           "ap": 5,
           "blast": "-1/m",
@@ -1189,7 +1189,7 @@
           "cost": 100
         },
         {
-          "name": "High explosive",
+          "name": "High Explosive Grenade",
           "damage": "16P",
           "ap": -2,
           "blast": "-2/m",
@@ -1197,7 +1197,7 @@
           "cost": 100
         },
         {
-          "name": "Gas",
+          "name": "Gas Grenade",
           "damage": "as Chemical",
           "ap": null,
           "blast": "10m Radius",
@@ -1205,7 +1205,7 @@
           "cost": "40¥ + Chemical cost"
         },
         {
-          "name": "Smoke",
+          "name": "Smoke Grenade",
           "damage": null,
           "ap": null,
           "blast": "10m Radius",
@@ -1213,7 +1213,7 @@
           "cost": 40
         },
         {
-          "name": "Thermal smoke",
+          "name": "Thermal Smoke Grenade",
           "damage": null,
           "ap": null,
           "blast": "10m Radius",
@@ -1229,7 +1229,7 @@
       "rows": [
         {
           "category": "Rockets",
-          "name": "Anti-vehicle",
+          "name": "Anti-vehicle Rocket",
           "damage": "24P",
           "ap": "-4/-10",
           "blast": "-4/m",
@@ -1238,7 +1238,7 @@
         },
         {
           "category": "Rockets",
-          "name": "Fragmentation",
+          "name": "Fragmentation Rocket",
           "damage": "23P(f)",
           "ap": 5,
           "blast": "-1/m",
@@ -1247,7 +1247,7 @@
         },
         {
           "category": "Rockets",
-          "name": "High-explosive",
+          "name": "High-explosive Rocket",
           "damage": "21P",
           "ap": -2,
           "blast": "-2/m",

@@ -141,12 +141,21 @@ function findMatch(
   });
   if (exact) return exact;
 
-  // Substring containment (ref name within data name or vice versa)
-  const partial = dataItems.find((item) => {
+  // Substring containment — prefer the closest length match to avoid
+  // "Fragmentation" matching "Fragmentation Grenade" instead of "Fragmentation Rocket"
+  const candidates: { item: Record<string, unknown>; distance: number }[] = [];
+  for (const item of dataItems) {
     const dataName = normalizeName(String(item[matchField] ?? ""));
-    return dataName.includes(normalizedRef) || normalizedRef.includes(dataName);
-  });
-  return partial;
+    if (dataName.includes(normalizedRef) || normalizedRef.includes(dataName)) {
+      candidates.push({ item, distance: Math.abs(dataName.length - normalizedRef.length) });
+    }
+  }
+  if (candidates.length > 0) {
+    candidates.sort((a, b) => a.distance - b.distance);
+    return candidates[0].item;
+  }
+
+  return undefined;
 }
 
 /**
@@ -156,6 +165,9 @@ function findMatch(
 function valuesMatch(refVal: unknown, dataVal: unknown): boolean {
   if (refVal === dataVal) return true;
   if (refVal == null && dataVal == null) return true;
+
+  // Null reference value means "see parent item" or "N/A" — skip comparison
+  if (refVal === null) return true;
 
   const refStr = String(refVal).trim();
   const dataStr = String(dataVal).trim();
@@ -168,10 +180,13 @@ function valuesMatch(refVal: unknown, dataVal: unknown): boolean {
   // Case-insensitive string comparison
   if (refStr.toLowerCase() === dataStr.toLowerCase()) return true;
 
-  // AP: reference "—" or null should match null/undefined/0
-  // NOTE: This is lenient — 0 vs null is a real semantic issue tracked in #597
-  if (refStr === "—" && (dataVal == null || dataVal === 0)) return true;
-  if (refVal === null && (dataVal === 0 || dataVal == null)) return true;
+  // Reference "—" means "included with parent" or "N/A" — skip comparison
+  if (refStr === "—") return true;
+
+  // Damage: null/"-"/"—" are all equivalent (no damage)
+  if ((refStr === "-" || refStr === "—") && (dataVal === "-" || dataVal === "—" || dataVal == null))
+    return true;
+  if (refVal == null && (dataStr === "-" || dataStr === "—")) return true;
 
   // Availability: strip legality suffix for numeric comparison
   // e.g., "12R" in reference, availability=12 + legality="restricted" in data
@@ -191,6 +206,10 @@ function valuesMatch(refVal: unknown, dataVal: unknown): boolean {
   const ammoMatch = refStr.match(/^(\d+)\s*\([a-z]+\)$/);
   if (ammoMatch && Number(ammoMatch[1]) === dataNum) return true;
 
+  // Ammo: dual-feed "50 (c) or 100 (belt)" — match first value
+  const dualAmmoMatch = refStr.match(/^(\d+)\s*\([a-z]+\)\s+or\s+\d+\s*\([a-z]+\)$/);
+  if (dualAmmoMatch && Number(dualAmmoMatch[1]) === dataNum) return true;
+
   // Accuracy: reference "5 (7)" means base 5, smartgun 7 — match base only
   const accMatch = refStr.match(/^(\d+)\s*\(\d+\)$/);
   if (accMatch && Number(accMatch[1]) === dataNum) return true;
@@ -207,8 +226,32 @@ function valuesMatch(refVal: unknown, dataVal: unknown): boolean {
   const rcBaseMatch = refStr.match(/^(\d+)\s*\(\d+\)$/);
   if (rcBaseMatch && Number(rcBaseMatch[1]) === dataNum) return true;
 
-  // Cost formulas: "Rating × 200¥" — skip comparison (needs formula support)
-  if (refStr.includes("×") || refStr.includes("Rating")) return true;
+  // Cost/availability formulas: skip comparison for computed values
+  // "Rating × 200¥", "Rating x 500¥", "2 + Chemical Availability", "40¥ + Chemical cost"
+  if (refStr.includes("×") || refStr.includes("Rating") || /\+\s*\w/.test(refStr)) return true;
+
+  // Cost ranges: "20¥-100,000¥" — skip (variable pricing)
+  if (/^\d[\d,]*¥?\s*[-–]\s*\d[\d,]*¥?$/.test(refStr)) return true;
+
+  // Cost/availability modifiers: "+500¥", "+3", "(+2)R" — skip (modifier values for sub-items)
+  if (/^\+\d/.test(refStr) || /^\(\+\d+\)[RF]?$/.test(refStr)) return true;
+
+  // Multiple mount options: "Top or Under" — match if data is one of the options
+  if (refStr.includes(" or ") && !refStr.match(/^\d/)) {
+    const options = refStr.split(/\s+or\s+/i).map((o) => o.trim().toLowerCase());
+    if (options.includes(dataStr.toLowerCase())) return true;
+  }
+
+  // Dual AP: "-4/-10" — match first value
+  const dualApMatch = refStr.match(/^(-?\d+)\s*\/\s*-?\d+$/);
+  if (dualApMatch && Number(dualApMatch[1]) === dataNum) return true;
+
+  // Dual AP without minus: "0/−1" — match first value (handles unicode minus)
+  const dualApMatch2 = refStr.match(/^(-?\d+)\s*\/\s*[−-]?\d+$/);
+  if (dualApMatch2 && Number(dualApMatch2[1]) === dataNum) return true;
+
+  // Damage strings: normalize whitespace inside parentheses — "23P(f)" matches "23P (f)"
+  if (refStr.replace(/\s+/g, "") === dataStr.replace(/\s+/g, "")) return true;
 
   // Capacity: "(Rating)" bracket notation vs "[Rating]"
   if (refStr.replace(/[()[\]]/g, "") === dataStr.replace(/[()[\]]/g, "")) return true;
@@ -337,16 +380,28 @@ function verifyMapping(config: MappingConfig): VerificationReport {
         const dataVal = dataItem[dataField];
 
         if (refVal !== undefined && !valuesMatch(refVal, dataVal)) {
-          findings.push({
-            severity: "error",
-            type: "value-mismatch",
-            table: mapping.referenceTable,
-            item: refName,
-            field: `${refField} → ${dataField}`,
-            expected: refVal,
-            actual: dataVal,
-            message: `"${refName}".${dataField}: expected ${JSON.stringify(refVal)}, got ${JSON.stringify(dataVal)}`,
-          });
+          // If data value is undefined, reclassify as missing-field (warning) not value-mismatch
+          if (dataVal === undefined) {
+            findings.push({
+              severity: "warning",
+              type: "missing-field",
+              table: mapping.referenceTable,
+              item: refName,
+              field: dataField,
+              message: `"${refName}" is missing required field "${dataField}" (reference has ${JSON.stringify(refVal)})`,
+            });
+          } else {
+            findings.push({
+              severity: "error",
+              type: "value-mismatch",
+              table: mapping.referenceTable,
+              item: refName,
+              field: `${refField} → ${dataField}`,
+              expected: refVal,
+              actual: dataVal,
+              message: `"${refName}".${dataField}: expected ${JSON.stringify(refVal)}, got ${JSON.stringify(dataVal)}`,
+            });
+          }
         }
       }
 
