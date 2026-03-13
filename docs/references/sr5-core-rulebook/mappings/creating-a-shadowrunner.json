@@ -1,0 +1,50 @@
+{
+  "referenceFile": "docs/references/sr5-core-rulebook/creating-a-shadowrunner.json",
+  "dataFile": "data/editions/sr5/core-rulebook.json",
+  "description": "Maps character creation reference tables to core-rulebook.json data for qualities, metatypes, and lifestyles",
+  "mappings": [
+    {
+      "referenceTable": "positive-qualities-summary",
+      "dataPath": ["modules", "qualities", "payload", "positive"],
+      "matchField": "name",
+      "referenceMatchField": "quality",
+      "fieldMap": {
+        "quality": "name",
+        "karma_cost": "karmaCost"
+      },
+      "requiredDataFields": ["name", "karmaCost", "summary"]
+    },
+    {
+      "referenceTable": "negative-qualities-summary",
+      "dataPath": ["modules", "qualities", "payload", "negative"],
+      "matchField": "name",
+      "referenceMatchField": "quality",
+      "fieldMap": {
+        "quality": "name",
+        "karma_bonus": "karmaBonus"
+      },
+      "requiredDataFields": ["name", "karmaBonus", "summary"]
+    },
+    {
+      "referenceTable": "metatype-attribute-table",
+      "dataPath": ["modules", "metatypes", "payload", "metatypes"],
+      "matchField": "name",
+      "referenceMatchField": "race",
+      "fieldMap": {
+        "race": "name"
+      },
+      "requiredDataFields": ["name", "attributes", "racialTraits", "priorityAvailability"]
+    },
+    {
+      "referenceTable": "lifestyle-costs",
+      "dataPath": ["modules", "lifestyle", "payload", "lifestyles"],
+      "matchField": "name",
+      "referenceMatchField": "lifestyle",
+      "fieldMap": {
+        "lifestyle": "name",
+        "monthly_cost": "monthlyCost"
+      },
+      "requiredDataFields": ["name", "monthlyCost", "startingNuyen"]
+    }
+  ]
+}

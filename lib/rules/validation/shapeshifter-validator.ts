@@ -76,8 +76,7 @@ export const shapeshifterValidator: ValidatorDefinition = {
     if (!shapeshifterMetahumanForm) {
       issues.push({
         code: SHAPESHIFTER_ERROR_CODES.NO_METAHUMAN_FORM,
-        message:
-          "Shapeshifters must select a metahuman form (Human, Dwarf, Elf, Ork, or Troll).",
+        message: "Shapeshifters must select a metahuman form (Human, Dwarf, Elf, Ork, or Troll).",
         field: "shapeshifterMetahumanForm",
         severity: "error",
         suggestion: "Select a metahuman form in the Metatype section.",

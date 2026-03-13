@@ -137,7 +137,8 @@
         "cost": "cost",
         "droneCompatible": "droneCompatible"
       },
-      "requiredDataFields": ["availability", "cost"]
+      "requiredDataFields": ["availability", "cost"],
+      "referenceMatchField": "modification"
     }
   ]
 }

@@ -1,0 +1,38 @@
+{
+  "referenceFile": "docs/references/sr5-core-rulebook/riggers.json",
+  "dataFile": "data/editions/sr5/core-rulebook.json",
+  "description": "Maps rigger reference tables to core-rulebook.json data for RCCs and autosofts",
+  "mappings": [
+    {
+      "referenceTable": "command-console",
+      "dataPath": ["modules", "vehicles", "payload", "rccs"],
+      "matchField": "name",
+      "referenceMatchField": "console",
+      "fieldMap": {
+        "console": "name",
+        "device_rating": "deviceRating",
+        "data_processing": "dataProcessing",
+        "firewall": "firewall",
+        "availability": "availability",
+        "cost_nuyen": "cost"
+      },
+      "requiredDataFields": [
+        "name",
+        "deviceRating",
+        "dataProcessing",
+        "firewall",
+        "availability",
+        "cost"
+      ]
+    },
+    {
+      "referenceTable": "autosoft-types",
+      "dataPath": ["modules", "vehicles", "payload", "autosofts"],
+      "matchField": "name",
+      "fieldMap": {
+        "name": "name"
+      },
+      "requiredDataFields": ["name", "description", "maxRating", "costPerRating"]
+    }
+  ]
+}

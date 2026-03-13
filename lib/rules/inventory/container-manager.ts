@@ -133,7 +133,6 @@ export function getContainerChain(character: Character, itemId: string): string[
   let currentId = itemId;
   const visited = new Set<string>();
 
-   
   while (true) {
     const item = findGearItemById(character, currentId);
     if (!item) break;

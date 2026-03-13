@@ -23,7 +23,8 @@
         "weakness": "name",
         "mechanic": "description"
       },
-      "requiredDataFields": ["name", "description"]
+      "requiredDataFields": ["name", "description"],
+      "referenceMatchField": "weakness"
     },
     {
       "referenceTable": "mundane-critters",
@@ -114,7 +115,8 @@
         "availability": "availability",
         "costPerDose": "cost"
       },
-      "requiredDataFields": ["availability", "cost", "legality"]
+      "requiredDataFields": ["availability", "cost", "legality"],
+      "referenceMatchField": "toxin"
     },
     {
       "referenceTable": "drug-stats",
@@ -138,7 +140,8 @@
         "availability": "availability",
         "costPerDose": "cost"
       },
-      "requiredDataFields": ["availability", "cost", "legality"]
+      "requiredDataFields": ["availability", "cost", "legality"],
+      "referenceMatchField": "drug"
     },
     {
       "referenceTable": "addiction-table",
@@ -149,7 +152,8 @@
         "addictionThreshold": "addictionThreshold",
         "addictionType": "addictionType"
       },
-      "requiredDataFields": ["addictionRating", "addictionThreshold", "addictionType"]
+      "requiredDataFields": ["addictionRating", "addictionThreshold", "addictionType"],
+      "referenceMatchField": "substance"
     }
   ]
 }
