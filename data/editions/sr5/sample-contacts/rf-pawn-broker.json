@@ -1,0 +1,50 @@
+{
+  "id": "rf-sample-contact-pawn-broker",
+  "editionCode": "sr5",
+  "name": "Pawn Broker",
+  "description": "Part of the neighborhood's eyes and ears, the Pawn Broker sees people come in and out, hears their stories of hardship, and knows a few of their routines. While she's good at buying and selling goods, she also has knowledge of her customers' habits or changes in routine. And sometimes she has some wiz, if used, gear.",
+  "uses": ["Buy and sell goods", "Neighborhood intelligence", "Used gear", "Quick cash"],
+  "meetingPlaces": ["Pawn shops", "Flea markets", "Neighborhood streets"],
+  "similarContacts": ["Antique Dealer"],
+  "attributes": {
+    "body": 3,
+    "agility": 3,
+    "reaction": 3,
+    "strength": 3,
+    "willpower": 4,
+    "logic": 3,
+    "intuition": 4,
+    "charisma": 4
+  },
+  "specialAttributes": {
+    "edge": 2,
+    "essence": 6
+  },
+  "initiative": {
+    "base": 7,
+    "dice": 1
+  },
+  "limits": {
+    "physical": 4,
+    "mental": 5,
+    "social": 6
+  },
+  "conditionMonitor": 10,
+  "skills": [
+    { "name": "Computers", "rating": 2 },
+    { "name": "Etiquette", "rating": 2, "specialization": "Street" },
+    { "name": "Longarms", "rating": 3 },
+    { "name": "Negotiation", "rating": 5 },
+    { "name": "Perception", "rating": 5 }
+  ],
+  "knowledgeSkills": [
+    { "name": "Item Appraisal", "rating": 3 },
+    { "name": "Street Rumors", "rating": 2 },
+    { "name": "Tech Trends", "rating": 2 }
+  ],
+  "metadata": {
+    "source": "Run Faster",
+    "page": "190",
+    "category": "Sample Contact"
+  }
+}

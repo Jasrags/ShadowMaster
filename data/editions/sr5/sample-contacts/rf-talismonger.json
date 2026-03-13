@@ -1,0 +1,52 @@
+{
+  "id": "rf-sample-contact-talismonger",
+  "editionCode": "sr5",
+  "name": "Talismonger",
+  "description": "(p. 392, SR5)",
+  "uses": ["Magical supplies", "Arcane knowledge", "Spell components", "Magical identification"],
+  "meetingPlaces": ["Talismonger shops", "Magical supply stores", "Ley line locations"],
+  "similarContacts": [],
+  "attributes": {
+    "body": 4,
+    "agility": 3,
+    "reaction": 3,
+    "strength": 3,
+    "willpower": 5,
+    "logic": 3,
+    "intuition": 3,
+    "charisma": 4
+  },
+  "specialAttributes": {
+    "edge": 2,
+    "essence": 6
+  },
+  "initiative": {
+    "base": 6,
+    "dice": 1
+  },
+  "limits": {
+    "physical": 5,
+    "mental": 5,
+    "social": 7
+  },
+  "conditionMonitor": 10,
+  "skills": [
+    { "name": "Alchemy", "rating": 4 },
+    { "name": "Arcana", "rating": 4 },
+    { "name": "Assensing", "rating": 3 },
+    { "name": "Etiquette", "rating": 3, "specialization": "Magic" },
+    { "name": "Negotiation", "rating": 4 },
+    { "name": "Perception", "rating": 3 },
+    { "name": "Sorcery skill group", "rating": 2 }
+  ],
+  "knowledgeSkills": [
+    { "name": "Magical Threats", "rating": 5 },
+    { "name": "Magic Theory", "rating": 5 },
+    { "name": "Parabotany", "rating": 2 }
+  ],
+  "metadata": {
+    "source": "Run Faster",
+    "page": "194",
+    "category": "Sample Contact"
+  }
+}

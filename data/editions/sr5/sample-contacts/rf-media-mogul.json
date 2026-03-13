@@ -1,0 +1,52 @@
+{
+  "id": "rf-sample-contact-media-mogul",
+  "editionCode": "sr5",
+  "name": "Media Mogul",
+  "description": "The Media Mogul decides what information is deemed worthy to be broadcast to the subscribers on the corporate grid. It doesn't really matter how accurate it is, as long as the masses eat it up. The Media Mogul channels the voice of the corporation in promoting corporate products, trids, and newsworthy stories. Things happen fast for those who want to stay popular, so he has an army of news journalists, glitterati drones, and corporate spies to make sure his masses are the first to know when news drops. This also means that time is money to him, so you have to be succinct and make it worth his while in order to keep his attention for more than two seconds.",
+  "uses": ["Media manipulation", "News suppression", "Corporate intelligence", "Public relations"],
+  "meetingPlaces": ["Media studios", "Corporate towers", "Exclusive restaurants"],
+  "similarContacts": ["Horizon Spin Doctor", "KSAF Showrunner"],
+  "attributes": {
+    "body": 4,
+    "agility": 4,
+    "reaction": 3,
+    "strength": 3,
+    "willpower": 4,
+    "logic": 3,
+    "intuition": 5,
+    "charisma": 6
+  },
+  "specialAttributes": {
+    "edge": 1,
+    "essence": 6
+  },
+  "initiative": {
+    "base": 8,
+    "dice": 1
+  },
+  "limits": {
+    "physical": 5,
+    "mental": 5,
+    "social": 8
+  },
+  "conditionMonitor": 10,
+  "skills": [
+    { "name": "Artisan", "rating": 4, "specialization": "Writing" },
+    { "name": "Con", "rating": 4 },
+    { "name": "Electronics skill group", "rating": 4 },
+    { "name": "Etiquette", "rating": 5, "specialization": "Media" },
+    { "name": "Intimidation", "rating": 4 },
+    { "name": "Negotiation", "rating": 6 }
+  ],
+  "knowledgeSkills": [
+    { "name": "Corporate Rumors", "rating": 5 },
+    { "name": "Elven Wines", "rating": 4 },
+    { "name": "Expensive Restaurants", "rating": 4 },
+    { "name": "Street Rumors", "rating": 5 }
+  ],
+  "metadata": {
+    "source": "Run Faster",
+    "page": "189",
+    "category": "Sample Contact"
+  }
+}

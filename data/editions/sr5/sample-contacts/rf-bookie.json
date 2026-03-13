@@ -1,0 +1,51 @@
+{
+  "id": "rf-sample-contact-bookie",
+  "editionCode": "sr5",
+  "name": "Bookie",
+  "description": "May the odds be ever in your favor—that's what he says every time you place a bet. His comment is not, of course, sincere. He's good at knowing the odds in the various games of sport across the grids and balancing them so whatever the matchup, he'll get money put down on either side. He is also good at knowing the statistics of the sports players and who's open for other games of chance (pool, darts, etc.). You can borrow money from him, but expect substantial interest to be added.",
+  "uses": ["Gambling", "Loans", "Sports information", "Underground connections"],
+  "meetingPlaces": ["Sports bars", "Underground gambling dens", "Race tracks"],
+  "similarContacts": ["Loan Shark"],
+  "attributes": {
+    "body": 5,
+    "agility": 4,
+    "reaction": 3,
+    "strength": 3,
+    "willpower": 4,
+    "logic": 5,
+    "intuition": 4,
+    "charisma": 2
+  },
+  "specialAttributes": {
+    "edge": 1,
+    "essence": 6
+  },
+  "initiative": {
+    "base": 7,
+    "dice": 1
+  },
+  "limits": {
+    "physical": 5,
+    "mental": 6,
+    "social": 5
+  },
+  "conditionMonitor": 11,
+  "skills": [
+    { "name": "Computers", "rating": 3 },
+    { "name": "Con", "rating": 3 },
+    { "name": "Etiquette", "rating": 3 },
+    { "name": "Negotiation", "rating": 4 },
+    { "name": "Perception", "rating": 5 }
+  ],
+  "knowledgeSkills": [
+    { "name": "Currency Exchange Rates", "rating": 3 },
+    { "name": "Gambling Sites", "rating": 6 },
+    { "name": "Horse Breeds", "rating": 3 },
+    { "name": "Sport Statistics", "rating": 6 }
+  ],
+  "metadata": {
+    "source": "Run Faster",
+    "page": "183",
+    "category": "Sample Contact"
+  }
+}

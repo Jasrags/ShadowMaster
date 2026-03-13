@@ -1,0 +1,54 @@
+{
+  "id": "rf-sample-contact-safehouse-master",
+  "editionCode": "sr5",
+  "name": "Safehouse Master",
+  "description": "As his title states, he is the master of the safehouse. His objective is to protect the people temporarily residing there. This sometimes means protecting these people against themselves. He makes sure that they keep a low profile, including avoiding the Grid and any Demi-GODs roaming around. He is disciplined, keeps strict hours, and monitors those who enter and leave the house.",
+  "uses": ["Safe lodging", "Security", "Low-profile operations", "Fugitive protection"],
+  "meetingPlaces": ["Safehouses", "Secure locations", "Anonymous cafes"],
+  "similarContacts": [],
+  "attributes": {
+    "body": 5,
+    "agility": 3,
+    "reaction": 3,
+    "strength": 5,
+    "willpower": 5,
+    "logic": 3,
+    "intuition": 3,
+    "charisma": 4
+  },
+  "specialAttributes": {
+    "edge": 1,
+    "essence": 6
+  },
+  "initiative": {
+    "base": 6,
+    "dice": 1
+  },
+  "limits": {
+    "physical": 6,
+    "mental": 5,
+    "social": 7
+  },
+  "conditionMonitor": 11,
+  "skills": [
+    { "name": "Computers", "rating": 3 },
+    { "name": "Etiquette", "rating": 3, "specialization": "Corp" },
+    { "name": "First Aid", "rating": 3 },
+    { "name": "Leadership", "rating": 3 },
+    { "name": "Negotiation", "rating": 2 },
+    { "name": "Perception", "rating": 4 },
+    { "name": "Pistols", "rating": 3 },
+    { "name": "Stealth skill group", "rating": 2 }
+  ],
+  "knowledgeSkills": [
+    { "name": "[City] Knowledge", "rating": 2 },
+    { "name": "Corporate Politics", "rating": 3 },
+    { "name": "(Language)", "rating": 3 },
+    { "name": "Security Systems", "rating": 4 }
+  ],
+  "metadata": {
+    "source": "Run Faster",
+    "page": "192",
+    "category": "Sample Contact"
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "id": "rf-sample-contact-lone-star-detective",
+  "editionCode": "sr5",
+  "name": "Lone Star Detective",
+  "description": "More than just a beat cop, the Lone Star Detective follows up on leads and suspects after the crime has occurred. A detective is good at observation, and unlike a simple beat cop she has access to old cases to go along with rap sheets and criminal SINs. While the Lone Star Detective's job is slightly more difficult with the SINless masses and a corporate jurisdiction quagmire, she has her cultivated sources. Through her, one can follow cases, examine evidence, or see who's in town.",
+  "uses": [
+    "Criminal investigation access",
+    "Evidence examination",
+    "Criminal records",
+    "Case tracking"
+  ],
+  "meetingPlaces": ["Precinct offices", "Crime scenes", "Late-night diners"],
+  "similarContacts": [],
+  "attributes": {
+    "body": 4,
+    "agility": 3,
+    "reaction": 3,
+    "strength": 5,
+    "willpower": 4,
+    "logic": 3,
+    "intuition": 5,
+    "charisma": 2
+  },
+  "specialAttributes": {
+    "edge": 2,
+    "essence": 6
+  },
+  "initiative": {
+    "base": 8,
+    "dice": 1
+  },
+  "limits": {
+    "physical": 6,
+    "mental": 5,
+    "social": 5
+  },
+  "conditionMonitor": 10,
+  "skills": [
+    { "name": "Clubs", "rating": 4 },
+    { "name": "Computers", "rating": 3 },
+    { "name": "Con", "rating": 2 },
+    { "name": "Etiquette", "rating": 4, "specialization": "Street" },
+    { "name": "Intimidation", "rating": 3 },
+    { "name": "Perception", "rating": 5 },
+    { "name": "Pistols", "rating": 4 },
+    { "name": "Stealth skill group", "rating": 4 }
+  ],
+  "knowledgeSkills": [
+    { "name": "Crime Syndicates", "rating": 4 },
+    { "name": "Law Enforcement", "rating": 4 },
+    { "name": "Street Gang Identification", "rating": 4 },
+    { "name": "Street Rumors", "rating": 4 }
+  ],
+  "metadata": {
+    "source": "Run Faster",
+    "page": "188",
+    "category": "Sample Contact"
+  }
+}

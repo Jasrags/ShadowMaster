@@ -1,0 +1,53 @@
+{
+  "id": "rf-sample-contact-arms-dealer",
+  "editionCode": "sr5",
+  "name": "Arms Dealer",
+  "description": "What are you looking for? Armor piercing? Range? How about a chainsaw accessory or a pearl handle with a clamshell holster? The Arms Dealer offers a variety of firearms, from the hold-out pistol to assault cannon along with a rainbow of ammo flavors. The Arms Dealer does business with a number of organizations. Instead of selling to the highest bidder, he makes sure there's plenty to go around. Pricing depends on how much he likes you and what permits you already have. As a favor, he might let you borrow or purchase one of the bigger toys.",
+  "uses": ["Weapons procurement", "Ammunition", "Military gear", "Information on arms trade"],
+  "meetingPlaces": ["Gun ranges", "Military surplus stores", "Private warehouses"],
+  "similarContacts": ["Military Supply Officer", "Terrorist"],
+  "attributes": {
+    "body": 3,
+    "agility": 3,
+    "reaction": 5,
+    "strength": 3,
+    "willpower": 4,
+    "logic": 3,
+    "intuition": 3,
+    "charisma": 4
+  },
+  "specialAttributes": {
+    "edge": 2,
+    "essence": 6
+  },
+  "initiative": {
+    "base": 8,
+    "dice": 1
+  },
+  "limits": {
+    "physical": 5,
+    "mental": 5,
+    "social": 5
+  },
+  "conditionMonitor": 10,
+  "skills": [
+    { "name": "Armorer", "rating": 4 },
+    { "name": "Computers", "rating": 3 },
+    { "name": "Etiquette", "rating": 4, "specialization": "Corporate" },
+    { "name": "Firearms", "rating": 4 },
+    { "name": "Gunnery", "rating": 3 },
+    { "name": "Instruction", "rating": 2 },
+    { "name": "Negotiation", "rating": 5 },
+    { "name": "Perception", "rating": 4 }
+  ],
+  "knowledgeSkills": [
+    { "name": "Chemistry", "rating": 4 },
+    { "name": "Firearms", "rating": 4 },
+    { "name": "Mercenary Groups", "rating": 4 }
+  ],
+  "metadata": {
+    "source": "Run Faster",
+    "page": "182",
+    "category": "Sample Contact"
+  }
+}

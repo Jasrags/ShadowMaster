@@ -1,0 +1,54 @@
+{
+  "id": "rf-sample-contact-street-doc",
+  "editionCode": "sr5",
+  "name": "Street Doc",
+  "description": "(p. 392, SR5)",
+  "uses": ["Medical care", "Cyberware installation", "Drug knowledge", "Emergency treatment"],
+  "meetingPlaces": ["Back-alley clinics", "Body shops", "Mobile medical vans"],
+  "similarContacts": [],
+  "attributes": {
+    "body": 3,
+    "agility": 3,
+    "reaction": 3,
+    "strength": 3,
+    "willpower": 4,
+    "logic": 4,
+    "intuition": 3,
+    "charisma": 3
+  },
+  "specialAttributes": {
+    "edge": 2,
+    "essence": 6
+  },
+  "initiative": {
+    "base": 6,
+    "dice": 1
+  },
+  "limits": {
+    "physical": 4,
+    "mental": 5,
+    "social": 6
+  },
+  "conditionMonitor": 10,
+  "skills": [
+    { "name": "Chemistry", "rating": 4 },
+    { "name": "Computers", "rating": 4 },
+    { "name": "Con", "rating": 2 },
+    { "name": "Cybertechnology", "rating": 3 },
+    { "name": "First Aid", "rating": 4 },
+    { "name": "Influence skill group", "rating": 4 },
+    { "name": "Medicine", "rating": 6 },
+    { "name": "Pistols", "rating": 4 }
+  ],
+  "knowledgeSkills": [
+    { "name": "BTLs", "rating": 3 },
+    { "name": "Drugs", "rating": 4 },
+    { "name": "Medical Centers", "rating": 4 },
+    { "name": "Street Rumors", "rating": 3 }
+  ],
+  "metadata": {
+    "source": "Run Faster",
+    "page": "193",
+    "category": "Sample Contact"
+  }
+}

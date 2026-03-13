@@ -1,0 +1,54 @@
+{
+  "id": "rf-sample-contact-knight-errant-dispatcher",
+  "editionCode": "sr5",
+  "name": "Knight Errant Dispatcher",
+  "description": "They don't walk the streets, but they have a finger on the pulse of the city. They monitor security alarms, law-enforcement radios, and panic buttons. They have their fellow officer's back as they coordinate backup to high-threat situations. A dispatcher can be very useful for shadowrunners, possibly telling them when they've been spotted or how long and from what direction that Lone Star response is coming. Most of this would be under special circumstances that there will not be a fight. A dispatcher is also good in tracking active events in a city: stakeouts, SWAT teams, and chases.",
+  "uses": [
+    "Law enforcement alerts",
+    "Police response timing",
+    "Security monitoring",
+    "Active event tracking"
+  ],
+  "meetingPlaces": ["Off-duty cop bars", "Coffee shops near precincts", "Matrix calls"],
+  "similarContacts": [],
+  "attributes": {
+    "body": 4,
+    "agility": 3,
+    "reaction": 4,
+    "strength": 5,
+    "willpower": 5,
+    "logic": 4,
+    "intuition": 4,
+    "charisma": 3
+  },
+  "specialAttributes": {
+    "edge": 1,
+    "essence": 6
+  },
+  "initiative": {
+    "base": 8,
+    "dice": 1
+  },
+  "limits": {
+    "physical": 6,
+    "mental": 6,
+    "social": 6
+  },
+  "conditionMonitor": 10,
+  "skills": [
+    { "name": "Computers", "rating": 4 },
+    { "name": "Etiquette", "rating": 3, "specialization": "Street" },
+    { "name": "Leadership", "rating": 3 },
+    { "name": "Perception", "rating": 4 },
+    { "name": "Pistols", "rating": 3 }
+  ],
+  "knowledgeSkills": [
+    { "name": "Law Enforcement", "rating": 4 },
+    { "name": "Security Systems", "rating": 4 }
+  ],
+  "metadata": {
+    "source": "Run Faster",
+    "page": "188",
+    "category": "Sample Contact"
+  }
+}

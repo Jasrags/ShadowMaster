@@ -1,0 +1,57 @@
+{
+  "id": "rf-sample-contact-gang-boss",
+  "editionCode": "sr5",
+  "name": "Gang Boss",
+  "description": "A Gang Boss has worked his way up with cunning and a gun to gain his piece of the world. He has intimidated an army of thugs, and in turn they respect him and his power. As a leader of a criminal organization, he has dealt with other criminals, so he knows more about the underworld than law enforcement. With a wealth of information and people to get it for him, a character must understand that a favor from the Gang Boss comes at a price.",
+  "uses": [
+    "Street-level muscle",
+    "Criminal information",
+    "Territory access",
+    "Underground connections"
+  ],
+  "meetingPlaces": ["Gang hangouts", "Back alleys", "Abandoned buildings"],
+  "similarContacts": [],
+  "attributes": {
+    "body": 5,
+    "agility": 3,
+    "reaction": 3,
+    "strength": 3,
+    "willpower": 4,
+    "logic": 3,
+    "intuition": 3,
+    "charisma": 4
+  },
+  "specialAttributes": {
+    "edge": 2,
+    "essence": 6
+  },
+  "initiative": {
+    "base": 6,
+    "dice": 1
+  },
+  "limits": {
+    "physical": 5,
+    "mental": 5,
+    "social": 6
+  },
+  "conditionMonitor": 11,
+  "skills": [
+    { "name": "Blades", "rating": 4 },
+    { "name": "Etiquette", "rating": 3, "specialization": "Street" },
+    { "name": "Intimidation", "rating": 4 },
+    { "name": "Leadership", "rating": 4 },
+    { "name": "Negotiation", "rating": 3 },
+    { "name": "Sneaking", "rating": 3 }
+  ],
+  "knowledgeSkills": [
+    { "name": "BTLs", "rating": 2 },
+    { "name": "City Knowledge", "rating": 4 },
+    { "name": "Drugs", "rating": 2 },
+    { "name": "Street Gang Identification", "rating": 4 }
+  ],
+  "metadata": {
+    "source": "Run Faster",
+    "page": "187",
+    "category": "Sample Contact"
+  }
+}

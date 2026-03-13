@@ -1,0 +1,54 @@
+{
+  "id": "rf-sample-contact-corporate-administrator",
+  "editionCode": "sr5",
+  "name": "Corporate Administrator",
+  "description": "Found in many corporate offices, the Corporate Administrator is the human version of Matrix software that schedules appointments, greets guests, sets up celebrations and retirements, and plans out the daily schedule for individuals or groups. While the profession is archaic, the intuition and metahuman connection it provides cannot be substituted by software. Because of his position, he is the go-to person for help with both personal and business subjects. This makes the Administrator the center of gossip and rumors and news around the office. You want to know who is sleeping with who in the copy room or what new project has been handed down from above, or who to talk to at some other corporate office? Call the Corporate Admin. Corporate Administrators live on gossip and office supplies as it's how he works the system and makes himself invaluable to the other wageslaves.",
+  "uses": ["Corporate gossip", "Office access", "Schedule information", "Internal connections"],
+  "meetingPlaces": ["Corporate lobbies", "Break rooms", "Nearby coffee shops"],
+  "similarContacts": [],
+  "attributes": {
+    "body": 4,
+    "agility": 3,
+    "reaction": 4,
+    "strength": 5,
+    "willpower": 4,
+    "logic": 4,
+    "intuition": 4,
+    "charisma": 3
+  },
+  "specialAttributes": {
+    "edge": 1,
+    "essence": 6
+  },
+  "initiative": {
+    "base": 8,
+    "dice": 1
+  },
+  "limits": {
+    "physical": 6,
+    "mental": 6,
+    "social": 6
+  },
+  "conditionMonitor": 10,
+  "skills": [
+    { "name": "Computers", "rating": 4 },
+    { "name": "Con", "rating": 2 },
+    { "name": "Etiquette", "rating": 4, "specialization": "Corporate" },
+    { "name": "First Aid", "rating": 3 },
+    { "name": "Instruction", "rating": 3 },
+    { "name": "Leadership", "rating": 2 },
+    { "name": "Negotiation", "rating": 3 }
+  ],
+  "knowledgeSkills": [
+    { "name": "City Knowledge", "rating": 3 },
+    { "name": "Corporate Rumors", "rating": 5 },
+    { "name": "Food Delivery Services", "rating": 3 },
+    { "name": "Hardware", "rating": 2 },
+    { "name": "Security Systems", "rating": 3 }
+  ],
+  "metadata": {
+    "source": "Run Faster",
+    "page": "185",
+    "category": "Sample Contact"
+  }
+}

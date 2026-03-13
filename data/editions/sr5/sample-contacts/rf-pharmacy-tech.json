@@ -1,0 +1,54 @@
+{
+  "id": "rf-sample-contact-pharmacy-tech",
+  "editionCode": "sr5",
+  "name": "Pharmacy Tech",
+  "description": "These days, the technology to create drugs has exceeded the ability for any government to regulate them. Only the hostilities between corporations over patents keep most drugs on the market in check. A Pharmacy Tech has the chemical and biological knowledge to create, deconstruct, and in some cases neutralize drug effects. Some even have knowledge of bad combinations or their effects on other sapient species. A Pharmacy Tech can provide illegal drugs without a prescription, refill a medkit's painkillers or antibiotics, or supply those handy slap patches.",
+  "uses": ["Drug procurement", "Pharmaceutical knowledge", "Medkit supplies", "Drug analysis"],
+  "meetingPlaces": ["Pharmacies", "Clinics", "University labs"],
+  "similarContacts": ["High School Chemistry Teacher"],
+  "attributes": {
+    "body": 2,
+    "agility": 5,
+    "reaction": 3,
+    "strength": 3,
+    "willpower": 4,
+    "logic": 6,
+    "intuition": 5,
+    "charisma": 3
+  },
+  "specialAttributes": {
+    "edge": 1,
+    "essence": 6
+  },
+  "initiative": {
+    "base": 8,
+    "dice": 1
+  },
+  "limits": {
+    "physical": 4,
+    "mental": 7,
+    "social": 6
+  },
+  "conditionMonitor": 9,
+  "skills": [
+    { "name": "Biotechnology", "rating": 4 },
+    { "name": "Chemistry", "rating": 5 },
+    { "name": "Electronics skill group", "rating": 2 },
+    { "name": "Etiquette", "rating": 2 },
+    { "name": "Medicine", "rating": 5 },
+    { "name": "Negotiation", "rating": 2 },
+    { "name": "Perception", "rating": 4 }
+  ],
+  "knowledgeSkills": [
+    { "name": "Botany", "rating": 2 },
+    { "name": "Chemistry", "rating": 4 },
+    { "name": "Corporate Business", "rating": 5 },
+    { "name": "Drugs", "rating": 6 },
+    { "name": "Law", "rating": 5 }
+  ],
+  "metadata": {
+    "source": "Run Faster",
+    "page": "190",
+    "category": "Sample Contact"
+  }
+}

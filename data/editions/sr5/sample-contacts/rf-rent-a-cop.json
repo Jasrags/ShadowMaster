@@ -1,0 +1,51 @@
+{
+  "id": "rf-sample-contact-rent-a-cop",
+  "editionCode": "sr5",
+  "name": "Rent-a-Cop",
+  "description": "While he has been given a gun and a badge, he does not have the same training or discipline as those employed with Lone Star or Knight Errant. He has been hired cheaply by some mall or minor corporation to have a presence that will deter criminals. He believes that chicks dig the uniform. Unfortunately if the shit hits the fan, his contract does not cover taking a bullet for the company. While on the job, he keeps his eyes and ears open to what is going on, plus he's given authorization to walk around and access most spots in his assigned beat.",
+  "uses": ["Security patrol information", "Building access", "Local intelligence", "Lookout duty"],
+  "meetingPlaces": ["Shopping malls", "Corporate parking lots", "Fast food joints"],
+  "similarContacts": [],
+  "attributes": {
+    "body": 5,
+    "agility": 3,
+    "reaction": 3,
+    "strength": 3,
+    "willpower": 4,
+    "logic": 3,
+    "intuition": 3,
+    "charisma": 2
+  },
+  "specialAttributes": {
+    "edge": 2,
+    "essence": 6
+  },
+  "initiative": {
+    "base": 6,
+    "dice": 1
+  },
+  "limits": {
+    "physical": 5,
+    "mental": 5,
+    "social": 4
+  },
+  "conditionMonitor": 11,
+  "skills": [
+    { "name": "Etiquette", "rating": 3, "specialization": "Street" },
+    { "name": "Intimidation", "rating": 3 },
+    { "name": "Perception", "rating": 3 },
+    { "name": "Pilot Ground Craft", "rating": 2 },
+    { "name": "Pistols", "rating": 2 }
+  ],
+  "knowledgeSkills": [
+    { "name": "Gang Identification", "rating": 3 },
+    { "name": "Local Cheap Food", "rating": 4 },
+    { "name": "Security Systems", "rating": 2 },
+    { "name": "Street Rumors", "rating": 3 }
+  ],
+  "metadata": {
+    "source": "Run Faster",
+    "page": "192",
+    "category": "Sample Contact"
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "id": "rf-sample-contact-coyote",
+  "editionCode": "sr5",
+  "name": "Coyote",
+  "description": "For every security border, there's someone who knows how to bypass it. For a hefty fee, she brings individuals or groups through tunnels, under fences, and/or by bribed guards from one nation to the next. For a favor, she might direct them to someone to get them the proper paperwork (fake SIN/permits) to be able to work and live in the new place.",
+  "uses": ["Border smuggling", "Safe passage", "Fake SIN connections", "Underground routes"],
+  "meetingPlaces": ["Border towns", "Safe houses", "Truck stops"],
+  "similarContacts": [],
+  "attributes": {
+    "body": 3,
+    "agility": 3,
+    "reaction": 5,
+    "strength": 3,
+    "willpower": 4,
+    "logic": 3,
+    "intuition": 3,
+    "charisma": 4
+  },
+  "specialAttributes": {
+    "edge": 1,
+    "essence": 6
+  },
+  "initiative": {
+    "base": 8,
+    "dice": 1
+  },
+  "limits": {
+    "physical": 5,
+    "mental": 5,
+    "social": 6
+  },
+  "conditionMonitor": 10,
+  "skills": [
+    { "name": "Athletics skill group", "rating": 2 },
+    { "name": "Computers", "rating": 2 },
+    { "name": "Con", "rating": 3 },
+    { "name": "Etiquette", "rating": 3, "specialization": "Street" },
+    { "name": "Impersonation", "rating": 3 },
+    { "name": "Leadership", "rating": 2 },
+    { "name": "Negotiation", "rating": 4 },
+    { "name": "Pistols", "rating": 4 }
+  ],
+  "knowledgeSkills": [
+    { "name": "City Knowledge", "rating": 5 },
+    { "name": "Magical Threats", "rating": 3 },
+    { "name": "Security Systems", "rating": 4 }
+  ],
+  "metadata": {
+    "source": "Run Faster",
+    "page": "186",
+    "category": "Sample Contact"
+  }
+}

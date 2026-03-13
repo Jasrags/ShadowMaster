@@ -1,0 +1,53 @@
+{
+  "id": "rf-sample-contact-bounty-hunter",
+  "editionCode": "sr5",
+  "name": "Bounty Hunter",
+  "description": "A Bounty Hunter will chase down a subject provided the price is right. She can track down anyone anywhere given enough time, money, and details on the person. Pricing also depends on if you want just a location, a corpse, or a still breathing subject. She is not subtle in her techniques as she works fast to get to the next target. She is one of the more refreshingly straightforward contacts with ten percent cash up front. There are also the arcane bounty hunters, who can use their Awakened talents to find people on little more than a cigarette stub or drop of blood. Of course their prices tend to be higher.",
+  "uses": ["Tracking people", "Skip tracing", "Bounty collection", "Street-level intelligence"],
+  "meetingPlaces": ["Bail bond offices", "Dive bars", "Parked vehicles on stakeout"],
+  "similarContacts": [],
+  "attributes": {
+    "body": 5,
+    "agility": 3,
+    "reaction": 5,
+    "strength": 5,
+    "willpower": 5,
+    "logic": 3,
+    "intuition": 3,
+    "charisma": 3
+  },
+  "specialAttributes": {
+    "edge": 1,
+    "essence": 6
+  },
+  "initiative": {
+    "base": 8,
+    "dice": 1
+  },
+  "limits": {
+    "physical": 7,
+    "mental": 5,
+    "social": 7
+  },
+  "conditionMonitor": 11,
+  "skills": [
+    { "name": "Athletics skill group", "rating": 2 },
+    { "name": "Con", "rating": 3 },
+    { "name": "Etiquette", "rating": 2 },
+    { "name": "Intimidation", "rating": 3 },
+    { "name": "Negotiation", "rating": 3 },
+    { "name": "Perception", "rating": 4 },
+    { "name": "Pistols", "rating": 4 }
+  ],
+  "knowledgeSkills": [
+    { "name": "Local Streets", "rating": 3 },
+    { "name": "Local Coyotes", "rating": 3 },
+    { "name": "Organized Crime", "rating": 3 },
+    { "name": "Safe Houses", "rating": 4 }
+  ],
+  "metadata": {
+    "source": "Run Faster",
+    "page": "183",
+    "category": "Sample Contact"
+  }
+}

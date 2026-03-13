@@ -1,0 +1,51 @@
+{
+  "id": "rf-sample-contact-recicladore",
+  "editionCode": "sr5",
+  "name": "Recicladore",
+  "description": "The current trend of what to do with trash is to bury it to make it go away. But like information on the Matrix, it doesn't always stay buried. A Recicladore lives and works from trash dumps, making a living recycling and using what's been buried for generations. Need a DVD player? Readers Digest in paper form? How about a twentieth-century car engine? A Recicladore collects many low-tech items or raw materials. Communities of recicladores trade recyclables for foodstuffs and medicine, and this Recicladore is no exception. Standard currency can be used to buy his stuff, but it's not preferred as most communities are barter societies. Recicladores have the advantage of knowing just where a body—dead or alive—can be stashed and never found.",
+  "uses": ["Salvaged goods", "Body disposal", "Low-tech equipment", "Barter goods"],
+  "meetingPlaces": ["Trash dumps", "Recycling centers", "Barrens outskirts"],
+  "similarContacts": ["Junkyard Operator", "Water/Sewage Treatment Worker"],
+  "attributes": {
+    "body": 7,
+    "agility": 4,
+    "reaction": 3,
+    "strength": 7,
+    "willpower": 4,
+    "logic": 3,
+    "intuition": 3,
+    "charisma": 4
+  },
+  "specialAttributes": {
+    "edge": 1,
+    "essence": 6
+  },
+  "initiative": {
+    "base": 7,
+    "dice": 1
+  },
+  "limits": {
+    "physical": 8,
+    "mental": 5,
+    "social": 5
+  },
+  "conditionMonitor": 12,
+  "skills": [
+    { "name": "Clubs", "rating": 3 },
+    { "name": "Etiquette", "rating": 2, "specialization": "Street" },
+    { "name": "First Aid", "rating": 3 },
+    { "name": "Perception", "rating": 3 },
+    { "name": "Survival", "rating": 2 }
+  ],
+  "knowledgeSkills": [
+    { "name": "Biotechnology", "rating": 3 },
+    { "name": "BTLs", "rating": 3 },
+    { "name": "Chemistry", "rating": 4 },
+    { "name": "Twentieth Century Technology", "rating": 3 }
+  ],
+  "metadata": {
+    "source": "Run Faster",
+    "page": "191",
+    "category": "Sample Contact"
+  }
+}

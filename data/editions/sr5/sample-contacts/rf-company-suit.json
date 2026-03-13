@@ -1,0 +1,59 @@
+{
+  "id": "rf-sample-contact-company-suit",
+  "editionCode": "sr5",
+  "name": "Company Suit",
+  "description": "The Company Suit is a special executive agent for the corporation. She is the Law above corporate security and will most often take care of corporate matters, where shadowrunners aren't required. She has access to most of the corporations intelligence when required and some of its dirty secrets. However she is loyal to a fault and will not let shame fall on her corporation. She'll even die for her company, with the belief that they can fix it. While she will not work against her company, she will provide any intelligence that the corporation has to help take down a rival corp or help her beloved parent corp.",
+  "uses": [
+    "Corporate intelligence",
+    "Corporate access",
+    "Legal resources",
+    "Corporate connections"
+  ],
+  "meetingPlaces": ["Corporate offices", "Executive lounges", "High-end bars"],
+  "similarContacts": ["Corporate Security Officer", "Executive Wageslave"],
+  "attributes": {
+    "body": 3,
+    "agility": 3,
+    "reaction": 5,
+    "strength": 3,
+    "willpower": 4,
+    "logic": 3,
+    "intuition": 3,
+    "charisma": 4
+  },
+  "specialAttributes": {
+    "edge": 2,
+    "essence": 6
+  },
+  "initiative": {
+    "base": 8,
+    "dice": 1
+  },
+  "limits": {
+    "physical": 5,
+    "mental": 5,
+    "social": 6
+  },
+  "conditionMonitor": 10,
+  "skills": [
+    { "name": "Blades", "rating": 5 },
+    { "name": "Clubs", "rating": 3 },
+    { "name": "Con", "rating": 4, "specialization": "Fast-talking" },
+    { "name": "Electronics skill group", "rating": 4 },
+    { "name": "Leadership", "rating": 4 },
+    { "name": "Negotiation", "rating": 3 },
+    { "name": "Pilot Ground Craft", "rating": 2 },
+    { "name": "Pistols", "rating": 4 }
+  ],
+  "knowledgeSkills": [
+    { "name": "Corporate Rumors", "rating": 4 },
+    { "name": "Corporate Safehouses", "rating": 4 },
+    { "name": "Organized Criminals", "rating": 4 },
+    { "name": "City Streets", "rating": 4 }
+  ],
+  "metadata": {
+    "source": "Run Faster",
+    "page": "184",
+    "category": "Sample Contact"
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "id": "rf-sample-contact-taxi-driver",
+  "editionCode": "sr5",
+  "name": "Taxi Driver",
+  "description": "Need to travel around and don't have the wheels or know all the shortcuts in the city? The Taxi Driver can help you get around. He works most of the day and his ride blends in to almost any surrounding, especially in sprawls. As a favor, the driver could pick up the contact if he's in trouble, even if that trouble is in the barrens. But you'd better tip well.",
+  "uses": ["Transportation", "City navigation", "Surveillance platform", "Quick getaway"],
+  "meetingPlaces": ["Taxi stands", "Hotels", "Airports"],
+  "similarContacts": [],
+  "attributes": {
+    "body": 4,
+    "agility": 3,
+    "reaction": 3,
+    "strength": 3,
+    "willpower": 4,
+    "logic": 3,
+    "intuition": 3,
+    "charisma": 3
+  },
+  "specialAttributes": {
+    "edge": 3,
+    "essence": 6
+  },
+  "initiative": {
+    "base": 6,
+    "dice": 1
+  },
+  "limits": {
+    "physical": 5,
+    "mental": 5,
+    "social": 6
+  },
+  "conditionMonitor": 10,
+  "skills": [
+    { "name": "Automotive Mechanic", "rating": 2 },
+    { "name": "Blades", "rating": 2 },
+    { "name": "Etiquette", "rating": 3, "specialization": "Street" },
+    { "name": "Negotiation", "rating": 2 },
+    { "name": "Perception", "rating": 3 },
+    { "name": "Pilot Ground Craft", "rating": 5 }
+  ],
+  "knowledgeSkills": [
+    { "name": "(City) Knowledge", "rating": 4 },
+    { "name": "(City) Streets", "rating": 4 },
+    { "name": "Street Rumors", "rating": 4 }
+  ],
+  "metadata": {
+    "source": "Run Faster",
+    "page": "194",
+    "category": "Sample Contact"
+  }
+}

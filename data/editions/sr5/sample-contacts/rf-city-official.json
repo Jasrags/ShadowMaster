@@ -1,0 +1,54 @@
+{
+  "id": "rf-sample-contact-city-official",
+  "editionCode": "sr5",
+  "name": "City Official",
+  "description": "The City Official is a typical bureaucrat who has used his charms and public image to sway the voters to elect him into a position of power. He is, however, more concerned about the needs of his boss and sponsors than those of the masses. He's the most honest con artist you'll ever meet. Always good for offering dirt on his political rivals and can possibly be persuaded to leverage the city's resources for a runner if it offers a career advantage.",
+  "uses": ["Political favors", "Government information", "Legal leverage", "Resource allocation"],
+  "meetingPlaces": ["City hall", "Upscale restaurants", "Private clubs"],
+  "similarContacts": [],
+  "attributes": {
+    "body": 4,
+    "agility": 3,
+    "reaction": 4,
+    "strength": 4,
+    "willpower": 4,
+    "logic": 3,
+    "intuition": 4,
+    "charisma": 6
+  },
+  "specialAttributes": {
+    "edge": 2,
+    "essence": 6
+  },
+  "initiative": {
+    "base": 8,
+    "dice": 1
+  },
+  "limits": {
+    "physical": 6,
+    "mental": 5,
+    "social": 8
+  },
+  "conditionMonitor": 10,
+  "skills": [
+    { "name": "Acting skill group", "rating": 4 },
+    { "name": "Computers", "rating": 4 },
+    { "name": "Etiquette", "rating": 5, "specialization": "Corporate" },
+    { "name": "Leadership", "rating": 5 },
+    { "name": "Negotiation", "rating": 5 },
+    { "name": "Pistols", "rating": 3 },
+    { "name": "Sneaking", "rating": 3 },
+    { "name": "Unarmed Combat", "rating": 4 }
+  ],
+  "knowledgeSkills": [
+    { "name": "Drugs", "rating": 3 },
+    { "name": "Drug Dealers", "rating": 2 },
+    { "name": "Law", "rating": 6 },
+    { "name": "Street Rumors", "rating": 3 }
+  ],
+  "metadata": {
+    "source": "Run Faster",
+    "page": "184",
+    "category": "Sample Contact"
+  }
+}

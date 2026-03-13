@@ -1,0 +1,49 @@
+{
+  "id": "rf-sample-contact-street-kid",
+  "editionCode": "sr5",
+  "name": "Street Kid",
+  "description": "The Street Kid was born, naturally, on the streets. Quite literally, in fact. There are many like him in the barrens. His family are people he's found whom he can trust, and they are few. He's small enough to be ignored, but don't give him the brush-off as he might know something useful. Also be careful—in his eyes, you are somebody, and that's more than he can say for his parents.",
+  "uses": ["Surveillance", "Message running", "Street-level information", "Distraction"],
+  "meetingPlaces": ["Street corners", "Abandoned lots", "Soup kitchens"],
+  "similarContacts": [],
+  "attributes": {
+    "body": 2,
+    "agility": 3,
+    "reaction": 3,
+    "strength": 3,
+    "willpower": 2,
+    "logic": 3,
+    "intuition": 3,
+    "charisma": 3
+  },
+  "specialAttributes": {
+    "edge": 6,
+    "essence": 6
+  },
+  "initiative": {
+    "base": 6,
+    "dice": 1
+  },
+  "limits": {
+    "physical": 4,
+    "mental": 4,
+    "social": 5
+  },
+  "conditionMonitor": 9,
+  "skills": [
+    { "name": "Etiquette", "rating": 2, "specialization": "Street" },
+    { "name": "Palming", "rating": 2 },
+    { "name": "Perception", "rating": 2 },
+    { "name": "Sneaking", "rating": 4 },
+    { "name": "Survival", "rating": 3 }
+  ],
+  "knowledgeSkills": [
+    { "name": "(City) Knowledge", "rating": 3 },
+    { "name": "Street Rumors", "rating": 3 }
+  ],
+  "metadata": {
+    "source": "Run Faster",
+    "page": "194",
+    "category": "Sample Contact"
+  }
+}

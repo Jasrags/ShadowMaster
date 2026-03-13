@@ -1,0 +1,56 @@
+{
+  "id": "rf-sample-contact-club-kid",
+  "editionCode": "sr5",
+  "name": "Club Kid",
+  "description": "She stays on the bleeding edge of fashion, keeping a finger on the pulse of the city so she always knows where the party is. She thinks she knows everybody who's anybody and might have rubbed elbows with a few mega-power players. The club is her escape from her mundane wageslave existence.",
+  "uses": [
+    "Social networking",
+    "Fashion and trends",
+    "Club scene information",
+    "Celebrity connections"
+  ],
+  "meetingPlaces": ["Nightclubs", "Fashion boutiques", "Gallery openings"],
+  "similarContacts": [],
+  "attributes": {
+    "body": 3,
+    "agility": 3,
+    "reaction": 3,
+    "strength": 3,
+    "willpower": 4,
+    "logic": 3,
+    "intuition": 4,
+    "charisma": 5
+  },
+  "specialAttributes": {
+    "edge": 2,
+    "essence": 6
+  },
+  "initiative": {
+    "base": 7,
+    "dice": 1
+  },
+  "limits": {
+    "physical": 4,
+    "mental": 5,
+    "social": 7
+  },
+  "conditionMonitor": 10,
+  "skills": [
+    { "name": "Artisan", "rating": 4, "specialization": "Fashion" },
+    { "name": "Con", "rating": 4, "specialization": "Seduction" },
+    { "name": "Negotiation", "rating": 4 },
+    { "name": "Performance", "rating": 5, "specialization": "Dance" },
+    { "name": "Pistols", "rating": 2 }
+  ],
+  "knowledgeSkills": [
+    { "name": "Current Fashion", "rating": 4 },
+    { "name": "Night Clubs", "rating": 3 },
+    { "name": "Simstars", "rating": 3 },
+    { "name": "Street Rumors", "rating": 4 }
+  ],
+  "metadata": {
+    "source": "Run Faster",
+    "page": "184",
+    "category": "Sample Contact"
+  }
+}

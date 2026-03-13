@@ -1,0 +1,51 @@
+{
+  "id": "rf-sample-contact-store-owner",
+  "editionCode": "sr5",
+  "name": "Store Owner",
+  "description": "A Store Owner is always good for friendly advice and, depending on the store, a free meal or help with fixing something. A Store Owner is also a fixed point in a city, regularly in a spot where she can observe the comings and goings of residents around her, know the word on the street, and what changes may be coming.",
+  "uses": ["Local intelligence", "Meeting point", "Small goods", "Community connections"],
+  "meetingPlaces": ["Their store", "Local markets", "Neighborhood streets"],
+  "similarContacts": ["Mobile Food Truck Operator", "Street Vendor"],
+  "attributes": {
+    "body": 3,
+    "agility": 3,
+    "reaction": 3,
+    "strength": 3,
+    "willpower": 4,
+    "logic": 3,
+    "intuition": 3,
+    "charisma": 4
+  },
+  "specialAttributes": {
+    "edge": 1,
+    "essence": 6
+  },
+  "initiative": {
+    "base": 6,
+    "dice": 1
+  },
+  "limits": {
+    "physical": 4,
+    "mental": 5,
+    "social": 6
+  },
+  "conditionMonitor": 10,
+  "skills": [
+    { "name": "Artisan", "rating": 2 },
+    { "name": "Blades", "rating": 2 },
+    { "name": "Etiquette", "rating": 3, "specialization": "Corp" },
+    { "name": "Negotiation", "rating": 3 },
+    { "name": "Perception", "rating": 3 }
+  ],
+  "knowledgeSkills": [
+    { "name": "[City] Politics", "rating": 3 },
+    { "name": "Media Trivia", "rating": 3 },
+    { "name": "Street Rumors", "rating": 3 },
+    { "name": "Thrift Stores", "rating": 3 }
+  ],
+  "metadata": {
+    "source": "Run Faster",
+    "page": "193",
+    "category": "Sample Contact"
+  }
+}

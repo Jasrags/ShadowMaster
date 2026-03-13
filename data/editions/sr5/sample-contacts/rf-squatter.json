@@ -1,0 +1,53 @@
+{
+  "id": "rf-sample-contact-squatter",
+  "editionCode": "sr5",
+  "name": "Squatter",
+  "description": "Squatters have no money and no residence—like the thousands of other SINless who live in the city. Can't loan you any money and probably aren't educated or literate enough to help with legwork. But with so many around, many people tend to ignore them. This is their asset: anonymity. As a contact, the Squatter can sit and watch a place for days, reporting who's coming and going—provided that the character keeps him fed.",
+  "uses": ["Surveillance", "Barrens knowledge", "Anonymity", "Local rumors"],
+  "meetingPlaces": ["Under bridges", "Abandoned buildings", "Soup kitchens"],
+  "similarContacts": [],
+  "attributes": {
+    "body": 4,
+    "agility": 3,
+    "reaction": 3,
+    "strength": 3,
+    "willpower": 4,
+    "logic": 3,
+    "intuition": 3,
+    "charisma": 4
+  },
+  "specialAttributes": {
+    "edge": 2,
+    "essence": 6
+  },
+  "initiative": {
+    "base": 6,
+    "dice": 1
+  },
+  "limits": {
+    "physical": 5,
+    "mental": 5,
+    "social": 5
+  },
+  "conditionMonitor": 10,
+  "skills": [
+    { "name": "Blades", "rating": 2 },
+    { "name": "Con", "rating": 1 },
+    { "name": "Etiquette", "rating": 3, "specialization": "Street" },
+    { "name": "Intimidation", "rating": 1 },
+    { "name": "Perception", "rating": 3 },
+    { "name": "Sneaking", "rating": 3 }
+  ],
+  "knowledgeSkills": [
+    { "name": "[City] Knowledge", "rating": 3 },
+    { "name": "Drugs", "rating": 2 },
+    { "name": "Dumpster Diving", "rating": 3 },
+    { "name": "Gang Identification", "rating": 3 },
+    { "name": "Street Rumors", "rating": 2 }
+  ],
+  "metadata": {
+    "source": "Run Faster",
+    "page": "193",
+    "category": "Sample Contact"
+  }
+}

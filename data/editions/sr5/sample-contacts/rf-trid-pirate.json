@@ -1,0 +1,53 @@
+{
+  "id": "rf-sample-contact-trid-pirate",
+  "editionCode": "sr5",
+  "name": "Trid Pirate",
+  "description": "The Trid Pirate is the icon of old-school Pink Mohawk runners. He rebels against the corporations by disrupting media broadcasts with his own version of the truth. Most often he can get away with generating noise to \"wake the wageslave zombie from doing work for the Man.\" He's always good for distraction or a laugh, and sometimes the \"hidden truths\" he says he knows have the virtue of actually being true.",
+  "uses": ["Media disruption", "Signal jamming", "Propaganda broadcasting", "Electronic warfare"],
+  "meetingPlaces": ["Pirate radio stations", "Underground studios", "Hacker dens"],
+  "similarContacts": [],
+  "attributes": {
+    "body": 6,
+    "agility": 3,
+    "reaction": 3,
+    "strength": 5,
+    "willpower": 4,
+    "logic": 3,
+    "intuition": 4,
+    "charisma": 3
+  },
+  "specialAttributes": {
+    "edge": 4,
+    "essence": 6
+  },
+  "initiative": {
+    "base": 7,
+    "dice": 1
+  },
+  "limits": {
+    "physical": 7,
+    "mental": 5,
+    "social": 6
+  },
+  "conditionMonitor": 11,
+  "skills": [
+    { "name": "Computers", "rating": 5 },
+    { "name": "Electronic Warfare", "rating": 5 },
+    { "name": "Hacking", "rating": 3 },
+    { "name": "Hardware", "rating": 3 },
+    { "name": "Influence skill group", "rating": 2 },
+    { "name": "Performance", "rating": 3 },
+    { "name": "Software", "rating": 3 }
+  ],
+  "knowledgeSkills": [
+    { "name": "Grids", "rating": 4 },
+    { "name": "Media Stars", "rating": 3 },
+    { "name": "Street Rumors", "rating": 3 },
+    { "name": "Wired Technology", "rating": 4 }
+  ],
+  "metadata": {
+    "source": "Run Faster",
+    "page": "195",
+    "category": "Sample Contact"
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "id": "rf-sample-contact-bartender",
+  "editionCode": "sr5",
+  "name": "Bartender",
+  "description": "(p. 390, SR5)",
+  "uses": ["Information", "Street rumors", "Meeting place", "Additional contacts"],
+  "meetingPlaces": ["Any bar or nightclub"],
+  "similarContacts": ["Bouncer", "Nightclub Owner", "Stripper", "Waitress"],
+  "attributes": {
+    "body": 3,
+    "agility": 4,
+    "reaction": 3,
+    "strength": 3,
+    "willpower": 4,
+    "logic": 3,
+    "intuition": 4,
+    "charisma": 5
+  },
+  "specialAttributes": {
+    "edge": 1,
+    "essence": 6
+  },
+  "initiative": {
+    "base": 7,
+    "dice": 1
+  },
+  "limits": {
+    "physical": 4,
+    "mental": 5,
+    "social": 7
+  },
+  "conditionMonitor": 10,
+  "skills": [
+    { "name": "Automatics", "rating": 1 },
+    { "name": "Clubs", "rating": 3 },
+    { "name": "Etiquette", "rating": 4, "specialization": "Street" },
+    { "name": "Intimidation", "rating": 2 },
+    { "name": "Negotiation", "rating": 3 }
+  ],
+  "knowledgeSkills": [
+    { "name": "Alcohol", "rating": 4 },
+    { "name": "Media Stars", "rating": 4 },
+    { "name": "Sports", "rating": 4 },
+    { "name": "Street Rumors", "rating": 2 }
+  ],
+  "metadata": {
+    "source": "Run Faster",
+    "page": "182",
+    "category": "Sample Contact"
+  }
+}

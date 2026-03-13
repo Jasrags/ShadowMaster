@@ -1,0 +1,61 @@
+{
+  "id": "rf-sample-contact-terrafirst-activist",
+  "editionCode": "sr5",
+  "name": "TerraFirst! Activist",
+  "description": "The TerraFirst! Activist is totally devoted to her cause—namely, opposition to environmental destruction. She believes the extreme actions she takes are the only actions available to her. She targets those who she believes are enemies to her cause. Collateral damage is justified as those who should not have turned a blind eye to the damage being done to the environment.",
+  "uses": [
+    "Demolitions expertise",
+    "Eco-terrorism connections",
+    "Protest organization",
+    "Underground networks"
+  ],
+  "meetingPlaces": ["Nature preserves", "Underground bunkers", "Eco-communes"],
+  "similarContacts": [],
+  "attributes": {
+    "body": 5,
+    "agility": 3,
+    "reaction": 4,
+    "strength": 5,
+    "willpower": 5,
+    "logic": 5,
+    "intuition": 3,
+    "charisma": 3
+  },
+  "specialAttributes": {
+    "edge": 1,
+    "essence": 6
+  },
+  "initiative": {
+    "base": 7,
+    "dice": 1
+  },
+  "limits": {
+    "physical": 7,
+    "mental": 6,
+    "social": 6
+  },
+  "conditionMonitor": 11,
+  "skills": [
+    { "name": "Acting skill group", "rating": 4 },
+    { "name": "Armorer", "rating": 3 },
+    { "name": "Automatics", "rating": 4 },
+    { "name": "Computers", "rating": 3 },
+    { "name": "Demolitions", "rating": 6 },
+    { "name": "Etiquette", "rating": 3, "specialization": "Media" },
+    { "name": "Intimidation", "rating": 3 },
+    { "name": "Perception", "rating": 3 }
+  ],
+  "knowledgeSkills": [
+    { "name": "Chemistry", "rating": 3 },
+    { "name": "Corporate Politics", "rating": 3 },
+    { "name": "Corporate Rumors", "rating": 3 },
+    { "name": "(Language)", "rating": 3 },
+    { "name": "Safehouses", "rating": 3 },
+    { "name": "Street Rumors", "rating": 3 }
+  ],
+  "metadata": {
+    "source": "Run Faster",
+    "page": "194",
+    "category": "Sample Contact"
+  }
+}

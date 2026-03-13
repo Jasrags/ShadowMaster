@@ -1,0 +1,55 @@
+{
+  "id": "rf-sample-contact-con-fanatic",
+  "editionCode": "sr5",
+  "name": "Con Fanatic",
+  "description": "They know all the episodes of Neil the Ork Barbarian; they can explain the controversial history around the actors; they even have bootlegged copies of the short-lived Selena the Ork Amazon Princess. They have hardcopies of many rare graphic novels throughout the century (or digital copies when the hard stuff isn't affordable). They have customized agent software on their commlink designed to build characters based on personal/min maxing preferences and to track loot. And they have logged thousands of hours on the Gaming Grids to amass an army of toons and mules that even a decker would be jealous of. Is this of any use to a shadowrunner? Probably not, but these contacts work through all the bureaucratic paperwork to drive/fly to every convention possible across the different nations. Such a contact can help get the character to a location nearest the next convention with a convincing cover story. As a favor, he might allow the character to crash on the couch in the hotel or use his spare steampunk costume.",
+  "uses": [
+    "Travel arrangements",
+    "Cover stories",
+    "Pop culture knowledge",
+    "Convention networking"
+  ],
+  "meetingPlaces": ["Gaming stores", "Convention centers", "Online Matrix forums"],
+  "similarContacts": ["Music or Sports Fanatic"],
+  "attributes": {
+    "body": 2,
+    "agility": 3,
+    "reaction": 4,
+    "strength": 3,
+    "willpower": 3,
+    "logic": 4,
+    "intuition": 4,
+    "charisma": 3
+  },
+  "specialAttributes": {
+    "edge": 2,
+    "essence": 6
+  },
+  "initiative": {
+    "base": 8,
+    "dice": 1
+  },
+  "limits": {
+    "physical": 4,
+    "mental": 4,
+    "social": 5
+  },
+  "conditionMonitor": 9,
+  "skills": [
+    { "name": "Artisan", "rating": 3 },
+    { "name": "Con", "rating": 2 },
+    { "name": "Impersonation", "rating": 2 },
+    { "name": "Leadership", "rating": 2 },
+    { "name": "Negotiation", "rating": 2 },
+    { "name": "Performance", "rating": 3 }
+  ],
+  "knowledgeSkills": [
+    { "name": "Hobby-Related Rules", "rating": 4 },
+    { "name": "Hobby-Related Trivia", "rating": 4 }
+  ],
+  "metadata": {
+    "source": "Run Faster",
+    "page": "185",
+    "category": "Sample Contact"
+  }
+}

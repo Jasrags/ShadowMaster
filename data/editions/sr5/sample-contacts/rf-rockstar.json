@@ -1,0 +1,54 @@
+{
+  "id": "rf-sample-contact-rockstar",
+  "editionCode": "sr5",
+  "name": "Rockstar",
+  "description": "Millions of fans follow every move she makes on the matrix and pour over every detail on her MeFeed. Corporations fight to the death for her to promote or sponsor their products. She is wildly popular with the masses, and everybody wants to be her friend. This allows her to meet with virtually anyone when she travels the globe to play her music. This makes her a worthy contact to use in order to contact influential people. The trick is staying out of the spotlight when meeting her and making sure any actions don't get tied back to her—otherwise that's another burned bridge.",
+  "uses": ["Celebrity access", "Social influence", "Media connections", "VIP introductions"],
+  "meetingPlaces": ["Backstage areas", "Private parties", "Recording studios"],
+  "similarContacts": ["Simsense Star", "Trid Star"],
+  "attributes": {
+    "body": 3,
+    "agility": 5,
+    "reaction": 3,
+    "strength": 3,
+    "willpower": 4,
+    "logic": 2,
+    "intuition": 3,
+    "charisma": 5
+  },
+  "specialAttributes": {
+    "edge": 2,
+    "essence": 6
+  },
+  "initiative": {
+    "base": 6,
+    "dice": 1
+  },
+  "limits": {
+    "physical": 4,
+    "mental": 4,
+    "social": 7
+  },
+  "conditionMonitor": 10,
+  "skills": [
+    { "name": "Clubs", "rating": 2 },
+    { "name": "Computers", "rating": 3 },
+    { "name": "Etiquette", "rating": 4, "specialization": "Media" },
+    { "name": "Negotiation", "rating": 4 },
+    { "name": "Perception", "rating": 4 },
+    { "name": "Performance", "rating": 5, "specialization": "Singing" },
+    { "name": "Pilot Ground Craft", "rating": 3 },
+    { "name": "Stealth skill group", "rating": 4 }
+  ],
+  "knowledgeSkills": [
+    { "name": "(Language)", "rating": 3 },
+    { "name": "Music Industry", "rating": 3 },
+    { "name": "Musical Instruments", "rating": 3 },
+    { "name": "Street Rumors", "rating": 2 }
+  ],
+  "metadata": {
+    "source": "Run Faster",
+    "page": "192",
+    "category": "Sample Contact"
+  }
+}
