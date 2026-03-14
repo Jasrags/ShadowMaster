@@ -182,6 +182,7 @@ function WeaponRow({
   ammunition?: AmmunitionItem[];
 }) {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [ammoError, setAmmoError] = useState<string | null>(null);
   const { pool, label } = calculateWeaponPool(weapon, character);
   const isMelee = isMeleeWeapon(weapon);
   const modeStr = weapon.mode?.join("/") || "";
@@ -210,6 +211,7 @@ function WeaponRow({
     async (ammoItemId: string) => {
       if (!character.id || !onCharacterUpdate) return;
       try {
+        setAmmoError(null);
         const response = await fetch(`/api/characters/${character.id}/weapons/${weaponId}/ammo`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -226,9 +228,11 @@ function WeaponRow({
             weapons: updatedWeapons,
             ammunition: updatedAmmunition,
           });
+        } else {
+          setAmmoError(result.error || "Failed to reload weapon");
         }
-      } catch (error) {
-        console.error("Failed to reload weapon:", error);
+      } catch {
+        setAmmoError("Failed to reload weapon");
       }
     },
     [character, weaponId, onCharacterUpdate]
@@ -237,6 +241,7 @@ function WeaponRow({
   const handleUnload = useCallback(async () => {
     if (!character.id || !onCharacterUpdate) return;
     try {
+      setAmmoError(null);
       const response = await fetch(`/api/characters/${character.id}/weapons/${weaponId}/ammo`, {
         method: "DELETE",
       });
@@ -249,9 +254,11 @@ function WeaponRow({
         );
         const updatedAmmunition = result.ammunition ?? character.ammunition;
         onCharacterUpdate({ ...character, weapons: updatedWeapons, ammunition: updatedAmmunition });
+      } else {
+        setAmmoError(result.error || "Failed to unload weapon");
       }
-    } catch (error) {
-      console.error("Failed to unload weapon:", error);
+    } catch {
+      setAmmoError("Failed to unload weapon");
     }
   }, [character, weaponId, onCharacterUpdate]);
 
@@ -259,6 +266,7 @@ function WeaponRow({
     async (magazineId: string) => {
       if (!character.id || !onCharacterUpdate) return;
       try {
+        setAmmoError(null);
         const response = await fetch(`/api/characters/${character.id}/weapons/${weaponId}/ammo`, {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
@@ -276,9 +284,11 @@ function WeaponRow({
               : w
           );
           onCharacterUpdate({ ...character, weapons: updatedWeapons });
+        } else {
+          setAmmoError(result.error || "Failed to swap magazine");
         }
-      } catch (error) {
-        console.error("Failed to swap magazine:", error);
+      } catch {
+        setAmmoError("Failed to swap magazine");
       }
     },
     [character, weaponId, onCharacterUpdate]
@@ -549,13 +559,23 @@ function WeaponRow({
           {weapon.ammoState && (
             <div data-testid="ammo-section">
               {editable && onCharacterUpdate ? (
-                <WeaponAmmoDisplay
-                  weapon={weapon}
-                  availableAmmo={ammunition}
-                  onReload={handleReload}
-                  onUnload={handleUnload}
-                  onSwapMagazine={handleSwapMagazine}
-                />
+                <>
+                  <WeaponAmmoDisplay
+                    weapon={weapon}
+                    availableAmmo={ammunition}
+                    onReload={handleReload}
+                    onUnload={handleUnload}
+                    onSwapMagazine={handleSwapMagazine}
+                  />
+                  {ammoError && (
+                    <p
+                      data-testid="ammo-error"
+                      className="mt-1 text-xs text-red-500 dark:text-red-400"
+                    >
+                      {ammoError}
+                    </p>
+                  )}
+                </>
               ) : (
                 <div className="flex items-baseline gap-2 text-xs text-zinc-500 dark:text-zinc-400">
                   <span className="text-[10px] font-semibold uppercase tracking-wider">Ammo</span>
