@@ -25,8 +25,11 @@ export async function POST(request: NextRequest): Promise<NextResponse<AuthRespo
   try {
     // Rate limiting check (before parsing body)
     // E2E tests can bypass rate limiting in non-production environments
+    const bypassSecret = process.env.E2E_BYPASS_SECRET;
     const isE2EBypass =
-      process.env.NODE_ENV !== "production" && request.headers.get("x-e2e-bypass") === "true";
+      process.env.NODE_ENV !== "production" &&
+      Boolean(bypassSecret) &&
+      request.headers.get("x-e2e-bypass") === bypassSecret;
 
     if (!isE2EBypass) {
       const rateLimiter = RateLimiter.get("signup", SIGNUP_LIMIT);
