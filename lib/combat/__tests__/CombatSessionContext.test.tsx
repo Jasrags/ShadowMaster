@@ -108,6 +108,7 @@ describe("CombatSessionContext", () => {
 
     it("loads initial session when provided", async () => {
       mockFetch.mockResolvedValueOnce({
+        ok: true,
         json: () => Promise.resolve({ success: true, session: mockSession }),
       });
 
@@ -125,6 +126,7 @@ describe("CombatSessionContext", () => {
 
     it("identifies correct participant", async () => {
       mockFetch.mockResolvedValueOnce({
+        ok: true,
         json: () => Promise.resolve({ success: true, session: mockSession }),
       });
 
@@ -142,6 +144,7 @@ describe("CombatSessionContext", () => {
 
     it("detects when it is my turn", async () => {
       mockFetch.mockResolvedValueOnce({
+        ok: true,
         json: () => Promise.resolve({ success: true, session: mockSession }),
       });
 
@@ -161,6 +164,7 @@ describe("CombatSessionContext", () => {
       };
 
       mockFetch.mockResolvedValueOnce({
+        ok: true,
         json: () => Promise.resolve({ success: true, session: sessionNotMyTurn }),
       });
 
@@ -179,6 +183,7 @@ describe("CombatSessionContext", () => {
   describe("joinSession", () => {
     it("joins a combat session successfully", async () => {
       mockFetch.mockResolvedValueOnce({
+        ok: true,
         json: () => Promise.resolve({ success: true, session: mockSession }),
       });
 
@@ -197,6 +202,7 @@ describe("CombatSessionContext", () => {
 
     it("handles join failure", async () => {
       mockFetch.mockResolvedValueOnce({
+        ok: true,
         json: () => Promise.resolve({ success: false, error: "Session not found" }),
       });
 
@@ -218,6 +224,7 @@ describe("CombatSessionContext", () => {
     it("leaves a combat session successfully", async () => {
       // First join
       mockFetch.mockResolvedValueOnce({
+        ok: true,
         json: () => Promise.resolve({ success: true, session: mockSession }),
       });
 
@@ -231,6 +238,7 @@ describe("CombatSessionContext", () => {
 
       // Then leave
       mockFetch.mockResolvedValueOnce({
+        ok: true,
         json: () => Promise.resolve({ success: true }),
       });
 
@@ -255,6 +263,7 @@ describe("CombatSessionContext", () => {
 
     it("returns action economy when in combat", async () => {
       mockFetch.mockResolvedValueOnce({
+        ok: true,
         json: () => Promise.resolve({ success: true, session: mockSession }),
       });
 
@@ -308,6 +317,7 @@ describe("CombatSessionContext", () => {
       };
 
       mockFetch.mockResolvedValueOnce({
+        ok: true,
         json: () => Promise.resolve({ success: true, session: sessionWithLimitedActions }),
       });
 
@@ -337,6 +347,7 @@ describe("CombatSessionContext", () => {
 
     it("returns current turn participant", async () => {
       mockFetch.mockResolvedValueOnce({
+        ok: true,
         json: () => Promise.resolve({ success: true, session: mockSession }),
       });
 
@@ -356,9 +367,11 @@ describe("CombatSessionContext", () => {
     it("executes action successfully", async () => {
       mockFetch
         .mockResolvedValueOnce({
+          ok: true,
           json: () => Promise.resolve({ success: true, session: mockSession }),
         })
         .mockResolvedValueOnce({
+          ok: true,
           json: () =>
             Promise.resolve({
               success: true,
@@ -415,9 +428,11 @@ describe("CombatSessionContext", () => {
 
       mockFetch
         .mockResolvedValueOnce({
+          ok: true,
           json: () => Promise.resolve({ success: true, session: mockSession }),
         })
         .mockResolvedValueOnce({
+          ok: true,
           json: () => Promise.resolve({ success: true, session: updatedSession }),
         });
 
@@ -443,9 +458,11 @@ describe("CombatSessionContext", () => {
     it("delays turn successfully", async () => {
       mockFetch
         .mockResolvedValueOnce({
+          ok: true,
           json: () => Promise.resolve({ success: true, session: mockSession }),
         })
         .mockResolvedValueOnce({
+          ok: true,
           json: () =>
             Promise.resolve({
               success: true,
@@ -476,6 +493,263 @@ describe("CombatSessionContext", () => {
       });
 
       expect(success!).toBe(true);
+    });
+  });
+
+  describe("response.ok guard", () => {
+    it("fetchSession sets error when response is not ok", async () => {
+      mockFetch.mockResolvedValueOnce({
+        ok: false,
+        status: 502,
+        statusText: "Bad Gateway",
+        json: () => Promise.reject(new Error("not JSON")),
+      });
+
+      const { result } = renderHook(() => useCombatSession(), {
+        wrapper: createWrapper("char-1"),
+      });
+
+      let success: boolean;
+      await act(async () => {
+        success = await result.current.joinSession("session-1");
+      });
+
+      expect(success!).toBe(false);
+      expect(result.current.error).toContain("502");
+    });
+
+    it("joinSession (add participant) sets error when response is not ok", async () => {
+      // First fetch succeeds (fetching session) but char is NOT a participant
+      const sessionWithoutChar: CombatSession = {
+        ...mockSession,
+        participants: [mockSession.participants[1]], // only the NPC
+      };
+
+      mockFetch
+        .mockResolvedValueOnce({
+          ok: true,
+          json: () => Promise.resolve({ success: true, session: sessionWithoutChar }),
+        })
+        .mockResolvedValueOnce({
+          ok: false,
+          status: 503,
+          statusText: "Service Unavailable",
+          json: () => Promise.reject(new Error("not JSON")),
+        });
+
+      const { result } = renderHook(() => useCombatSession(), {
+        wrapper: createWrapper("char-1"),
+      });
+
+      let success: boolean;
+      await act(async () => {
+        success = await result.current.joinSession("session-1");
+      });
+
+      expect(success!).toBe(false);
+      expect(result.current.error).toContain("503");
+    });
+
+    it("leaveSession sets error when response is not ok", async () => {
+      // First load the session
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        json: () => Promise.resolve({ success: true, session: mockSession }),
+      });
+
+      const { result } = renderHook(() => useCombatSession(), {
+        wrapper: createWrapper("char-1", "session-1"),
+      });
+
+      await waitFor(() => {
+        expect(result.current.session).not.toBeNull();
+      });
+
+      // Then leave fails with non-ok response
+      mockFetch.mockResolvedValueOnce({
+        ok: false,
+        status: 500,
+        statusText: "Internal Server Error",
+        json: () => Promise.reject(new Error("not JSON")),
+      });
+
+      let success: boolean;
+      await act(async () => {
+        success = await result.current.leaveSession();
+      });
+
+      expect(success!).toBe(false);
+      expect(result.current.error).toContain("500");
+    });
+
+    it("executeAction sets error when response is not ok", async () => {
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        json: () => Promise.resolve({ success: true, session: mockSession }),
+      });
+
+      const { result } = renderHook(() => useCombatSession(), {
+        wrapper: createWrapper("char-1", "session-1"),
+      });
+
+      await waitFor(() => {
+        expect(result.current.session).not.toBeNull();
+      });
+
+      mockFetch.mockResolvedValueOnce({
+        ok: false,
+        status: 502,
+        statusText: "Bad Gateway",
+        json: () => Promise.reject(new Error("not JSON")),
+      });
+
+      let success: boolean;
+      await act(async () => {
+        success = await result.current.executeAction("fire-weapon", "p2");
+      });
+
+      expect(success!).toBe(false);
+      expect(result.current.error).toContain("502");
+    });
+
+    it("spendAction sets error when response is not ok", async () => {
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        json: () => Promise.resolve({ success: true, session: mockSession }),
+      });
+
+      const { result } = renderHook(() => useCombatSession(), {
+        wrapper: createWrapper("char-1", "session-1"),
+      });
+
+      await waitFor(() => {
+        expect(result.current.session).not.toBeNull();
+      });
+
+      mockFetch.mockResolvedValueOnce({
+        ok: false,
+        status: 504,
+        statusText: "Gateway Timeout",
+        json: () => Promise.reject(new Error("not JSON")),
+      });
+
+      let success: boolean;
+      await act(async () => {
+        success = await result.current.spendAction("simple");
+      });
+
+      expect(success!).toBe(false);
+      expect(result.current.error).toContain("504");
+    });
+
+    it("delayTurn sets error when response is not ok", async () => {
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        json: () => Promise.resolve({ success: true, session: mockSession }),
+      });
+
+      const { result } = renderHook(() => useCombatSession(), {
+        wrapper: createWrapper("char-1", "session-1"),
+      });
+
+      await waitFor(() => {
+        expect(result.current.session).not.toBeNull();
+      });
+
+      mockFetch.mockResolvedValueOnce({
+        ok: false,
+        status: 500,
+        statusText: "Internal Server Error",
+        json: () => Promise.reject(new Error("not JSON")),
+      });
+
+      let success: boolean;
+      await act(async () => {
+        success = await result.current.delayTurn();
+      });
+
+      expect(success!).toBe(false);
+      expect(result.current.error).toContain("500");
+    });
+
+    it("endTurn sets error when response is not ok", async () => {
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        json: () => Promise.resolve({ success: true, session: mockSession }),
+      });
+
+      const { result } = renderHook(() => useCombatSession(), {
+        wrapper: createWrapper("char-1", "session-1"),
+      });
+
+      await waitFor(() => {
+        expect(result.current.session).not.toBeNull();
+      });
+
+      mockFetch.mockResolvedValueOnce({
+        ok: false,
+        status: 502,
+        statusText: "Bad Gateway",
+        json: () => Promise.reject(new Error("not JSON")),
+      });
+
+      let success: boolean;
+      await act(async () => {
+        success = await result.current.endTurn();
+      });
+
+      expect(success!).toBe(false);
+      expect(result.current.error).toContain("502");
+    });
+
+    it("useInterrupt sets error when response is not ok", async () => {
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        json: () => Promise.resolve({ success: true, session: mockSession }),
+      });
+
+      const { result } = renderHook(() => useCombatSession(), {
+        wrapper: createWrapper("char-1", "session-1"),
+      });
+
+      await waitFor(() => {
+        expect(result.current.session).not.toBeNull();
+      });
+
+      mockFetch.mockResolvedValueOnce({
+        ok: false,
+        status: 503,
+        statusText: "Service Unavailable",
+        json: () => Promise.reject(new Error("not JSON")),
+      });
+
+      let success: boolean;
+      await act(async () => {
+        success = await result.current.useInterrupt("block", "p2");
+      });
+
+      expect(success!).toBe(false);
+      expect(result.current.error).toContain("503");
+    });
+
+    it("findActiveSession returns null when response is not ok", async () => {
+      mockFetch.mockResolvedValueOnce({
+        ok: false,
+        status: 502,
+        statusText: "Bad Gateway",
+        json: () => Promise.reject(new Error("not JSON")),
+      });
+
+      const { result } = renderHook(() => useCombatSession(), {
+        wrapper: createWrapper("char-1"),
+      });
+
+      let sessionId: string | null;
+      await act(async () => {
+        sessionId = await result.current.findActiveSession();
+      });
+
+      expect(sessionId!).toBeNull();
     });
   });
 });

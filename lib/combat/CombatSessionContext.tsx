@@ -116,6 +116,9 @@ export function CombatSessionProvider({
   const fetchSession = useCallback(async (sessionId: string): Promise<CombatSession | null> => {
     try {
       const response = await fetch(`/api/combat/${sessionId}`);
+      if (!response.ok) {
+        throw new Error(`Request failed (${response.status} ${response.statusText})`);
+      }
       const data = await response.json();
 
       if (!data.success) {
@@ -176,6 +179,9 @@ export function CombatSessionProvider({
           body: JSON.stringify({ characterId }),
         });
 
+        if (!response.ok) {
+          throw new Error(`Request failed (${response.status} ${response.statusText})`);
+        }
         const data = await response.json();
 
         if (!data.success) {
@@ -207,6 +213,9 @@ export function CombatSessionProvider({
         method: "DELETE",
       });
 
+      if (!response.ok) {
+        throw new Error(`Request failed (${response.status} ${response.statusText})`);
+      }
       const data = await response.json();
 
       if (!data.success) {
@@ -251,6 +260,9 @@ export function CombatSessionProvider({
           }),
         });
 
+        if (!response.ok) {
+          throw new Error(`Request failed (${response.status} ${response.statusText})`);
+        }
         const data = await response.json();
 
         if (!data.success) {
@@ -292,6 +304,9 @@ export function CombatSessionProvider({
           }),
         });
 
+        if (!response.ok) {
+          throw new Error(`Request failed (${response.status} ${response.statusText})`);
+        }
         const data = await response.json();
 
         if (!data.success) {
@@ -339,6 +354,9 @@ export function CombatSessionProvider({
         body: JSON.stringify({ participantId: participant.id }),
       });
 
+      if (!response.ok) {
+        throw new Error(`Request failed (${response.status} ${response.statusText})`);
+      }
       const data = await response.json();
 
       if (!data.success) {
@@ -376,6 +394,9 @@ export function CombatSessionProvider({
         body: JSON.stringify({ action: "end" }),
       });
 
+      if (!response.ok) {
+        throw new Error(`Request failed (${response.status} ${response.statusText})`);
+      }
       const data = await response.json();
 
       if (!data.success) {
@@ -423,6 +444,9 @@ export function CombatSessionProvider({
           }),
         });
 
+        if (!response.ok) {
+          throw new Error(`Request failed (${response.status} ${response.statusText})`);
+        }
         const data = await response.json();
 
         if (!data.success) {
@@ -450,6 +474,9 @@ export function CombatSessionProvider({
     try {
       // Fetch active combat sessions for the current user
       const response = await fetch("/api/combat?status=active&limit=20");
+      if (!response.ok) {
+        throw new Error(`Request failed (${response.status} ${response.statusText})`);
+      }
       const data = await response.json();
 
       if (!data.success || !data.sessions) {
