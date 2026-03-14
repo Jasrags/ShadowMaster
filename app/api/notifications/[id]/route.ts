@@ -11,7 +11,7 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
     const userId = await getSession();
 
     if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
     const body = await request.json();
@@ -23,7 +23,10 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
     });
 
     if (!updated) {
-      return NextResponse.json({ error: "Notification not found" }, { status: 404 });
+      return NextResponse.json(
+        { success: false, error: "Notification not found" },
+        { status: 404 }
+      );
     }
 
     return NextResponse.json({
@@ -32,6 +35,6 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
     });
   } catch (error) {
     console.error("Error updating notification:", error);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return NextResponse.json({ success: false, error: "Internal server error" }, { status: 500 });
   }
 }

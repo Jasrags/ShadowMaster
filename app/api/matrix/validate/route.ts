@@ -35,12 +35,12 @@ export async function POST(
     // Check authentication
     const userId = await getSession();
     if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
     const user = await getUserById(userId);
     if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      return NextResponse.json({ success: false, error: "User not found" }, { status: 404 });
     }
 
     // Parse request
@@ -49,27 +49,30 @@ export async function POST(
 
     // Validate required fields
     if (!characterId) {
-      return NextResponse.json({ error: "characterId is required" }, { status: 400 });
+      return NextResponse.json(
+        { success: false, error: "characterId is required" },
+        { status: 400 }
+      );
     }
 
     if (!deckId) {
-      return NextResponse.json({ error: "deckId is required" }, { status: 400 });
+      return NextResponse.json({ success: false, error: "deckId is required" }, { status: 400 });
     }
 
     if (!config) {
-      return NextResponse.json({ error: "config is required" }, { status: 400 });
+      return NextResponse.json({ success: false, error: "config is required" }, { status: 400 });
     }
 
     // Get the character
     const character = await getCharacter(userId, characterId);
     if (!character) {
-      return NextResponse.json({ error: "Character not found" }, { status: 404 });
+      return NextResponse.json({ success: false, error: "Character not found" }, { status: 404 });
     }
 
     // Check ownership
     if (character.ownerId !== userId) {
       return NextResponse.json(
-        { error: "Not authorized to validate this character's config" },
+        { success: false, error: "Not authorized to validate this character's config" },
         { status: 403 }
       );
     }
@@ -79,7 +82,7 @@ export async function POST(
     const deck = cyberdecks.find((d) => d.id === deckId || d.catalogId === deckId);
 
     if (!deck) {
-      return NextResponse.json({ error: "Cyberdeck not found" }, { status: 404 });
+      return NextResponse.json({ success: false, error: "Cyberdeck not found" }, { status: 404 });
     }
 
     // Validate deck configuration
@@ -97,7 +100,7 @@ export async function POST(
 
       if (!loadResult.success || !loadResult.ruleset) {
         return NextResponse.json(
-          { error: loadResult.error || "Failed to load ruleset" },
+          { success: false, error: loadResult.error || "Failed to load ruleset" },
           { status: 500 }
         );
       }
@@ -120,6 +123,9 @@ export async function POST(
     return NextResponse.json(response);
   } catch (error) {
     console.error("Failed to validate matrix config:", error);
-    return NextResponse.json({ error: "Failed to validate matrix configuration" }, { status: 500 });
+    return NextResponse.json(
+      { success: false, error: "Failed to validate matrix configuration" },
+      { status: 500 }
+    );
   }
 }

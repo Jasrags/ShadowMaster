@@ -8,12 +8,12 @@ export async function GET() {
   try {
     const userId = await getSession();
     if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
     const user = await getUserById(userId);
     if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      return NextResponse.json({ success: false, error: "User not found" }, { status: 404 });
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -42,6 +42,6 @@ export async function GET() {
     });
   } catch (error) {
     console.error("Failed to export data:", error);
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+    return NextResponse.json({ success: false, error: "Internal Server Error" }, { status: 500 });
   }
 }
