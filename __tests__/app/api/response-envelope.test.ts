@@ -101,7 +101,10 @@ const mockedUpdateNotification = vi.mocked(updateNotification);
 /**
  * Helper: assert that an error response includes { success: false, error: "..." }
  */
-async function expectEnvelopedError(response: ReturnType<typeof NextResponse.json>, expectedStatus: number) {
+async function expectEnvelopedError(
+  response: ReturnType<typeof NextResponse.json>,
+  expectedStatus: number
+) {
   const data = await (response as { json: () => Promise<Record<string, unknown>> }).json();
   expect(data).toHaveProperty("success", false);
   expect(data).toHaveProperty("error");
@@ -115,6 +118,7 @@ async function expectEnvelopedError(response: ReturnType<typeof NextResponse.jso
 
 function createRequest(url: string, init?: { method?: string; body?: string }) {
   // Using the mocked NextRequest from setup.ts
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { NextRequest } = require("next/server");
   return new NextRequest(url, init);
 }
@@ -227,7 +231,11 @@ describe("Response envelope consistency (#688)", () => {
 
     it("returns { success: false, error } when missing required fields", async () => {
       mockedGetSession.mockResolvedValue("user-1");
-      mockedGetUserById.mockResolvedValue({ id: "user-1", username: "test", role: ["player"] } as never);
+      mockedGetUserById.mockResolvedValue({
+        id: "user-1",
+        username: "test",
+        role: ["player"],
+      } as never);
       const { POST } = await import("@/app/api/rigging/validate/route");
       const req = createRequest("http://localhost/api/rigging/validate", {
         method: "POST",
@@ -330,7 +338,11 @@ describe("Response envelope consistency (#688)", () => {
 
     it("returns { success: false, error } when not admin", async () => {
       mockedGetSession.mockResolvedValue("user-1");
-      mockedGetUserById.mockResolvedValue({ id: "user-1", username: "test", role: ["player"] } as never);
+      mockedGetUserById.mockResolvedValue({
+        id: "user-1",
+        username: "test",
+        role: ["player"],
+      } as never);
       const { GET } = await import("@/app/api/admin/migrate/gear-state/route");
       const req = createRequest("http://localhost/api/admin/migrate/gear-state");
       const res = await GET(req);
@@ -361,7 +373,11 @@ describe("Response envelope consistency (#688)", () => {
 
     it("returns { success: false, error } when character not found", async () => {
       mockedGetSession.mockResolvedValue("user-1");
-      mockedGetUserById.mockResolvedValue({ id: "user-1", username: "test", role: ["player"] } as never);
+      mockedGetUserById.mockResolvedValue({
+        id: "user-1",
+        username: "test",
+        role: ["player"],
+      } as never);
       mockedGetCharacter.mockResolvedValue(null);
       const { GET } = await import("@/app/api/characters/[characterId]/rigging/route");
       const req = createRequest("http://localhost/api/characters/c1/rigging");
