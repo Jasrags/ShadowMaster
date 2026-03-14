@@ -992,14 +992,21 @@ export function calculateRemainingBudget(
   _character: Character | CharacterDraft,
   creationState?: CreationState
 ): number {
-  // If we have creation state with tracked budgets, use that
-  if (creationState?.budgets?.[budgetId] !== undefined) {
-    return creationState.budgets[budgetId];
+  if (!creationState) {
+    throw new Error(
+      `calculateRemainingBudget: creationState is required but was ${String(creationState)}. ` +
+        `Cannot determine budget "${budgetId}" without creation state.`
+    );
   }
 
-  // Otherwise, calculate from character data
-  // This is a simplified calculation - real implementation would be more complex
-  return 0;
+  if (creationState.budgets[budgetId] === undefined) {
+    throw new Error(
+      `calculateRemainingBudget: budget "${budgetId}" not found in creationState. ` +
+        `Available budgets: ${Object.keys(creationState.budgets).join(", ") || "(none)"}`
+    );
+  }
+
+  return creationState.budgets[budgetId];
 }
 
 /**
