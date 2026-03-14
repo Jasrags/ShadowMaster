@@ -294,6 +294,59 @@ describe("POST /api/campaigns/[id]/sessions/[sessionId]/awards", () => {
     expect(data.error).toBe("Character not found");
   });
 
+  it("should return 404 when character belongs to a different campaign", async () => {
+    const mockCampaign = createMockCampaign();
+    const crossCampaignCharacter = createMockCharacter({
+      id: "other-campaign-char",
+      campaignId: "other-campaign-id",
+    });
+
+    vi.mocked(sessionModule.getSession).mockResolvedValue("test-gm-id");
+    vi.mocked(campaignStorage.getCampaignById).mockResolvedValue(mockCampaign);
+    vi.mocked(characterStorage.getCharacterById).mockResolvedValue(crossCampaignCharacter);
+
+    const request = createMockRequest(BASE_URL, {
+      ...defaultBody,
+      characterId: "other-campaign-char",
+    });
+    const response = await POST(request, {
+      params: Promise.resolve({ id: "test-campaign-id", sessionId: "test-session-id" }),
+    });
+    const data = await response.json();
+
+    expect(response.status).toBe(404);
+    expect(data.success).toBe(false);
+    expect(data.error).toBe("Character not found");
+    expect(characterStorage.awardKarma).not.toHaveBeenCalled();
+    expect(characterStorage.awardNuyen).not.toHaveBeenCalled();
+  });
+
+  it("should return 404 when character has no campaignId", async () => {
+    const mockCampaign = createMockCampaign();
+    const unassignedCharacter = createMockCharacter({
+      id: "unassigned-char",
+      campaignId: undefined,
+    });
+
+    vi.mocked(sessionModule.getSession).mockResolvedValue("test-gm-id");
+    vi.mocked(campaignStorage.getCampaignById).mockResolvedValue(mockCampaign);
+    vi.mocked(characterStorage.getCharacterById).mockResolvedValue(unassignedCharacter);
+
+    const request = createMockRequest(BASE_URL, {
+      ...defaultBody,
+      characterId: "unassigned-char",
+    });
+    const response = await POST(request, {
+      params: Promise.resolve({ id: "test-campaign-id", sessionId: "test-session-id" }),
+    });
+    const data = await response.json();
+
+    expect(response.status).toBe(404);
+    expect(data.success).toBe(false);
+    expect(data.error).toBe("Character not found");
+    expect(characterStorage.awardKarma).not.toHaveBeenCalled();
+  });
+
   it("should award karma only", async () => {
     const mockCampaign = createMockCampaign();
     const mockCharacter = createMockCharacter();

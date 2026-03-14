@@ -102,7 +102,7 @@ export async function POST(
         );
       }
       const character = await getCharacterById(characterId);
-      if (!character) {
+      if (!character || character.campaignId !== campaignId) {
         return NextResponse.json({ success: false, error: "Character not found" }, { status: 404 });
       }
       targets = [character];
