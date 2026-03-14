@@ -200,4 +200,42 @@ describe("GET /api/users/[id]/audit", () => {
     expect(response.status).toBe(403);
     expect(data.success).toBe(false);
   });
+
+  describe("pagination bounds validation", () => {
+    beforeEach(() => {
+      vi.mocked(middlewareModule.requireAdmin).mockResolvedValue(mockAdminUser);
+      vi.mocked(storageModule.getUserById).mockResolvedValue(mockTargetUser);
+      vi.mocked(auditModule.getUserAuditLog).mockResolvedValue({
+        entries: [],
+        total: 0,
+      });
+    });
+
+    it("should clamp limit=0 to minimum of 1", async () => {
+      const request = createMockRequest({ limit: "0" });
+      const { params } = createMockParams("target-user-id");
+      await GET(request, { params });
+
+      const callArgs = vi.mocked(auditModule.getUserAuditLog).mock.calls[0]?.[1];
+      expect(callArgs?.limit).toBeGreaterThanOrEqual(1);
+    });
+
+    it("should clamp limit above 100 to maximum of 100", async () => {
+      const request = createMockRequest({ limit: "99999999" });
+      const { params } = createMockParams("target-user-id");
+      await GET(request, { params });
+
+      const callArgs = vi.mocked(auditModule.getUserAuditLog).mock.calls[0]?.[1];
+      expect(callArgs?.limit).toBeLessThanOrEqual(100);
+    });
+
+    it("should clamp negative offset to minimum of 0", async () => {
+      const request = createMockRequest({ offset: "-1" });
+      const { params } = createMockParams("target-user-id");
+      await GET(request, { params });
+
+      const callArgs = vi.mocked(auditModule.getUserAuditLog).mock.calls[0][1];
+      expect(callArgs?.offset).toBeGreaterThanOrEqual(0);
+    });
+  });
 });

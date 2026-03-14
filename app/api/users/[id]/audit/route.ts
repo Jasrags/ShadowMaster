@@ -20,8 +20,8 @@ export async function GET(
 
     // Get query parameters for pagination
     const searchParams = request.nextUrl.searchParams;
-    const limit = parseInt(searchParams.get("limit") || "50", 10);
-    const offset = parseInt(searchParams.get("offset") || "0", 10);
+    const limit = Math.max(1, Math.min(100, parseInt(searchParams.get("limit") || "50", 10) || 50));
+    const offset = Math.max(0, parseInt(searchParams.get("offset") || "0", 10) || 0);
     const order = (searchParams.get("order") || "desc") as "asc" | "desc";
 
     // Validate user exists
