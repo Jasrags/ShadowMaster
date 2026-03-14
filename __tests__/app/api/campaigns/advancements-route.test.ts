@@ -129,7 +129,7 @@ vi.mock("@/lib/storage/characters", () => ({
       (character: Character, filters?: { gmApproved?: boolean; rejected?: boolean }) => {
         const history = character.advancementHistory || [];
         return history.filter((a: AdvancementRecord) => {
-          const record = a as Record<string, unknown>;
+          const record = a as unknown as Record<string, unknown>;
           if (filters?.gmApproved !== undefined && a.gmApproved !== filters.gmApproved)
             return false;
           if (filters?.rejected !== undefined && (record.rejected ?? false) !== filters.rejected)
