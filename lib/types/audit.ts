@@ -75,7 +75,7 @@ export type AuditAction =
 /**
  * Role of the actor performing the action
  */
-export type ActorRole = "owner" | "gm" | "admin" | "system";
+export type ActorRole = "owner" | "gm" | "admin" | "system" | "viewer";
 
 /**
  * Actor who performed an auditable action

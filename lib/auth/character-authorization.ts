@@ -127,6 +127,11 @@ export function getPermissionsForRole(
       }
       break;
 
+    case "viewer":
+      // Viewer can only view (same-campaign players, unrecognized users)
+      permissions.push("view");
+      break;
+
     case "system":
       // System can do anything (for automated processes)
       return [
@@ -195,15 +200,14 @@ export async function determineRole(
     if (campaign && campaign.gmId === userId) {
       return { role: "gm", campaign };
     }
-    // Could be a player in the same campaign - limited view access
+    // Could be a player in the same campaign - view-only access
     if (campaign && campaign.playerIds.includes(userId)) {
-      // Players can't do much with other players' characters
-      return { role: "owner", campaign }; // Treat as minimal permissions
+      return { role: "viewer", campaign };
     }
   }
 
-  // No recognized role - will result in denied access
-  return { role: "owner", campaign: null };
+  // No recognized role - view-only access
+  return { role: "viewer", campaign: null };
 }
 
 /**

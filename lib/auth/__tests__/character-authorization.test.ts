@@ -129,6 +129,27 @@ describe("getPermissionsForRole", () => {
     });
   });
 
+  describe("viewer role", () => {
+    it("should only have view permission regardless of status", () => {
+      const statuses: CharacterStatus[] = ["draft", "active", "retired", "deceased"];
+
+      for (const status of statuses) {
+        const permissions = getPermissionsForRole("viewer", status);
+        expect(permissions).toEqual(["view"]);
+      }
+    });
+
+    it("should not have edit, delete, or manage_campaign permissions", () => {
+      const permissions = getPermissionsForRole("viewer", "active");
+
+      expect(permissions).not.toContain("edit");
+      expect(permissions).not.toContain("delete");
+      expect(permissions).not.toContain("manage_campaign");
+      expect(permissions).not.toContain("gameplay_edit");
+      expect(permissions).not.toContain("advance");
+    });
+  });
+
   describe("system role", () => {
     it("should have all permissions like admin", () => {
       const permissions = getPermissionsForRole("system", "active");
@@ -365,7 +386,7 @@ describe("determineRole", () => {
     expect(result.campaign).toEqual(campaign);
   });
 
-  it("returns owner role for player in same campaign (limited permissions)", async () => {
+  it("returns viewer role for player in same campaign (view-only)", async () => {
     const character = createMockCharacter({
       ownerId: "other-user",
       campaignId: "campaign-123",
@@ -380,7 +401,7 @@ describe("determineRole", () => {
     // A player who is not the owner but is in the same campaign
     const result = await determineRole("player-789", character, false);
 
-    expect(result.role).toBe("owner");
+    expect(result.role).toBe("viewer");
     expect(result.campaign).toEqual(campaign);
   });
 
@@ -411,18 +432,18 @@ describe("determineRole", () => {
     expect(campaignsStorage.getCampaignById).toHaveBeenCalledWith("campaign-123");
   });
 
-  it("returns owner role with null campaign when campaign not found", async () => {
+  it("returns viewer role with null campaign for unrecognized user", async () => {
     const character = createMockCharacter({
-      ownerId: "unknown-user",
+      ownerId: "actual-owner",
       campaignId: "campaign-123",
     });
 
     vi.mocked(campaignsStorage.getCampaignById).mockResolvedValue(null);
 
     // User is not owner and campaign doesn't exist
-    const result = await determineRole("unknown-user", character, false);
+    const result = await determineRole("stranger", character, false);
 
-    expect(result.role).toBe("owner");
+    expect(result.role).toBe("viewer");
     expect(result.campaign).toBeNull();
   });
 });
@@ -475,7 +496,7 @@ describe("authorizeCharacter", () => {
     expect(result.permissions).toContain("edit");
   });
 
-  it("returns 403 when user lacks view permission", async () => {
+  it("returns authorized with view-only for stranger (viewer role)", async () => {
     const character = createMockCharacter({ ownerId: "other-user" });
     vi.mocked(charactersStorage.getCharacter).mockResolvedValue(character);
     vi.mocked(campaignsStorage.getCampaignById).mockResolvedValue(null);
@@ -484,10 +505,11 @@ describe("authorizeCharacter", () => {
       userId: "stranger", // Not owner, not in campaign
     });
 
-    // Based on the implementation, a stranger still gets "owner" role with minimal permissions
-    // The determineRole function returns "owner" as default for unrecognized users
-    expect(result.authorized).toBe(true); // They have view permission as owner
-    expect(result.permissions).toContain("view");
+    expect(result.authorized).toBe(true); // Viewer can view
+    expect(result.role).toBe("viewer");
+    expect(result.permissions).toEqual(["view"]);
+    expect(result.permissions).not.toContain("delete");
+    expect(result.permissions).not.toContain("edit");
   });
 
   it("returns 403 when requiredPermission is not granted", async () => {
@@ -711,20 +733,14 @@ describe("canEditCharacter", () => {
     expect(result).toBe(false);
   });
 
-  it("returns true for non-owner due to fallback owner role in implementation", async () => {
-    // NOTE: The current implementation assigns "owner" role as a fallback for
-    // unrecognized users (not in campaign, not the actual owner). This means
-    // strangers technically get owner permissions. In practice, this is
-    // protected by storage layer access controls.
+  it("returns false for non-owner stranger (viewer role has no edit)", async () => {
     const character = createMockCharacter({ ownerId: "other-user", status: "draft" });
     vi.mocked(charactersStorage.getCharacter).mockResolvedValue(character);
     vi.mocked(campaignsStorage.getCampaignById).mockResolvedValue(null);
 
     const result = await canEditCharacter("user-123", "other-user", "char-123");
 
-    // Current implementation gives strangers "owner" role permissions
-    // The storage layer prevents actual access by requiring ownerId match
-    expect(result).toBe(true);
+    expect(result).toBe(false);
   });
 });
 
@@ -799,16 +815,13 @@ describe("canDeleteCharacter", () => {
     expect(result).toBe(true); // Owner can delete
   });
 
-  it("returns true for non-owner due to fallback owner role in implementation", async () => {
-    // NOTE: Same as canEditCharacter - the implementation gives strangers
-    // "owner" role permissions. Storage layer provides actual access control.
+  it("returns false for non-owner stranger (viewer role has no delete)", async () => {
     const character = createMockCharacter({ ownerId: "owner-user", status: "draft" });
     vi.mocked(charactersStorage.getCharacter).mockResolvedValue(character);
     vi.mocked(campaignsStorage.getCampaignById).mockResolvedValue(null);
 
     const result = await canDeleteCharacter("stranger", "owner-user", "char-123");
 
-    // Current implementation gives strangers "owner" role permissions
-    expect(result).toBe(true);
+    expect(result).toBe(false);
   });
 });
