@@ -320,12 +320,9 @@ export async function deleteUser(userId: string): Promise<void> {
   }
 
   // Delete all characters owned by the user first (Requirement 4.3)
-  try {
-    const { deleteUserCharacters } = await import("./characters");
-    await deleteUserCharacters(userId);
-  } catch (error) {
-    console.error(`Error deleting characters for user ${userId}:`, error);
-  }
+  // If this fails, we abort to avoid orphaned character files
+  const { deleteUserCharacters } = await import("./characters");
+  await deleteUserCharacters(userId);
 
   const filePath = getUserFilePath(userId);
   try {
