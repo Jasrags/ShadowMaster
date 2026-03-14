@@ -484,7 +484,18 @@ export async function saveCampaignAsTemplate(
   assertValid(validateCampaignTemplateData(template), "CampaignTemplate");
 
   const filePath = path.join(getTemplatesDir(), `${template.id}.json`);
-  await fs.writeFile(filePath, JSON.stringify(template, null, 2), "utf-8");
+  const tempFilePath = `${filePath}.tmp`;
+  try {
+    await fs.writeFile(tempFilePath, JSON.stringify(template, null, 2), "utf-8");
+    await fs.rename(tempFilePath, filePath);
+  } catch (error) {
+    try {
+      await fs.unlink(tempFilePath);
+    } catch {
+      // Ignore cleanup errors
+    }
+    throw error;
+  }
 
   return template;
 }

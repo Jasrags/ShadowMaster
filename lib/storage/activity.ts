@@ -68,7 +68,18 @@ export async function logActivity(
     entries = entries.slice(0, 500);
   }
 
-  await fs.writeFile(filePath, JSON.stringify(entries, null, 2), "utf-8");
+  const tempFilePath = `${filePath}.tmp`;
+  try {
+    await fs.writeFile(tempFilePath, JSON.stringify(entries, null, 2), "utf-8");
+    await fs.rename(tempFilePath, filePath);
+  } catch (error) {
+    try {
+      await fs.unlink(tempFilePath);
+    } catch {
+      // Ignore cleanup errors
+    }
+    throw error;
+  }
   return newEvent;
 }
 

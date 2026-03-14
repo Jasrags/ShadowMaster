@@ -69,7 +69,18 @@ export async function createNotification(
     notifications = notifications.slice(0, 100);
   }
 
-  await fs.writeFile(filePath, JSON.stringify(notifications, null, 2), "utf-8");
+  const tempFilePath = `${filePath}.tmp`;
+  try {
+    await fs.writeFile(tempFilePath, JSON.stringify(notifications, null, 2), "utf-8");
+    await fs.rename(tempFilePath, filePath);
+  } catch (error) {
+    try {
+      await fs.unlink(tempFilePath);
+    } catch {
+      // Ignore cleanup errors
+    }
+    throw error;
+  }
   return newNotification;
 }
 
@@ -128,7 +139,18 @@ export async function updateNotification(
       readAt: updates.read && !notifications[index].read ? now : notifications[index].readAt,
     };
 
-    await fs.writeFile(filePath, JSON.stringify(notifications, null, 2), "utf-8");
+    const tempFilePath = `${filePath}.tmp`;
+    try {
+      await fs.writeFile(tempFilePath, JSON.stringify(notifications, null, 2), "utf-8");
+      await fs.rename(tempFilePath, filePath);
+    } catch (error) {
+      try {
+        await fs.unlink(tempFilePath);
+      } catch {
+        // Ignore cleanup errors
+      }
+      throw error;
+    }
     return notifications[index];
   } catch {
     return null;
@@ -156,7 +178,18 @@ export async function markAllRead(userId: string, campaignId?: string): Promise<
     });
 
     if (count > 0) {
-      await fs.writeFile(filePath, JSON.stringify(updated, null, 2), "utf-8");
+      const tempFilePath = `${filePath}.tmp`;
+      try {
+        await fs.writeFile(tempFilePath, JSON.stringify(updated, null, 2), "utf-8");
+        await fs.rename(tempFilePath, filePath);
+      } catch (error) {
+        try {
+          await fs.unlink(tempFilePath);
+        } catch {
+          // Ignore cleanup errors
+        }
+        throw error;
+      }
     }
   } catch {
     return 0;

@@ -637,7 +637,18 @@ export async function createLocationTemplate(
   assertValid(validateLocationTemplateData(template), "LocationTemplate");
 
   const filePath = getTemplateFilePath(template.id);
-  await fs.writeFile(filePath, JSON.stringify(template, null, 2), "utf-8");
+  const tempFilePath = `${filePath}.tmp`;
+  try {
+    await fs.writeFile(tempFilePath, JSON.stringify(template, null, 2), "utf-8");
+    await fs.rename(tempFilePath, filePath);
+  } catch (error) {
+    try {
+      await fs.unlink(tempFilePath);
+    } catch {
+      // Ignore cleanup errors
+    }
+    throw error;
+  }
 
   return template;
 }
@@ -725,7 +736,18 @@ export async function incrementTemplateUsage(templateId: ID): Promise<void> {
       updatedAt: new Date().toISOString(),
     };
     const filePath = getTemplateFilePath(templateId);
-    await fs.writeFile(filePath, JSON.stringify(updatedTemplate, null, 2), "utf-8");
+    const tempFilePath = `${filePath}.tmp`;
+    try {
+      await fs.writeFile(tempFilePath, JSON.stringify(updatedTemplate, null, 2), "utf-8");
+      await fs.rename(tempFilePath, filePath);
+    } catch (error) {
+      try {
+        await fs.unlink(tempFilePath);
+      } catch {
+        // Ignore cleanup errors
+      }
+      throw error;
+    }
   }
 }
 
@@ -831,7 +853,18 @@ export async function createLocationConnection(
   };
 
   const filePath = getConnectionFilePath(campaignId, connection.id);
-  await fs.writeFile(filePath, JSON.stringify(connection, null, 2), "utf-8");
+  const tempFilePath = `${filePath}.tmp`;
+  try {
+    await fs.writeFile(tempFilePath, JSON.stringify(connection, null, 2), "utf-8");
+    await fs.rename(tempFilePath, filePath);
+  } catch (error) {
+    try {
+      await fs.unlink(tempFilePath);
+    } catch {
+      // Ignore cleanup errors
+    }
+    throw error;
+  }
 
   return connection;
 }
