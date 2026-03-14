@@ -7,6 +7,7 @@
  */
 
 import type { ID, ISODateString } from "./core";
+import type { EditionCode } from "./edition";
 
 // =============================================================================
 // COMBAT SESSION TYPES
@@ -66,7 +67,7 @@ export interface CombatSession {
   /** User who created/owns the session */
   ownerId: ID;
   /** Edition code for rules lookup */
-  editionCode: string;
+  editionCode: EditionCode;
   /** Display name for the combat */
   name?: string;
   /** All participants in this combat */

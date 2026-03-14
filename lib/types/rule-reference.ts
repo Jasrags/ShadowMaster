@@ -6,6 +6,8 @@
  * and category-based filtering.
  */
 
+import type { EditionCode } from "./edition";
+
 export type RuleReferenceCategory =
   | "combat"
   | "magic"
@@ -35,6 +37,6 @@ export interface RuleReferenceEntry {
 
 export interface RuleReferenceData {
   version: string;
-  editionCode: string;
+  editionCode: EditionCode;
   entries: RuleReferenceEntry[];
 }
