@@ -275,6 +275,38 @@ describe("POST /api/auth/signin", () => {
     );
   });
 
+  it("should return 403 when account is suspended", async () => {
+    const suspendedUser = {
+      ...mockUser,
+      accountStatus: "suspended" as const,
+    };
+    const requestBody = {
+      email: "test@example.com",
+      password: "ValidPass123!",
+    };
+
+    vi.mocked(storageModule.getUserByEmail).mockResolvedValue(suspendedUser);
+    vi.mocked(passwordModule.verifyCredentials).mockResolvedValue({ valid: true, error: null });
+
+    const request = createMockRequest("http://localhost:3000/api/auth/signin", requestBody, "POST");
+
+    const response = await POST(request);
+    const data = await response.json();
+
+    expect(response.status).toBe(403);
+    expect(data.success).toBe(false);
+    expect(data.error).toBe("Your account has been suspended.");
+    expect(sessionModule.createSession).not.toHaveBeenCalled();
+    expect(storageModule.updateUser).not.toHaveBeenCalled();
+    expect(AuditLogger.log).toHaveBeenCalledWith(
+      expect.objectContaining({
+        event: "signin.failure",
+        userId: suspendedUser.id,
+        metadata: { reason: "account_suspended" },
+      })
+    );
+  });
+
   it("should return 403 when account is locked out", async () => {
     const lockedUser = {
       ...mockUser,
