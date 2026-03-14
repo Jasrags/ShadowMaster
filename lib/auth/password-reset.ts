@@ -27,6 +27,7 @@ import { AuditLogger } from "@/lib/security/audit-logger";
 import { sendPasswordChangedEmail } from "@/lib/email/security-alerts";
 import { sendAdminPasswordResetNotification } from "@/lib/email/admin-notifications";
 import { isStrongPassword } from "./validation";
+import { hashPassword } from "./password";
 
 /** Token size in bytes (32 bytes = 256 bits of entropy) */
 const TOKEN_BYTES = 32;
@@ -34,8 +35,8 @@ const TOKEN_BYTES = 32;
 /** Token expiration time in hours */
 const TOKEN_EXPIRY_HOURS = 1;
 
-/** bcrypt rounds for token hashing */
-const BCRYPT_ROUNDS = 10;
+/** bcrypt rounds for token hashing (lower than password rounds since tokens are single-use random) */
+const TOKEN_BCRYPT_ROUNDS = 10;
 
 /**
  * Result of token generation
@@ -88,7 +89,7 @@ export async function generatePasswordResetToken(): Promise<GeneratedResetToken>
   const token = tokenBuffer.toString("base64url");
 
   // Hash the token for storage (don't store plain text)
-  const tokenHash = await bcrypt.hash(token, BCRYPT_ROUNDS);
+  const tokenHash = await bcrypt.hash(token, TOKEN_BCRYPT_ROUNDS);
 
   // Calculate expiration time (1 hour)
   const expiresAt = new Date();
@@ -291,8 +292,8 @@ export async function resetPassword(
       return { success: false, error: "weak_password" };
     }
 
-    // Hash the new password
-    const passwordHash = await bcrypt.hash(newPassword, BCRYPT_ROUNDS);
+    // Hash the new password (uses canonical 12 rounds from hashPassword)
+    const passwordHash = await hashPassword(newPassword);
 
     // Update password and invalidate all sessions
     await updateUserPassword(user.id, passwordHash);

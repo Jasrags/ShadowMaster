@@ -315,14 +315,14 @@ describe("password-reset", () => {
       expect(result.userId).toBe(mockUser.id);
     });
 
-    it("should update password with new hash", async () => {
+    it("should update password with new hash using 12 bcrypt rounds", async () => {
       vi.mocked(usersStorage.getUserByPasswordResetToken).mockResolvedValue(mockUser);
 
       await resetPassword("valid-token", "NewPassword123!");
 
       expect(usersStorage.updateUserPassword).toHaveBeenCalledWith(
         mockUser.id,
-        expect.stringMatching(/^\$2[ab]\$/) // bcrypt hash
+        expect.stringMatching(/^\$2[ab]\$12\$/) // bcrypt hash with 12 rounds
       );
     });
 
