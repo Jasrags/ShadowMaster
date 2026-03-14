@@ -368,4 +368,48 @@ describe("GET /api/users", () => {
 
     consoleErrorSpy.mockRestore();
   });
+
+  describe("pagination bounds validation", () => {
+    beforeEach(() => {
+      vi.mocked(middlewareModule.requireAdmin).mockResolvedValue(mockAdminUser);
+      vi.mocked(usersModule.getAllUsers).mockResolvedValue(mockUsers);
+    });
+
+    it("should clamp limit=0 to minimum of 1", async () => {
+      const request = createMockRequest({ limit: "0" });
+      const response = await GET(request);
+      const data = await response.json();
+
+      expect(response.status).toBe(200);
+      expect(data.pagination.limit).toBeGreaterThanOrEqual(1);
+      expect(Number.isFinite(data.pagination.totalPages)).toBe(true);
+    });
+
+    it("should clamp limit above 100 to maximum of 100", async () => {
+      const request = createMockRequest({ limit: "99999999" });
+      const response = await GET(request);
+      const data = await response.json();
+
+      expect(response.status).toBe(200);
+      expect(data.pagination.limit).toBeLessThanOrEqual(100);
+    });
+
+    it("should clamp page=0 to minimum of 1", async () => {
+      const request = createMockRequest({ page: "0" });
+      const response = await GET(request);
+      const data = await response.json();
+
+      expect(response.status).toBe(200);
+      expect(data.pagination.page).toBeGreaterThanOrEqual(1);
+    });
+
+    it("should clamp negative page to minimum of 1", async () => {
+      const request = createMockRequest({ page: "-5" });
+      const response = await GET(request);
+      const data = await response.json();
+
+      expect(response.status).toBe(200);
+      expect(data.pagination.page).toBeGreaterThanOrEqual(1);
+    });
+  });
 });
