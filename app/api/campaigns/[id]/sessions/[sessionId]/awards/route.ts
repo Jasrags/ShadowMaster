@@ -78,9 +78,9 @@ export async function POST(
       );
     }
 
-    // Fetch and validate character
+    // Fetch and validate character belongs to this campaign
     const character = await getCharacterById(characterId);
-    if (!character) {
+    if (!character || character.campaignId !== campaignId) {
       return NextResponse.json({ success: false, error: "Character not found" }, { status: 404 });
     }
 
