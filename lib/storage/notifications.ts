@@ -8,6 +8,7 @@ import { promises as fs } from "fs";
 import path from "path";
 import { v4 as uuidv4 } from "uuid";
 import type { CampaignNotification } from "../types/campaign";
+import { sanitizePathSegment, writeJsonFile } from "./base";
 
 function getDataDir(): string {
   return process.env.NOTIFICATION_DATA_DIR || path.join(process.cwd(), "data", "notifications");
@@ -30,7 +31,7 @@ async function ensureDataDirectory(): Promise<void> {
  * Get the file path for a user's notifications
  */
 function getFilePath(userId: string): string {
-  return path.join(getDataDir(), `${userId}.json`);
+  return path.join(getDataDir(), `${sanitizePathSegment(userId)}.json`);
 }
 
 /**
@@ -69,7 +70,7 @@ export async function createNotification(
     notifications = notifications.slice(0, 100);
   }
 
-  await fs.writeFile(filePath, JSON.stringify(notifications, null, 2), "utf-8");
+  await writeJsonFile(filePath, notifications);
   return newNotification;
 }
 
@@ -128,7 +129,7 @@ export async function updateNotification(
       readAt: updates.read && !notifications[index].read ? now : notifications[index].readAt,
     };
 
-    await fs.writeFile(filePath, JSON.stringify(notifications, null, 2), "utf-8");
+    await writeJsonFile(filePath, notifications);
     return notifications[index];
   } catch {
     return null;
@@ -156,7 +157,7 @@ export async function markAllRead(userId: string, campaignId?: string): Promise<
     });
 
     if (count > 0) {
-      await fs.writeFile(filePath, JSON.stringify(updated, null, 2), "utf-8");
+      await writeJsonFile(filePath, updated);
     }
   } catch {
     return 0;

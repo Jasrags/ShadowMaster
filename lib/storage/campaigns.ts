@@ -21,6 +21,7 @@ import type { ValidationResult } from "../rules/constraint-validation";
 import { getAllCharacters, updateCharacter } from "./characters";
 import { getEdition } from "./editions";
 import { validateCampaignTemplateData, assertValid } from "./validation";
+import { sanitizePathSegment, writeJsonFile } from "./base";
 
 function getDataDir(): string {
   return process.env.CAMPAIGN_DATA_DIR || path.join(process.cwd(), "data", "campaigns");
@@ -483,8 +484,8 @@ export async function saveCampaignAsTemplate(
   // Validate data before writing (defense-in-depth for CWE-73)
   assertValid(validateCampaignTemplateData(template), "CampaignTemplate");
 
-  const filePath = path.join(getTemplatesDir(), `${template.id}.json`);
-  await fs.writeFile(filePath, JSON.stringify(template, null, 2), "utf-8");
+  const filePath = path.join(getTemplatesDir(), `${sanitizePathSegment(template.id)}.json`);
+  await writeJsonFile(filePath, template);
 
   return template;
 }
