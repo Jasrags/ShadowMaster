@@ -56,8 +56,8 @@ export async function PUT(
       updatedAt: new Date().toISOString(),
     };
 
-    sessions[sessionIndex] = updatedSession;
-    await updateCampaign(id, { sessions });
+    const updatedSessions = sessions.map((s, i) => (i === sessionIndex ? updatedSession : s));
+    await updateCampaign(id, { sessions: updatedSessions });
 
     return NextResponse.json({
       success: true,

@@ -52,8 +52,8 @@ export async function PUT(
       updatedAt: new Date().toISOString(),
     };
 
-    notes[noteIndex] = updatedNote;
-    await updateCampaign(id, { notes });
+    const updatedNotes = notes.map((n, i) => (i === noteIndex ? updatedNote : n));
+    await updateCampaign(id, { notes: updatedNotes });
 
     return NextResponse.json({
       success: true,
