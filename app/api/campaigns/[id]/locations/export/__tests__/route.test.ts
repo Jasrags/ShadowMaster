@@ -2,18 +2,19 @@
  * Tests for /api/campaigns/[id]/locations/export endpoint
  *
  * Tests location export (GET) functionality.
+ * Export is restricted to GM-only (issue #683).
  */
 
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { GET } from "../route";
 import { NextRequest } from "next/server";
 import * as sessionModule from "@/lib/auth/session";
-import * as campaignStorage from "@/lib/storage/campaigns";
+import * as campaignAuth from "@/lib/auth/campaign";
 import * as locationStorage from "@/lib/storage/locations";
-import type { Campaign, Location } from "@/lib/types";
+import type { Location } from "@/lib/types";
 
 vi.mock("@/lib/auth/session");
-vi.mock("@/lib/storage/campaigns");
+vi.mock("@/lib/auth/campaign");
 vi.mock("@/lib/storage/locations");
 
 function createMockRequest(url: string): NextRequest {
@@ -37,39 +38,6 @@ function createMockLocation(overrides?: Partial<Location>): Location {
   } as Location;
 }
 
-function createMockCampaign(overrides?: Partial<Campaign>): Campaign {
-  return {
-    id: "test-campaign-id",
-    gmId: "test-gm-id",
-    title: "Test Campaign",
-    status: "active",
-    editionId: "sr5-edition-id",
-    editionCode: "sr5",
-    enabledBookIds: ["core-rulebook"],
-    enabledCreationMethodIds: ["priority"],
-    gameplayLevel: "street",
-    visibility: "public",
-    playerIds: ["player-1"],
-    advancementSettings: {
-      trainingTimeMultiplier: 1.0,
-      attributeKarmaMultiplier: 5,
-      skillKarmaMultiplier: 2,
-      skillGroupKarmaMultiplier: 5,
-      knowledgeSkillKarmaMultiplier: 1,
-      specializationKarmaCost: 7,
-      spellKarmaCost: 5,
-      complexFormKarmaCost: 4,
-      attributeRatingCap: 10,
-      skillRatingCap: 13,
-      allowInstantAdvancement: false,
-      requireApproval: true,
-    },
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    ...overrides,
-  };
-}
-
 describe("GET /api/campaigns/[id]/locations/export", () => {
   beforeEach(() => vi.clearAllMocks());
 
@@ -83,10 +51,15 @@ describe("GET /api/campaigns/[id]/locations/export", () => {
   });
 
   it("should export locations successfully for GM", async () => {
-    const mockCampaign = createMockCampaign();
     const locations = [createMockLocation({ id: "loc-1" }), createMockLocation({ id: "loc-2" })];
     vi.mocked(sessionModule.getSession).mockResolvedValue("test-gm-id");
-    vi.mocked(campaignStorage.getCampaignById).mockResolvedValue(mockCampaign);
+    vi.mocked(campaignAuth.authorizeCampaign).mockResolvedValue({
+      authorized: true,
+      campaign: null,
+      role: "gm",
+      error: undefined,
+      status: 200,
+    });
     vi.mocked(locationStorage.exportLocations).mockResolvedValue(locations);
     const request = createMockRequest(
       "http://localhost:3000/api/campaigns/test-campaign-id/locations/export"
@@ -98,26 +71,31 @@ describe("GET /api/campaigns/[id]/locations/export", () => {
     expect(data.locations).toHaveLength(2);
   });
 
-  it("should export locations successfully for player", async () => {
-    const mockCampaign = createMockCampaign();
-    const locations = [createMockLocation({ id: "loc-1" })];
+  it("should return 403 for player (GM-only endpoint)", async () => {
     vi.mocked(sessionModule.getSession).mockResolvedValue("player-1");
-    vi.mocked(campaignStorage.getCampaignById).mockResolvedValue(mockCampaign);
-    vi.mocked(locationStorage.exportLocations).mockResolvedValue(locations);
+    vi.mocked(campaignAuth.authorizeCampaign).mockResolvedValue({
+      authorized: false,
+      campaign: null,
+      role: "player",
+      error: "GM access required",
+      status: 403,
+    });
     const request = createMockRequest(
       "http://localhost:3000/api/campaigns/test-campaign-id/locations/export"
     );
     const response = await GET(request, { params: Promise.resolve({ id: "test-campaign-id" }) });
-    const data = await response.json();
-    expect(response.status).toBe(200);
-    expect(data.success).toBe(true);
-    expect(data.locations).toHaveLength(1);
+    expect(response.status).toBe(403);
   });
 
   it("should return 403 when not a member", async () => {
-    const mockCampaign = createMockCampaign();
     vi.mocked(sessionModule.getSession).mockResolvedValue("non-member");
-    vi.mocked(campaignStorage.getCampaignById).mockResolvedValue(mockCampaign);
+    vi.mocked(campaignAuth.authorizeCampaign).mockResolvedValue({
+      authorized: false,
+      campaign: null,
+      role: null,
+      error: "Not a member of this campaign",
+      status: 403,
+    });
     const request = createMockRequest(
       "http://localhost:3000/api/campaigns/test-campaign-id/locations/export"
     );
@@ -127,7 +105,13 @@ describe("GET /api/campaigns/[id]/locations/export", () => {
 
   it("should return 404 when campaign not found", async () => {
     vi.mocked(sessionModule.getSession).mockResolvedValue("test-gm-id");
-    vi.mocked(campaignStorage.getCampaignById).mockResolvedValue(null);
+    vi.mocked(campaignAuth.authorizeCampaign).mockResolvedValue({
+      authorized: false,
+      campaign: null,
+      role: null,
+      error: "Campaign not found",
+      status: 404,
+    });
     const request = createMockRequest(
       "http://localhost:3000/api/campaigns/nonexistent/locations/export"
     );
@@ -135,10 +119,29 @@ describe("GET /api/campaigns/[id]/locations/export", () => {
     expect(response.status).toBe(404);
   });
 
+  it("should call authorizeCampaign with requireGM: true", async () => {
+    vi.mocked(sessionModule.getSession).mockResolvedValue("test-gm-id");
+    vi.mocked(campaignAuth.authorizeCampaign).mockResolvedValue({
+      authorized: true,
+      campaign: null,
+      role: "gm",
+      error: undefined,
+      status: 200,
+    });
+    vi.mocked(locationStorage.exportLocations).mockResolvedValue([]);
+    const request = createMockRequest(
+      "http://localhost:3000/api/campaigns/test-campaign-id/locations/export"
+    );
+    await GET(request, { params: Promise.resolve({ id: "test-campaign-id" }) });
+    expect(campaignAuth.authorizeCampaign).toHaveBeenCalledWith("test-campaign-id", "test-gm-id", {
+      requireGM: true,
+    });
+  });
+
   it("should return 500 on error", async () => {
     const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
     vi.mocked(sessionModule.getSession).mockResolvedValue("test-gm-id");
-    vi.mocked(campaignStorage.getCampaignById).mockRejectedValue(new Error("Error"));
+    vi.mocked(campaignAuth.authorizeCampaign).mockRejectedValue(new Error("Error"));
     const request = createMockRequest(
       "http://localhost:3000/api/campaigns/test-campaign-id/locations/export"
     );
