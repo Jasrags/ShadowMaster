@@ -43,17 +43,7 @@ vi.mock("@/lib/security/audit-logger", () => ({
   },
 }));
 
-vi.mock("next/headers", () => ({
-  headers: vi.fn(() =>
-    Promise.resolve({
-      get: vi.fn((name: string) => {
-        if (name === "x-forwarded-for") return "127.0.0.1";
-        if (name === "x-real-ip") return null;
-        return null;
-      }),
-    })
-  ),
-}));
+// next/headers mock removed — route now uses getClientIp(request) instead
 
 // Import after mocks are set up
 import { POST } from "../route";
@@ -154,7 +144,7 @@ describe("POST /api/auth/magic-link", () => {
       expect(magicLinkModule.requestMagicLink).toHaveBeenCalledWith(
         "test@example.com",
         "http://localhost:3000",
-        "127.0.0.1"
+        "unknown"
       );
     });
 

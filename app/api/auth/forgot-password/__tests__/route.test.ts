@@ -31,11 +31,7 @@ vi.mock("@/lib/security/rate-limit", () => ({
 vi.mock("@/lib/security/audit-logger", () => ({
   AuditLogger: mockAuditLogger,
 }));
-vi.mock("next/headers", () => ({
-  headers: vi.fn().mockResolvedValue({
-    get: vi.fn().mockReturnValue("127.0.0.1"),
-  }),
-}));
+// next/headers mock removed — route now uses getClientIp(request) instead
 
 // Import after mocks are set up
 import { POST } from "../route";
@@ -95,7 +91,7 @@ describe("POST /api/auth/forgot-password", () => {
     expect(passwordResetModule.requestPasswordReset).toHaveBeenCalledWith(
       "test@example.com",
       "http://localhost:3000",
-      "127.0.0.1"
+      "unknown"
     );
   });
 
@@ -206,7 +202,7 @@ describe("POST /api/auth/forgot-password", () => {
       expect.objectContaining({
         event: "password_reset.rate_limited",
         email: "test@example.com",
-        ip: "127.0.0.1",
+        ip: "unknown",
       })
     );
   });
@@ -271,7 +267,7 @@ describe("POST /api/auth/forgot-password", () => {
     expect(passwordResetModule.requestPasswordReset).toHaveBeenCalledWith(
       "test@example.com",
       "https://example.com",
-      "127.0.0.1"
+      "unknown"
     );
   });
 });
