@@ -12,7 +12,7 @@ import { requestMagicLink } from "@/lib/auth/magic-link";
 import { isValidEmail } from "@/lib/auth/validation";
 import { RateLimiter } from "@/lib/security/rate-limit";
 import { AuditLogger } from "@/lib/security/audit-logger";
-import { headers } from "next/headers";
+import { getClientIp } from "@/lib/security/ip";
 
 // Rate limit: 5 requests per hour per email
 const rateLimiter = RateLimiter.get("magic-link", {
@@ -33,8 +33,7 @@ interface MagicLinkResponse {
 export async function POST(request: NextRequest): Promise<NextResponse<MagicLinkResponse>> {
   try {
     // Get IP for logging
-    const headersList = await headers();
-    const ip = headersList.get("x-forwarded-for") || headersList.get("x-real-ip") || "unknown";
+    const ip = getClientIp(request);
 
     // Parse request body
     let body: MagicLinkRequest;

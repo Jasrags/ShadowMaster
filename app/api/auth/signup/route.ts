@@ -14,13 +14,14 @@ import { sendVerificationEmail } from "@/lib/auth/email-verification";
 import { sendAdminNewUserNotification } from "@/lib/email";
 import { RateLimiter } from "@/lib/security/rate-limit";
 import { AuditLogger } from "@/lib/security/audit-logger";
+import { getClientIp } from "@/lib/security/ip";
 import type { SignupRequest, AuthResponse } from "@/lib/types/user";
 
 // Rate limit: 5 signups per hour per IP
 const SIGNUP_LIMIT = { windowMs: 60 * 60 * 1000, max: 5 };
 
 export async function POST(request: NextRequest): Promise<NextResponse<AuthResponse>> {
-  const ip = request.headers.get("x-forwarded-for") || "unknown";
+  const ip = getClientIp(request);
 
   try {
     // Rate limiting check (before parsing body)
