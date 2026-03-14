@@ -522,6 +522,107 @@ describe("POST /api/auth/signup", () => {
       });
     });
 
+    it("should NOT bypass rate limiting when x-e2e-bypass is 'true' but E2E_BYPASS_SECRET is not set", async () => {
+      delete process.env.E2E_BYPASS_SECRET;
+
+      vi.mocked(RateLimiter.get).mockReturnValue({
+        isRateLimited: vi.fn().mockReturnValue(true),
+      } as unknown as RateLimiter);
+
+      const requestBody = {
+        email: "newuser@example.com",
+        username: "newuser",
+        password: "ValidPass123!",
+      };
+
+      const headers = new Headers();
+      headers.set("Content-Type", "application/json");
+      headers.set("x-e2e-bypass", "true");
+
+      const request = new NextRequest("http://localhost:3000/api/auth/signup", {
+        method: "POST",
+        body: JSON.stringify(requestBody),
+        headers,
+      });
+      (request as { json: () => Promise<unknown> }).json = async () => requestBody;
+
+      const response = await POST(request);
+      const data = await response.json();
+
+      expect(response.status).toBe(429);
+      expect(data.success).toBe(false);
+    });
+
+    it("should NOT bypass rate limiting when x-e2e-bypass header has wrong value", async () => {
+      process.env.E2E_BYPASS_SECRET = "correct-secret";
+
+      vi.mocked(RateLimiter.get).mockReturnValue({
+        isRateLimited: vi.fn().mockReturnValue(true),
+      } as unknown as RateLimiter);
+
+      const requestBody = {
+        email: "newuser@example.com",
+        username: "newuser",
+        password: "ValidPass123!",
+      };
+
+      const headers = new Headers();
+      headers.set("Content-Type", "application/json");
+      headers.set("x-e2e-bypass", "wrong-secret");
+
+      const request = new NextRequest("http://localhost:3000/api/auth/signup", {
+        method: "POST",
+        body: JSON.stringify(requestBody),
+        headers,
+      });
+      (request as { json: () => Promise<unknown> }).json = async () => requestBody;
+
+      const response = await POST(request);
+      const data = await response.json();
+
+      expect(response.status).toBe(429);
+      expect(data.success).toBe(false);
+
+      delete process.env.E2E_BYPASS_SECRET;
+    });
+
+    it("should bypass rate limiting when x-e2e-bypass header matches E2E_BYPASS_SECRET", async () => {
+      process.env.E2E_BYPASS_SECRET = "my-secret-token";
+
+      vi.mocked(RateLimiter.get).mockReturnValue({
+        isRateLimited: vi.fn().mockReturnValue(true),
+      } as unknown as RateLimiter);
+
+      const requestBody = {
+        email: "newuser@example.com",
+        username: "newuser",
+        password: "ValidPass123!",
+      };
+
+      vi.mocked(storageModule.getUserByEmail).mockResolvedValue(null);
+      vi.mocked(passwordModule.hashPassword).mockResolvedValue("hashed-password");
+      vi.mocked(storageModule.createUser).mockResolvedValue(mockUser);
+
+      const headers = new Headers();
+      headers.set("Content-Type", "application/json");
+      headers.set("x-e2e-bypass", "my-secret-token");
+
+      const request = new NextRequest("http://localhost:3000/api/auth/signup", {
+        method: "POST",
+        body: JSON.stringify(requestBody),
+        headers,
+      });
+      (request as { json: () => Promise<unknown> }).json = async () => requestBody;
+
+      const response = await POST(request);
+      const data = await response.json();
+
+      expect(response.status).toBe(200);
+      expect(data.success).toBe(true);
+
+      delete process.env.E2E_BYPASS_SECRET;
+    });
+
     it("should use x-forwarded-for header for IP", async () => {
       const mockIsRateLimited = vi.fn().mockReturnValue(false);
       vi.mocked(RateLimiter.get).mockReturnValue({

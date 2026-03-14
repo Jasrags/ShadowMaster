@@ -31,7 +31,7 @@ export async function setupRateLimitBypass(page: Page): Promise<void> {
   await page.route("**/api/**", async (route) => {
     const headers = {
       ...route.request().headers(),
-      "x-e2e-bypass": "true",
+      "x-e2e-bypass": process.env.E2E_BYPASS_SECRET ?? "true",
     };
     await route.continue({ headers });
   });
