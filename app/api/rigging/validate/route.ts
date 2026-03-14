@@ -51,12 +51,12 @@ export async function POST(
     // Check authentication
     const userId = await getSession();
     if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
     const user = await getUserById(userId);
     if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      return NextResponse.json({ success: false, error: "User not found" }, { status: 404 });
     }
 
     // Parse request
@@ -65,7 +65,7 @@ export async function POST(
 
     if (!characterId || !vehicleId || !actionType) {
       return NextResponse.json(
-        { error: "Missing required fields: characterId, vehicleId, actionType" },
+        { success: false, error: "Missing required fields: characterId, vehicleId, actionType" },
         { status: 400 }
       );
     }
@@ -73,13 +73,13 @@ export async function POST(
     // Get the character
     const character = await getCharacter(userId, characterId);
     if (!character) {
-      return NextResponse.json({ error: "Character not found" }, { status: 404 });
+      return NextResponse.json({ success: false, error: "Character not found" }, { status: 404 });
     }
 
     // Check ownership
     if (character.ownerId !== userId) {
       return NextResponse.json(
-        { error: "Not authorized to access this character" },
+        { success: false, error: "Not authorized to access this character" },
         { status: 403 }
       );
     }
@@ -89,7 +89,10 @@ export async function POST(
     const drone = (character.drones ?? []).find((d) => d.id === vehicleId);
 
     if (!vehicle && !drone) {
-      return NextResponse.json({ error: "Vehicle or drone not found" }, { status: 404 });
+      return NextResponse.json(
+        { success: false, error: "Vehicle or drone not found" },
+        { status: 404 }
+      );
     }
 
     // Validate the action
@@ -164,6 +167,9 @@ export async function POST(
     return NextResponse.json(response);
   } catch (error) {
     console.error("Failed to validate action:", error);
-    return NextResponse.json({ error: "Failed to validate action" }, { status: 500 });
+    return NextResponse.json(
+      { success: false, error: "Failed to validate action" },
+      { status: 500 }
+    );
   }
 }

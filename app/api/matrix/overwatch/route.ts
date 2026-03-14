@@ -83,12 +83,12 @@ export async function POST(
     // Check authentication
     const userId = await getAuthSession();
     if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
     const user = await getUserById(userId);
     if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      return NextResponse.json({ success: false, error: "User not found" }, { status: 404 });
     }
 
     // Parse request
@@ -97,16 +97,19 @@ export async function POST(
 
     // Validate required fields
     if (!characterId) {
-      return NextResponse.json({ error: "characterId is required" }, { status: 400 });
+      return NextResponse.json(
+        { success: false, error: "characterId is required" },
+        { status: 400 }
+      );
     }
 
     if (!action) {
-      return NextResponse.json({ error: "action is required" }, { status: 400 });
+      return NextResponse.json({ success: false, error: "action is required" }, { status: 400 });
     }
 
     if (typeof scoreAdded !== "number" || scoreAdded < 0) {
       return NextResponse.json(
-        { error: "scoreAdded must be a non-negative number" },
+        { success: false, error: "scoreAdded must be a non-negative number" },
         { status: 400 }
       );
     }
@@ -114,12 +117,12 @@ export async function POST(
     // Verify character ownership
     const character = await getCharacter(userId, characterId);
     if (!character) {
-      return NextResponse.json({ error: "Character not found" }, { status: 404 });
+      return NextResponse.json({ success: false, error: "Character not found" }, { status: 404 });
     }
 
     if (character.ownerId !== userId) {
       return NextResponse.json(
-        { error: "Not authorized to record overwatch for this character" },
+        { success: false, error: "Not authorized to record overwatch for this character" },
         { status: 403 }
       );
     }
@@ -131,6 +134,7 @@ export async function POST(
     if (session.converged) {
       return NextResponse.json(
         {
+          success: false,
           error: "Session has already converged. Start a new session.",
         },
         { status: 400 }
@@ -151,7 +155,10 @@ export async function POST(
     return NextResponse.json(response);
   } catch (error) {
     console.error("Failed to record overwatch event:", error);
-    return NextResponse.json({ error: "Failed to record overwatch event" }, { status: 500 });
+    return NextResponse.json(
+      { success: false, error: "Failed to record overwatch event" },
+      { status: 500 }
+    );
   }
 }
 
@@ -260,7 +267,7 @@ export async function GET(
     // Check authentication
     const userId = await getAuthSession();
     if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
     // Get characterId from query params
@@ -269,7 +276,7 @@ export async function GET(
 
     if (!characterId) {
       return NextResponse.json(
-        { error: "characterId query parameter is required" },
+        { success: false, error: "characterId query parameter is required" },
         { status: 400 }
       );
     }
@@ -277,11 +284,11 @@ export async function GET(
     // Verify character ownership
     const character = await getCharacter(userId, characterId);
     if (!character) {
-      return NextResponse.json({ error: "Character not found" }, { status: 404 });
+      return NextResponse.json({ success: false, error: "Character not found" }, { status: 404 });
     }
 
     if (character.ownerId !== userId) {
-      return NextResponse.json({ error: "Not authorized" }, { status: 403 });
+      return NextResponse.json({ success: false, error: "Not authorized" }, { status: 403 });
     }
 
     // Get session (without creating)
@@ -305,6 +312,9 @@ export async function GET(
     });
   } catch (error) {
     console.error("Failed to get overwatch status:", error);
-    return NextResponse.json({ error: "Failed to get overwatch status" }, { status: 500 });
+    return NextResponse.json(
+      { success: false, error: "Failed to get overwatch status" },
+      { status: 500 }
+    );
   }
 }

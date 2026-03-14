@@ -42,23 +42,26 @@ export async function GET(
     // Check authentication
     const userId = await getSession();
     if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
     const user = await getUserById(userId);
     if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      return NextResponse.json({ success: false, error: "User not found" }, { status: 404 });
     }
 
     // Get the character
     const character = await getCharacter(userId, characterId);
     if (!character) {
-      return NextResponse.json({ error: "Character not found" }, { status: 404 });
+      return NextResponse.json({ success: false, error: "Character not found" }, { status: 404 });
     }
 
     // Check ownership
     if (character.ownerId !== userId) {
-      return NextResponse.json({ error: "Not authorized to view this character" }, { status: 403 });
+      return NextResponse.json(
+        { success: false, error: "Not authorized to view this character" },
+        { status: 403 }
+      );
     }
 
     // Count equipment
@@ -89,6 +92,9 @@ export async function GET(
     return NextResponse.json(response);
   } catch (error) {
     console.error("Failed to get rigging equipment:", error);
-    return NextResponse.json({ error: "Failed to get rigging equipment" }, { status: 500 });
+    return NextResponse.json(
+      { success: false, error: "Failed to get rigging equipment" },
+      { status: 500 }
+    );
   }
 }

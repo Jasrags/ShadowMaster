@@ -36,7 +36,10 @@ async function requireAdmin(): Promise<
   if (!userId) {
     return {
       authorized: false,
-      response: NextResponse.json({ error: "Authentication required" }, { status: 401 }),
+      response: NextResponse.json(
+        { success: false, error: "Authentication required" },
+        { status: 401 }
+      ),
     };
   }
 
@@ -44,14 +47,17 @@ async function requireAdmin(): Promise<
   if (!user) {
     return {
       authorized: false,
-      response: NextResponse.json({ error: "User not found" }, { status: 404 }),
+      response: NextResponse.json({ success: false, error: "User not found" }, { status: 404 }),
     };
   }
 
   if (!user.role.includes("administrator")) {
     return {
       authorized: false,
-      response: NextResponse.json({ error: "Administrator access required" }, { status: 403 }),
+      response: NextResponse.json(
+        { success: false, error: "Administrator access required" },
+        { status: 403 }
+      ),
     };
   }
 
@@ -102,7 +108,10 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     });
   } catch (error) {
     console.error("Migration preview error:", error);
-    return NextResponse.json({ error: "Failed to preview migration" }, { status: 500 });
+    return NextResponse.json(
+      { success: false, error: "Failed to preview migration" },
+      { status: 500 }
+    );
   }
 }
 
@@ -177,6 +186,9 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     });
   } catch (error) {
     console.error("Migration error:", error);
-    return NextResponse.json({ error: "Failed to execute migration" }, { status: 500 });
+    return NextResponse.json(
+      { success: false, error: "Failed to execute migration" },
+      { status: 500 }
+    );
   }
 }
