@@ -335,64 +335,72 @@ export function applyDamageToMonitor(
   damage: number,
   damageType: DamageType
 ): ConditionMonitorState {
-  const newState = { ...state };
-  let remainingDamage = damage;
-  let damageConverted = false;
-
   if (damageType === "physical") {
-    // Apply to physical track
-    const physicalRoom = newState.physicalMax - newState.physicalDamage;
+    const physicalRoom = state.physicalMax - state.physicalDamage;
 
-    if (remainingDamage <= physicalRoom) {
+    if (damage <= physicalRoom) {
       // All damage fits in physical track
-      newState.physicalDamage += remainingDamage;
-    } else {
-      // Fill physical track, overflow goes to overflow
-      newState.physicalDamage = newState.physicalMax;
-      remainingDamage -= physicalRoom;
-
-      // Apply to overflow
-      newState.overflowDamage = Math.min(
-        newState.overflowMax,
-        newState.overflowDamage + remainingDamage
-      );
+      const physicalDamage = state.physicalDamage + damage;
+      return {
+        ...state,
+        physicalDamage,
+        incapacitated: physicalDamage >= state.physicalMax,
+      };
     }
-  } else {
-    // Stun damage
-    const stunRoom = newState.stunMax - newState.stunDamage;
 
-    if (remainingDamage <= stunRoom) {
-      // All damage fits in stun track
-      newState.stunDamage += remainingDamage;
-    } else {
-      // Fill stun track, overflow converts to physical
-      newState.stunDamage = newState.stunMax;
-      remainingDamage -= stunRoom;
-      damageConverted = true;
-
-      // Convert excess stun to physical (2 stun = 1 physical)
-      const convertedPhysical = Math.ceil(remainingDamage / 2);
-      const physicalRoom = newState.physicalMax - newState.physicalDamage;
-
-      if (convertedPhysical <= physicalRoom) {
-        newState.physicalDamage += convertedPhysical;
-      } else {
-        newState.physicalDamage = newState.physicalMax;
-        const overflowPhysical = convertedPhysical - physicalRoom;
-        newState.overflowDamage = Math.min(
-          newState.overflowMax,
-          newState.overflowDamage + overflowPhysical
-        );
-      }
-    }
+    // Fill physical track, overflow goes to overflow
+    const overflowAmount = damage - physicalRoom;
+    const overflowDamage = Math.min(state.overflowMax, state.overflowDamage + overflowAmount);
+    return {
+      ...state,
+      physicalDamage: state.physicalMax,
+      overflowDamage,
+      incapacitated: true,
+      dead: overflowDamage >= state.overflowMax,
+    };
   }
 
-  // Update status flags
-  newState.unconscious = newState.stunDamage >= newState.stunMax;
-  newState.incapacitated = newState.physicalDamage >= newState.physicalMax;
-  newState.dead = newState.overflowDamage >= newState.overflowMax;
+  // Stun damage
+  const stunRoom = state.stunMax - state.stunDamage;
 
-  return newState;
+  if (damage <= stunRoom) {
+    // All damage fits in stun track
+    const stunDamage = state.stunDamage + damage;
+    return {
+      ...state,
+      stunDamage,
+      unconscious: stunDamage >= state.stunMax,
+    };
+  }
+
+  // Fill stun track, overflow converts to physical (2 stun = 1 physical)
+  const stunOverflow = damage - stunRoom;
+  const convertedPhysical = Math.ceil(stunOverflow / 2);
+  const physicalRoom = state.physicalMax - state.physicalDamage;
+
+  if (convertedPhysical <= physicalRoom) {
+    const physicalDamage = state.physicalDamage + convertedPhysical;
+    return {
+      ...state,
+      stunDamage: state.stunMax,
+      physicalDamage,
+      unconscious: true,
+      incapacitated: physicalDamage >= state.physicalMax,
+    };
+  }
+
+  // Physical also overflows
+  const overflowPhysical = convertedPhysical - physicalRoom;
+  const overflowDamage = Math.min(state.overflowMax, state.overflowDamage + overflowPhysical);
+  return {
+    ...state,
+    stunDamage: state.stunMax,
+    physicalDamage: state.physicalMax,
+    overflowDamage,
+    unconscious: true,
+    incapacitated: true,
+    dead: overflowDamage >= state.overflowMax,
+  };
 }
 
 /**

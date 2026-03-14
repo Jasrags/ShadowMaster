@@ -400,6 +400,63 @@ describe("applyDamageToMonitor", () => {
     expect(newState.unconscious).toBe(true);
   });
 
+  it("does not mutate the input state", () => {
+    const state = Object.freeze({
+      physicalDamage: 2,
+      physicalMax: 10,
+      stunDamage: 3,
+      stunMax: 10,
+      overflowDamage: 0,
+      overflowMax: 4,
+      unconscious: false,
+      incapacitated: false,
+      dead: false,
+    });
+
+    // Should not throw due to frozen input
+    const newState = applyDamageToMonitor(state, 5, "physical");
+    expect(newState.physicalDamage).toBe(7);
+    // Original unchanged (frozen would throw if mutated)
+    expect(state.physicalDamage).toBe(2);
+  });
+
+  it("returns a new object reference", () => {
+    const state = {
+      physicalDamage: 0,
+      physicalMax: 10,
+      stunDamage: 0,
+      stunMax: 10,
+      overflowDamage: 0,
+      overflowMax: 4,
+      unconscious: false,
+      incapacitated: false,
+      dead: false,
+    };
+
+    const newState = applyDamageToMonitor(state, 0, "physical");
+    expect(newState).not.toBe(state);
+  });
+
+  it("does not mutate input when stun overflows to physical", () => {
+    const state = Object.freeze({
+      physicalDamage: 0,
+      physicalMax: 10,
+      stunDamage: 8,
+      stunMax: 10,
+      overflowDamage: 0,
+      overflowMax: 4,
+      unconscious: false,
+      incapacitated: false,
+      dead: false,
+    });
+
+    const newState = applyDamageToMonitor(state, 6, "stun");
+    expect(newState.stunDamage).toBe(10);
+    expect(newState.physicalDamage).toBe(2);
+    expect(state.stunDamage).toBe(8);
+    expect(state.physicalDamage).toBe(0);
+  });
+
   it("sets dead flag when overflow is full", () => {
     const state = {
       physicalDamage: 10,
