@@ -182,7 +182,7 @@ describe("GET /api/users", () => {
     vi.clearAllMocks();
   });
 
-  it("should return 403 when not authenticated", async () => {
+  it("should return 401 when not authenticated", async () => {
     vi.mocked(middlewareModule.requireAdmin).mockRejectedValue(
       new Error("Authentication required")
     );
@@ -191,7 +191,7 @@ describe("GET /api/users", () => {
     const response = await GET(request);
     const data = await response.json();
 
-    expect(response.status).toBe(403);
+    expect(response.status).toBe(401);
     expect(data.success).toBe(false);
     expect(data.error).toBe("Authentication required");
   });

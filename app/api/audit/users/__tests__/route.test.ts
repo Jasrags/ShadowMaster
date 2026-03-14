@@ -14,7 +14,13 @@ import type { User } from "@/lib/types/user";
 import type { UserAuditEntry } from "@/lib/types/audit";
 
 // Mock dependencies
-vi.mock("@/lib/auth/middleware");
+vi.mock("@/lib/auth/middleware", async (importOriginal) => {
+  const actual = await importOriginal<typeof middlewareModule>();
+  return {
+    ...actual,
+    requireAdmin: vi.fn(),
+  };
+});
 vi.mock("@/lib/storage/user-audit");
 
 describe("GET /api/audit/users", () => {
@@ -214,7 +220,7 @@ describe("GET /api/audit/users", () => {
     expect(data.success).toBe(false);
   });
 
-  it("should return 403 if not authenticated", async () => {
+  it("should return 401 if not authenticated", async () => {
     vi.mocked(middlewareModule.requireAdmin).mockRejectedValue(
       new Error("Authentication required")
     );
@@ -223,7 +229,7 @@ describe("GET /api/audit/users", () => {
     const response = await GET(request);
     const data = await response.json();
 
-    expect(response.status).toBe(403);
+    expect(response.status).toBe(401);
     expect(data.success).toBe(false);
   });
 });

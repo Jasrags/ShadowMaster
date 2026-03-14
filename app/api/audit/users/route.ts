@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { requireAdmin } from "@/lib/auth/middleware";
+import { requireAdmin, handleAdminAuthError } from "@/lib/auth/middleware";
 import { getAllUserAuditEntries } from "@/lib/storage/user-audit";
 import type { UserAuditAction, UserAuditEntry } from "@/lib/types/audit";
 
@@ -61,15 +61,8 @@ export async function GET(request: NextRequest): Promise<NextResponse<SystemAudi
       total,
     });
   } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : "An error occurred";
-
-    // Check if it's an authentication/authorization error
-    if (
-      errorMessage === "Authentication required" ||
-      errorMessage === "Administrator access required"
-    ) {
-      return NextResponse.json({ success: false, error: errorMessage }, { status: 403 });
-    }
+    const authResponse = handleAdminAuthError(error);
+    if (authResponse) return authResponse;
 
     console.error("Get system audit log error:", error);
     return NextResponse.json(

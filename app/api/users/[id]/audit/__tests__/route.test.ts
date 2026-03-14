@@ -15,7 +15,13 @@ import type { User } from "@/lib/types/user";
 import type { UserAuditEntry } from "@/lib/types/audit";
 
 // Mock dependencies
-vi.mock("@/lib/auth/middleware");
+vi.mock("@/lib/auth/middleware", async (importOriginal) => {
+  const actual = await importOriginal<typeof middlewareModule>();
+  return {
+    ...actual,
+    requireAdmin: vi.fn(),
+  };
+});
 vi.mock("@/lib/storage/users");
 vi.mock("@/lib/storage/user-audit");
 
