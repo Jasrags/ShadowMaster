@@ -548,9 +548,9 @@ describe("determineActorRole", () => {
     expect(role).toBe("gm");
   });
 
-  it("should return owner as default for non-owner non-gm", () => {
+  it("should return viewer as default for non-owner non-gm", () => {
     const character = createMockCharacter({ ownerId: "user-123" });
     const role = determineActorRole("other-user", character);
-    expect(role).toBe("owner");
+    expect(role).toBe("viewer");
   });
 });

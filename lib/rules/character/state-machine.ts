@@ -519,5 +519,5 @@ export function determineActorRole(
   if (isAdmin) return "admin";
   if (campaignGmId && userId === campaignGmId) return "gm";
   if (userId === character.ownerId) return "owner";
-  return "owner"; // Default to owner for now (no player role yet)
+  return "viewer"; // Non-owner, non-GM users get view-only access
 }
