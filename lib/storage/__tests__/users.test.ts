@@ -303,6 +303,26 @@ describe("User Storage", () => {
     it("should throw error for non-existent user", async () => {
       await expect(deleteUser("nonexistent-id")).rejects.toThrow("not found");
     });
+
+    it("should propagate error when deleteUserCharacters fails", async () => {
+      const user = await createUser({
+        email: "char-fail@example.com",
+        passwordHash: "hash",
+        username: "CharFail",
+        role: ["user" as UserRole],
+      });
+
+      // Mock the characters module to make deleteUserCharacters throw
+      vi.doMock("../characters", () => ({
+        deleteUserCharacters: vi.fn().mockRejectedValue(new Error("disk failure")),
+      }));
+
+      await expect(deleteUser(user.id)).rejects.toThrow("disk failure");
+
+      // User file should NOT have been deleted (no orphan)
+      const stillExists = await getUserById(user.id);
+      expect(stillExists).not.toBeNull();
+    });
   });
 
   describe("atomic writes", () => {
