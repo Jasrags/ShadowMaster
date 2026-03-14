@@ -10,6 +10,7 @@ import { createSession } from "@/lib/auth/session";
 import { toPublicUser } from "@/lib/auth/middleware";
 import { RateLimiter } from "@/lib/security/rate-limit";
 import { AuditLogger } from "@/lib/security/audit-logger";
+import { getClientIp } from "@/lib/security/ip";
 import type { SigninRequest, AuthResponse } from "@/lib/types/user";
 
 // Rate limit configuration
@@ -17,7 +18,7 @@ const IP_LIMIT = { windowMs: 15 * 60 * 1000, max: 20 }; // 20 attempts per 15 mi
 const ACCOUNT_LIMIT = { windowMs: 15 * 60 * 1000, max: 5 }; // 5 attempts per 15 mins per Email
 
 export async function POST(request: NextRequest): Promise<NextResponse<AuthResponse>> {
-  const ip = request.headers.get("x-forwarded-for") || "unknown";
+  const ip = getClientIp(request);
 
   try {
     const body: SigninRequest = await request.json();
