@@ -8,6 +8,7 @@ import { promises as fs } from "fs";
 import path from "path";
 import { v4 as uuidv4 } from "uuid";
 import type { CampaignActivityEvent } from "../types/campaign";
+import { sanitizePathSegment, writeJsonFile } from "./base";
 
 function getDataDir(): string {
   return process.env.ACTIVITY_DATA_DIR || path.join(process.cwd(), "data", "activity");
@@ -30,7 +31,7 @@ async function ensureDataDirectory(): Promise<void> {
  * Get the file path for a campaign's activity log
  */
 function getFilePath(campaignId: string): string {
-  return path.join(getDataDir(), `${campaignId}.json`);
+  return path.join(getDataDir(), `${sanitizePathSegment(campaignId)}.json`);
 }
 
 /**
@@ -68,18 +69,7 @@ export async function logActivity(
     entries = entries.slice(0, 500);
   }
 
-  const tempFilePath = `${filePath}.tmp`;
-  try {
-    await fs.writeFile(tempFilePath, JSON.stringify(entries, null, 2), "utf-8");
-    await fs.rename(tempFilePath, filePath);
-  } catch (error) {
-    try {
-      await fs.unlink(tempFilePath);
-    } catch {
-      // Ignore cleanup errors
-    }
-    throw error;
-  }
+  await writeJsonFile(filePath, entries);
   return newEvent;
 }
 

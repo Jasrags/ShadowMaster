@@ -19,6 +19,7 @@ import type {
   LocationConnection,
 } from "../types";
 import { validateLocationData, validateLocationTemplateData, assertValid } from "./validation";
+import { sanitizePathSegment, writeJsonFile } from "./base";
 
 function getCampaignsBaseDir(): string {
   return process.env.LOCATIONS_CAMPAIGNS_DATA_DIR || path.join(process.cwd(), "data", "campaigns");
@@ -28,7 +29,7 @@ function getCampaignsBaseDir(): string {
  * Get the locations directory for a campaign
  */
 function getLocationsDir(campaignId: string): string {
-  return path.join(getCampaignsBaseDir(), campaignId, "locations");
+  return path.join(getCampaignsBaseDir(), sanitizePathSegment(campaignId), "locations");
 }
 
 /**
@@ -46,14 +47,14 @@ async function ensureLocationsDirectory(campaignId: string): Promise<void> {
 }
 
 function getLocationFilePath(campaignId: string, locationId: string): string {
-  return path.join(getLocationsDir(campaignId), `${locationId}.json`);
+  return path.join(getLocationsDir(campaignId), `${sanitizePathSegment(locationId)}.json`);
 }
 
 /**
  * Get the connections directory for a campaign
  */
 function getConnectionsDir(campaignId: string): string {
-  return path.join(getCampaignsBaseDir(), campaignId, "connections");
+  return path.join(getCampaignsBaseDir(), sanitizePathSegment(campaignId), "connections");
 }
 
 /**
@@ -71,7 +72,7 @@ async function ensureConnectionsDirectory(campaignId: string): Promise<void> {
 }
 
 function getConnectionFilePath(campaignId: string, connectionId: string): string {
-  return path.join(getConnectionsDir(campaignId), `${connectionId}.json`);
+  return path.join(getConnectionsDir(campaignId), `${sanitizePathSegment(connectionId)}.json`);
 }
 
 /**
@@ -99,7 +100,7 @@ async function ensureTemplatesDirectory(): Promise<void> {
  * Get the file path for a template by ID
  */
 function getTemplateFilePath(templateId: string): string {
-  return path.join(getTemplatesDir(), `${templateId}.json`);
+  return path.join(getTemplatesDir(), `${sanitizePathSegment(templateId)}.json`);
 }
 
 /**
@@ -637,18 +638,7 @@ export async function createLocationTemplate(
   assertValid(validateLocationTemplateData(template), "LocationTemplate");
 
   const filePath = getTemplateFilePath(template.id);
-  const tempFilePath = `${filePath}.tmp`;
-  try {
-    await fs.writeFile(tempFilePath, JSON.stringify(template, null, 2), "utf-8");
-    await fs.rename(tempFilePath, filePath);
-  } catch (error) {
-    try {
-      await fs.unlink(tempFilePath);
-    } catch {
-      // Ignore cleanup errors
-    }
-    throw error;
-  }
+  await writeJsonFile(filePath, template);
 
   return template;
 }
@@ -736,18 +726,7 @@ export async function incrementTemplateUsage(templateId: ID): Promise<void> {
       updatedAt: new Date().toISOString(),
     };
     const filePath = getTemplateFilePath(templateId);
-    const tempFilePath = `${filePath}.tmp`;
-    try {
-      await fs.writeFile(tempFilePath, JSON.stringify(updatedTemplate, null, 2), "utf-8");
-      await fs.rename(tempFilePath, filePath);
-    } catch (error) {
-      try {
-        await fs.unlink(tempFilePath);
-      } catch {
-        // Ignore cleanup errors
-      }
-      throw error;
-    }
+    await writeJsonFile(filePath, updatedTemplate);
   }
 }
 
@@ -853,18 +832,7 @@ export async function createLocationConnection(
   };
 
   const filePath = getConnectionFilePath(campaignId, connection.id);
-  const tempFilePath = `${filePath}.tmp`;
-  try {
-    await fs.writeFile(tempFilePath, JSON.stringify(connection, null, 2), "utf-8");
-    await fs.rename(tempFilePath, filePath);
-  } catch (error) {
-    try {
-      await fs.unlink(tempFilePath);
-    } catch {
-      // Ignore cleanup errors
-    }
-    throw error;
-  }
+  await writeJsonFile(filePath, connection);
 
   return connection;
 }

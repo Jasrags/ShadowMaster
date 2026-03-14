@@ -1,42 +1,42 @@
 /**
- * Tests that all storage modules use atomic writes (write-to-temp-then-rename)
- * instead of direct fs.writeFile calls.
+ * Tests that storage modules delegate writes to writeJsonFile (atomic writes)
+ * and that path segments are sanitized to prevent path traversal.
  *
  * Issue: #633 — Non-atomic writes in storage layer
- *
- * These tests verify that logActivity, createNotification, updateNotification,
- * markAllRead, createLocationTemplate, incrementTemplateUsage,
- * createLocationConnection, and saveCampaignAsTemplate all use writeJsonFile
- * (which performs atomic writes) instead of raw fs.writeFile.
  */
 
 import { describe, test, expect, vi, beforeEach } from "vitest";
-import { promises as fs } from "fs";
 
-// Mock fs before importing modules under test
-vi.mock("fs", () => {
-  const actual = vi.importActual("fs");
+// Mock base storage to spy on writeJsonFile and sanitizePathSegment
+vi.mock("@/lib/storage/base", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@/lib/storage/base")>();
   return {
     ...actual,
-    promises: {
-      ...(actual as typeof import("fs")).promises,
-      mkdir: vi.fn().mockResolvedValue(undefined),
-      readFile: vi.fn(),
-      writeFile: vi.fn().mockResolvedValue(undefined),
-      rename: vi.fn().mockResolvedValue(undefined),
-      unlink: vi.fn().mockResolvedValue(undefined),
-      readdir: vi.fn().mockResolvedValue([]),
-      access: vi.fn().mockResolvedValue(undefined),
-      stat: vi.fn().mockResolvedValue({ isDirectory: () => true }),
-    },
+    writeJsonFile: vi.fn().mockResolvedValue(undefined),
+    ensureDirectory: vi.fn().mockResolvedValue(undefined),
   };
+});
+
+// Must use vi.hoisted() so mockPromises is available inside vi.mock (which is hoisted)
+const mockPromises = vi.hoisted(() => ({
+  mkdir: vi.fn().mockResolvedValue(undefined),
+  readFile: vi.fn(),
+  writeFile: vi.fn().mockResolvedValue(undefined),
+  rename: vi.fn().mockResolvedValue(undefined),
+  unlink: vi.fn().mockResolvedValue(undefined),
+  readdir: vi.fn().mockResolvedValue([]),
+  access: vi.fn().mockResolvedValue(undefined),
+  stat: vi.fn().mockResolvedValue({ isDirectory: () => true }),
+}));
+vi.mock("fs", async () => {
+  const actual = await vi.importActual<typeof import("fs")>("fs");
+  return { ...actual, default: { ...actual, promises: mockPromises }, promises: mockPromises };
 });
 
 vi.mock("uuid", () => ({
   v4: () => "test-uuid-1234",
 }));
 
-// Mock validation module used by locations and campaigns
 vi.mock("@/lib/storage/validation", () => ({
   validateLocationData: vi.fn().mockReturnValue({ valid: true, errors: [] }),
   validateLocationTemplateData: vi.fn().mockReturnValue({ valid: true, errors: [] }),
@@ -44,7 +44,6 @@ vi.mock("@/lib/storage/validation", () => ({
   assertValid: vi.fn(),
 }));
 
-// Mock campaign dependencies
 vi.mock("@/lib/storage/characters", () => ({
   getAllCharacters: vi.fn().mockResolvedValue([]),
   updateCharacter: vi.fn(),
@@ -58,254 +57,194 @@ vi.mock("@/lib/rules/campaign-validation", () => ({
   validateCharacterCampaignCompliance: vi.fn(),
 }));
 
-const mockedFs = vi.mocked(fs);
+import { writeJsonFile, sanitizePathSegment } from "@/lib/storage/base";
 
-/**
- * Helper: assert that a write operation used the atomic pattern
- * (writeFile to .tmp path, then rename to final path).
- */
-function assertAtomicWrite(finalPath: string): void {
-  const tmpPath = `${finalPath}.tmp`;
+const mockedWriteJsonFile = vi.mocked(writeJsonFile);
 
-  // Find the writeFile call that wrote to the .tmp path
-  const writeCall = mockedFs.writeFile.mock.calls.find(
-    (call) => typeof call[0] === "string" && (call[0] as string).endsWith(".tmp")
-  );
-  expect(writeCall, `Expected writeFile to a .tmp file for atomic write to ${finalPath}`).toBeDefined();
-  expect(writeCall![0]).toBe(tmpPath);
-
-  // Find the rename call from .tmp to final
-  const renameCall = mockedFs.rename.mock.calls.find(
-    (call) => call[0] === tmpPath && call[1] === finalPath
-  );
-  expect(renameCall, `Expected rename from ${tmpPath} to ${finalPath}`).toBeDefined();
-
-  // Ensure no direct writeFile to the final path
-  const directWrite = mockedFs.writeFile.mock.calls.find(
-    (call) => call[0] === finalPath
-  );
-  expect(directWrite, `Found non-atomic direct write to ${finalPath}`).toBeUndefined();
-}
-
-describe("Atomic writes in storage modules", () => {
+describe("Atomic writes via writeJsonFile delegation", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    // Default mock: readFile returns ENOENT (file not found)
-    mockedFs.readFile.mockRejectedValue(
-      Object.assign(new Error("ENOENT"), { code: "ENOENT" })
+    mockPromises.readFile.mockRejectedValue(Object.assign(new Error("ENOENT"), { code: "ENOENT" }));
+    mockPromises.mkdir.mockResolvedValue(undefined);
+  });
+
+  test("activity.logActivity delegates to writeJsonFile", async () => {
+    const { logActivity } = await import("@/lib/storage/activity");
+
+    await logActivity({
+      campaignId: "campaign-1",
+      type: "player_joined",
+      actorId: "user-1",
+      description: "Test activity",
+    });
+
+    expect(mockedWriteJsonFile).toHaveBeenCalledTimes(1);
+    expect(mockedWriteJsonFile.mock.calls[0][0]).toMatch(/campaign-1\.json$/);
+  });
+
+  test("notifications.createNotification delegates to writeJsonFile", async () => {
+    const { createNotification } = await import("@/lib/storage/notifications");
+
+    await createNotification({
+      userId: "user-1",
+      campaignId: "campaign-1",
+      type: "campaign_invite",
+      title: "Test",
+      message: "Test notification",
+    });
+
+    expect(mockedWriteJsonFile).toHaveBeenCalledTimes(1);
+    expect(mockedWriteJsonFile.mock.calls[0][0]).toMatch(/user-1\.json$/);
+  });
+
+  test("notifications.updateNotification delegates to writeJsonFile", async () => {
+    const { updateNotification } = await import("@/lib/storage/notifications");
+
+    mockPromises.readFile.mockResolvedValue(
+      JSON.stringify([
+        {
+          id: "notif-1",
+          userId: "user-1",
+          campaignId: "campaign-1",
+          type: "campaign_invite",
+          title: "Test",
+          message: "msg",
+          read: false,
+          dismissed: false,
+          createdAt: "2024-01-01",
+        },
+      ]) as never
     );
-    mockedFs.mkdir.mockResolvedValue(undefined);
-    mockedFs.writeFile.mockResolvedValue(undefined);
-    mockedFs.rename.mockResolvedValue(undefined);
+
+    await updateNotification("user-1", "notif-1", { read: true });
+
+    expect(mockedWriteJsonFile).toHaveBeenCalledTimes(1);
   });
 
-  describe("activity.ts — logActivity", () => {
-    test("uses atomic write pattern", async () => {
-      const { logActivity } = await import("@/lib/storage/activity");
+  test("notifications.markAllRead delegates to writeJsonFile", async () => {
+    const { markAllRead } = await import("@/lib/storage/notifications");
 
-      await logActivity({
-        campaignId: "campaign-1",
-        type: "character_joined",
-        userId: "user-1",
-        details: "Test activity",
-      });
+    mockPromises.readFile.mockResolvedValue(
+      JSON.stringify([
+        {
+          id: "notif-1",
+          userId: "user-1",
+          campaignId: "campaign-1",
+          type: "campaign_invite",
+          title: "Test",
+          message: "msg",
+          read: false,
+          dismissed: false,
+          createdAt: "2024-01-01",
+        },
+      ]) as never
+    );
 
-      // Should have written to a .tmp file and renamed
-      const writeCalls = mockedFs.writeFile.mock.calls;
-      expect(writeCalls.length).toBeGreaterThan(0);
+    await markAllRead("user-1");
 
-      const tmpWrite = writeCalls.find(
-        (call) => typeof call[0] === "string" && (call[0] as string).endsWith(".tmp")
-      );
-      expect(tmpWrite, "logActivity should write to .tmp file for atomic write").toBeDefined();
-      expect(mockedFs.rename).toHaveBeenCalled();
+    expect(mockedWriteJsonFile).toHaveBeenCalledTimes(1);
+  });
+
+  test("locations.createLocationTemplate delegates to writeJsonFile", async () => {
+    const { createLocationTemplate } = await import("@/lib/storage/locations");
+
+    await createLocationTemplate("user-1", {
+      name: "Test Template",
+      type: "physical",
+      templateData: {
+        name: "Test",
+        type: "physical",
+        visibility: "public",
+      },
+      isPublic: false,
     });
+
+    expect(mockedWriteJsonFile).toHaveBeenCalledTimes(1);
   });
 
-  describe("notifications.ts — createNotification", () => {
-    test("uses atomic write pattern", async () => {
-      const { createNotification } = await import("@/lib/storage/notifications");
+  test("locations.incrementTemplateUsage delegates to writeJsonFile", async () => {
+    const { incrementTemplateUsage } = await import("@/lib/storage/locations");
 
-      await createNotification({
-        userId: "user-1",
-        campaignId: "campaign-1",
-        type: "invite",
-        title: "Test",
-        message: "Test notification",
-      });
-
-      const writeCalls = mockedFs.writeFile.mock.calls;
-      const tmpWrite = writeCalls.find(
-        (call) => typeof call[0] === "string" && (call[0] as string).endsWith(".tmp")
-      );
-      expect(tmpWrite, "createNotification should write to .tmp file for atomic write").toBeDefined();
-      expect(mockedFs.rename).toHaveBeenCalled();
-    });
-  });
-
-  describe("notifications.ts — updateNotification", () => {
-    test("uses atomic write pattern", async () => {
-      const { updateNotification } = await import("@/lib/storage/notifications");
-
-      // Mock readFile to return existing notifications
-      mockedFs.readFile.mockResolvedValue(
-        JSON.stringify([
-          {
-            id: "notif-1",
-            userId: "user-1",
-            campaignId: "campaign-1",
-            type: "invite",
-            title: "Test",
-            message: "msg",
-            read: false,
-            dismissed: false,
-            createdAt: "2024-01-01",
-          },
-        ]) as never
-      );
-
-      await updateNotification("user-1", "notif-1", { read: true });
-
-      const writeCalls = mockedFs.writeFile.mock.calls;
-      const tmpWrite = writeCalls.find(
-        (call) => typeof call[0] === "string" && (call[0] as string).endsWith(".tmp")
-      );
-      expect(tmpWrite, "updateNotification should write to .tmp file for atomic write").toBeDefined();
-      expect(mockedFs.rename).toHaveBeenCalled();
-    });
-  });
-
-  describe("notifications.ts — markAllRead", () => {
-    test("uses atomic write pattern", async () => {
-      const { markAllRead } = await import("@/lib/storage/notifications");
-
-      mockedFs.readFile.mockResolvedValue(
-        JSON.stringify([
-          {
-            id: "notif-1",
-            userId: "user-1",
-            campaignId: "campaign-1",
-            type: "invite",
-            title: "Test",
-            message: "msg",
-            read: false,
-            dismissed: false,
-            createdAt: "2024-01-01",
-          },
-        ]) as never
-      );
-
-      await markAllRead("user-1");
-
-      const writeCalls = mockedFs.writeFile.mock.calls;
-      const tmpWrite = writeCalls.find(
-        (call) => typeof call[0] === "string" && (call[0] as string).endsWith(".tmp")
-      );
-      expect(tmpWrite, "markAllRead should write to .tmp file for atomic write").toBeDefined();
-      expect(mockedFs.rename).toHaveBeenCalled();
-    });
-  });
-
-  describe("locations.ts — createLocationTemplate", () => {
-    test("uses atomic write pattern", async () => {
-      const { createLocationTemplate } = await import("@/lib/storage/locations");
-
-      await createLocationTemplate("user-1", {
-        name: "Test Template",
-        type: "building",
+    mockPromises.readFile.mockResolvedValue(
+      JSON.stringify({
+        id: "template-1",
+        name: "Test",
+        type: "physical",
         templateData: {},
+        createdBy: "user-1",
         isPublic: false,
-      });
+        usageCount: 0,
+        createdAt: "2024-01-01",
+        updatedAt: "2024-01-01",
+      }) as never
+    );
 
-      const writeCalls = mockedFs.writeFile.mock.calls;
-      const tmpWrite = writeCalls.find(
-        (call) => typeof call[0] === "string" && (call[0] as string).endsWith(".tmp")
-      );
-      expect(tmpWrite, "createLocationTemplate should write to .tmp file for atomic write").toBeDefined();
-      expect(mockedFs.rename).toHaveBeenCalled();
-    });
+    await incrementTemplateUsage("template-1");
+
+    expect(mockedWriteJsonFile).toHaveBeenCalledTimes(1);
   });
 
-  describe("locations.ts — incrementTemplateUsage", () => {
-    test("uses atomic write pattern", async () => {
-      const { incrementTemplateUsage } = await import("@/lib/storage/locations");
+  test("locations.createLocationConnection delegates to writeJsonFile", async () => {
+    const { createLocationConnection } = await import("@/lib/storage/locations");
 
-      mockedFs.readFile.mockResolvedValue(
-        JSON.stringify({
-          id: "template-1",
-          name: "Test",
-          type: "building",
-          templateData: {},
-          createdBy: "user-1",
-          isPublic: false,
-          usageCount: 0,
-          createdAt: "2024-01-01",
-          updatedAt: "2024-01-01",
-        }) as never
-      );
-
-      await incrementTemplateUsage("template-1");
-
-      const writeCalls = mockedFs.writeFile.mock.calls;
-      const tmpWrite = writeCalls.find(
-        (call) => typeof call[0] === "string" && (call[0] as string).endsWith(".tmp")
-      );
-      expect(tmpWrite, "incrementTemplateUsage should write to .tmp file for atomic write").toBeDefined();
-      expect(mockedFs.rename).toHaveBeenCalled();
+    await createLocationConnection("campaign-1", {
+      fromLocationId: "loc-1",
+      toLocationId: "loc-2",
+      connectionType: "physical",
+      bidirectional: true,
     });
+
+    expect(mockedWriteJsonFile).toHaveBeenCalledTimes(1);
   });
 
-  describe("locations.ts — createLocationConnection", () => {
-    test("uses atomic write pattern", async () => {
-      const { createLocationConnection } = await import("@/lib/storage/locations");
+  test("campaigns.saveCampaignAsTemplate delegates to writeJsonFile", async () => {
+    const { saveCampaignAsTemplate } = await import("@/lib/storage/campaigns");
 
-      await createLocationConnection("campaign-1", {
-        fromLocationId: "loc-1",
-        toLocationId: "loc-2",
-        type: "road",
-      });
+    mockPromises.readFile.mockResolvedValue(
+      JSON.stringify({
+        id: "campaign-1",
+        gmId: "user-1",
+        title: "Test Campaign",
+        description: "A test",
+        status: "active",
+        editionId: "sr5",
+        editionCode: "sr5",
+        enabledBookIds: ["core-rulebook"],
+        enabledCreationMethodIds: ["priority"],
+        gameplayLevel: "street",
+        visibility: "private",
+        playerIds: [],
+        createdAt: "2024-01-01",
+        updatedAt: "2024-01-01",
+      }) as never
+    );
 
-      const writeCalls = mockedFs.writeFile.mock.calls;
-      const tmpWrite = writeCalls.find(
-        (call) => typeof call[0] === "string" && (call[0] as string).endsWith(".tmp")
-      );
-      expect(tmpWrite, "createLocationConnection should write to .tmp file for atomic write").toBeDefined();
-      expect(mockedFs.rename).toHaveBeenCalled();
-    });
+    await saveCampaignAsTemplate("campaign-1", "My Template", "user-1");
+
+    expect(mockedWriteJsonFile).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe("sanitizePathSegment", () => {
+  test("strips path separators", () => {
+    expect(sanitizePathSegment("../../../etc/passwd")).toBe("etcpasswd");
   });
 
-  describe("campaigns.ts — saveCampaignAsTemplate", () => {
-    test("uses atomic write pattern", async () => {
-      const { saveCampaignAsTemplate } = await import("@/lib/storage/campaigns");
+  test("strips backslashes", () => {
+    expect(sanitizePathSegment("..\\..\\windows\\system32")).toBe("windowssystem32");
+  });
 
-      // Mock readFile to return an existing campaign
-      mockedFs.readFile.mockResolvedValue(
-        JSON.stringify({
-          id: "campaign-1",
-          gmId: "user-1",
-          title: "Test Campaign",
-          description: "A test",
-          status: "active",
-          editionId: "sr5",
-          editionCode: "sr5",
-          enabledBookIds: ["core-rulebook"],
-          enabledCreationMethodIds: ["priority"],
-          gameplayLevel: "street",
-          visibility: "private",
-          playerIds: [],
-          createdAt: "2024-01-01",
-          updatedAt: "2024-01-01",
-        }) as never
-      );
+  test("strips null bytes", () => {
+    expect(sanitizePathSegment("file\0name")).toBe("filename");
+  });
 
-      await saveCampaignAsTemplate("campaign-1", "My Template", "user-1");
+  test("passes through valid UUIDs unchanged", () => {
+    expect(sanitizePathSegment("550e8400-e29b-41d4-a716-446655440000")).toBe(
+      "550e8400-e29b-41d4-a716-446655440000"
+    );
+  });
 
-      const writeCalls = mockedFs.writeFile.mock.calls;
-      const tmpWrite = writeCalls.find(
-        (call) => typeof call[0] === "string" && (call[0] as string).endsWith(".tmp")
-      );
-      expect(tmpWrite, "saveCampaignAsTemplate should write to .tmp file for atomic write").toBeDefined();
-      expect(mockedFs.rename).toHaveBeenCalled();
-    });
+  test("throws on empty result", () => {
+    expect(() => sanitizePathSegment("../..")).toThrow("Invalid path segment");
   });
 });

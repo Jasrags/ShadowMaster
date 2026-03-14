@@ -14,6 +14,23 @@ import path from "path";
 export const DATA_DIR = path.join(process.cwd(), "data");
 
 /**
+ * Sanitize a path segment to prevent path traversal attacks.
+ * Strips directory separators and ".." sequences from user-provided IDs.
+ *
+ * @param segment - A user-provided ID used as a filename or directory name
+ * @returns The sanitized segment safe for use in path.join()
+ * @throws Error if the sanitized result is empty
+ */
+export function sanitizePathSegment(segment: string): string {
+  // Remove path separators and null bytes
+  const sanitized = segment.replace(/[/\\:\0]/g, "").replace(/\.\./g, "");
+  if (!sanitized) {
+    throw new Error("Invalid path segment: empty after sanitization");
+  }
+  return sanitized;
+}
+
+/**
  * Check if a file exists
  */
 export async function fileExists(filePath: string): Promise<boolean> {
