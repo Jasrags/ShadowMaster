@@ -8,6 +8,7 @@
  */
 
 import type { ID, ISODateString, Metadata } from "./core";
+import type { EditionCode } from "./edition";
 
 // =============================================================================
 // CONTACT CORE TYPES
@@ -646,7 +647,7 @@ export interface SocialAction {
  */
 export interface FavorCostTable {
   /** Edition code this table applies to */
-  editionCode: string;
+  editionCode: EditionCode;
 
   /** All defined services */
   services: FavorServiceDefinition[];
