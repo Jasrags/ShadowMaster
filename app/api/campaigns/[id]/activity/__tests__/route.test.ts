@@ -110,7 +110,7 @@ describe("GET /api/campaigns/[id]/activity", () => {
     expect(response.status).toBe(200);
     expect(data.success).toBe(true);
     expect(data.activities).toHaveLength(2);
-    expect(data.total).toBe(2);
+    expect(data.pagination.total).toBe(2);
   });
 
   it("should return activities for player", async () => {

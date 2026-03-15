@@ -183,10 +183,12 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({
       success: true,
       characters,
-      total: result.total,
-      hasMore: result.hasMore,
-      limit: result.limit,
-      offset: result.offset,
+      pagination: {
+        total: result.total,
+        limit: result.limit,
+        offset: result.offset,
+        hasMore: result.hasMore,
+      },
       isAdminMode,
       // Include unique owners for filter dropdown (admin mode only)
       ...(isAdminMode && ownerMap

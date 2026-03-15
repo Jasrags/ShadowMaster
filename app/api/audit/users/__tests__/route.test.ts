@@ -112,7 +112,7 @@ describe("GET /api/audit/users", () => {
     expect(response.status).toBe(200);
     expect(data.success).toBe(true);
     expect(data.entries).toHaveLength(3);
-    expect(data.total).toBe(3);
+    expect(data.pagination.total).toBe(3);
   });
 
   it("should filter by action type", async () => {

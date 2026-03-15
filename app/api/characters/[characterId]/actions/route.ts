@@ -92,10 +92,12 @@ export async function GET(
     return NextResponse.json({
       success: true,
       actions,
-      total,
-      limit,
-      offset,
-      hasMore: offset + actions.length < total,
+      pagination: {
+        total,
+        limit,
+        offset,
+        hasMore: offset + actions.length < total,
+      },
       stats,
     });
   } catch (error) {

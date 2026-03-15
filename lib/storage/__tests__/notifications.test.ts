@@ -96,7 +96,7 @@ describe("createNotification", () => {
     await createNotification(createMockNotificationData({ title: "First" }));
     await createNotification(createMockNotificationData({ title: "Second" }));
 
-    const notifications = await getUserNotifications(TEST_USER_ID);
+    const { notifications } = await getUserNotifications(TEST_USER_ID);
 
     expect(notifications[0].title).toBe("Second");
     expect(notifications[1].title).toBe("First");
@@ -125,7 +125,7 @@ describe("createNotification", () => {
     // Add one more
     await createNotification(createMockNotificationData({ title: "New beyond limit" }));
 
-    const notifications = await getUserNotifications(TEST_USER_ID, {
+    const { notifications } = await getUserNotifications(TEST_USER_ID, {
       limit: 150,
     });
 
@@ -139,9 +139,9 @@ describe("createNotification", () => {
 // =============================================================================
 
 describe("getUserNotifications", () => {
-  it("should return empty array for user with no notifications", async () => {
+  it("should return empty result for user with no notifications", async () => {
     const result = await getUserNotifications("non-existent-user");
-    expect(result).toEqual([]);
+    expect(result).toEqual({ notifications: [], total: 0 });
   });
 
   it("should return notifications with default pagination", async () => {
@@ -152,7 +152,8 @@ describe("getUserNotifications", () => {
     const result = await getUserNotifications(TEST_USER_ID);
 
     // Default limit is 50
-    expect(result.length).toBe(50);
+    expect(result.notifications.length).toBe(50);
+    expect(result.total).toBe(60);
   });
 
   it("should filter by campaignId", async () => {
@@ -167,8 +168,8 @@ describe("getUserNotifications", () => {
       campaignId: "campaign-1",
     });
 
-    expect(result).toHaveLength(1);
-    expect(result[0].title).toBe("Campaign 1");
+    expect(result.notifications).toHaveLength(1);
+    expect(result.notifications[0].title).toBe("Campaign 1");
   });
 
   it("should filter unreadOnly", async () => {
@@ -182,8 +183,8 @@ describe("getUserNotifications", () => {
       unreadOnly: true,
     });
 
-    expect(result).toHaveLength(1);
-    expect(result[0].title).toBe("To be read");
+    expect(result.notifications).toHaveLength(1);
+    expect(result.notifications[0].title).toBe("To be read");
   });
 
   it("should respect limit parameter", async () => {
@@ -193,7 +194,8 @@ describe("getUserNotifications", () => {
 
     const result = await getUserNotifications(TEST_USER_ID, { limit: 5 });
 
-    expect(result.length).toBe(5);
+    expect(result.notifications.length).toBe(5);
+    expect(result.total).toBe(20);
   });
 
   it("should respect offset parameter", async () => {
@@ -206,7 +208,8 @@ describe("getUserNotifications", () => {
       limit: 5,
     });
 
-    expect(result.length).toBe(5);
+    expect(result.notifications.length).toBe(5);
+    expect(result.total).toBe(10);
   });
 });
 
@@ -268,7 +271,7 @@ describe("markAllRead", () => {
 
     expect(count).toBe(2);
 
-    const notifications = await getUserNotifications(TEST_USER_ID);
+    const { notifications } = await getUserNotifications(TEST_USER_ID);
     expect(notifications.every((n) => n.read)).toBe(true);
   });
 
@@ -280,7 +283,7 @@ describe("markAllRead", () => {
 
     expect(count).toBe(1);
 
-    const notifications = await getUserNotifications(TEST_USER_ID);
+    const { notifications } = await getUserNotifications(TEST_USER_ID);
     const campaign1 = notifications.find((n) => n.campaignId === "campaign-1");
     const campaign2 = notifications.find((n) => n.campaignId === "campaign-2");
 

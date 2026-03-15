@@ -45,7 +45,12 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     return NextResponse.json({
       success: true,
       activities,
-      total,
+      pagination: {
+        total,
+        limit,
+        offset,
+        hasMore: offset + activities.length < total,
+      },
     });
   } catch (error) {
     console.error("Error fetching campaign activity:", error);

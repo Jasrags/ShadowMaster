@@ -80,7 +80,7 @@ export async function createNotification(
 export async function getUserNotifications(
   userId: string,
   options: { campaignId?: string; unreadOnly?: boolean; limit?: number; offset?: number } = {}
-): Promise<CampaignNotification[]> {
+): Promise<{ notifications: CampaignNotification[]; total: number }> {
   try {
     const filePath = getFilePath(userId);
     const fileContent = await fs.readFile(filePath, "utf-8");
@@ -94,13 +94,14 @@ export async function getUserNotifications(
       notifications = notifications.filter((n) => !n.read);
     }
 
+    const total = notifications.length;
     const offset = options.offset || 0;
     const limit = options.limit || 50;
 
-    return notifications.slice(offset, offset + limit);
+    return { notifications: notifications.slice(offset, offset + limit), total };
   } catch (error) {
     if ((error as NodeJS.ErrnoException).code === "ENOENT") {
-      return [];
+      return { notifications: [], total: 0 };
     }
     throw error;
   }

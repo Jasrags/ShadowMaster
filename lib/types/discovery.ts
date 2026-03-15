@@ -138,9 +138,7 @@ export interface ContentPreviewItem {
  */
 export interface ContentPreviewResponse {
   items: ContentPreviewItem[];
-  total: number;
-  offset: number;
-  limit: number;
+  pagination: import("./core").PaginationMeta;
   category?: string;
   /** Echo back the search term when filtering */
   search?: string;

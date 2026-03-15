@@ -124,7 +124,10 @@ describe("GET /api/notifications", () => {
   it("should return notifications for authenticated user", async () => {
     vi.mocked(sessionModule.getSession).mockResolvedValue("test-user-id");
     vi.mocked(usersModule.getUserById).mockResolvedValue(mockUser);
-    vi.mocked(notificationsModule.getUserNotifications).mockResolvedValue(mockNotifications);
+    vi.mocked(notificationsModule.getUserNotifications).mockResolvedValue({
+      notifications: mockNotifications,
+      total: mockNotifications.length,
+    });
     vi.mocked(notificationsModule.getUnreadCount).mockResolvedValue(1);
 
     const request = createMockRequest();
@@ -140,7 +143,10 @@ describe("GET /api/notifications", () => {
   it("should filter by campaignId", async () => {
     vi.mocked(sessionModule.getSession).mockResolvedValue("test-user-id");
     vi.mocked(usersModule.getUserById).mockResolvedValue(mockUser);
-    vi.mocked(notificationsModule.getUserNotifications).mockResolvedValue(mockNotifications);
+    vi.mocked(notificationsModule.getUserNotifications).mockResolvedValue({
+      notifications: mockNotifications,
+      total: mockNotifications.length,
+    });
     vi.mocked(notificationsModule.getUnreadCount).mockResolvedValue(1);
 
     const request = createMockRequest({ campaignId: "campaign-1" });
@@ -155,7 +161,10 @@ describe("GET /api/notifications", () => {
   it("should filter by unreadOnly=true", async () => {
     vi.mocked(sessionModule.getSession).mockResolvedValue("test-user-id");
     vi.mocked(usersModule.getUserById).mockResolvedValue(mockUser);
-    vi.mocked(notificationsModule.getUserNotifications).mockResolvedValue([mockNotifications[0]]);
+    vi.mocked(notificationsModule.getUserNotifications).mockResolvedValue({
+      notifications: [mockNotifications[0]],
+      total: 1,
+    });
     vi.mocked(notificationsModule.getUnreadCount).mockResolvedValue(1);
 
     const request = createMockRequest({ unreadOnly: "true" });
@@ -170,7 +179,10 @@ describe("GET /api/notifications", () => {
   it("should apply limit and offset pagination", async () => {
     vi.mocked(sessionModule.getSession).mockResolvedValue("test-user-id");
     vi.mocked(usersModule.getUserById).mockResolvedValue(mockUser);
-    vi.mocked(notificationsModule.getUserNotifications).mockResolvedValue([mockNotifications[0]]);
+    vi.mocked(notificationsModule.getUserNotifications).mockResolvedValue({
+      notifications: [mockNotifications[0]],
+      total: 1,
+    });
     vi.mocked(notificationsModule.getUnreadCount).mockResolvedValue(1);
 
     const request = createMockRequest({ limit: "10", offset: "5" });
@@ -185,7 +197,10 @@ describe("GET /api/notifications", () => {
   it("should return unreadCount in response", async () => {
     vi.mocked(sessionModule.getSession).mockResolvedValue("test-user-id");
     vi.mocked(usersModule.getUserById).mockResolvedValue(mockUser);
-    vi.mocked(notificationsModule.getUserNotifications).mockResolvedValue([]);
+    vi.mocked(notificationsModule.getUserNotifications).mockResolvedValue({
+      notifications: [],
+      total: 0,
+    });
     vi.mocked(notificationsModule.getUnreadCount).mockResolvedValue(5);
 
     const request = createMockRequest();

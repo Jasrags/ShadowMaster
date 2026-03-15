@@ -288,10 +288,10 @@ describe("GET /api/characters/[characterId]/actions", () => {
       expect(response.status).toBe(200);
       expect(data.success).toBe(true);
       expect(data.actions).toHaveLength(2);
-      expect(data.total).toBe(2);
-      expect(data.limit).toBe(20);
-      expect(data.offset).toBe(0);
-      expect(data.hasMore).toBe(false);
+      expect(data.pagination.total).toBe(2);
+      expect(data.pagination.limit).toBe(20);
+      expect(data.pagination.offset).toBe(0);
+      expect(data.pagination.hasMore).toBe(false);
       expect(queryActionHistory).toHaveBeenCalledWith(TEST_USER_ID, TEST_CHARACTER_ID, {
         limit: 20,
         offset: 0,
@@ -321,9 +321,9 @@ describe("GET /api/characters/[characterId]/actions", () => {
 
       expect(response.status).toBe(200);
       expect(data.success).toBe(true);
-      expect(data.limit).toBe(10);
-      expect(data.offset).toBe(20);
-      expect(data.hasMore).toBe(true);
+      expect(data.pagination.limit).toBe(10);
+      expect(data.pagination.offset).toBe(20);
+      expect(data.pagination.hasMore).toBe(true);
       expect(queryActionHistory).toHaveBeenCalledWith(TEST_USER_ID, TEST_CHARACTER_ID, {
         limit: 10,
         offset: 20,

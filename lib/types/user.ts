@@ -119,12 +119,7 @@ export interface UpdateUserResponse {
 export interface UsersListResponse {
   success: boolean;
   users: PublicUser[];
-  pagination?: {
-    page: number;
-    limit: number;
-    total: number;
-    totalPages: number;
-  };
+  pagination?: import("./core").PaginationMeta;
   error?: string;
 }
 
@@ -148,6 +143,6 @@ export interface SuspendUserResponse {
 export interface UserAuditLogResponse {
   success: boolean;
   entries?: import("./audit").UserAuditEntry[];
-  total?: number;
+  pagination?: import("./core").PaginationMeta;
   error?: string;
 }

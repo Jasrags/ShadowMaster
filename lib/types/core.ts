@@ -30,3 +30,18 @@ export type MagicalPath =
  * - undefined: Legal, no suffix
  */
 export type ItemLegality = "restricted" | "forbidden";
+
+/**
+ * Standardized pagination metadata for all list API responses.
+ * All paginated endpoints MUST return this shape under a `pagination` key.
+ */
+export interface PaginationMeta {
+  /** Total number of items matching the query */
+  total: number;
+  /** Maximum items per page */
+  limit: number;
+  /** Number of items skipped from the start */
+  offset: number;
+  /** Whether more items exist beyond the current page */
+  hasMore: boolean;
+}

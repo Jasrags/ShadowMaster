@@ -97,19 +97,19 @@ export async function GET(request: NextRequest) {
 
     // Apply pagination
     const total = filteredUsers.length;
-    const totalPages = Math.ceil(total / limit);
     const startIndex = (page - 1) * limit;
     const endIndex = startIndex + limit;
     const paginatedUsers = filteredUsers.slice(startIndex, endIndex);
 
+    const offset = startIndex;
     return NextResponse.json({
       success: true,
       users: paginatedUsers,
       pagination: {
-        page,
-        limit,
         total,
-        totalPages,
+        limit,
+        offset,
+        hasMore: offset + paginatedUsers.length < total,
       },
     });
   } catch (error) {

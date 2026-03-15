@@ -36,7 +36,12 @@ export async function GET(
     return NextResponse.json({
       success: true,
       entries,
-      total,
+      pagination: {
+        total,
+        limit,
+        offset,
+        hasMore: offset + entries.length < total,
+      },
     });
   } catch (error) {
     const authResponse = handleAdminAuthError(error);

@@ -35,7 +35,7 @@ export default function UserAuditModal({ user, isOpen, onClose }: UserAuditModal
 
       if (data.success) {
         setEntries(data.entries || []);
-        setTotal(data.total || 0);
+        setTotal(data.pagination?.total || 0);
       } else {
         setError(data.error || "Failed to fetch audit log");
       }
