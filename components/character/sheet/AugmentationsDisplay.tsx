@@ -964,7 +964,7 @@ export function AugmentationsDisplay({
           }}
           onAdd={handleAddEnhancement}
           limb={selectedCyberlimb}
-          availableNuyen={Infinity}
+          availableNuyen={character.nuyen}
         />
       )}
 
@@ -978,7 +978,7 @@ export function AugmentationsDisplay({
           }}
           onAdd={handleAddAccessory}
           limb={selectedCyberlimb}
-          availableNuyen={Infinity}
+          availableNuyen={character.nuyen}
         />
       )}
 
@@ -990,7 +990,7 @@ export function AugmentationsDisplay({
         augmentationType="cyberware"
         mode="management"
         remainingEssence={remainingEssence}
-        remainingNuyen={Infinity}
+        remainingNuyen={character.nuyen}
         isAwakened={isAwakened}
         isTechnomancer={isTechnomancer}
         currentMagic={character.specialAttributes?.magic ?? 0}
