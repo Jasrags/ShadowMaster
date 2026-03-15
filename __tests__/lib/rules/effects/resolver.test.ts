@@ -485,6 +485,40 @@ describe("Stacking", () => {
       expect(result.totalInitiativeModifier).toBe(1);
       expect(result.totalThresholdModifier).toBe(-1);
     });
+
+    it("should populate armorModifiers for armor-modifier effects", () => {
+      const effects = [
+        makeResolved({
+          effect: makeEffect({ id: "e1", type: "armor-modifier" }),
+          resolvedValue: 2,
+        }),
+        makeResolved({
+          effect: makeEffect({ id: "e2", type: "armor-modifier" }),
+          resolvedValue: 3,
+        }),
+      ];
+      const result = applyStackingRules(effects);
+      expect(result.totalArmorModifier).toBe(5);
+      expect(result.armorModifiers).toHaveLength(2);
+      expect(result.excludedByStacking).toHaveLength(0);
+    });
+
+    it("should populate woundModifiers for wound-modifier effects", () => {
+      const effects = [
+        makeResolved({
+          effect: makeEffect({ id: "e1", type: "wound-modifier" }),
+          resolvedValue: -1,
+        }),
+        makeResolved({
+          effect: makeEffect({ id: "e2", type: "wound-modifier" }),
+          resolvedValue: -2,
+        }),
+      ];
+      const result = applyStackingRules(effects);
+      expect(result.totalWoundModifier).toBe(-3);
+      expect(result.woundModifiers).toHaveLength(2);
+      expect(result.excludedByStacking).toHaveLength(0);
+    });
   });
 
   describe("NaN protection", () => {

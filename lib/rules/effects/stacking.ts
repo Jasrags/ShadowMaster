@@ -52,11 +52,15 @@ function emptyResult(): EffectResolutionResult {
     thresholdModifiers: [],
     accuracyModifiers: [],
     initiativeModifiers: [],
+    armorModifiers: [],
+    woundModifiers: [],
     totalDicePoolModifier: 0,
     totalLimitModifier: 0,
     totalThresholdModifier: 0,
     totalAccuracyModifier: 0,
     totalInitiativeModifier: 0,
+    totalArmorModifier: 0,
+    totalWoundModifier: 0,
     excludedByStacking: [],
   };
 }
@@ -195,7 +199,14 @@ export function applyStackingRules(effects: UnifiedResolvedEffect[]): EffectReso
         result.initiativeModifiers.push(...included);
         result.totalInitiativeModifier = total;
         break;
-      // Other types are resolved but not surfaced in typed arrays
+      case "armor-modifier":
+        result.armorModifiers.push(...included);
+        result.totalArmorModifier = total;
+        break;
+      case "wound-modifier":
+        result.woundModifiers.push(...included);
+        result.totalWoundModifier = total;
+        break;
     }
   }
 

@@ -390,6 +390,12 @@ export interface EffectResolutionResult {
   /** Initiative modifier effects */
   initiativeModifiers: UnifiedResolvedEffect[];
 
+  /** Armor modifier effects */
+  armorModifiers: UnifiedResolvedEffect[];
+
+  /** Wound modifier effects */
+  woundModifiers: UnifiedResolvedEffect[];
+
   /** Total dice pool modifier (after stacking rules) */
   totalDicePoolModifier: number;
 
@@ -404,6 +410,12 @@ export interface EffectResolutionResult {
 
   /** Total initiative modifier (after stacking rules) */
   totalInitiativeModifier: number;
+
+  /** Total armor modifier (after stacking rules) */
+  totalArmorModifier: number;
+
+  /** Total wound modifier (after stacking rules) */
+  totalWoundModifier: number;
 
   /** Effects excluded by stacking rules (for UI transparency) */
   excludedByStacking: UnifiedResolvedEffect[];
