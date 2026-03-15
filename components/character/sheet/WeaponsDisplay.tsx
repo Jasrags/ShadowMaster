@@ -9,6 +9,7 @@ import { useGear } from "@/lib/rules";
 import { useCombatReadiness } from "@/lib/combat";
 import { isGlobalWirelessEnabled } from "@/lib/rules/wireless";
 import { DisplayCard } from "./DisplayCard";
+import { getWeaponSkill } from "@/lib/rules/action-resolution/combat/weapon-handler";
 import { isMeleeWeapon } from "./constants";
 import { WirelessIndicator } from "./WirelessIndicator";
 import { WeaponAmmoDisplay } from "./WeaponAmmoDisplay";
@@ -46,23 +47,14 @@ function calculateWeaponPool(
     poolLabel = `AGI + ${weapon.name}`;
   }
 
-  const commonCombatSkills = [
-    "pistols",
-    "automatics",
-    "longarms",
-    "unarmed-combat",
-    "blades",
-    "clubs",
-    "archery",
-    "throwing-weapons",
-  ];
-  const foundSkill = commonCombatSkills.find((s) =>
-    weapon.category.toLowerCase().includes(s.replace(/-/g, " "))
-  );
+  // Use getWeaponSkill for correct subcategory-to-skill mapping
+  // (covers heavy-weapons, exotic-ranged-weapon, and all other categories)
+  const skillId = getWeaponSkill(weapon).replace(/_/g, "-");
+  const skillRating = skills[skillId] ?? 0;
 
-  if (foundSkill && skills[foundSkill]) {
-    basePool += skills[foundSkill];
-    poolLabel = `${isMelee ? "STR" : "AGI"} + ${foundSkill.replace(/-/g, " ")}`;
+  if (skillRating > 0) {
+    basePool += skillRating;
+    poolLabel = `${isMelee ? "STR" : "AGI"} + ${skillId.replace(/-/g, " ")}`;
   }
 
   return { pool: basePool, label: poolLabel };
