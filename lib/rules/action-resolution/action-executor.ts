@@ -533,12 +533,8 @@ export async function applyStateChanges(changes: StateChange[]): Promise<void> {
 
   // Apply changes to each entity
   // This is a simplified implementation - would need actual storage updates
-  for (const [key, entityChanges] of byEntity) {
-    const [entityType, entityId] = key.split(":");
-
-    // Would apply changes based on entity type
-    // For now, just log that changes would be applied
-    console.log(`Would apply ${entityChanges.length} changes to ${entityType} ${entityId}`);
+  for (const [_key, _entityChanges] of byEntity) {
+    // TODO: implement actual state mutation (see migration-engine)
   }
 }
 
