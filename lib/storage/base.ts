@@ -124,17 +124,22 @@ export async function listJsonFiles(dirPath: string): Promise<string[]> {
 }
 
 /**
- * Read all JSON files in a directory and return their contents
+ * Read all JSON files in a directory and return their contents.
+ * Corrupt or unreadable files are skipped with a warning log.
  */
 export async function readAllJsonFiles<T>(dirPath: string): Promise<T[]> {
   const fileIds = await listJsonFiles(dirPath);
   const items: T[] = [];
 
   for (const id of fileIds) {
-    const filePath = path.join(dirPath, `${id}.json`);
-    const item = await readJsonFile<T>(filePath);
-    if (item) {
-      items.push(item);
+    try {
+      const filePath = path.join(dirPath, `${id}.json`);
+      const item = await readJsonFile<T>(filePath);
+      if (item) {
+        items.push(item);
+      }
+    } catch (error) {
+      console.error(`Skipping corrupt file ${id}.json in ${dirPath}:`, error);
     }
   }
 
@@ -204,6 +209,7 @@ export async function ensureDataDirectories(): Promise<void> {
     "violations",
     "templates",
     "drift-reports",
+    "matrix/overwatch",
   ];
   await Promise.all(dirs.map((dir) => ensureDirectory(path.join(DATA_DIR, dir))));
 }
