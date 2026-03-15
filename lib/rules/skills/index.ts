@@ -36,3 +36,5 @@ export {
   calculateFreeSkillGroupPointsUsed,
   getSkillsWithFreeAllocation,
 } from "./free-skills";
+
+export { buildSkillCategoriesMap } from "./utils";

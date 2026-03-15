@@ -17,6 +17,7 @@
 import { useMemo, useState } from "react";
 import { useSkills } from "@/lib/rules";
 import { getGroupRating, isGroupBroken } from "@/lib/rules/skills/group-utils";
+import { buildSkillCategoriesMap } from "@/lib/rules/skills/utils";
 import type { CreationState } from "@/lib/types";
 import type { SkillGroupValue } from "@/lib/types/creation-selections";
 import { useCreationBudgets } from "@/lib/contexts";
@@ -102,13 +103,7 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
   }, [state.selections.positiveQualities]);
 
   // Build skill categories map for designation hooks
-  const skillCategories = useMemo(() => {
-    const categories: Record<string, string | undefined> = {};
-    for (const skill of activeSkills) {
-      categories[skill.id] = skill.category;
-    }
-    return categories;
-  }, [activeSkills]);
+  const skillCategories = useMemo(() => buildSkillCategoriesMap(activeSkills), [activeSkills]);
 
   // Map of skill ID to name for display
   const skillNameMap = useMemo(() => {

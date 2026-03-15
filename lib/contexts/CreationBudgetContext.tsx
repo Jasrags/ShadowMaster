@@ -34,6 +34,7 @@ import {
 } from "../rules/skills/free-skills";
 import { FREE_SKILL_TYPE_LABELS } from "@/components/creation/magic-path/constants";
 import { calculateBrokenGroupSkillPointOffset } from "../rules/skills/group-utils";
+import { buildSkillCategoriesMap } from "../rules/skills/utils";
 import {
   getQualityBudgetModifiers,
   getDefaultModifiers,
@@ -59,22 +60,6 @@ import {
   POINT_BUY_KARMA_BUDGET,
   POINT_BUY_NUYEN_PER_KARMA,
 } from "../rules/point-buy-validation";
-
-// =============================================================================
-// SKILL CATEGORY HELPERS
-// =============================================================================
-
-/**
- * Build a map of skill ID to category from skill data.
- * Used for determining which skills qualify for free skill allocations.
- */
-function buildSkillCategoriesMap(activeSkills: SkillData[]): Record<string, string | undefined> {
-  const categories: Record<string, string | undefined> = {};
-  for (const skill of activeSkills) {
-    categories[skill.id] = skill.category;
-  }
-  return categories;
-}
 
 // =============================================================================
 // TYPES
