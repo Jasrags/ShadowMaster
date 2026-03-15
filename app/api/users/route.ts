@@ -13,8 +13,34 @@ export async function GET(request: NextRequest) {
     const search = searchParams.get("search") || "";
     const page = Math.max(1, parseInt(searchParams.get("page") || "1", 10) || 1);
     const limit = Math.max(1, Math.min(100, parseInt(searchParams.get("limit") || "20", 10) || 20));
-    const sortBy = searchParams.get("sortBy") || "createdAt";
-    const sortOrder = searchParams.get("sortOrder") || "asc";
+    const ALLOWED_SORT_FIELDS = ["email", "username", "role", "createdAt"] as const;
+    const ALLOWED_SORT_ORDERS = ["asc", "desc"] as const;
+
+    const sortByParam = searchParams.get("sortBy") || "createdAt";
+    const sortOrderParam = searchParams.get("sortOrder") || "asc";
+
+    if (!ALLOWED_SORT_FIELDS.includes(sortByParam as (typeof ALLOWED_SORT_FIELDS)[number])) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: `Invalid sortBy value. Allowed: ${ALLOWED_SORT_FIELDS.join(", ")}`,
+        },
+        { status: 400 }
+      );
+    }
+
+    if (!ALLOWED_SORT_ORDERS.includes(sortOrderParam as (typeof ALLOWED_SORT_ORDERS)[number])) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: `Invalid sortOrder value. Allowed: ${ALLOWED_SORT_ORDERS.join(", ")}`,
+        },
+        { status: 400 }
+      );
+    }
+
+    const sortBy = sortByParam;
+    const sortOrder = sortOrderParam;
 
     // Get all users
     const allUsers = await getAllUsers();
