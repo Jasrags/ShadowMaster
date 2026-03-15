@@ -47,8 +47,17 @@ function formatCategoryLabel(category: string, catalog: GearCatalogData | null):
     .join(" ");
 }
 
-/** Search all GearItemData sub-arrays in the catalog to find an item by name. */
-function findCatalogItem(catalog: GearCatalogData | null, name: string): GearItemData | undefined {
+/** Search all GearItemData sub-arrays in the catalog to find an item by catalogId, falling back to name for legacy data. */
+function findCatalogItemByIdOrName(
+  catalog: GearCatalogData | null,
+  catalogId: string | undefined,
+  name: string
+): GearItemData | undefined {
+  if (catalogId) {
+    const byId = findGearItemInCatalog(catalog, (item) => item.id === catalogId);
+    if (byId) return byId;
+  }
+  // Fallback to name matching for legacy characters without catalogId
   return findGearItemInCatalog(catalog, (item) => item.name === name);
 }
 
@@ -546,7 +555,7 @@ export function GearDisplay({ character, gear, onCharacterUpdate, editable }: Ge
             </div>
             <div className="overflow-hidden rounded-lg border border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-950">
               {grouped[cat].map(({ item, originalIndex }, idx) => {
-                const catalogItem = findCatalogItem(catalog, item.name);
+                const catalogItem = findCatalogItemByIdOrName(catalog, item.catalogId, item.name);
                 return (
                   <GearRow
                     key={`${item.name}-${idx}`}
