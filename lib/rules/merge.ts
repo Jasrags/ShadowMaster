@@ -381,22 +381,7 @@ export function produceMergedRuleset(loadedRuleset: LoadedRuleset): MergeResult 
  * Infer the merge strategy from a BookModuleEntry
  */
 function inferMergeStrategy(entry: BookModuleEntry): MergeStrategy {
-  // Explicit strategy takes precedence
-  if (entry.mergeStrategy) {
-    return entry.mergeStrategy;
-  }
-
-  // Shorthand flags
-  if (entry.replace === true) {
-    return "replace";
-  }
-
-  if (entry.append === true) {
-    return "append";
-  }
-
-  // Default to merge
-  return "merge";
+  return entry.mergeStrategy ?? "merge";
 }
 
 // =============================================================================
