@@ -20,6 +20,21 @@ vi.mock("@/lib/auth/session");
 vi.mock("@/lib/storage/users");
 vi.mock("@/lib/storage/characters");
 
+// Mock file-based storage with an in-memory Map
+const sessionStore = new Map<string, unknown>();
+vi.mock("@/lib/storage/base", () => ({
+  readJsonFile: vi.fn(async (filePath: string) => {
+    return sessionStore.get(filePath) ?? null;
+  }),
+  writeJsonFile: vi.fn(async (filePath: string, data: unknown) => {
+    sessionStore.set(filePath, data);
+  }),
+  deleteFile: vi.fn(async (filePath: string) => {
+    return sessionStore.delete(filePath);
+  }),
+  sanitizePathSegment: (s: string) => s,
+}));
+
 // Helper to create a NextRequest with JSON body (POST/DELETE)
 function createMockRequest(body?: unknown, method = "POST"): NextRequest {
   const headers = new Headers();
@@ -137,6 +152,7 @@ describe("/api/matrix/overwatch", () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    sessionStore.clear();
   });
 
   // =============================================================================

@@ -25,13 +25,7 @@ import {
   endOverwatchSession,
 } from "@/lib/rules/matrix/overwatch-tracker";
 import { OVERWATCH_THRESHOLD } from "@/lib/types/matrix";
-import {
-  ensureDirectory,
-  readJsonFile,
-  writeJsonFile,
-  deleteFile,
-  sanitizePathSegment,
-} from "@/lib/storage/base";
+import { readJsonFile, writeJsonFile, deleteFile, sanitizePathSegment } from "@/lib/storage/base";
 import path from "path";
 
 // =============================================================================
@@ -39,6 +33,7 @@ import path from "path";
 // =============================================================================
 
 const OVERWATCH_DIR = path.join(process.cwd(), "data", "matrix", "overwatch");
+// Directory is created at startup by ensureDataDirectories() in base.ts
 
 function getSessionFilePath(characterId: string): string {
   return path.join(OVERWATCH_DIR, `${sanitizePathSegment(characterId)}.json`);
@@ -48,7 +43,6 @@ function getSessionFilePath(characterId: string): string {
  * Get or create an overwatch session for a character
  */
 async function getOrCreateSession(characterId: string): Promise<OverwatchSession> {
-  await ensureDirectory(OVERWATCH_DIR);
   const filePath = getSessionFilePath(characterId);
   const existing = await readJsonFile<OverwatchSession>(filePath);
   if (existing && !existing.converged && !existing.endReason) {
@@ -71,7 +65,6 @@ async function getOverwatchSession(characterId: string): Promise<OverwatchSessio
  * Update session in storage
  */
 async function updateSession(session: OverwatchSession): Promise<void> {
-  await ensureDirectory(OVERWATCH_DIR);
   await writeJsonFile(getSessionFilePath(session.characterId), session);
 }
 

@@ -267,13 +267,21 @@ describe("Storage Base Utilities", () => {
       expect(result).toEqual([]);
     });
 
-    it("should skip corrupt files and return valid ones", async () => {
+    it("should throw on corrupt files by default", async () => {
+      await ensureDirectory(TEST_DIR);
+      await writeJsonFile(path.join(TEST_DIR, "valid.json"), { id: "1" });
+      await fs.writeFile(path.join(TEST_DIR, "invalid.json"), "invalid json", "utf-8");
+
+      await expect(readAllJsonFiles(TEST_DIR)).rejects.toThrow();
+    });
+
+    it("should skip corrupt files when skipCorrupt is true", async () => {
       await ensureDirectory(TEST_DIR);
       await writeJsonFile(path.join(TEST_DIR, "valid.json"), { id: "1" });
       await fs.writeFile(path.join(TEST_DIR, "invalid.json"), "invalid json", "utf-8");
 
       const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
-      const result = await readAllJsonFiles(TEST_DIR);
+      const result = await readAllJsonFiles(TEST_DIR, { skipCorrupt: true });
 
       expect(result).toHaveLength(1);
       expect(result).toContainEqual({ id: "1" });
@@ -356,6 +364,7 @@ describe("Storage Base Utilities", () => {
         "violations",
         "templates",
         "drift-reports",
+        "matrix/overwatch",
       ];
 
       for (const dir of expectedDirs) {

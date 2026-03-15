@@ -185,7 +185,6 @@ graph TD
         CreationErrorBoundary[CreationErrorBoundary]
         DerivedStatsCard[DerivedStatsCard]
         EditionSelector[EditionSelector]
-        GearTabsCard[GearTabsCard]
         PrioritySelectionCard[PrioritySelectionCard]
         SkillsCard[SkillsCard]
         SpellsCard[SpellsCard]
@@ -202,7 +201,6 @@ graph TD
     style CreationErrorBoundary fill:#6b7280,color:#fff
     style DerivedStatsCard fill:#3b82f6,color:#fff
     style EditionSelector fill:#6b7280,color:#fff
-    style GearTabsCard fill:#3b82f6,color:#fff
     style PrioritySelectionCard fill:#3b82f6,color:#fff
     style SkillsCard fill:#3b82f6,color:#fff
     style SpellsCard fill:#3b82f6,color:#fff
