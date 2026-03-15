@@ -4,7 +4,7 @@
  * Tests file I/O operations with temporary directories.
  */
 
-import { describe, it, expect, beforeEach, afterEach } from "vitest";
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { promises as fs } from "fs";
 import path from "path";
 import {
@@ -267,15 +267,21 @@ describe("Storage Base Utilities", () => {
       expect(result).toEqual([]);
     });
 
-    it("should handle invalid JSON files gracefully", async () => {
+    it("should skip corrupt files and return valid ones", async () => {
       await ensureDirectory(TEST_DIR);
       await writeJsonFile(path.join(TEST_DIR, "valid.json"), { id: "1" });
       await fs.writeFile(path.join(TEST_DIR, "invalid.json"), "invalid json", "utf-8");
 
-      // readAllJsonFiles uses readJsonFile which throws on invalid JSON
-      // So invalid files will cause the function to throw
-      // This is expected behavior - invalid files should be fixed, not silently skipped
-      await expect(readAllJsonFiles(TEST_DIR)).rejects.toThrow();
+      const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+      const result = await readAllJsonFiles(TEST_DIR);
+
+      expect(result).toHaveLength(1);
+      expect(result).toContainEqual({ id: "1" });
+      expect(consoleSpy).toHaveBeenCalledWith(
+        expect.stringContaining("Skipping corrupt file"),
+        expect.anything()
+      );
+      consoleSpy.mockRestore();
     });
   });
 

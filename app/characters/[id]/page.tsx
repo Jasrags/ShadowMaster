@@ -210,6 +210,32 @@ function CharacterSheet({
     );
   }, [character, ruleset]);
 
+  const handleExport = useCallback(() => downloadCharacterJson(character), [character]);
+
+  // Dice roller open helper
+  const openDiceRoller = useCallback(
+    (pool: number, context?: string) => {
+      setTargetPool(pool);
+      setPoolContext(context);
+      setShowDiceRoller(true);
+    },
+    [setTargetPool, setPoolContext, setShowDiceRoller]
+  );
+
+  const handleAttributeSelect = useCallback(
+    (attrId: string, val: number) => openDiceRoller(val, ATTRIBUTE_DISPLAY[attrId]?.abbr),
+    [openDiceRoller]
+  );
+
+  const handleSkillSelect = useCallback(
+    (skillId: string, pool: number, attrAbbr?: string) => {
+      const skillName = skillId.replace(/-/g, " ");
+      const context = attrAbbr ? `${attrAbbr} + ${skillName}` : skillName;
+      openDiceRoller(pool, context);
+    },
+    [openDiceRoller]
+  );
+
   if (!ready || rulesetLoading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
@@ -225,15 +251,6 @@ function CharacterSheet({
       </div>
     );
   }
-
-  const handleExport = () => downloadCharacterJson(character);
-
-  // Dice roller open helper
-  const openDiceRoller = (pool: number, context?: string) => {
-    setTargetPool(pool);
-    setPoolContext(context);
-    setShowDiceRoller(true);
-  };
 
   return (
     <div className="character-sheet min-h-screen transition-colors duration-300">
@@ -404,10 +421,7 @@ function CharacterSheet({
         <div className="character-sheet-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {/* Left Column - Attributes & Condition */}
           <div className="space-y-6">
-            <AttributesDisplay
-              character={character}
-              onSelect={(attrId, val) => openDiceRoller(val, ATTRIBUTE_DISPLAY[attrId]?.abbr)}
-            />
+            <AttributesDisplay character={character} onSelect={handleAttributeSelect} />
 
             <DerivedStatsDisplay character={character} resolveEffects={resolveEffects} />
 
@@ -417,13 +431,13 @@ function CharacterSheet({
 
             <LoadoutDisplay
               character={character}
-              onCharacterUpdate={(updated) => setCharacter(updated)}
+              onCharacterUpdate={setCharacter}
               editable={character.status === "active"}
             />
 
             <WirelessDisplay
               character={character}
-              onCharacterUpdate={(updated) => setCharacter(updated)}
+              onCharacterUpdate={setCharacter}
               editable={character.status === "active"}
             />
 
@@ -432,7 +446,7 @@ function CharacterSheet({
             <ActiveModifiersPanel
               character={character}
               editable={character.status === "active"}
-              onCharacterUpdate={(updated) => setCharacter(updated)}
+              onCharacterUpdate={setCharacter}
             />
 
             <ConditionDisplay
@@ -448,7 +462,7 @@ function CharacterSheet({
               character={character}
               woundModifier={woundModifier}
               physicalLimit={physicalLimit}
-              onPoolSelect={(pool, context) => openDiceRoller(pool, context)}
+              onPoolSelect={openDiceRoller}
               resolveEffects={resolveEffects}
             />
 
@@ -459,7 +473,7 @@ function CharacterSheet({
               physicalLimit={physicalLimit}
               mentalLimit={mentalLimit}
               socialLimit={socialLimit}
-              onOpenDiceRoller={(pool, context) => openDiceRoller(pool, context)}
+              onOpenDiceRoller={openDiceRoller}
             />
 
             {/* Quick Combat Controls */}
@@ -477,21 +491,14 @@ function CharacterSheet({
             <SkillsDisplay
               character={character}
               resolveEffects={resolveEffects}
-              onSelect={(skillId, pool, attrAbbr) => {
-                const skillName = skillId.replace(/-/g, " ");
-                const context = attrAbbr ? `${attrAbbr} + ${skillName}` : skillName;
-                openDiceRoller(pool, context);
-              }}
+              onSelect={handleSkillSelect}
             />
 
             {/* Magic Operations */}
             {character.magicalPath !== "mundane" && <MagicSummaryDisplay character={character} />}
 
             {character.spells && character.spells.length > 0 && (
-              <SpellsDisplay
-                spells={character.spells}
-                onSelect={(pool, label) => openDiceRoller(pool, label)}
-              />
+              <SpellsDisplay spells={character.spells} onSelect={openDiceRoller} />
             )}
 
             {character.adeptPowers && character.adeptPowers.length > 0 && (
@@ -502,7 +509,7 @@ function CharacterSheet({
             {character.complexForms && character.complexForms.length > 0 && (
               <ComplexFormsDisplay
                 complexForms={character.complexForms}
-                onSelect={(pool, label) => openDiceRoller(pool, label)}
+                onSelect={openDiceRoller}
               />
             )}
 
@@ -511,7 +518,7 @@ function CharacterSheet({
               <>
                 <MatrixSummaryDisplay
                   character={character}
-                  onCharacterUpdate={(updated) => setCharacter(updated)}
+                  onCharacterUpdate={setCharacter}
                   editable={character.status === "active"}
                   connectionMode={matrixSession.connectionMode}
                   overwatchScore={matrixSession.overwatchScore}
@@ -519,14 +526,14 @@ function CharacterSheet({
                 {(character.cyberdecks?.length ?? 0) > 0 && (
                   <CyberdeckConfigDisplay
                     character={character}
-                    onCharacterUpdate={(updated) => setCharacter(updated)}
+                    onCharacterUpdate={setCharacter}
                     editable={character.status === "active"}
                   />
                 )}
                 {(character.programs?.length ?? 0) > 0 && (
                   <ProgramManagerDisplay
                     character={character}
-                    onCharacterUpdate={(updated) => setCharacter(updated)}
+                    onCharacterUpdate={setCharacter}
                     editable={character.status === "active"}
                   />
                 )}
@@ -534,7 +541,7 @@ function CharacterSheet({
                   <>
                     <MatrixActionsDisplay
                       character={character}
-                      onSelect={(pool, label) => openDiceRoller(pool, label)}
+                      onSelect={openDiceRoller}
                       editable={character.status === "active"}
                     />
                     <MatrixMarksDisplay character={character} />
@@ -548,27 +555,27 @@ function CharacterSheet({
               <>
                 <RiggingSummaryDisplay
                   character={character}
-                  onCharacterUpdate={(updated) => setCharacter(updated)}
+                  onCharacterUpdate={setCharacter}
                   editable={character.status === "active"}
                 />
                 <DroneNetworkDisplay
                   character={character}
-                  onCharacterUpdate={(updated) => setCharacter(updated)}
+                  onCharacterUpdate={setCharacter}
                   editable={character.status === "active"}
                 />
                 <JumpInControlDisplay
                   character={character}
-                  onCharacterUpdate={(updated) => setCharacter(updated)}
+                  onCharacterUpdate={setCharacter}
                   editable={character.status === "active"}
                 />
                 <VehicleActionsDisplay
                   character={character}
-                  onSelect={(pool, label) => openDiceRoller(pool, label)}
+                  onSelect={openDiceRoller}
                   editable={character.status === "active"}
                 />
                 <AutosoftManagerDisplay
                   character={character}
-                  onCharacterUpdate={(updated) => setCharacter(updated)}
+                  onCharacterUpdate={setCharacter}
                   editable={character.status === "active"}
                 />
               </>
@@ -577,14 +584,11 @@ function CharacterSheet({
             {/* Foci */}
             {character.foci && character.foci.length > 0 && <FociDisplay foci={character.foci} />}
 
-            <KnowledgeLanguagesDisplay
-              character={character}
-              onSelect={(pool, label) => openDiceRoller(pool, label)}
-            />
+            <KnowledgeLanguagesDisplay character={character} onSelect={openDiceRoller} />
 
             <QualitiesDisplay
               character={character}
-              onUpdate={(updated) => setCharacter(updated)}
+              onUpdate={setCharacter}
               firstMeeting={firstMeeting}
               onFirstMeetingChange={setFirstMeeting}
             />
@@ -595,28 +599,28 @@ function CharacterSheet({
             {/* Combat Gear: Weapons + Armor */}
             <WeaponsDisplay
               character={character}
-              onSelect={(pool, label) => openDiceRoller(pool, label)}
-              onCharacterUpdate={(updated) => setCharacter(updated)}
+              onSelect={openDiceRoller}
+              onCharacterUpdate={setCharacter}
               editable={character.status === "active"}
             />
 
             <ArmorDisplay
               character={character}
-              onCharacterUpdate={(updated) => setCharacter(updated)}
+              onCharacterUpdate={setCharacter}
               editable={character.status === "active"}
             />
 
             {hasMatrixAccess(character) && (
               <MatrixDevicesDisplay
                 character={character}
-                onCharacterUpdate={(updated) => setCharacter(updated)}
+                onCharacterUpdate={setCharacter}
                 editable={character.status === "active"}
               />
             )}
 
             <AugmentationsDisplay
               character={character}
-              onCharacterUpdate={(updated) => setCharacter(updated)}
+              onCharacterUpdate={setCharacter}
               editable={character.status === "active"}
             />
 
@@ -625,14 +629,14 @@ function CharacterSheet({
               drones={character.drones}
               rccs={character.rccs}
               character={character}
-              onCharacterUpdate={(updated) => setCharacter(updated)}
+              onCharacterUpdate={setCharacter}
               editable={character.status === "active"}
             />
 
             <GearDisplay
               character={character}
               gear={(character.gear || []).filter((item) => item.category !== "drug")}
-              onCharacterUpdate={(updated) => setCharacter(updated)}
+              onCharacterUpdate={setCharacter}
               editable={character.status === "active"}
             />
 
@@ -642,7 +646,7 @@ function CharacterSheet({
 
             <LifestylesDisplay
               character={character}
-              onCharacterUpdate={(updated) => setCharacter(updated)}
+              onCharacterUpdate={setCharacter}
               editable={character.status === "active"}
             />
 

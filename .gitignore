@@ -56,6 +56,7 @@ next-env.d.ts
 /data/migrations
 /data/security
 /data/combat
+/data/matrix
 /data/ruleset-snapshots
 /data/notifications/*
 !/data/notifications/.gitkeep

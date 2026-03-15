@@ -23,53 +23,63 @@ import {
   startOverwatchSession,
   recordOverwatchEvent,
   endOverwatchSession,
-  getConvergenceProgress,
 } from "@/lib/rules/matrix/overwatch-tracker";
-import { handleConvergence } from "@/lib/rules/matrix/overwatch-calculator";
 import { OVERWATCH_THRESHOLD } from "@/lib/types/matrix";
+import {
+  ensureDirectory,
+  readJsonFile,
+  writeJsonFile,
+  deleteFile,
+  sanitizePathSegment,
+} from "@/lib/storage/base";
+import path from "path";
 
 // =============================================================================
-// IN-MEMORY SESSION STORAGE (for demo/development)
-// In production, this would be stored in Redis or similar
+// FILE-BASED SESSION STORAGE
 // =============================================================================
 
-// Session storage - in production, use Redis or similar
-const activeSessions = new Map<string, OverwatchSession>();
+const OVERWATCH_DIR = path.join(process.cwd(), "data", "matrix", "overwatch");
+
+function getSessionFilePath(characterId: string): string {
+  return path.join(OVERWATCH_DIR, `${sanitizePathSegment(characterId)}.json`);
+}
 
 /**
  * Get or create an overwatch session for a character
  */
-function getOrCreateSession(characterId: string): OverwatchSession {
-  const existing = activeSessions.get(characterId);
+async function getOrCreateSession(characterId: string): Promise<OverwatchSession> {
+  await ensureDirectory(OVERWATCH_DIR);
+  const filePath = getSessionFilePath(characterId);
+  const existing = await readJsonFile<OverwatchSession>(filePath);
   if (existing && !existing.converged && !existing.endReason) {
     return existing;
   }
 
-  // Create new session
   const session = startOverwatchSession(characterId, OVERWATCH_THRESHOLD);
-  activeSessions.set(characterId, session);
+  await writeJsonFile(filePath, session);
   return session;
 }
 
 /**
  * Get existing session (without creating)
  */
-function getOverwatchSession(characterId: string): OverwatchSession | null {
-  return activeSessions.get(characterId) ?? null;
+async function getOverwatchSession(characterId: string): Promise<OverwatchSession | null> {
+  return readJsonFile<OverwatchSession>(getSessionFilePath(characterId));
 }
 
 /**
  * Update session in storage
  */
-function updateSession(session: OverwatchSession): void {
-  activeSessions.set(session.characterId, session);
+async function updateSession(session: OverwatchSession): Promise<void> {
+  await ensureDirectory(OVERWATCH_DIR);
+  await writeJsonFile(getSessionFilePath(session.characterId), session);
 }
 
 /**
  * Remove session from storage
  */
-function removeSession(characterId: string): void {
-  activeSessions.delete(characterId);
+async function removeSession(characterId: string): Promise<void> {
+  await deleteFile(getSessionFilePath(characterId));
 }
 
 // =============================================================================
@@ -128,7 +138,7 @@ export async function POST(
     }
 
     // Get or create session
-    let session = getOrCreateSession(characterId);
+    let session = await getOrCreateSession(characterId);
 
     // Check if already converged
     if (session.converged) {
@@ -143,7 +153,7 @@ export async function POST(
 
     // Record the event
     session = recordOverwatchEvent(session, action, scoreAdded);
-    updateSession(session);
+    await updateSession(session);
 
     const response: OverwatchResponse = {
       currentScore: session.currentScore,
@@ -214,7 +224,7 @@ export async function DELETE(request: NextRequest): Promise<NextResponse<EndSess
     }
 
     // Get session
-    let session = getOverwatchSession(characterId);
+    let session = await getOverwatchSession(characterId);
     if (!session) {
       return NextResponse.json(
         { success: false, error: "No active session found" },
@@ -224,7 +234,7 @@ export async function DELETE(request: NextRequest): Promise<NextResponse<EndSess
 
     // End the session
     session = endOverwatchSession(session, reason);
-    updateSession(session);
+    await updateSession(session);
 
     // If converged, calculate convergence effects
     let convergence: ConvergenceResult | undefined;
@@ -240,7 +250,7 @@ export async function DELETE(request: NextRequest): Promise<NextResponse<EndSess
     }
 
     // Clean up session after ending
-    removeSession(characterId);
+    await removeSession(characterId);
 
     return NextResponse.json({
       success: true,
@@ -292,7 +302,7 @@ export async function GET(
     }
 
     // Get session (without creating)
-    const session = getOverwatchSession(characterId);
+    const session = await getOverwatchSession(characterId);
 
     if (!session) {
       // Return empty state

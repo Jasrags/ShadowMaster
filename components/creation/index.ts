@@ -25,9 +25,6 @@ export { MatrixGearCard } from "./matrix-gear";
 export { AugmentationsCard } from "./AugmentationsCard";
 export { VehiclesCard } from "./VehiclesCard";
 
-// Phase 6: Tabbed Gear Interface (optional alternative to individual panels)
-export { GearTabsCard } from "./GearTabsCard";
-
 // Phase 5: Social & Identity Components
 export { ContactsCard } from "./contacts";
 export { IdentitiesCard } from "./identities";
