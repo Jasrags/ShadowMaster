@@ -102,7 +102,7 @@ const SpellsCard = dynamic(
 | SheetCreationLayout | `/app/characters/create/sheet/components/` | Main layout orchestrator               |
 | BudgetSummaryCard   | Inline in SheetCreationLayout              | Budget progress bars                   |
 | ValidationSummary   | Inline in SheetCreationLayout              | Finalize button and status             |
-| PlaceholderCard     | Inline in SheetCreationLayout              | Placeholder for unimplemented sections |
+
 
 ## Props Interface
 

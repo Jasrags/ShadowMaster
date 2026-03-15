@@ -132,50 +132,6 @@ interface SheetCreationLayoutProps {
 }
 
 // =============================================================================
-// PLACEHOLDER COMPONENTS
-// =============================================================================
-
-/**
- * Temporary placeholder card for sections not yet implemented.
- * Will be replaced with actual creation components in Phase 3-6.
- */
-function PlaceholderCard({
-  title,
-  description,
-  status = "pending",
-}: {
-  title: string;
-  description: string;
-  status?: "pending" | "partial" | "complete";
-}) {
-  const statusColors = {
-    pending: "border-zinc-200 dark:border-zinc-800",
-    partial: "border-amber-300 dark:border-amber-700",
-    complete: "border-emerald-300 dark:border-emerald-700",
-  };
-
-  const statusIcons = {
-    pending: <Clock className="h-4 w-4 text-zinc-400" />,
-    partial: <AlertTriangle className="h-4 w-4 text-amber-500" />,
-    complete: <CheckCircle2 className="h-4 w-4 text-emerald-500" />,
-  };
-
-  return (
-    <div
-      className={`rounded-lg border-2 border-dashed ${statusColors[status]} bg-zinc-50 p-4 dark:bg-zinc-900`}
-    >
-      <div className="flex items-start justify-between">
-        <div>
-          <h3 className="font-medium text-zinc-900 dark:text-zinc-100">{title}</h3>
-          <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">{description}</p>
-        </div>
-        {statusIcons[status]}
-      </div>
-    </div>
-  );
-}
-
-// =============================================================================
 // BUDGET SUMMARY CARD
 // =============================================================================
 
