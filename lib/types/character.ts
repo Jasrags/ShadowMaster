@@ -745,6 +745,8 @@ export interface InstalledGearMod {
 
 export interface GearItem {
   id?: ID;
+  /** Reference to the catalog item ID for reliable lookup */
+  catalogId?: string;
   name: string;
   category: string;
   /** Subcategory for more specific classification (e.g., "clothing" for armor) */

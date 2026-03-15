@@ -246,6 +246,7 @@ export function GearPanel({ state, updateState }: GearPanelProps) {
 
       const newGear: GearItem = {
         id: `${gearData.id}-${Date.now()}`,
+        catalogId: gearData.id,
         name: displayName,
         category: gearData.category,
         cost: unitCost,
