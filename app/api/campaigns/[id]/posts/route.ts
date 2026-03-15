@@ -69,12 +69,15 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       return NextResponse.json({ success: false, error: "Missing fields" }, { status: 400 });
     }
 
+    // Only GMs can create GM-only posts (playerVisible: false)
+    const playerVisible = isGm ? (body.playerVisible ?? true) : true;
+
     const post = await createCampaignPost(id, {
       title: body.title,
       content: body.content,
       type: body.type,
       isPinned: body.isPinned || false,
-      playerVisible: body.playerVisible ?? true,
+      playerVisible,
       authorId: userId,
     });
 
