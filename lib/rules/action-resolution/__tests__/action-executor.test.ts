@@ -1079,7 +1079,7 @@ describe("executeOpposedTest", () => {
 // =============================================================================
 
 describe("applyStateChanges", () => {
-  it("should group changes by entity", async () => {
+  it("should accept changes without producing console output", async () => {
     const consoleSpy = vi.spyOn(console, "log").mockImplementation(() => {});
 
     const changes: StateChange[] = [
@@ -1111,19 +1111,14 @@ describe("applyStateChanges", () => {
 
     await applyStateChanges(changes);
 
-    expect(consoleSpy).toHaveBeenCalledWith(
-      expect.stringContaining("2 changes to character char-1")
-    );
-    expect(consoleSpy).toHaveBeenCalledWith(
-      expect.stringContaining("1 changes to character char-2")
-    );
+    expect(consoleSpy).not.toHaveBeenCalled();
 
     consoleSpy.mockRestore();
   });
 });
 
 describe("rollbackStateChanges", () => {
-  it("should reverse changes and swap values", async () => {
+  it("should reverse changes and swap values without console output", async () => {
     const consoleSpy = vi.spyOn(console, "log").mockImplementation(() => {});
 
     const changes: StateChange[] = [
@@ -1147,10 +1142,7 @@ describe("rollbackStateChanges", () => {
 
     await rollbackStateChanges(changes);
 
-    // Should be called with rollback prefix
-    expect(consoleSpy).toHaveBeenCalledWith(
-      expect.stringContaining("2 changes to character char-1")
-    );
+    expect(consoleSpy).not.toHaveBeenCalled();
 
     consoleSpy.mockRestore();
   });
