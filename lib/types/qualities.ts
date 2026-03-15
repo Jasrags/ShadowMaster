@@ -226,7 +226,7 @@ export type AcquisitionSource =
  * Selection of a quality on a character
  */
 export interface QualitySelection {
-  /** @deprecated Use qualityId instead */
+  /** @deprecated Use qualityId instead. Tracked by #661; remove in v1.9. */
   id?: string;
   qualityId: string; // References catalog Quality.id
   rating?: number; // Chosen rating for per-rating qualities

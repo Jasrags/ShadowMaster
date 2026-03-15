@@ -56,13 +56,6 @@ export type CharacterApprovalStatus =
   | "rejected" // Rejected by GM (with feedback)
   | "not-applicable"; // Not in a campaign or no approval required
 
-/**
- * Selection of a quality during character creation/advancement
- *
- * @deprecated The `id` field is deprecated. Use `qualityId` instead.
- * This field is maintained for backward compatibility during migration.
- */
-
 // =============================================================================
 // ADVANCEMENT TYPES (defined early for use in Character interface)
 // =============================================================================
