@@ -131,20 +131,17 @@ describe("GET /api/campaigns/[id]/activity", () => {
     expect(data.activities).toHaveLength(1);
   });
 
-  it("should return activities for public campaign viewer", async () => {
-    const activities = [createMockActivity()];
+  it("should deny non-member access to public campaign activity feed (#692)", async () => {
     const mockCampaign = createMockCampaign({ visibility: "public" });
     const mockUser = createMockUser({ id: "non-member" });
     vi.mocked(sessionModule.getSession).mockResolvedValue("non-member");
     vi.mocked(userStorage.getUserById).mockResolvedValue(mockUser);
     vi.mocked(campaignStorage.getCampaignById).mockResolvedValue(mockCampaign);
-    vi.mocked(activityStorage.getCampaignActivity).mockResolvedValue(activities);
-    vi.mocked(activityStorage.getCampaignActivityCount).mockResolvedValue(1);
     const request = createMockRequest(
       "http://localhost:3000/api/campaigns/test-campaign-id/activity"
     );
     const response = await GET(request, { params: Promise.resolve({ id: "test-campaign-id" }) });
-    expect(response.status).toBe(200);
+    expect(response.status).toBe(403);
   });
 
   it("should apply pagination with limit and offset", async () => {

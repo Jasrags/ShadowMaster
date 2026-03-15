@@ -30,8 +30,8 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     const isGm = campaign.gmId === user.id;
     const isPlayer = campaign.playerIds.includes(user.id);
 
-    if (!isGm && !isPlayer && campaign.visibility !== "public") {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    if (!isGm && !isPlayer) {
+      return NextResponse.json({ success: false, error: "Forbidden" }, { status: 403 });
     }
 
     // Get query parameters for pagination
