@@ -219,7 +219,7 @@ function CharacterSheet({
       setPoolContext(context);
       setShowDiceRoller(true);
     },
-    [setTargetPool, setPoolContext, setShowDiceRoller]
+    [] // useState setters are stable references
   );
 
   const handleAttributeSelect = useCallback(

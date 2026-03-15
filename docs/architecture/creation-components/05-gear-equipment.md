@@ -43,7 +43,6 @@ graph TD
 
     subgraph "Legacy"
         GearCard[GearCard]
-        GearTabsCard[GearTabsCard]
     end
 
     style GearPanel fill:#3b82f6,color:#fff
@@ -60,7 +59,6 @@ graph TD
     style ArmorPurchaseModal fill:#8b5cf6,color:#fff
     style ArmorModificationModal fill:#8b5cf6,color:#fff
     style GearCard fill:#6b7280,color:#fff
-    style GearTabsCard fill:#6b7280,color:#fff
 ```
 
 ## General Gear (`/gear/`)
@@ -205,12 +203,6 @@ Armor modification management:
 Location: `/components/creation/GearCard.tsx`
 
 Original unified gear interface (superseded by individual panels)
-
-### GearTabsCard
-
-Location: `/components/creation/GearTabsCard.tsx`
-
-Alternative tabbed interface combining all gear types
 
 ## File Summary
 

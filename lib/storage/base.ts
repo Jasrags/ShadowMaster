@@ -125,9 +125,13 @@ export async function listJsonFiles(dirPath: string): Promise<string[]> {
 
 /**
  * Read all JSON files in a directory and return their contents.
- * Corrupt or unreadable files are skipped with a warning log.
+ * When skipCorrupt is true, corrupt files are skipped with a warning log.
+ * Defaults to throwing on corrupt files to prevent silent data loss.
  */
-export async function readAllJsonFiles<T>(dirPath: string): Promise<T[]> {
+export async function readAllJsonFiles<T>(
+  dirPath: string,
+  options?: { skipCorrupt?: boolean }
+): Promise<T[]> {
   const fileIds = await listJsonFiles(dirPath);
   const items: T[] = [];
 
@@ -139,7 +143,11 @@ export async function readAllJsonFiles<T>(dirPath: string): Promise<T[]> {
         items.push(item);
       }
     } catch (error) {
-      console.error(`Skipping corrupt file ${id}.json in ${dirPath}:`, error);
+      if (options?.skipCorrupt) {
+        console.error(`Skipping corrupt file ${id}.json in ${dirPath}:`, error);
+      } else {
+        throw error;
+      }
     }
   }
 
