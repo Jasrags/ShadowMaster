@@ -316,6 +316,74 @@ describe("Equipment readiness gating", () => {
     });
   });
 
+  describe("active modifier expiry with injectable now", () => {
+    const emptyRuleset = makeRuleset();
+
+    const MODIFIER_EFFECT: Effect = {
+      id: "mod-effect",
+      type: "dice-pool-modifier",
+      triggers: ["always"],
+      target: {},
+      value: 2,
+    };
+
+    it("should include non-expired active modifiers when now is before expiresAt", () => {
+      const char = createMockCharacter({
+        activeModifiers: [
+          {
+            id: "mod-1",
+            name: "Combat Drug",
+            source: "temporary",
+            effect: MODIFIER_EFFECT,
+            expiresAt: "2099-01-01T00:00:00.000Z",
+            appliedAt: "2020-01-01T00:00:00.000Z",
+          },
+        ],
+      });
+      const effects = gatherEffectSources(char, emptyRuleset, {
+        now: new Date("2025-06-01T00:00:00.000Z"),
+      });
+      expect(effects.some((e) => e.source.id === "mod-1")).toBe(true);
+    });
+
+    it("should exclude expired active modifiers when now is after expiresAt", () => {
+      const char = createMockCharacter({
+        activeModifiers: [
+          {
+            id: "mod-2",
+            name: "Expired Drug",
+            source: "temporary",
+            effect: MODIFIER_EFFECT,
+            expiresAt: "2020-01-01T00:00:00.000Z",
+            appliedAt: "2019-01-01T00:00:00.000Z",
+          },
+        ],
+      });
+      const effects = gatherEffectSources(char, emptyRuleset, {
+        now: new Date("2025-06-01T00:00:00.000Z"),
+      });
+      expect(effects.some((e) => e.source.id === "mod-2")).toBe(false);
+    });
+
+    it("should default now to current time when not provided", () => {
+      const char = createMockCharacter({
+        activeModifiers: [
+          {
+            id: "mod-3",
+            name: "Far Future Drug",
+            source: "temporary",
+            effect: MODIFIER_EFFECT,
+            expiresAt: "2099-12-31T23:59:59.999Z",
+            appliedAt: "2020-01-01T00:00:00.000Z",
+          },
+        ],
+      });
+      // No now parameter — should use current time, and modifier expires far in future
+      const effects = gatherEffectSources(char, emptyRuleset);
+      expect(effects.some((e) => e.source.id === "mod-3")).toBe(true);
+    });
+  });
+
   describe("stored readiness normalization", () => {
     it("should NOT gather effects from stored weapons (weapon category)", () => {
       const ruleset = makeRuleset(makeGearModule("test-weapon-catalog"));
