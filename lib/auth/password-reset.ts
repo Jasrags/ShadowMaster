@@ -24,6 +24,7 @@ import {
 import { sendEmail, renderTemplate } from "@/lib/email";
 import { PasswordResetEmailTemplate } from "@/lib/email/templates/password-reset-email";
 import { AuditLogger } from "@/lib/security/audit-logger";
+import { authLogger } from "@/lib/logging";
 import { sendPasswordChangedEmail } from "@/lib/email/security-alerts";
 import { sendAdminPasswordResetNotification } from "@/lib/email/admin-notifications";
 import { isStrongPassword } from "./validation";
@@ -158,11 +159,11 @@ export async function sendPasswordResetEmail(
 
       return { success: true };
     } else {
-      console.error("Failed to send password reset email:", result.error);
+      authLogger.error({ error: result.error }, "Failed to send password reset email");
       return { success: false, error: result.error || "Failed to send email" };
     }
   } catch (error) {
-    console.error("Error in sendPasswordResetEmail:", error);
+    authLogger.error({ error }, "Error in sendPasswordResetEmail");
     return {
       success: false,
       error: error instanceof Error ? error.message : "Unknown error",
@@ -202,7 +203,7 @@ export async function requestPasswordReset(
 
     // Send admin notification (fire-and-forget)
     sendAdminPasswordResetNotification(user.id, user.email, user.username, new Date(), ip).catch(
-      (err) => console.error("Admin notification failed:", err)
+      (err) => authLogger.error({ error: err }, "Admin notification failed")
     );
   }
 
@@ -237,7 +238,7 @@ export async function validateResetToken(token: string): Promise<ValidateTokenRe
 
     return { valid: true, userId: user.id };
   } catch (error) {
-    console.error("Error in validateResetToken:", error);
+    authLogger.error({ error }, "Error in validateResetToken");
     return { valid: false, reason: "invalid" };
   }
 }
@@ -308,12 +309,12 @@ export async function resetPassword(
     // Send password changed notification email (fire-and-forget)
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
     sendPasswordChangedEmail(user.id, user.email, user.username, new Date(), baseUrl).catch((err) =>
-      console.error("Failed to send password changed email:", err)
+      authLogger.error({ error: err }, "Failed to send password changed email")
     );
 
     return { success: true, userId: user.id };
   } catch (error) {
-    console.error("Error in resetPassword:", error);
+    authLogger.error({ error }, "Error in resetPassword");
     await AuditLogger.log({
       event: "password_reset.failed",
       metadata: {

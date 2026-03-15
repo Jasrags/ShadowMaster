@@ -25,6 +25,7 @@ import {
 import { sendEmail, renderTemplate } from "@/lib/email";
 import { MagicLinkEmailTemplate } from "@/lib/email/templates/magic-link-email";
 import { AuditLogger } from "@/lib/security/audit-logger";
+import { authLogger } from "@/lib/logging";
 
 /** Token size in bytes (32 bytes = 256 bits of entropy) */
 const TOKEN_BYTES = 32;
@@ -192,11 +193,11 @@ export async function sendMagicLinkEmail(
 
       return { success: true };
     } else {
-      console.error("Failed to send magic link email:", result.error);
+      authLogger.error({ error: result.error }, "Failed to send magic link email");
       return { success: false, error: result.error || "Failed to send email" };
     }
   } catch (error) {
-    console.error("Error in sendMagicLinkEmail:", error);
+    authLogger.error({ error }, "Error in sendMagicLinkEmail");
     return {
       success: false,
       error: error instanceof Error ? error.message : "Unknown error",
@@ -334,7 +335,7 @@ export async function verifyMagicLink(token: string): Promise<VerifyMagicLinkRes
       sessionVersion: user.sessionVersion,
     };
   } catch (error) {
-    console.error("Error in verifyMagicLink:", error);
+    authLogger.error({ error }, "Error in verifyMagicLink");
     await AuditLogger.log({
       event: "magic_link.failed",
       metadata: {
