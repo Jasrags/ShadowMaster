@@ -395,11 +395,15 @@ describe("SkillsDisplay", () => {
         thresholdModifiers: [],
         accuracyModifiers: [],
         initiativeModifiers: [],
+        armorModifiers: [],
+        woundModifiers: [],
         totalDicePoolModifier: 2,
         totalLimitModifier: 0,
         totalThresholdModifier: 0,
         totalAccuracyModifier: 0,
         totalInitiativeModifier: 0,
+        totalArmorModifier: 0,
+        totalWoundModifier: 0,
         excludedByStacking: [],
       } satisfies EffectResolutionResult);
     }
@@ -480,11 +484,15 @@ describe("SkillsDisplay", () => {
         thresholdModifiers: [],
         accuracyModifiers: [],
         initiativeModifiers: [],
+        armorModifiers: [],
+        woundModifiers: [],
         totalDicePoolModifier: 2,
         totalLimitModifier: 0,
         totalThresholdModifier: 0,
         totalAccuracyModifier: 0,
         totalInitiativeModifier: 0,
+        totalArmorModifier: 0,
+        totalWoundModifier: 0,
         excludedByStacking: [],
       } satisfies EffectResolutionResult);
       render(<SkillsDisplay character={character} resolveEffects={resolveEffects} />);
