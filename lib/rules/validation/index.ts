@@ -44,6 +44,7 @@ export {
 export {
   type ValidationResult,
   type ValidationContext,
+  type ConstraintValidator,
   validateConstraint,
   validateAllConstraints,
   validateCharacter as validateCharacterLegacy,
