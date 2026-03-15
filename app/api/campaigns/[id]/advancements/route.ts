@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
 import { getCampaignById } from "@/lib/storage/campaigns";
-import { getCharactersByCampaign, getAdvancementHistory } from "@/lib/storage/characters";
-import type { AdvancementRecord } from "@/lib/types";
+import { getUserCharacters, getAdvancementHistory } from "@/lib/storage/characters";
+import type { AdvancementRecord, Character } from "@/lib/types";
 
 interface PendingAdvancementRecord extends AdvancementRecord {
   characterId: string;
@@ -42,8 +42,14 @@ export async function GET(
       );
     }
 
-    // Get all characters in the campaign
-    const characters = await getCharactersByCampaign(userId, campaignId);
+    // Get all characters from all campaign members (GM + players)
+    const allMemberIds = [campaign.gmId, ...campaign.playerIds];
+    const characterArrays = await Promise.all(
+      allMemberIds.map((memberId) => getUserCharacters(memberId))
+    );
+    const characters: Character[] = characterArrays
+      .flat()
+      .filter((c) => c.campaignId === campaignId);
 
     // Collate all pending advancements
     const allPending: PendingAdvancementRecord[] = [];

@@ -14,7 +14,15 @@ import type { Campaign, Character, AdvancementRecord } from "@/lib/types";
 
 vi.mock("@/lib/auth/session");
 vi.mock("@/lib/storage/campaigns");
-vi.mock("@/lib/storage/characters");
+vi.mock("@/lib/storage/characters", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@/lib/storage/characters")>();
+  return {
+    ...actual,
+    getUserCharacters: vi.fn().mockResolvedValue([]),
+    getCharactersByCampaign: vi.fn().mockResolvedValue([]),
+    getAdvancementHistory: vi.fn().mockReturnValue([]),
+  };
+});
 
 function createMockRequest(url: string): NextRequest {
   const urlObj = new URL(url);
@@ -105,7 +113,11 @@ function createMockCampaign(overrides?: Partial<Campaign>): Campaign {
 }
 
 describe("GET /api/campaigns/[id]/advancements", () => {
-  beforeEach(() => vi.clearAllMocks());
+  beforeEach(() => {
+    vi.clearAllMocks();
+    // Default: getUserCharacters returns empty array for any member
+    vi.mocked(characterStorage.getUserCharacters).mockResolvedValue([]);
+  });
 
   it("should return 401 when not authenticated", async () => {
     vi.mocked(sessionModule.getSession).mockResolvedValue(null);
@@ -126,7 +138,7 @@ describe("GET /api/campaigns/[id]/advancements", () => {
     });
     vi.mocked(sessionModule.getSession).mockResolvedValue("test-gm-id");
     vi.mocked(campaignStorage.getCampaignById).mockResolvedValue(mockCampaign);
-    vi.mocked(characterStorage.getCharactersByCampaign).mockResolvedValue([mockCharacter]);
+    vi.mocked(characterStorage.getUserCharacters).mockResolvedValue([mockCharacter]);
     vi.mocked(characterStorage.getAdvancementHistory).mockReturnValue([
       createMockAdvancementRecord({ gmApproved: false }),
     ]);
@@ -144,7 +156,7 @@ describe("GET /api/campaigns/[id]/advancements", () => {
     const mockCampaign = createMockCampaign();
     vi.mocked(sessionModule.getSession).mockResolvedValue("test-gm-id");
     vi.mocked(campaignStorage.getCampaignById).mockResolvedValue(mockCampaign);
-    vi.mocked(characterStorage.getCharactersByCampaign).mockResolvedValue([]);
+    vi.mocked(characterStorage.getUserCharacters).mockResolvedValue([]);
     const request = createMockRequest(
       "http://localhost:3000/api/campaigns/test-campaign-id/advancements"
     );
