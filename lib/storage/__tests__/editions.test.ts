@@ -50,7 +50,7 @@ function createMockBookPayload(overrides: Partial<BookPayload> = {}): BookPayloa
     },
     modules: {
       metatypes: {
-        replace: true,
+        mergeStrategy: "replace",
         payload: {
           metatypes: [
             { id: "human", name: "Human" },
@@ -59,7 +59,7 @@ function createMockBookPayload(overrides: Partial<BookPayload> = {}): BookPayloa
         },
       },
       skills: {
-        replace: true,
+        mergeStrategy: "replace",
         payload: {
           activeSkills: [
             { id: "firearms", name: "Firearms" },
@@ -68,14 +68,14 @@ function createMockBookPayload(overrides: Partial<BookPayload> = {}): BookPayloa
         },
       },
       qualities: {
-        replace: true,
+        mergeStrategy: "replace",
         payload: {
           positive: [{ id: "ambidextrous", name: "Ambidextrous" }],
           negative: [{ id: "addiction", name: "Addiction" }],
         },
       },
       creationMethods: {
-        replace: true,
+        mergeStrategy: "replace",
         payload: {
           creationMethods: [
             {

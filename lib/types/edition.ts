@@ -308,12 +308,6 @@ export interface BookModuleEntry {
   /** Merge strategy for this module's data */
   mergeStrategy?: MergeStrategy;
 
-  /** Whether to replace entirely (shorthand for mergeStrategy: "replace") */
-  replace?: boolean;
-
-  /** Whether to append (shorthand for mergeStrategy: "append") */
-  append?: boolean;
-
   /** The actual module data */
   payload: Record<string, unknown>;
 }
