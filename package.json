@@ -107,7 +107,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
     "husky": "^9.0.0",
-    "jsdom": "^27.3.0",
+    "jsdom": "^28.1.0",
     "knip": "^5.83.0",
     "lint-staged": "^16.2.7",
     "next-devtools-mcp": "^0.3.10",
