@@ -219,7 +219,7 @@ export function checkMorale(team: GruntTeam): MoraleState {
   const casualtyPercent = calculateCasualtyPercentage(team.state.casualties, team.initialSize);
 
   if (casualtyPercent >= breakThreshold) {
-    return team.state.moraleBroken ? "broken" : "broken";
+    return team.state.moraleBroken ? "routed" : "broken";
   }
 
   // Shaken when at 50% or more of break threshold
