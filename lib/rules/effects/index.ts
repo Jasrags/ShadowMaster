@@ -15,7 +15,7 @@ export { STACKING_RULES, getStackingRule, applyStackingRules } from "./stacking"
 
 // Gathering
 export { gatherEffectSources } from "./gathering";
-export type { SourcedEffect } from "./gathering";
+export type { SourcedEffect, GatherEffectOptions } from "./gathering";
 
 // Resolver (main pipeline)
 export { resolveEffects, resolveFromSources } from "./resolver";

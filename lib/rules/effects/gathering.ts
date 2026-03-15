@@ -432,13 +432,16 @@ function gatherWeaponModEffects(character: Character, ruleset: MergedRuleset): S
  * Gather effects from active modifiers on the character.
  * Filters out expired modifiers (by timestamp or remaining uses).
  */
-function gatherActiveModifierEffects(character: Character): SourcedEffect[] {
+function gatherActiveModifierEffects(
+  character: Character,
+  now: Date = new Date()
+): SourcedEffect[] {
   const results: SourcedEffect[] = [];
-  const now = new Date().toISOString();
+  const nowISO = now.toISOString();
 
   for (const modifier of character.activeModifiers || []) {
     // Filter expired by timestamp
-    if (modifier.expiresAt && modifier.expiresAt < now) continue;
+    if (modifier.expiresAt && modifier.expiresAt < nowISO) continue;
 
     // Filter expired by remaining uses
     if (modifier.remainingUses !== undefined && modifier.remainingUses <= 0) continue;
@@ -460,7 +463,16 @@ function gatherActiveModifierEffects(character: Character): SourcedEffect[] {
  * Collects effects from qualities, gear, weapons, armor, cyberware,
  * bioware, adept powers, and active modifiers.
  */
-export function gatherEffectSources(character: Character, ruleset: MergedRuleset): SourcedEffect[] {
+export interface GatherEffectOptions {
+  /** Override the current time for deterministic expiry checks. Defaults to `new Date()`. */
+  now?: Date;
+}
+
+export function gatherEffectSources(
+  character: Character,
+  ruleset: MergedRuleset,
+  options: GatherEffectOptions = {}
+): SourcedEffect[] {
   return [
     ...gatherQualityEffects(character, ruleset),
     ...gatherGearEffects(character, ruleset),
@@ -471,6 +483,6 @@ export function gatherEffectSources(character: Character, ruleset: MergedRuleset
     ...gatherCyberwareEffects(character, ruleset),
     ...gatherBiowareEffects(character, ruleset),
     ...gatherAdeptPowerEffects(character, ruleset),
-    ...gatherActiveModifierEffects(character),
+    ...gatherActiveModifierEffects(character, options.now),
   ];
 }
