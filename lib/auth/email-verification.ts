@@ -22,6 +22,7 @@ import {
 import { sendEmail, renderTemplate } from "@/lib/email";
 import { VerificationEmailTemplate } from "@/lib/email/templates/verification-email";
 import { AuditLogger } from "@/lib/security/audit-logger";
+import { authLogger } from "@/lib/logging";
 
 /** Token size in bytes (32 bytes = 256 bits of entropy) */
 const TOKEN_BYTES = 32;
@@ -140,11 +141,11 @@ export async function sendVerificationEmail(
 
       return { success: true };
     } else {
-      console.error("Failed to send verification email:", result.error);
+      authLogger.error({ error: result.error }, "Failed to send verification email");
       return { success: false, error: result.error || "Failed to send email" };
     }
   } catch (error) {
-    console.error("Error in sendVerificationEmail:", error);
+    authLogger.error({ error }, "Error in sendVerificationEmail");
     return {
       success: false,
       error: error instanceof Error ? error.message : "Unknown error",
@@ -204,7 +205,7 @@ export async function verifyEmailToken(token: string): Promise<VerificationResul
 
     return { success: true, userId: user.id };
   } catch (error) {
-    console.error("Error in verifyEmailToken:", error);
+    authLogger.error({ error }, "Error in verifyEmailToken");
     await AuditLogger.log({
       event: "verification.failed",
       metadata: {
