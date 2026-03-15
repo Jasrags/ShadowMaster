@@ -234,8 +234,11 @@ export async function getTransactionsByDateRange(
   endDate: string
 ): Promise<FavorTransaction[]> {
   const ledger = await getFavorLedger(userId, characterId);
+  const startMs = new Date(startDate).getTime();
+  const endMs = new Date(endDate).getTime();
   return ledger.transactions.filter((t) => {
-    return t.timestamp >= startDate && t.timestamp <= endDate;
+    const timestampMs = new Date(t.timestamp).getTime();
+    return timestampMs >= startMs && timestampMs <= endMs;
   });
 }
 
