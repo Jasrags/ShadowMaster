@@ -16,6 +16,12 @@ import * as charactersModule from "@/lib/storage/characters";
 vi.mock("@/lib/auth/session");
 vi.mock("@/lib/storage/users");
 vi.mock("@/lib/storage/characters");
+vi.mock("@/lib/security/rate-limit", () => ({
+  RateLimiter: { get: () => ({ isRateLimited: () => false }) },
+}));
+vi.mock("@/lib/security/ip", () => ({
+  getClientIp: () => "127.0.0.1",
+}));
 
 // Helper to create a NextRequest with JSON body
 function createMockRequest(url: string, body?: unknown, method = "POST"): NextRequest {

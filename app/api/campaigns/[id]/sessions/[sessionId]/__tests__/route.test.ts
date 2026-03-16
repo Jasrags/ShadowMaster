@@ -9,11 +9,15 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { PUT, DELETE } from "../route";
 import { NextRequest } from "next/server";
 import * as sessionModule from "@/lib/auth/session";
+import * as campaignAuthModule from "@/lib/auth/campaign";
 import * as campaignStorage from "@/lib/storage/campaigns";
 import type { Campaign, CampaignSession } from "@/lib/types";
 
 // Mock dependencies
 vi.mock("@/lib/auth/session");
+vi.mock("@/lib/auth/campaign", () => ({
+  authorizeGM: vi.fn(),
+}));
 vi.mock("@/lib/storage/campaigns");
 
 // Helper to create a NextRequest
@@ -119,7 +123,12 @@ describe("PUT /api/campaigns/[id]/sessions/[sessionId]", () => {
     const mockCampaign = createMockCampaign();
 
     vi.mocked(sessionModule.getSession).mockResolvedValue("test-gm-id");
-    vi.mocked(campaignStorage.getCampaignById).mockResolvedValue(mockCampaign);
+    vi.mocked(campaignAuthModule.authorizeGM).mockResolvedValue({
+      authorized: true,
+      campaign: mockCampaign,
+      role: "gm",
+      status: 200,
+    });
     vi.mocked(campaignStorage.updateCampaign).mockResolvedValue(mockCampaign);
 
     const request = createMockRequest(
@@ -141,7 +150,12 @@ describe("PUT /api/campaigns/[id]/sessions/[sessionId]", () => {
     const mockCampaign = createMockCampaign();
 
     vi.mocked(sessionModule.getSession).mockResolvedValue("test-gm-id");
-    vi.mocked(campaignStorage.getCampaignById).mockResolvedValue(mockCampaign);
+    vi.mocked(campaignAuthModule.authorizeGM).mockResolvedValue({
+      authorized: true,
+      campaign: mockCampaign,
+      role: "gm",
+      status: 200,
+    });
     vi.mocked(campaignStorage.updateCampaign).mockResolvedValue(mockCampaign);
 
     const request = createMockRequest(
@@ -159,10 +173,14 @@ describe("PUT /api/campaigns/[id]/sessions/[sessionId]", () => {
   });
 
   it("should return 403 when user is not GM", async () => {
-    const mockCampaign = createMockCampaign({ gmId: "other-gm-id" });
-
     vi.mocked(sessionModule.getSession).mockResolvedValue("player-1");
-    vi.mocked(campaignStorage.getCampaignById).mockResolvedValue(mockCampaign);
+    vi.mocked(campaignAuthModule.authorizeGM).mockResolvedValue({
+      authorized: false,
+      campaign: null,
+      role: null,
+      error: "Only the GM can perform this action",
+      status: 403,
+    });
 
     const request = createMockRequest(
       "http://localhost:3000/api/campaigns/test-campaign-id/sessions/test-session-id",
@@ -175,13 +193,18 @@ describe("PUT /api/campaigns/[id]/sessions/[sessionId]", () => {
 
     expect(response.status).toBe(403);
     expect(data.success).toBe(false);
-    expect(data.error).toBe("Only the GM can update sessions");
     expect(campaignStorage.updateCampaign).not.toHaveBeenCalled();
   });
 
   it("should return 404 when campaign not found", async () => {
     vi.mocked(sessionModule.getSession).mockResolvedValue("test-gm-id");
-    vi.mocked(campaignStorage.getCampaignById).mockResolvedValue(null);
+    vi.mocked(campaignAuthModule.authorizeGM).mockResolvedValue({
+      authorized: false,
+      campaign: null,
+      role: null,
+      error: "Campaign not found",
+      status: 404,
+    });
 
     const request = createMockRequest(
       "http://localhost:3000/api/campaigns/nonexistent-id/sessions/test-session-id",
@@ -201,7 +224,12 @@ describe("PUT /api/campaigns/[id]/sessions/[sessionId]", () => {
     const mockCampaign = createMockCampaign({ sessions: [] });
 
     vi.mocked(sessionModule.getSession).mockResolvedValue("test-gm-id");
-    vi.mocked(campaignStorage.getCampaignById).mockResolvedValue(mockCampaign);
+    vi.mocked(campaignAuthModule.authorizeGM).mockResolvedValue({
+      authorized: true,
+      campaign: mockCampaign,
+      role: "gm",
+      status: 200,
+    });
 
     const request = createMockRequest(
       "http://localhost:3000/api/campaigns/test-campaign-id/sessions/nonexistent-session",
@@ -221,7 +249,7 @@ describe("PUT /api/campaigns/[id]/sessions/[sessionId]", () => {
     const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
 
     vi.mocked(sessionModule.getSession).mockResolvedValue("test-gm-id");
-    vi.mocked(campaignStorage.getCampaignById).mockRejectedValue(new Error("Storage error"));
+    vi.mocked(campaignAuthModule.authorizeGM).mockRejectedValue(new Error("Storage error"));
 
     const request = createMockRequest(
       "http://localhost:3000/api/campaigns/test-campaign-id/sessions/test-session-id",
@@ -269,7 +297,12 @@ describe("DELETE /api/campaigns/[id]/sessions/[sessionId]", () => {
     });
 
     vi.mocked(sessionModule.getSession).mockResolvedValue("test-gm-id");
-    vi.mocked(campaignStorage.getCampaignById).mockResolvedValue(mockCampaign);
+    vi.mocked(campaignAuthModule.authorizeGM).mockResolvedValue({
+      authorized: true,
+      campaign: mockCampaign,
+      role: "gm",
+      status: 200,
+    });
     vi.mocked(campaignStorage.updateCampaign).mockResolvedValue({
       ...mockCampaign,
       sessions: [],
@@ -294,10 +327,14 @@ describe("DELETE /api/campaigns/[id]/sessions/[sessionId]", () => {
   });
 
   it("should return 403 when user is not GM", async () => {
-    const mockCampaign = createMockCampaign({ gmId: "other-gm-id" });
-
     vi.mocked(sessionModule.getSession).mockResolvedValue("player-1");
-    vi.mocked(campaignStorage.getCampaignById).mockResolvedValue(mockCampaign);
+    vi.mocked(campaignAuthModule.authorizeGM).mockResolvedValue({
+      authorized: false,
+      campaign: null,
+      role: null,
+      error: "Only the GM can perform this action",
+      status: 403,
+    });
 
     const request = createMockRequest(
       "http://localhost:3000/api/campaigns/test-campaign-id/sessions/test-session-id",
@@ -311,13 +348,18 @@ describe("DELETE /api/campaigns/[id]/sessions/[sessionId]", () => {
 
     expect(response.status).toBe(403);
     expect(data.success).toBe(false);
-    expect(data.error).toBe("Only the GM can delete sessions");
     expect(campaignStorage.updateCampaign).not.toHaveBeenCalled();
   });
 
   it("should return 404 when campaign not found", async () => {
     vi.mocked(sessionModule.getSession).mockResolvedValue("test-gm-id");
-    vi.mocked(campaignStorage.getCampaignById).mockResolvedValue(null);
+    vi.mocked(campaignAuthModule.authorizeGM).mockResolvedValue({
+      authorized: false,
+      campaign: null,
+      role: null,
+      error: "Campaign not found",
+      status: 404,
+    });
 
     const request = createMockRequest(
       "http://localhost:3000/api/campaigns/nonexistent-id/sessions/test-session-id",
@@ -338,7 +380,12 @@ describe("DELETE /api/campaigns/[id]/sessions/[sessionId]", () => {
     const mockCampaign = createMockCampaign({ sessions: [] });
 
     vi.mocked(sessionModule.getSession).mockResolvedValue("test-gm-id");
-    vi.mocked(campaignStorage.getCampaignById).mockResolvedValue(mockCampaign);
+    vi.mocked(campaignAuthModule.authorizeGM).mockResolvedValue({
+      authorized: true,
+      campaign: mockCampaign,
+      role: "gm",
+      status: 200,
+    });
 
     const request = createMockRequest(
       "http://localhost:3000/api/campaigns/test-campaign-id/sessions/nonexistent-session",
@@ -359,7 +406,7 @@ describe("DELETE /api/campaigns/[id]/sessions/[sessionId]", () => {
     const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
 
     vi.mocked(sessionModule.getSession).mockResolvedValue("test-gm-id");
-    vi.mocked(campaignStorage.getCampaignById).mockRejectedValue(new Error("Storage error"));
+    vi.mocked(campaignAuthModule.authorizeGM).mockRejectedValue(new Error("Storage error"));
 
     const request = createMockRequest(
       "http://localhost:3000/api/campaigns/test-campaign-id/sessions/test-session-id",

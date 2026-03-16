@@ -8,15 +8,16 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { GET, POST } from "../route";
 import { NextRequest } from "next/server";
 import * as sessionModule from "@/lib/auth/session";
-import * as userStorage from "@/lib/storage/users";
-import * as campaignStorage from "@/lib/storage/campaigns";
+import * as campaignAuthModule from "@/lib/auth/campaign";
 import * as contactStorage from "@/lib/storage/contacts";
 import * as contactRules from "@/lib/rules/contacts";
-import type { Campaign, User, SocialContact } from "@/lib/types";
+import type { Campaign, SocialContact } from "@/lib/types";
 
 vi.mock("@/lib/auth/session");
-vi.mock("@/lib/storage/users");
-vi.mock("@/lib/storage/campaigns");
+vi.mock("@/lib/auth/campaign", () => ({
+  authorizeGM: vi.fn(),
+  authorizeMember: vi.fn(),
+}));
 vi.mock("@/lib/storage/contacts");
 vi.mock("@/lib/rules/contacts");
 
@@ -32,17 +33,6 @@ function createMockRequest(url: string, body?: unknown, method = "GET"): NextReq
   Object.defineProperty(request, "nextUrl", { value: urlObj, writable: false });
   if (body) (request as { json: () => Promise<unknown> }).json = async () => body;
   return request;
-}
-
-function createMockUser(overrides?: Partial<User>): User {
-  return {
-    id: "test-user-id",
-    username: "testuser",
-    passwordHash: "hash",
-    email: "test@example.com",
-    createdAt: new Date().toISOString(),
-    ...overrides,
-  } as User;
 }
 
 function createMockContact(overrides?: Partial<SocialContact>): SocialContact {
@@ -136,10 +126,13 @@ describe("GET /api/campaigns/[id]/contacts", () => {
       }),
     ];
     const mockCampaign = createMockCampaign();
-    const mockUser = createMockUser({ id: "test-gm-id" });
     vi.mocked(sessionModule.getSession).mockResolvedValue("test-gm-id");
-    vi.mocked(userStorage.getUserById).mockResolvedValue(mockUser);
-    vi.mocked(campaignStorage.getCampaignById).mockResolvedValue(mockCampaign);
+    vi.mocked(campaignAuthModule.authorizeMember).mockResolvedValue({
+      authorized: true,
+      campaign: mockCampaign,
+      role: "gm",
+      status: 200,
+    });
     vi.mocked(contactStorage.getCampaignContacts).mockResolvedValue(contacts);
     const request = createMockRequest(
       "http://localhost:3000/api/campaigns/test-campaign-id/contacts"
@@ -174,10 +167,13 @@ describe("GET /api/campaigns/[id]/contacts", () => {
       }),
     ];
     const mockCampaign = createMockCampaign();
-    const mockUser = createMockUser({ id: "player-1" });
     vi.mocked(sessionModule.getSession).mockResolvedValue("player-1");
-    vi.mocked(userStorage.getUserById).mockResolvedValue(mockUser);
-    vi.mocked(campaignStorage.getCampaignById).mockResolvedValue(mockCampaign);
+    vi.mocked(campaignAuthModule.authorizeMember).mockResolvedValue({
+      authorized: true,
+      campaign: mockCampaign,
+      role: "player",
+      status: 200,
+    });
     vi.mocked(contactStorage.getCampaignContacts).mockResolvedValue(contacts);
     const request = createMockRequest(
       "http://localhost:3000/api/campaigns/test-campaign-id/contacts"
@@ -192,10 +188,13 @@ describe("GET /api/campaigns/[id]/contacts", () => {
   it("should filter by archetype", async () => {
     const contacts = [createMockContact({ archetype: "fixer" })];
     const mockCampaign = createMockCampaign();
-    const mockUser = createMockUser({ id: "test-gm-id" });
     vi.mocked(sessionModule.getSession).mockResolvedValue("test-gm-id");
-    vi.mocked(userStorage.getUserById).mockResolvedValue(mockUser);
-    vi.mocked(campaignStorage.getCampaignById).mockResolvedValue(mockCampaign);
+    vi.mocked(campaignAuthModule.authorizeMember).mockResolvedValue({
+      authorized: true,
+      campaign: mockCampaign,
+      role: "gm",
+      status: 200,
+    });
     vi.mocked(contactStorage.getCampaignContacts).mockResolvedValue(contacts);
     const request = createMockRequest(
       "http://localhost:3000/api/campaigns/test-campaign-id/contacts?archetype=fixer"
@@ -205,11 +204,14 @@ describe("GET /api/campaigns/[id]/contacts", () => {
   });
 
   it("should return 403 when not a member", async () => {
-    const mockCampaign = createMockCampaign();
-    const mockUser = createMockUser({ id: "non-member" });
     vi.mocked(sessionModule.getSession).mockResolvedValue("non-member");
-    vi.mocked(userStorage.getUserById).mockResolvedValue(mockUser);
-    vi.mocked(campaignStorage.getCampaignById).mockResolvedValue(mockCampaign);
+    vi.mocked(campaignAuthModule.authorizeMember).mockResolvedValue({
+      authorized: false,
+      campaign: null,
+      role: null,
+      error: "Access denied: campaign membership required",
+      status: 403,
+    });
     const request = createMockRequest(
       "http://localhost:3000/api/campaigns/test-campaign-id/contacts"
     );
@@ -218,10 +220,14 @@ describe("GET /api/campaigns/[id]/contacts", () => {
   });
 
   it("should return 404 when campaign not found", async () => {
-    const mockUser = createMockUser({ id: "test-gm-id" });
     vi.mocked(sessionModule.getSession).mockResolvedValue("test-gm-id");
-    vi.mocked(userStorage.getUserById).mockResolvedValue(mockUser);
-    vi.mocked(campaignStorage.getCampaignById).mockResolvedValue(null);
+    vi.mocked(campaignAuthModule.authorizeMember).mockResolvedValue({
+      authorized: false,
+      campaign: null,
+      role: null,
+      error: "Campaign not found",
+      status: 404,
+    });
     const request = createMockRequest("http://localhost:3000/api/campaigns/nonexistent/contacts");
     const response = await GET(request, { params: Promise.resolve({ id: "nonexistent" }) });
     expect(response.status).toBe(404);
@@ -230,7 +236,7 @@ describe("GET /api/campaigns/[id]/contacts", () => {
   it("should return 500 on error", async () => {
     const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
     vi.mocked(sessionModule.getSession).mockResolvedValue("test-gm-id");
-    vi.mocked(userStorage.getUserById).mockRejectedValue(new Error("Error"));
+    vi.mocked(campaignAuthModule.authorizeMember).mockRejectedValue(new Error("Error"));
     const request = createMockRequest(
       "http://localhost:3000/api/campaigns/test-campaign-id/contacts"
     );
@@ -256,11 +262,14 @@ describe("POST /api/campaigns/[id]/contacts", () => {
 
   it("should create contact successfully", async () => {
     const mockCampaign = createMockCampaign();
-    const mockUser = createMockUser({ id: "test-gm-id" });
     const mockContact = createMockContact();
     vi.mocked(sessionModule.getSession).mockResolvedValue("test-gm-id");
-    vi.mocked(userStorage.getUserById).mockResolvedValue(mockUser);
-    vi.mocked(campaignStorage.getCampaignById).mockResolvedValue(mockCampaign);
+    vi.mocked(campaignAuthModule.authorizeGM).mockResolvedValue({
+      authorized: true,
+      campaign: mockCampaign,
+      role: "gm",
+      status: 200,
+    });
     vi.mocked(contactRules.validateContact).mockReturnValue({
       valid: true,
       errors: [],
@@ -282,10 +291,13 @@ describe("POST /api/campaigns/[id]/contacts", () => {
 
   it("should return 400 when validation fails", async () => {
     const mockCampaign = createMockCampaign();
-    const mockUser = createMockUser({ id: "test-gm-id" });
     vi.mocked(sessionModule.getSession).mockResolvedValue("test-gm-id");
-    vi.mocked(userStorage.getUserById).mockResolvedValue(mockUser);
-    vi.mocked(campaignStorage.getCampaignById).mockResolvedValue(mockCampaign);
+    vi.mocked(campaignAuthModule.authorizeGM).mockResolvedValue({
+      authorized: true,
+      campaign: mockCampaign,
+      role: "gm",
+      status: 200,
+    });
     vi.mocked(contactRules.validateContact).mockReturnValue({
       valid: false,
       errors: ["Invalid connection rating"],
@@ -302,11 +314,14 @@ describe("POST /api/campaigns/[id]/contacts", () => {
 
   it("should return 400 when duplicate name exists", async () => {
     const mockCampaign = createMockCampaign();
-    const mockUser = createMockUser({ id: "test-gm-id" });
     const existingContact = createMockContact({ name: "existing contact" });
     vi.mocked(sessionModule.getSession).mockResolvedValue("test-gm-id");
-    vi.mocked(userStorage.getUserById).mockResolvedValue(mockUser);
-    vi.mocked(campaignStorage.getCampaignById).mockResolvedValue(mockCampaign);
+    vi.mocked(campaignAuthModule.authorizeGM).mockResolvedValue({
+      authorized: true,
+      campaign: mockCampaign,
+      role: "gm",
+      status: 200,
+    });
     vi.mocked(contactRules.validateContact).mockReturnValue({
       valid: true,
       errors: [],
@@ -325,11 +340,14 @@ describe("POST /api/campaigns/[id]/contacts", () => {
   });
 
   it("should return 403 when not GM", async () => {
-    const mockCampaign = createMockCampaign();
-    const mockUser = createMockUser({ id: "player-1" });
     vi.mocked(sessionModule.getSession).mockResolvedValue("player-1");
-    vi.mocked(userStorage.getUserById).mockResolvedValue(mockUser);
-    vi.mocked(campaignStorage.getCampaignById).mockResolvedValue(mockCampaign);
+    vi.mocked(campaignAuthModule.authorizeGM).mockResolvedValue({
+      authorized: false,
+      campaign: null,
+      role: "player",
+      error: "Only the GM can perform this action",
+      status: 403,
+    });
     const request = createMockRequest(
       "http://localhost:3000/api/campaigns/test-campaign-id/contacts",
       { name: "New Contact", archetype: "fixer", connection: 3, loyalty: 2 },
@@ -342,7 +360,7 @@ describe("POST /api/campaigns/[id]/contacts", () => {
   it("should return 500 on error", async () => {
     const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
     vi.mocked(sessionModule.getSession).mockResolvedValue("test-gm-id");
-    vi.mocked(userStorage.getUserById).mockRejectedValue(new Error("Error"));
+    vi.mocked(campaignAuthModule.authorizeGM).mockRejectedValue(new Error("Error"));
     const request = createMockRequest(
       "http://localhost:3000/api/campaigns/test-campaign-id/contacts",
       { name: "New Contact", archetype: "fixer", connection: 3, loyalty: 2 },

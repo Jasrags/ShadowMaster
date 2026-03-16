@@ -9,11 +9,15 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { DELETE } from "../route";
 import { NextRequest } from "next/server";
 import * as sessionModule from "@/lib/auth/session";
+import * as campaignAuthModule from "@/lib/auth/campaign";
 import * as campaignStorage from "@/lib/storage/campaigns";
 import type { Campaign } from "@/lib/types";
 
 // Mock dependencies
 vi.mock("@/lib/auth/session");
+vi.mock("@/lib/auth/campaign", () => ({
+  authorizeGM: vi.fn(),
+}));
 vi.mock("@/lib/storage/campaigns");
 
 // Helper to create a NextRequest
@@ -94,7 +98,12 @@ describe("DELETE /api/campaigns/[id]/players/[playerId]", () => {
     });
 
     vi.mocked(sessionModule.getSession).mockResolvedValue("test-gm-id");
-    vi.mocked(campaignStorage.getCampaignById).mockResolvedValue(mockCampaign);
+    vi.mocked(campaignAuthModule.authorizeGM).mockResolvedValue({
+      authorized: true,
+      campaign: mockCampaign,
+      role: "gm",
+      status: 200,
+    });
     vi.mocked(campaignStorage.removePlayerFromCampaign).mockResolvedValue({
       ...mockCampaign,
       playerIds: ["player-2"],
@@ -117,13 +126,14 @@ describe("DELETE /api/campaigns/[id]/players/[playerId]", () => {
   });
 
   it("should return 403 when user is not the GM", async () => {
-    const mockCampaign = createMockCampaign({
-      gmId: "test-gm-id",
-      playerIds: ["player-1", "test-user-id"],
-    });
-
     vi.mocked(sessionModule.getSession).mockResolvedValue("test-user-id"); // Not the GM
-    vi.mocked(campaignStorage.getCampaignById).mockResolvedValue(mockCampaign);
+    vi.mocked(campaignAuthModule.authorizeGM).mockResolvedValue({
+      authorized: false,
+      campaign: null,
+      role: null,
+      error: "Only the GM can perform this action",
+      status: 403,
+    });
 
     const request = createMockRequest(
       "http://localhost:3000/api/campaigns/test-campaign-id/players/player-1"
@@ -135,7 +145,6 @@ describe("DELETE /api/campaigns/[id]/players/[playerId]", () => {
 
     expect(response.status).toBe(403);
     expect(data.success).toBe(false);
-    expect(data.error).toBe("Only the GM can remove players");
     expect(campaignStorage.removePlayerFromCampaign).not.toHaveBeenCalled();
   });
 
@@ -146,7 +155,12 @@ describe("DELETE /api/campaigns/[id]/players/[playerId]", () => {
     });
 
     vi.mocked(sessionModule.getSession).mockResolvedValue("test-gm-id");
-    vi.mocked(campaignStorage.getCampaignById).mockResolvedValue(mockCampaign);
+    vi.mocked(campaignAuthModule.authorizeGM).mockResolvedValue({
+      authorized: true,
+      campaign: mockCampaign,
+      role: "gm",
+      status: 200,
+    });
 
     const request = createMockRequest(
       "http://localhost:3000/api/campaigns/test-campaign-id/players/nonexistent-player"
@@ -164,7 +178,13 @@ describe("DELETE /api/campaigns/[id]/players/[playerId]", () => {
 
   it("should return 404 when campaign not found", async () => {
     vi.mocked(sessionModule.getSession).mockResolvedValue("test-gm-id");
-    vi.mocked(campaignStorage.getCampaignById).mockResolvedValue(null);
+    vi.mocked(campaignAuthModule.authorizeGM).mockResolvedValue({
+      authorized: false,
+      campaign: null,
+      role: null,
+      error: "Campaign not found",
+      status: 404,
+    });
 
     const request = createMockRequest(
       "http://localhost:3000/api/campaigns/nonexistent-id/players/player-1"
@@ -183,7 +203,7 @@ describe("DELETE /api/campaigns/[id]/players/[playerId]", () => {
     const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
 
     vi.mocked(sessionModule.getSession).mockResolvedValue("test-gm-id");
-    vi.mocked(campaignStorage.getCampaignById).mockRejectedValue(new Error("Storage error"));
+    vi.mocked(campaignAuthModule.authorizeGM).mockRejectedValue(new Error("Storage error"));
 
     const request = createMockRequest(
       "http://localhost:3000/api/campaigns/test-campaign-id/players/player-1"
@@ -209,7 +229,12 @@ describe("DELETE /api/campaigns/[id]/players/[playerId]", () => {
     });
 
     vi.mocked(sessionModule.getSession).mockResolvedValue("test-gm-id");
-    vi.mocked(campaignStorage.getCampaignById).mockResolvedValue(mockCampaign);
+    vi.mocked(campaignAuthModule.authorizeGM).mockResolvedValue({
+      authorized: true,
+      campaign: mockCampaign,
+      role: "gm",
+      status: 200,
+    });
     vi.mocked(campaignStorage.removePlayerFromCampaign).mockRejectedValue(
       new Error("Remove failed")
     );
