@@ -243,17 +243,31 @@ export async function ensureDataDirectories(): Promise<void> {
 const fileLocks = new Map<string, Promise<unknown>>();
 
 export async function withFileLock<T>(filePath: string, fn: () => Promise<T>): Promise<T> {
-  // Wait for any existing operation on this file to complete
   const existing = fileLocks.get(filePath) ?? Promise.resolve();
 
-  // Chain our operation after the existing one
-  const operation = existing.then(fn, fn);
+  // Each caller gets its own result promise, isolated from predecessors.
+  // The chain promise tracks ordering; the caller promise tracks this fn's outcome.
+  let resolve!: (v: T | PromiseLike<T>) => void;
+  let reject!: (e: unknown) => void;
+  const callerPromise = new Promise<T>((res, rej) => {
+    resolve = res;
+    reject = rej;
+  });
+
+  // Wait for predecessor to settle (pass or fail), then run fn
+  const operation = existing
+    .then(
+      () => {},
+      () => {}
+    )
+    .then(() => fn())
+    .then(resolve, reject);
 
   // Store the chain so the next caller waits for us
   fileLocks.set(filePath, operation);
 
   try {
-    return await operation;
+    return await callerPromise;
   } finally {
     // Clean up if we're still the latest operation (prevents memory leak)
     if (fileLocks.get(filePath) === operation) {

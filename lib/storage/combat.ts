@@ -181,11 +181,6 @@ async function moveToCompleted(sessionId: ID, ownerId: ID, campaignId?: ID): Pro
     const trimmedCompleted = newCompleted.slice(0, MAX_COMPLETED_SESSIONS);
     const toRemove = newCompleted.slice(MAX_COMPLETED_SESSIONS);
 
-    // Delete old session files
-    for (const id of toRemove) {
-      await deleteFile(getSessionPath(id));
-    }
-
     const updatedIndex: CombatSessionIndex = {
       ...index,
       active: index.active.filter((id) => id !== sessionId),
@@ -194,7 +189,14 @@ async function moveToCompleted(sessionId: ID, ownerId: ID, campaignId?: ID): Pro
       completed: trimmedCompleted,
     };
 
+    // Write index first — orphaned files on disk are harmless,
+    // but index referencing deleted files causes silent data loss.
     await writeIndex(updatedIndex);
+
+    // Then delete old session files
+    for (const id of toRemove) {
+      await deleteFile(getSessionPath(id));
+    }
   });
 }
 
@@ -890,6 +892,9 @@ export async function updateOpposedTest(
     ...updates,
   };
 
+  // Test file write is outside the index lock — individual test files have
+  // no concurrent-write risk under single-caller semantics. The lock only
+  // guards index consistency for the session→testId[] mapping.
   const filePath = path.join(OPPOSED_TESTS_DIR, `${testId}.json`);
   await writeJsonFile(filePath, updated);
 

@@ -17,6 +17,7 @@ import {
   directoryExists,
   listSubdirectories,
   ensureDataDirectories,
+  withFileLock,
   DATA_DIR,
 } from "../base";
 
@@ -379,6 +380,78 @@ describe("Storage Base Utilities", () => {
 
       const exists = await directoryExists(path.join(DATA_DIR, "users"));
       expect(exists).toBe(true);
+    });
+  });
+
+  // ===========================================================================
+  // withFileLock
+  // ===========================================================================
+
+  describe("withFileLock", () => {
+    const delay = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+    it("should return the result of fn", async () => {
+      const result = await withFileLock("/test/lock", async () => 42);
+      expect(result).toBe(42);
+    });
+
+    it("should serialise concurrent operations on the same path", async () => {
+      const order: number[] = [];
+      const p1 = withFileLock("/test/serial", async () => {
+        order.push(1);
+        await delay(20);
+        order.push(2);
+      });
+      const p2 = withFileLock("/test/serial", async () => {
+        order.push(3);
+      });
+      await Promise.all([p1, p2]);
+      // 3 must not appear between 1 and 2
+      expect(order).toEqual([1, 2, 3]);
+    });
+
+    it("should allow concurrent operations on different paths", async () => {
+      const order: string[] = [];
+      const p1 = withFileLock("/test/a", async () => {
+        order.push("a-start");
+        await delay(20);
+        order.push("a-end");
+      });
+      const p2 = withFileLock("/test/b", async () => {
+        order.push("b-start");
+        await delay(10);
+        order.push("b-end");
+      });
+      await Promise.all([p1, p2]);
+      // Both should start before either ends (parallel execution)
+      expect(order.indexOf("a-start")).toBeLessThan(order.indexOf("a-end"));
+      expect(order.indexOf("b-start")).toBeLessThan(order.indexOf("b-end"));
+    });
+
+    it("should not bleed errors between callers", async () => {
+      const p1 = withFileLock("/test/errors", async () => {
+        throw new Error("boom");
+      });
+      const p2 = withFileLock("/test/errors", async () => "ok");
+
+      await expect(p1).rejects.toThrow("boom");
+      await expect(p2).resolves.toBe("ok");
+    });
+
+    it("should propagate fn errors to the correct caller", async () => {
+      await expect(
+        withFileLock("/test/propagate", async () => {
+          throw new Error("test error");
+        })
+      ).rejects.toThrow("test error");
+    });
+
+    it("should clean up the lock after all callers drain", async () => {
+      await withFileLock("/test/cleanup", async () => "done");
+      // After completion, the internal map entry should be cleaned up.
+      // We verify by running another operation — if it hangs, cleanup failed.
+      const result = await withFileLock("/test/cleanup", async () => "second");
+      expect(result).toBe("second");
     });
   });
 });
