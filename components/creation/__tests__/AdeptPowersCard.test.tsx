@@ -49,11 +49,15 @@ vi.mock("../shared", () => ({
     spent,
     total,
     tooltip,
+    mode,
+    displayFormat,
   }: {
     label: string;
     spent: number;
     total: number;
     tooltip?: string;
+    mode?: string;
+    displayFormat?: string;
   }) => (
     <div
       data-testid="budget-indicator"
@@ -61,6 +65,8 @@ vi.mock("../shared", () => ({
       data-spent={spent}
       data-total={total}
       data-tooltip={tooltip}
+      data-mode={mode}
+      data-display-format={displayFormat}
     >
       {spent}/{total} {label}
     </div>
@@ -74,15 +80,20 @@ vi.mock("../shared", () => ({
 vi.mock("../adept-powers", () => ({
   AdeptPowerModal: ({
     isOpen,
+    onClose,
     onAdd,
     ppRemaining,
   }: {
     isOpen: boolean;
+    onClose: () => void;
     onAdd: (powerId: string, level: number, spec?: string) => void;
     ppRemaining: number;
   }) =>
     isOpen ? (
       <div data-testid="adept-power-modal" data-pp-remaining={ppRemaining}>
+        <button data-testid="modal-close" onClick={onClose}>
+          Close
+        </button>
         <button data-testid="modal-add-killing-hands" onClick={() => onAdd("killing-hands", 1)}>
           Add Killing Hands
         </button>
@@ -447,6 +458,17 @@ describe("AdeptPowersCard", () => {
       expect(screen.getByTestId("adept-power-modal")).toBeInTheDocument();
     });
 
+    it("closes modal when close button clicked", () => {
+      const state = createBaseState();
+      render(<AdeptPowersCard state={state} updateState={mockUpdateState} />);
+
+      fireEvent.click(screen.getByText("Add"));
+      expect(screen.getByTestId("adept-power-modal")).toBeInTheDocument();
+
+      fireEvent.click(screen.getByTestId("modal-close"));
+      expect(screen.queryByTestId("adept-power-modal")).not.toBeInTheDocument();
+    });
+
     it("adds power via modal callback", () => {
       const state = createBaseState();
       render(<AdeptPowersCard state={state} updateState={mockUpdateState} />);
@@ -690,6 +712,20 @@ describe("AdeptPowersCard", () => {
           "karma-spent-power-points": 5,
         }),
       });
+    });
+
+    it("does not show PP purchase button when budget equals magic rating", () => {
+      const state = createBaseState({
+        selections: {
+          "magical-path": "mystic-adept",
+          "power-points-allocation": 6,
+          adeptPowers: [],
+        },
+        budgets: { "karma-spent-power-points": 0, "power-points-spent": 0 },
+      });
+      render(<AdeptPowersCard state={state} updateState={mockUpdateState} />);
+
+      expect(screen.queryByText(/Purchase \+1 PP/)).not.toBeInTheDocument();
     });
   });
 

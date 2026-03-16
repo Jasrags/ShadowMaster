@@ -356,6 +356,17 @@ describe("MagicPathCard", () => {
       expect(screen.getByTestId("magic-path-modal")).toBeInTheDocument();
     });
 
+    it("closes modal when close button clicked", () => {
+      const state = createBaseState();
+      render(<MagicPathCard state={state} updateState={mockUpdateState} />);
+
+      fireEvent.click(screen.getByText("Choose path..."));
+      expect(screen.getByTestId("magic-path-modal")).toBeInTheDocument();
+
+      fireEvent.click(screen.getByTestId("modal-close"));
+      expect(screen.queryByTestId("magic-path-modal")).not.toBeInTheDocument();
+    });
+
     it("opens modal when Change button clicked on selected path", () => {
       const state = createBaseState({
         selections: { "magical-path": "magician", positiveQualities: [] },
@@ -396,6 +407,11 @@ describe("MagicPathCard", () => {
 
       const updateCall = mockUpdateState.mock.calls[0][0];
       expect(updateCall.selections.tradition).toBeUndefined();
+
+      // Verify original state was not mutated
+      expect(
+        (state as unknown as Record<string, Record<string, unknown>>).selections.tradition
+      ).toBe("hermetic");
     });
 
     it("clears aspected group when switching away from aspected mage", () => {
