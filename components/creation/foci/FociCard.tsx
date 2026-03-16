@@ -87,6 +87,7 @@ function FocusItem({
         {/* Remove button */}
         <button
           onClick={onRemove}
+          aria-label={`Remove ${focus.name}`}
           className="shrink-0 rounded p-1 text-zinc-400 hover:bg-zinc-200 hover:text-zinc-600 dark:hover:bg-zinc-700 dark:hover:text-zinc-300"
         >
           <X className="h-4 w-4" />
