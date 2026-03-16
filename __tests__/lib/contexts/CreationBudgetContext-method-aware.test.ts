@@ -9,7 +9,6 @@
  */
 
 import { describe, test, expect } from "vitest";
-import { _testExports } from "@/lib/contexts/CreationBudgetContext";
 import {
   POINT_BUY_KARMA_BUDGET,
   POINT_BUY_NUYEN_PER_KARMA,
@@ -17,13 +16,12 @@ import {
   POINT_BUY_MAGIC_QUALITY_COSTS,
 } from "@/lib/rules/point-buy-validation";
 import { LIFE_MODULES_KARMA_BUDGET } from "@/lib/types";
-
-const {
-  extractSpentValues,
+import {
   calculateBudgetTotals,
   calculateLifeModulesBudgetTotals,
   calculatePointBuyBudgetTotals,
-} = _testExports;
+} from "@/lib/rules/creation/budget-totals";
+import { extractSpentValues } from "@/lib/rules/creation/budget-spent";
 
 // Minimal defaults
 const emptyBudgets: Record<string, number> = {};

@@ -768,8 +768,8 @@ export default function CharacterPage({ params }: CharacterPageProps) {
   return (
     <RulesetProvider>
       <CombatSessionProvider characterId={character.id} pollInterval={5000}>
-        <MatrixSessionProvider character={character} onCharacterUpdate={setCharacter}>
-          <RiggingSessionProvider character={character} onCharacterUpdate={setCharacter}>
+        <MatrixSessionProvider character={character}>
+          <RiggingSessionProvider character={character}>
             <CharacterSheet
               character={character}
               setCharacter={setCharacter}

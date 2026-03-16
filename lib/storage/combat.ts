@@ -108,8 +108,8 @@ async function readIndex(): Promise<CombatSessionIndex> {
  * Write the session index
  */
 async function writeIndex(index: CombatSessionIndex): Promise<void> {
-  index.updatedAt = new Date().toISOString();
-  await writeJsonFile(getIndexPath(), index);
+  const timestamped: CombatSessionIndex = { ...index, updatedAt: new Date().toISOString() };
+  await writeJsonFile(getIndexPath(), timestamped);
 }
 
 /**
@@ -118,30 +118,27 @@ async function writeIndex(index: CombatSessionIndex): Promise<void> {
 async function addToIndex(session: CombatSession): Promise<void> {
   const index = await readIndex();
 
-  // Add to active list
-  if (!index.active.includes(session.id)) {
-    index.active.push(session.id);
-  }
+  const ownerList = index.byOwner[session.ownerId] || [];
+  const campaignList = session.campaignId ? index.byCampaign[session.campaignId] || [] : [];
 
-  // Add to owner index
-  if (!index.byOwner[session.ownerId]) {
-    index.byOwner[session.ownerId] = [];
-  }
-  if (!index.byOwner[session.ownerId].includes(session.id)) {
-    index.byOwner[session.ownerId].push(session.id);
-  }
+  const updatedIndex: CombatSessionIndex = {
+    ...index,
+    active: index.active.includes(session.id) ? index.active : [...index.active, session.id],
+    byOwner: {
+      ...index.byOwner,
+      [session.ownerId]: ownerList.includes(session.id) ? ownerList : [...ownerList, session.id],
+    },
+    byCampaign: session.campaignId
+      ? {
+          ...index.byCampaign,
+          [session.campaignId]: campaignList.includes(session.id)
+            ? campaignList
+            : [...campaignList, session.id],
+        }
+      : index.byCampaign,
+  };
 
-  // Add to campaign index if applicable
-  if (session.campaignId) {
-    if (!index.byCampaign[session.campaignId]) {
-      index.byCampaign[session.campaignId] = [];
-    }
-    if (!index.byCampaign[session.campaignId].includes(session.id)) {
-      index.byCampaign[session.campaignId].push(session.id);
-    }
-  }
-
-  await writeIndex(index);
+  await writeIndex(updatedIndex);
 }
 
 /**
@@ -150,40 +147,44 @@ async function addToIndex(session: CombatSession): Promise<void> {
 async function moveToCompleted(sessionId: ID, ownerId: ID, campaignId?: ID): Promise<void> {
   const index = await readIndex();
 
-  // Remove from active
-  index.active = index.active.filter((id) => id !== sessionId);
+  // Build updated owner index - remove sessionId, drop empty entries
+  const updatedByOwner = Object.fromEntries(
+    Object.entries({ ...index.byOwner })
+      .map(([key, ids]) => [key, key === ownerId ? ids.filter((id) => id !== sessionId) : ids])
+      .filter(([, ids]) => (ids as ID[]).length > 0)
+  );
 
-  // Remove from owner index
-  if (index.byOwner[ownerId]) {
-    index.byOwner[ownerId] = index.byOwner[ownerId].filter((id) => id !== sessionId);
-    if (index.byOwner[ownerId].length === 0) {
-      delete index.byOwner[ownerId];
-    }
+  // Build updated campaign index - remove sessionId, drop empty entries
+  const updatedByCampaign = campaignId
+    ? Object.fromEntries(
+        Object.entries({ ...index.byCampaign })
+          .map(([key, ids]) => [
+            key,
+            key === campaignId ? ids.filter((id) => id !== sessionId) : ids,
+          ])
+          .filter(([, ids]) => (ids as ID[]).length > 0)
+      )
+    : index.byCampaign;
+
+  // Add to completed (newest first)
+  const newCompleted = [sessionId, ...index.completed];
+  const trimmedCompleted = newCompleted.slice(0, MAX_COMPLETED_SESSIONS);
+  const toRemove = newCompleted.slice(MAX_COMPLETED_SESSIONS);
+
+  // Delete old session files
+  for (const id of toRemove) {
+    await deleteFile(getSessionPath(id));
   }
 
-  // Remove from campaign index
-  if (campaignId && index.byCampaign[campaignId]) {
-    index.byCampaign[campaignId] = index.byCampaign[campaignId].filter((id) => id !== sessionId);
-    if (index.byCampaign[campaignId].length === 0) {
-      delete index.byCampaign[campaignId];
-    }
-  }
+  const updatedIndex: CombatSessionIndex = {
+    ...index,
+    active: index.active.filter((id) => id !== sessionId),
+    byOwner: updatedByOwner,
+    byCampaign: updatedByCampaign,
+    completed: trimmedCompleted,
+  };
 
-  // Add to completed
-  index.completed.unshift(sessionId);
-
-  // Trim completed list
-  if (index.completed.length > MAX_COMPLETED_SESSIONS) {
-    const toRemove = index.completed.slice(MAX_COMPLETED_SESSIONS);
-    index.completed = index.completed.slice(0, MAX_COMPLETED_SESSIONS);
-
-    // Delete old session files
-    for (const id of toRemove) {
-      await deleteFile(getSessionPath(id));
-    }
-  }
-
-  await writeIndex(index);
+  await writeIndex(updatedIndex);
 }
 
 /**
@@ -192,25 +193,34 @@ async function moveToCompleted(sessionId: ID, ownerId: ID, campaignId?: ID): Pro
 async function removeFromIndex(sessionId: ID, ownerId: ID, campaignId?: ID): Promise<void> {
   const index = await readIndex();
 
-  // Remove from all lists
-  index.active = index.active.filter((id) => id !== sessionId);
-  index.completed = index.completed.filter((id) => id !== sessionId);
+  // Build updated owner index - remove sessionId, drop empty entries
+  const updatedByOwner = Object.fromEntries(
+    Object.entries(index.byOwner)
+      .map(([key, ids]) => [key, key === ownerId ? ids.filter((id) => id !== sessionId) : ids])
+      .filter(([, ids]) => (ids as ID[]).length > 0)
+  );
 
-  if (index.byOwner[ownerId]) {
-    index.byOwner[ownerId] = index.byOwner[ownerId].filter((id) => id !== sessionId);
-    if (index.byOwner[ownerId].length === 0) {
-      delete index.byOwner[ownerId];
-    }
-  }
+  // Build updated campaign index - remove sessionId, drop empty entries
+  const updatedByCampaign = campaignId
+    ? Object.fromEntries(
+        Object.entries(index.byCampaign)
+          .map(([key, ids]) => [
+            key,
+            key === campaignId ? ids.filter((id) => id !== sessionId) : ids,
+          ])
+          .filter(([, ids]) => (ids as ID[]).length > 0)
+      )
+    : index.byCampaign;
 
-  if (campaignId && index.byCampaign[campaignId]) {
-    index.byCampaign[campaignId] = index.byCampaign[campaignId].filter((id) => id !== sessionId);
-    if (index.byCampaign[campaignId].length === 0) {
-      delete index.byCampaign[campaignId];
-    }
-  }
+  const updatedIndex: CombatSessionIndex = {
+    ...index,
+    active: index.active.filter((id) => id !== sessionId),
+    completed: index.completed.filter((id) => id !== sessionId),
+    byOwner: updatedByOwner,
+    byCampaign: updatedByCampaign,
+  };
 
-  await writeIndex(index);
+  await writeIndex(updatedIndex);
 }
 
 // =============================================================================
@@ -378,12 +388,15 @@ export async function addParticipant(
     id: randomUUID(),
   };
 
-  session.participants.push(newParticipant);
-  session.updatedAt = new Date().toISOString();
+  const updated: CombatSession = {
+    ...session,
+    participants: [...session.participants, newParticipant],
+    updatedAt: new Date().toISOString(),
+  };
 
-  await writeJsonFile(getSessionPath(sessionId), session);
+  await writeJsonFile(getSessionPath(sessionId), updated);
 
-  return session;
+  return updated;
 }
 
 /**
@@ -398,13 +411,16 @@ export async function removeParticipant(
     return null;
   }
 
-  session.participants = session.participants.filter((p) => p.id !== participantId);
-  session.initiativeOrder = session.initiativeOrder.filter((id) => id !== participantId);
-  session.updatedAt = new Date().toISOString();
+  const updated: CombatSession = {
+    ...session,
+    participants: session.participants.filter((p) => p.id !== participantId),
+    initiativeOrder: session.initiativeOrder.filter((id) => id !== participantId),
+    updatedAt: new Date().toISOString(),
+  };
 
-  await writeJsonFile(getSessionPath(sessionId), session);
+  await writeJsonFile(getSessionPath(sessionId), updated);
 
-  return session;
+  return updated;
 }
 
 /**
@@ -420,20 +436,27 @@ export async function updateParticipant(
     return null;
   }
 
-  const index = session.participants.findIndex((p) => p.id === participantId);
-  if (index === -1) {
+  const participantIndex = session.participants.findIndex((p) => p.id === participantId);
+  if (participantIndex === -1) {
     return null;
   }
 
-  session.participants[index] = {
-    ...session.participants[index],
+  const updatedParticipant: CombatParticipant = {
+    ...session.participants[participantIndex],
     ...updates,
   };
-  session.updatedAt = new Date().toISOString();
 
-  await writeJsonFile(getSessionPath(sessionId), session);
+  const updated: CombatSession = {
+    ...session,
+    participants: session.participants.map((p, i) =>
+      i === participantIndex ? updatedParticipant : p
+    ),
+    updatedAt: new Date().toISOString(),
+  };
 
-  return session.participants[index];
+  await writeJsonFile(getSessionPath(sessionId), updated);
+
+  return updatedParticipant;
 }
 
 /**
@@ -465,9 +488,9 @@ export async function addCondition(
     return null;
   }
 
-  participant.conditions.push(condition);
-
-  return updateParticipant(sessionId, participantId, { conditions: participant.conditions });
+  return updateParticipant(sessionId, participantId, {
+    conditions: [...participant.conditions, condition],
+  });
 }
 
 /**
@@ -488,9 +511,9 @@ export async function removeCondition(
     return null;
   }
 
-  participant.conditions = participant.conditions.filter((c) => c.id !== conditionId);
-
-  return updateParticipant(sessionId, participantId, { conditions: participant.conditions });
+  return updateParticipant(sessionId, participantId, {
+    conditions: participant.conditions.filter((c) => c.id !== conditionId),
+  });
 }
 
 // =============================================================================
@@ -511,27 +534,37 @@ export async function setInitiativeScore(
     return null;
   }
 
-  const participant = session.participants.find((p) => p.id === participantId);
-  if (!participant) {
+  const participantIndex = session.participants.findIndex((p) => p.id === participantId);
+  if (participantIndex === -1) {
     return null;
   }
 
-  participant.initiativeScore = score;
-  if (dice) {
-    participant.initiativeDice = dice;
-  }
+  const updatedParticipant: CombatParticipant = {
+    ...session.participants[participantIndex],
+    initiativeScore: score,
+    ...(dice ? { initiativeDice: dice } : {}),
+  };
+
+  const updatedParticipants = session.participants.map((p, i) =>
+    i === participantIndex ? updatedParticipant : p
+  );
 
   // Re-sort initiative order
-  session.initiativeOrder = session.participants
+  const updatedInitiativeOrder = updatedParticipants
     .filter((p) => p.status === "active" || p.status === "delayed")
     .sort((a, b) => b.initiativeScore - a.initiativeScore)
     .map((p) => p.id);
 
-  session.updatedAt = new Date().toISOString();
+  const updated: CombatSession = {
+    ...session,
+    participants: updatedParticipants,
+    initiativeOrder: updatedInitiativeOrder,
+    updatedAt: new Date().toISOString(),
+  };
 
-  await writeJsonFile(getSessionPath(sessionId), session);
+  await writeJsonFile(getSessionPath(sessionId), updated);
 
-  return session;
+  return updated;
 }
 
 /**
@@ -568,30 +601,30 @@ export async function advanceTurn(sessionId: ID): Promise<CombatSession | null> 
   }
 
   // Move to next turn
-  session.currentTurn = (session.currentTurn + 1) % activeOrder.length;
+  const nextTurn = (session.currentTurn + 1) % activeOrder.length;
+  const wrappedAround = nextTurn === 0;
 
-  // If we wrapped around, advance the round
-  if (session.currentTurn === 0) {
-    session.round++;
-    // Reset action allocations for all participants
-    for (const participant of session.participants) {
-      if (participant.status === "active") {
-        participant.actionsRemaining = {
-          free: 999,
-          simple: 2,
-          complex: 1,
-          interrupt: true,
-        };
-      }
-    }
-  }
+  // If we wrapped around, advance the round and reset action allocations
+  const updatedParticipants = wrappedAround
+    ? session.participants.map((p) =>
+        p.status === "active"
+          ? { ...p, actionsRemaining: { free: 999, simple: 2, complex: 1, interrupt: true } }
+          : p
+      )
+    : session.participants;
 
-  session.currentPhase = "action";
-  session.updatedAt = new Date().toISOString();
+  const updated: CombatSession = {
+    ...session,
+    currentTurn: nextTurn,
+    round: wrappedAround ? session.round + 1 : session.round,
+    participants: updatedParticipants,
+    currentPhase: "action",
+    updatedAt: new Date().toISOString(),
+  };
 
-  await writeJsonFile(getSessionPath(sessionId), session);
+  await writeJsonFile(getSessionPath(sessionId), updated);
 
-  return session;
+  return updated;
 }
 
 /**
@@ -603,36 +636,35 @@ export async function advanceRound(sessionId: ID): Promise<CombatSession | null>
     return null;
   }
 
-  session.round++;
-  session.currentTurn = 0;
-  session.currentPhase = "initiative";
-
   // Reset action allocations and decrement condition durations
-  for (const participant of session.participants) {
-    if (participant.status === "active") {
-      participant.actionsRemaining = {
-        free: 999,
-        simple: 2,
-        complex: 1,
-        interrupt: true,
-      };
-    }
+  const updatedParticipants = session.participants.map((participant) => {
+    const updatedConditions = participant.conditions
+      .map((c) =>
+        c.roundsRemaining !== undefined ? { ...c, roundsRemaining: c.roundsRemaining - 1 } : c
+      )
+      .filter((c) => c.roundsRemaining === undefined || c.roundsRemaining > 0);
 
-    // Decrement condition durations
-    participant.conditions = participant.conditions.filter((c) => {
-      if (c.roundsRemaining !== undefined) {
-        c.roundsRemaining--;
-        return c.roundsRemaining > 0;
-      }
-      return true;
-    });
-  }
+    return participant.status === "active"
+      ? {
+          ...participant,
+          actionsRemaining: { free: 999, simple: 2, complex: 1, interrupt: true },
+          conditions: updatedConditions,
+        }
+      : { ...participant, conditions: updatedConditions };
+  });
 
-  session.updatedAt = new Date().toISOString();
+  const updated: CombatSession = {
+    ...session,
+    round: session.round + 1,
+    currentTurn: 0,
+    currentPhase: "initiative",
+    participants: updatedParticipants,
+    updatedAt: new Date().toISOString(),
+  };
 
-  await writeJsonFile(getSessionPath(sessionId), session);
+  await writeJsonFile(getSessionPath(sessionId), updated);
 
-  return session;
+  return updated;
 }
 
 /**
@@ -665,10 +697,12 @@ export async function declareInterrupt(
     return null;
   }
 
-  const participant = session.participants.find((p) => p.id === participantId);
-  if (!participant) {
+  const participantIndex = session.participants.findIndex((p) => p.id === participantId);
+  if (participantIndex === -1) {
     return null;
   }
+
+  const participant = session.participants[participantIndex];
 
   const pendingInterrupt: PendingInterrupt = {
     ...interrupt,
@@ -677,14 +711,23 @@ export async function declareInterrupt(
     resolved: false,
   };
 
-  participant.interruptsPending.push(pendingInterrupt);
-  participant.actionsRemaining.interrupt = false;
+  const updatedParticipant: CombatParticipant = {
+    ...participant,
+    interruptsPending: [...participant.interruptsPending, pendingInterrupt],
+    actionsRemaining: { ...participant.actionsRemaining, interrupt: false },
+  };
 
-  session.updatedAt = new Date().toISOString();
+  const updated: CombatSession = {
+    ...session,
+    participants: session.participants.map((p, i) =>
+      i === participantIndex ? updatedParticipant : p
+    ),
+    updatedAt: new Date().toISOString(),
+  };
 
-  await writeJsonFile(getSessionPath(sessionId), session);
+  await writeJsonFile(getSessionPath(sessionId), updated);
 
-  return session;
+  return updated;
 }
 
 /**
@@ -700,29 +743,34 @@ export async function resolveInterrupt(
     return null;
   }
 
-  const participant = session.participants.find((p) => p.id === participantId);
-  if (!participant) {
+  const participantIndex = session.participants.findIndex((p) => p.id === participantId);
+  if (participantIndex === -1) {
     return null;
   }
 
+  const participant = session.participants[participantIndex];
   const interrupt = participant.interruptsPending.find((i) => i.id === interruptId);
   if (!interrupt) {
     return null;
   }
 
-  interrupt.resolved = true;
+  const updatedParticipant: CombatParticipant = {
+    ...participant,
+    initiativeScore: participant.initiativeScore - interrupt.initiativeCost,
+    interruptsPending: participant.interruptsPending.filter((i) => i.id !== interruptId),
+  };
 
-  // Apply initiative cost
-  participant.initiativeScore -= interrupt.initiativeCost;
+  const updated: CombatSession = {
+    ...session,
+    participants: session.participants.map((p, i) =>
+      i === participantIndex ? updatedParticipant : p
+    ),
+    updatedAt: new Date().toISOString(),
+  };
 
-  // Remove resolved interrupts
-  participant.interruptsPending = participant.interruptsPending.filter((i) => !i.resolved);
+  await writeJsonFile(getSessionPath(sessionId), updated);
 
-  session.updatedAt = new Date().toISOString();
-
-  await writeJsonFile(getSessionPath(sessionId), session);
-
-  return session;
+  return updated;
 }
 
 // =============================================================================
@@ -759,6 +807,20 @@ export async function endCombatSession(
 // =============================================================================
 
 const OPPOSED_TESTS_DIR = path.join(COMBAT_DIR, "opposed-tests");
+const OPPOSED_INDEX_FILE = path.join(OPPOSED_TESTS_DIR, "_index.json");
+
+/**
+ * Opposed test index: maps sessionId → testId[] for quick lookup
+ */
+type OpposedTestIndex = Record<ID, ID[]>;
+
+async function readOpposedIndex(): Promise<OpposedTestIndex> {
+  return (await readJsonFile<OpposedTestIndex>(OPPOSED_INDEX_FILE)) ?? {};
+}
+
+async function writeOpposedIndex(index: OpposedTestIndex): Promise<void> {
+  await writeJsonFile(OPPOSED_INDEX_FILE, index);
+}
 
 /**
  * Create an opposed test record
@@ -777,6 +839,14 @@ export async function createOpposedTest(
   const filePath = path.join(OPPOSED_TESTS_DIR, `${opposedTest.id}.json`);
   await writeJsonFile(filePath, opposedTest);
 
+  // Update the session→tests index
+  const index = await readOpposedIndex();
+  const sessionTests = index[opposedTest.combatSessionId] ?? [];
+  await writeOpposedIndex({
+    ...index,
+    [opposedTest.combatSessionId]: [...sessionTests, opposedTest.id],
+  });
+
   return opposedTest;
 }
 
@@ -789,7 +859,7 @@ export async function getOpposedTest(testId: ID): Promise<OpposedTest | null> {
 }
 
 /**
- * Update an opposed test
+ * Update an opposed test. Removes resolved tests from the index.
  */
 export async function updateOpposedTest(
   testId: ID,
@@ -808,20 +878,30 @@ export async function updateOpposedTest(
   const filePath = path.join(OPPOSED_TESTS_DIR, `${testId}.json`);
   await writeJsonFile(filePath, updated);
 
+  // If the test was just resolved, remove it from the index
+  if (updated.state === "resolved" && test.state !== "resolved") {
+    const index = await readOpposedIndex();
+    const sessionTests = index[test.combatSessionId] ?? [];
+    await writeOpposedIndex({
+      ...index,
+      [test.combatSessionId]: sessionTests.filter((id) => id !== testId),
+    });
+  }
+
   return updated;
 }
 
 /**
- * Get pending opposed tests for a combat session
+ * Get pending opposed tests for a combat session using the index.
  */
 export async function getPendingOpposedTests(sessionId: ID): Promise<OpposedTest[]> {
-  await ensureDirectory(OPPOSED_TESTS_DIR);
-  const testIds = await listJsonFiles(OPPOSED_TESTS_DIR);
+  const index = await readOpposedIndex();
+  const testIds = index[sessionId] ?? [];
 
   const pendingTests: OpposedTest[] = [];
   for (const id of testIds) {
     const test = await getOpposedTest(id);
-    if (test && test.combatSessionId === sessionId && test.state !== "resolved") {
+    if (test && test.state !== "resolved") {
       pendingTests.push(test);
     }
   }

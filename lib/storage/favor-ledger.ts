@@ -151,15 +151,12 @@ export async function addFavorTransaction(
     timestamp: now,
   };
 
-  // Append transaction to ledger
-  const updatedLedger: FavorLedger = {
+  // Append transaction to ledger and recalculate aggregates
+  const updatedLedger = computeAggregates({
     ...ledger,
     transactions: [...ledger.transactions, transaction],
     updatedAt: now,
-  };
-
-  // Update aggregates
-  recalculateAggregatesInPlace(updatedLedger);
+  });
 
   const filePath = getFavorLedgerPath(userId, characterId);
   await writeJsonFile(filePath, updatedLedger);
@@ -306,11 +303,16 @@ export async function approveFavorTransaction(
     gmApprovedAt: now,
   };
 
-  ledger.transactions[transactionIndex] = updatedTransaction;
-  ledger.updatedAt = now;
+  const updatedLedger: FavorLedger = {
+    ...ledger,
+    transactions: ledger.transactions.map((t, i) =>
+      i === transactionIndex ? updatedTransaction : t
+    ),
+    updatedAt: now,
+  };
 
   const filePath = getFavorLedgerPath(userId, characterId);
-  await writeJsonFile(filePath, ledger);
+  await writeJsonFile(filePath, updatedLedger);
 
   return updatedTransaction;
 }
@@ -359,11 +361,16 @@ export async function rejectFavorTransaction(
     rejectionReason: reason,
   };
 
-  ledger.transactions[transactionIndex] = updatedTransaction;
-  ledger.updatedAt = now;
+  const updatedLedger: FavorLedger = {
+    ...ledger,
+    transactions: ledger.transactions.map((t, i) =>
+      i === transactionIndex ? updatedTransaction : t
+    ),
+    updatedAt: now,
+  };
 
   const filePath = getFavorLedgerPath(userId, characterId);
-  await writeJsonFile(filePath, ledger);
+  await writeJsonFile(filePath, updatedLedger);
 
   return updatedTransaction;
 }
@@ -379,13 +386,12 @@ export async function recalculateAggregates(userId: ID, characterId: ID): Promis
   const ledger = await getFavorLedger(userId, characterId);
   const now = new Date().toISOString();
 
-  recalculateAggregatesInPlace(ledger);
-  ledger.updatedAt = now;
+  const updated = computeAggregates({ ...ledger, updatedAt: now });
 
   const filePath = getFavorLedgerPath(userId, characterId);
-  await writeJsonFile(filePath, ledger);
+  await writeJsonFile(filePath, updated);
 
-  return ledger;
+  return updated;
 }
 
 // =============================================================================
@@ -470,9 +476,12 @@ export async function getFavorStatistics(
 // =============================================================================
 
 /**
- * Recalculate aggregates in place (mutates the ledger object)
+ * Recalculate aggregate statistics from transactions (pure function)
+ *
+ * @param ledger - Source ledger with transactions
+ * @returns New ledger with recalculated aggregates
  */
-function recalculateAggregatesInPlace(ledger: FavorLedger): void {
+function computeAggregates(ledger: FavorLedger): FavorLedger {
   let totalFavorsCalled = 0;
   let totalFavorsOwed = 0;
   let totalNuyenSpent = 0;
@@ -504,9 +513,12 @@ function recalculateAggregatesInPlace(ledger: FavorLedger): void {
     }
   }
 
-  ledger.totalFavorsCalled = totalFavorsCalled;
-  ledger.totalFavorsOwed = totalFavorsOwed;
-  ledger.totalNuyenSpent = totalNuyenSpent;
-  ledger.totalKarmaSpent = totalKarmaSpent;
-  ledger.burnedContactsCount = burnedContactsCount;
+  return {
+    ...ledger,
+    totalFavorsCalled,
+    totalFavorsOwed,
+    totalNuyenSpent,
+    totalKarmaSpent,
+    burnedContactsCount,
+  };
 }

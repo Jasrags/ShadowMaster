@@ -5,10 +5,10 @@
  */
 
 import { describe, it, expect } from "vitest";
-import { _testExports, type BudgetState } from "../CreationBudgetContext";
+import type { BudgetState } from "../CreationBudgetContext";
 import type { CreationState } from "../../types/creation";
-
-const { extractSpentValues, validateBudgets } = _testExports;
+import { extractSpentValues } from "@/lib/rules/creation/budget-spent";
+import { validateBudgets } from "@/lib/rules/creation/budget-validation";
 
 // =============================================================================
 // Test Helpers

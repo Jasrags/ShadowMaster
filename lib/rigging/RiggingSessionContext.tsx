@@ -203,8 +203,6 @@ function buildRiggingStateFromCharacter(character: Character): {
 interface RiggingSessionProviderProps {
   /** The character whose rigging session to manage */
   character: Character;
-  /** Callback when character data changes */
-  onCharacterUpdate: (updated: Character) => void;
   children: ReactNode;
 }
 
