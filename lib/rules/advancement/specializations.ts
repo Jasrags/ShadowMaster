@@ -15,6 +15,7 @@ import type {
 } from "@/lib/types";
 import type { CampaignAdvancementSettings } from "@/lib/types/campaign";
 import type { AdvancementRulesData } from "@/lib/rules/loader-types";
+import { getModule } from "../merge";
 import { calculateAdvancementTrainingTime } from "./training";
 import { validateSpecializationAdvancement } from "./validation";
 import { spendKarma } from "./ledger";
@@ -88,7 +89,7 @@ export function advanceSpecialization(
   options: AdvanceSpecializationOptions = {}
 ): AdvanceSpecializationResult {
   // Extract advancement rules
-  const advancementRules = ruleset.modules.advancement as unknown as AdvancementRulesData;
+  const advancementRules = getModule<AdvancementRulesData>(ruleset, "advancement");
 
   // Validate advancement
   const validation = validateSpecializationAdvancement(character, skillId, ruleset, {

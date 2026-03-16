@@ -8,6 +8,7 @@
 import type { Character, MergedRuleset, AdvancementRecord } from "@/lib/types";
 import type { CampaignAdvancementSettings } from "@/lib/types/campaign";
 import type { AdvancementRulesData } from "@/lib/rules/loader-types";
+import { getModule } from "../merge";
 import { validateAttributeAdvancement } from "./validation";
 import { spendKarma } from "./ledger";
 
@@ -51,7 +52,7 @@ export function advanceEdge(
   options: AdvanceEdgeOptions = {}
 ): AdvanceEdgeResult {
   // Extract advancement rules
-  const advancementRules = ruleset.modules.advancement as unknown as AdvancementRulesData;
+  const advancementRules = getModule<AdvancementRulesData>(ruleset, "advancement");
 
   // Validate advancement
   const validation = validateAttributeAdvancement(character, "edge", newRating, ruleset, {

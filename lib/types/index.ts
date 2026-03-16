@@ -421,7 +421,7 @@ export type {
   CampaignNotification,
 } from "./campaign";
 
-export type { CampaignAdvancementSettings } from "./campaign";
+export type { CampaignAdvancementSettings, AdvancementRulesData } from "./campaign";
 
 // Location types
 export type {
