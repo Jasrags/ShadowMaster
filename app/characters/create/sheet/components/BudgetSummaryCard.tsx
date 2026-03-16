@@ -26,6 +26,75 @@ function getBudgetTextColor(budget: { spent: number; total: number; remaining: n
 }
 
 // =============================================================================
+// TYPES
+// =============================================================================
+
+interface KarmaBreakdownItem {
+  name: string;
+  amount: number; // negative = cost, positive = gain
+}
+
+interface KarmaBreakdownCategory {
+  label: string;
+  total: number;
+  items?: KarmaBreakdownItem[];
+}
+
+// =============================================================================
+// HELPERS
+// =============================================================================
+
+/**
+ * Generate contextual notes for a budget line (e.g. karma-to-nuyen conversion info).
+ */
+function getNote(
+  budgetId: string,
+  karmaSpentGear: number,
+  karmaSpentContacts: number
+): { text: string; style: "info" | "warning" | "error" } | null {
+  switch (budgetId) {
+    case "karma":
+      if (karmaSpentGear > 0 && karmaSpentContacts > 0) {
+        return {
+          text: `${karmaSpentGear} for nuyen, ${karmaSpentContacts} for contacts`,
+          style: "info",
+        };
+      }
+      if (karmaSpentGear > 0) {
+        return {
+          text: `${karmaSpentGear} converted to ${(karmaSpentGear * 2000).toLocaleString()}¥`,
+          style: "info",
+        };
+      }
+      if (karmaSpentContacts > 0) {
+        return { text: `${karmaSpentContacts} for extra contacts`, style: "info" };
+      }
+      return null;
+
+    case "nuyen":
+      if (karmaSpentGear > 0) {
+        return {
+          text: `+${(karmaSpentGear * 2000).toLocaleString()}¥ from karma`,
+          style: "info",
+        };
+      }
+      return null;
+
+    case "contact-points":
+      if (karmaSpentContacts > 0) {
+        return {
+          text: `+${karmaSpentContacts} via karma`,
+          style: "info",
+        };
+      }
+      return null;
+
+    default:
+      return null;
+  }
+}
+
+// =============================================================================
 // BUDGET SUMMARY CARD
 // =============================================================================
 
@@ -70,16 +139,6 @@ export function BudgetSummaryCard({ creationState }: BudgetSummaryCardProps) {
   const karmaSpentContacts = Math.max(0, totalContactCost - freeContactKarma);
 
   // Build karma breakdown for tooltip
-  interface KarmaBreakdownItem {
-    name: string;
-    amount: number; // negative = cost, positive = gain
-  }
-  interface KarmaBreakdownCategory {
-    label: string;
-    total: number;
-    items?: KarmaBreakdownItem[];
-  }
-
   const karmaBreakdown = useMemo(() => {
     const categories: KarmaBreakdownCategory[] = [];
     const selections = creationState.selections || {};
@@ -215,8 +274,8 @@ export function BudgetSummaryCard({ creationState }: BudgetSummaryCardProps) {
           <span>{startingKarma}</span>
         </div>
 
-        {karmaBreakdown.map((category, idx) => (
-          <div key={idx} className="mt-2">
+        {karmaBreakdown.map((category) => (
+          <div key={category.label} className="mt-2">
             <div className="flex justify-between font-medium">
               <span>{category.label}:</span>
               <span className={category.total > 0 ? "text-emerald-400" : ""}>
@@ -224,8 +283,8 @@ export function BudgetSummaryCard({ creationState }: BudgetSummaryCardProps) {
                 {category.total}
               </span>
             </div>
-            {category.items?.map((item, itemIdx) => (
-              <div key={itemIdx} className="flex justify-between pl-2 text-zinc-400">
+            {category.items?.map((item) => (
+              <div key={item.name} className="flex justify-between pl-2 text-zinc-400">
                 <span className="truncate pr-2">{item.name}</span>
                 <span className={item.amount > 0 ? "text-emerald-400" : ""}>
                   {item.amount > 0 ? "+" : ""}
@@ -265,55 +324,6 @@ export function BudgetSummaryCard({ creationState }: BudgetSummaryCardProps) {
         })),
     [budgets]
   );
-
-  // Generate contextual notes for each budget
-  const getNote = (
-    budgetId: string
-  ): { text: string; style: "info" | "warning" | "error" } | null => {
-    switch (budgetId) {
-      case "karma":
-        // Show breakdown if karma is being used for gear or contacts
-        if (karmaSpentGear > 0 && karmaSpentContacts > 0) {
-          return {
-            text: `${karmaSpentGear} for nuyen, ${karmaSpentContacts} for contacts`,
-            style: "info",
-          };
-        }
-        if (karmaSpentGear > 0) {
-          return {
-            text: `${karmaSpentGear} converted to ${(karmaSpentGear * 2000).toLocaleString()}¥`,
-            style: "info",
-          };
-        }
-        if (karmaSpentContacts > 0) {
-          return { text: `${karmaSpentContacts} for extra contacts`, style: "info" };
-        }
-        return null;
-
-      case "nuyen":
-        // Show if nuyen was augmented by karma conversion
-        if (karmaSpentGear > 0) {
-          return {
-            text: `+${(karmaSpentGear * 2000).toLocaleString()}¥ from karma`,
-            style: "info",
-          };
-        }
-        return null;
-
-      case "contact-points":
-        // Show if contacts overflowed to general karma
-        if (karmaSpentContacts > 0) {
-          return {
-            text: `+${karmaSpentContacts} via karma`,
-            style: "info",
-          };
-        }
-        return null;
-
-      default:
-        return null;
-    }
-  };
 
   const formatValue = (value: number, format?: string, budgetId?: string) => {
     if (format === "currency") {
@@ -356,7 +366,7 @@ export function BudgetSummaryCard({ creationState }: BudgetSummaryCardProps) {
               budget.total > 0
                 ? Math.min(100, Math.max(0, (budget.spent / budget.total) * 100))
                 : 0;
-            const note = getNote(budget.id);
+            const note = getNote(budget.id, karmaSpentGear, karmaSpentContacts);
             const hasOverflow = budget.spent > budget.total;
             const isKarma = budget.id === "karma";
             const showKarmaTooltip = isKarma && hasKarmaBreakdown && karmaTooltipContent;
@@ -439,8 +449,8 @@ export function BudgetSummaryCard({ creationState }: BudgetSummaryCardProps) {
           <div className="flex items-start gap-2">
             <AlertTriangle className="mt-0.5 h-4 w-4 text-amber-600 dark:text-amber-400" />
             <div className="text-xs text-amber-800 dark:text-amber-200">
-              {warnings.map((w, i) => (
-                <p key={i}>{w.message}</p>
+              {warnings.map((w) => (
+                <p key={w.message}>{w.message}</p>
               ))}
             </div>
           </div>
@@ -453,8 +463,8 @@ export function BudgetSummaryCard({ creationState }: BudgetSummaryCardProps) {
           <div className="flex items-start gap-2">
             <AlertCircle className="mt-0.5 h-4 w-4 text-red-600 dark:text-red-400" />
             <div className="text-xs text-red-800 dark:text-red-200">
-              {errors.map((e, i) => (
-                <p key={i}>{e.message}</p>
+              {errors.map((e) => (
+                <p key={e.message}>{e.message}</p>
               ))}
             </div>
           </div>

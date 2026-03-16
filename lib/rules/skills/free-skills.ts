@@ -25,7 +25,7 @@
 import type { PriorityTableData } from "@/lib/rules/RulesetContext";
 import type { FreeSkillDesignations } from "@/lib/types";
 
-// Re-export for backwards compatibility
+// Re-export so callers importing from free-skills.ts continue to work
 export type { FreeSkillDesignations } from "@/lib/types";
 
 // =============================================================================
