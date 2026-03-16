@@ -154,26 +154,30 @@ vi.mock("@/lib/rules/qualities/budget-modifiers", () => ({
 }));
 
 // Mock @/lib/contexts
-const mockBudgets: Record<
-  string,
-  { total: number; spent: number; remaining: number; label: string }
-> = {
+const createMockBudgets = (overrides?: {
+  karma?: { total: number; spent: number; remaining: number; label: string };
+}) => ({
   karma: { total: 25, spent: 0, remaining: 25, label: "Karma" },
-};
+  ...overrides,
+});
 
-const mockQualityModifiers = {
+const createMockQualityModifiers = (overrides?: { friendsInHighPlaces?: boolean }) => ({
   friendsInHighPlaces: false,
   karmaToNuyenCap: 10,
   knowledgeCostMultipliers: {},
   languageCostMultiplier: 1,
   jackOfAllTrades: false,
-};
+  ...overrides,
+});
+
+let currentBudgets = createMockBudgets();
+let currentQualityModifiers = createMockQualityModifiers();
 
 vi.mock("@/lib/contexts", () => ({
   useCreationBudgets: () => ({
-    budgets: mockBudgets,
-    qualityModifiers: mockQualityModifiers,
-    getBudget: (id: string) => mockBudgets[id],
+    budgets: currentBudgets,
+    qualityModifiers: currentQualityModifiers,
+    getBudget: (id: string) => currentBudgets[id as keyof typeof currentBudgets] ?? null,
     errors: [],
     warnings: [],
     isValid: true,
@@ -223,9 +227,9 @@ describe("ContactsCard", () => {
     vi.clearAllMocks();
     mockUpdateState = vi.fn();
 
-    // Reset budgets to defaults
-    mockBudgets.karma = { total: 25, spent: 0, remaining: 25, label: "Karma" };
-    mockQualityModifiers.friendsInHighPlaces = false;
+    // Reset to fresh mock objects
+    currentBudgets = createMockBudgets();
+    currentQualityModifiers = createMockQualityModifiers();
   });
 
   describe("rendering", () => {
@@ -465,7 +469,9 @@ describe("ContactsCard", () => {
     it("disables Add button when no karma available", () => {
       // CHA=1, multiplier=3, free pool=3, karma remaining=0
       // Contact with cost 3 uses all free pool
-      mockBudgets.karma = { total: 25, spent: 25, remaining: 0, label: "Karma" };
+      currentBudgets = createMockBudgets({
+        karma: { total: 25, spent: 25, remaining: 0, label: "Karma" },
+      });
       const state = createBaseState({
         selections: {
           metatype: "human",

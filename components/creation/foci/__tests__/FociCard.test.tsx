@@ -164,7 +164,8 @@ describe("FociCard", () => {
       updateSpent: vi.fn(),
       errors: [],
       warnings: [],
-      isComplete: false,
+      isValid: true,
+      canFinalize: false,
       qualityModifiers: {
         karmaToNuyenCap: 10,
         knowledgeCostMultipliers: { academic: 1, street: 1, professional: 1, interests: 1 },
@@ -546,17 +547,8 @@ describe("FociCard", () => {
       });
       render(<FociCard state={state} updateState={mockUpdateState} />);
 
-      // The X button is the remove button inside FocusItem
-      const removeButtons = screen.getAllByRole("button");
-      // Find the remove button (has the X icon, appears after the focus item)
-      const removeButton = removeButtons.find(
-        (btn) => btn.querySelector(".lucide-x") !== null || btn.textContent === ""
-      );
-      // The remove button is the one that is not "Add", "Bonded"/"Not Bonded"
-      const nonAddButtons = removeButtons.filter(
-        (btn) => btn.textContent !== "Add" && !btn.textContent?.includes("Bonded")
-      );
-      fireEvent.click(nonAddButtons[0]);
+      // Click the remove button for Power Focus
+      fireEvent.click(screen.getByRole("button", { name: /remove power focus/i }));
 
       expect(mockUpdateState).toHaveBeenCalledWith({
         selections: expect.objectContaining({
@@ -587,11 +579,8 @@ describe("FociCard", () => {
       });
       render(<FociCard state={state} updateState={mockUpdateState} />);
 
-      // Remove the first focus (Power Focus) - find its remove button
-      const removeButtons = screen
-        .getAllByRole("button")
-        .filter((btn) => btn.textContent !== "Add" && !btn.textContent?.includes("Bonded"));
-      fireEvent.click(removeButtons[0]);
+      // Remove the first focus (Power Focus)
+      fireEvent.click(screen.getByRole("button", { name: /remove power focus/i }));
 
       expect(mockUpdateState).toHaveBeenCalledWith({
         selections: expect.objectContaining({
