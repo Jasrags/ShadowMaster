@@ -58,7 +58,7 @@ export interface BudgetState {
   /** Remaining = total - spent */
   remaining: number;
   /** Display format for UI */
-  displayFormat?: "number" | "currency" | "percentage";
+  displayFormat?: "number" | "currency" | "percentage" | "decimal";
   /** Human-readable label */
   label: string;
 }
@@ -469,16 +469,3 @@ export function useCanFinalize(): boolean {
   const { canFinalize } = useCreationBudgets();
   return canFinalize;
 }
-
-// =============================================================================
-// TESTABLE EXPORTS (for unit testing helper functions)
-// =============================================================================
-
-/** @internal Exported for testing only */
-export const _testExports = {
-  extractSpentValues,
-  validateBudgets,
-  calculateBudgetTotals,
-  calculateLifeModulesBudgetTotals,
-  calculatePointBuyBudgetTotals,
-};

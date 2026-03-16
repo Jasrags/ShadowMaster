@@ -52,7 +52,7 @@ async function ensureDataDirectory(): Promise<void> {
  * Get the file path for a campaign by ID
  */
 function getCampaignFilePath(campaignId: string): string {
-  return path.join(getDataDir(), `${campaignId}.json`);
+  return path.join(getDataDir(), `${sanitizePathSegment(campaignId)}.json`);
 }
 
 /**

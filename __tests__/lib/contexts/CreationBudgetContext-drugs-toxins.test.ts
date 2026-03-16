@@ -6,9 +6,7 @@
  */
 
 import { describe, test, expect } from "vitest";
-import { _testExports } from "@/lib/contexts/CreationBudgetContext";
-
-const { extractSpentValues } = _testExports;
+import { extractSpentValues } from "@/lib/rules/creation/budget-spent";
 
 // Minimal defaults for extractSpentValues parameters
 const emptyBudgets: Record<string, number> = {};

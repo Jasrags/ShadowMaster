@@ -6,7 +6,7 @@
  */
 
 import { describe, it, expect } from "vitest";
-import { _testExports, type BudgetState } from "../CreationBudgetContext";
+import type { BudgetState } from "../CreationBudgetContext";
 import type { CreationState } from "../../types/creation";
 import {
   LIFE_MODULES_KARMA_BUDGET,
@@ -14,13 +14,12 @@ import {
   LIFE_MODULES_MAX_NEGATIVE_QUALITIES,
   LIFE_MODULES_NUYEN_PER_KARMA,
 } from "../../types";
-
-const {
+import {
   calculateBudgetTotals,
   calculateLifeModulesBudgetTotals,
-  extractSpentValues,
-  validateBudgets,
-} = _testExports;
+} from "@/lib/rules/creation/budget-totals";
+import { extractSpentValues } from "@/lib/rules/creation/budget-spent";
+import { validateBudgets } from "@/lib/rules/creation/budget-validation";
 
 // =============================================================================
 // Test Helpers

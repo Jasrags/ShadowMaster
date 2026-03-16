@@ -20,7 +20,7 @@ import {
 export type BudgetTotalEntry = {
   total: number;
   label: string;
-  displayFormat?: "number" | "currency";
+  displayFormat?: "number" | "currency" | "decimal";
 };
 
 // =============================================================================
@@ -184,7 +184,7 @@ export function calculateBudgetTotals(
       totals["power-points"] = {
         total: basePowerPoints + karmaPurchasedPP,
         label: "Power Points",
-        displayFormat: "decimal" as "number" | "currency", // Cast for now, used for PP display
+        displayFormat: "decimal",
       };
     }
   }
