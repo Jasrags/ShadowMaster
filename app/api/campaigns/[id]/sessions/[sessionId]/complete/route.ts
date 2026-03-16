@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
-import { getCampaignById, updateCampaign } from "@/lib/storage/campaigns";
+import { authorizeGM } from "@/lib/auth/campaign";
+import { updateCampaign } from "@/lib/storage/campaigns";
 import { getCharacterById, awardKarma, awardNuyen } from "@/lib/storage/characters";
 import type { CampaignSession, SessionRewardData } from "@/lib/types/campaign";
 
@@ -22,19 +23,11 @@ export async function PUT(
     }
 
     const { id: campaignId, sessionId } = await params;
-    const campaign = await getCampaignById(campaignId);
-
-    if (!campaign) {
-      return NextResponse.json({ success: false, error: "Campaign not found" }, { status: 404 });
+    const auth = await authorizeGM(campaignId, userId);
+    if (!auth.authorized || !auth.campaign) {
+      return NextResponse.json({ success: false, error: auth.error }, { status: auth.status });
     }
-
-    // Only GM can complete sessions
-    if (campaign.gmId !== userId) {
-      return NextResponse.json(
-        { success: false, error: "Only the GM can complete sessions" },
-        { status: 403 }
-      );
-    }
+    const campaign = auth.campaign;
 
     const body = (await request.json()) as SessionRewardData;
     const { participantCharacterIds, karmaAward, nuyenAward, recap, distributeRewards } = body;

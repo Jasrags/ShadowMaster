@@ -8,14 +8,14 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { GET } from "../route";
 import { NextRequest } from "next/server";
 import * as sessionModule from "@/lib/auth/session";
-import * as userStorage from "@/lib/storage/users";
-import * as campaignStorage from "@/lib/storage/campaigns";
+import * as campaignAuthModule from "@/lib/auth/campaign";
 import * as characterStorage from "@/lib/storage/characters";
-import type { Campaign, Character, User, AdvancementRecord } from "@/lib/types";
+import type { Campaign, Character, AdvancementRecord } from "@/lib/types";
 
 vi.mock("@/lib/auth/session");
-vi.mock("@/lib/storage/users");
-vi.mock("@/lib/storage/campaigns");
+vi.mock("@/lib/auth/campaign", () => ({
+  authorizeGM: vi.fn(),
+}));
 vi.mock("@/lib/storage/characters");
 
 function createMockRequest(url: string): NextRequest {
@@ -35,17 +35,6 @@ function createMockAdvancementRecord(overrides?: Partial<AdvancementRecord>): Ad
     gmApproved: false,
     ...overrides,
   } as AdvancementRecord;
-}
-
-function createMockUser(overrides?: Partial<User>): User {
-  return {
-    id: "test-user-id",
-    username: "testuser",
-    passwordHash: "hash",
-    email: "test@example.com",
-    createdAt: new Date().toISOString(),
-    ...overrides,
-  } as User;
 }
 
 function createMockCharacter(overrides?: Partial<Character>): Character {
@@ -131,13 +120,16 @@ describe("GET /api/campaigns/[id]/advancements/pending", () => {
 
   it("should return pending advancements with character context for GM", async () => {
     const mockCampaign = createMockCampaign();
-    const mockUser = createMockUser({ id: "test-gm-id" });
     const mockCharacter = createMockCharacter({
       advancementHistory: [createMockAdvancementRecord({ gmApproved: false })],
     });
     vi.mocked(sessionModule.getSession).mockResolvedValue("test-gm-id");
-    vi.mocked(userStorage.getUserById).mockResolvedValue(mockUser);
-    vi.mocked(campaignStorage.getCampaignById).mockResolvedValue(mockCampaign);
+    vi.mocked(campaignAuthModule.authorizeGM).mockResolvedValue({
+      authorized: true,
+      campaign: mockCampaign,
+      role: "gm",
+      status: 200,
+    });
     vi.mocked(characterStorage.getUserCharacters).mockResolvedValue([mockCharacter]);
     const request = createMockRequest(
       "http://localhost:3000/api/campaigns/test-campaign-id/advancements/pending"
@@ -152,10 +144,13 @@ describe("GET /api/campaigns/[id]/advancements/pending", () => {
 
   it("should return empty array when no pending advancements", async () => {
     const mockCampaign = createMockCampaign();
-    const mockUser = createMockUser({ id: "test-gm-id" });
     vi.mocked(sessionModule.getSession).mockResolvedValue("test-gm-id");
-    vi.mocked(userStorage.getUserById).mockResolvedValue(mockUser);
-    vi.mocked(campaignStorage.getCampaignById).mockResolvedValue(mockCampaign);
+    vi.mocked(campaignAuthModule.authorizeGM).mockResolvedValue({
+      authorized: true,
+      campaign: mockCampaign,
+      role: "gm",
+      status: 200,
+    });
     vi.mocked(characterStorage.getUserCharacters).mockResolvedValue([]);
     const request = createMockRequest(
       "http://localhost:3000/api/campaigns/test-campaign-id/advancements/pending"
@@ -168,11 +163,14 @@ describe("GET /api/campaigns/[id]/advancements/pending", () => {
   });
 
   it("should return 403 when not GM", async () => {
-    const mockCampaign = createMockCampaign();
-    const mockUser = createMockUser({ id: "player-1" });
     vi.mocked(sessionModule.getSession).mockResolvedValue("player-1");
-    vi.mocked(userStorage.getUserById).mockResolvedValue(mockUser);
-    vi.mocked(campaignStorage.getCampaignById).mockResolvedValue(mockCampaign);
+    vi.mocked(campaignAuthModule.authorizeGM).mockResolvedValue({
+      authorized: false,
+      campaign: null,
+      role: "player",
+      error: "Only the GM can perform this action",
+      status: 403,
+    });
     const request = createMockRequest(
       "http://localhost:3000/api/campaigns/test-campaign-id/advancements/pending"
     );
@@ -180,21 +178,15 @@ describe("GET /api/campaigns/[id]/advancements/pending", () => {
     expect(response.status).toBe(403);
   });
 
-  it("should return 404 when user not found", async () => {
-    vi.mocked(sessionModule.getSession).mockResolvedValue("test-gm-id");
-    vi.mocked(userStorage.getUserById).mockResolvedValue(null);
-    const request = createMockRequest(
-      "http://localhost:3000/api/campaigns/test-campaign-id/advancements/pending"
-    );
-    const response = await GET(request, { params: Promise.resolve({ id: "test-campaign-id" }) });
-    expect(response.status).toBe(404);
-  });
-
   it("should return 404 when campaign not found", async () => {
-    const mockUser = createMockUser({ id: "test-gm-id" });
     vi.mocked(sessionModule.getSession).mockResolvedValue("test-gm-id");
-    vi.mocked(userStorage.getUserById).mockResolvedValue(mockUser);
-    vi.mocked(campaignStorage.getCampaignById).mockResolvedValue(null);
+    vi.mocked(campaignAuthModule.authorizeGM).mockResolvedValue({
+      authorized: false,
+      campaign: null,
+      role: null,
+      error: "Campaign not found",
+      status: 404,
+    });
     const request = createMockRequest(
       "http://localhost:3000/api/campaigns/nonexistent/advancements/pending"
     );
@@ -205,7 +197,7 @@ describe("GET /api/campaigns/[id]/advancements/pending", () => {
   it("should return 500 on error", async () => {
     const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
     vi.mocked(sessionModule.getSession).mockResolvedValue("test-gm-id");
-    vi.mocked(userStorage.getUserById).mockRejectedValue(new Error("Error"));
+    vi.mocked(campaignAuthModule.authorizeGM).mockRejectedValue(new Error("Error"));
     const request = createMockRequest(
       "http://localhost:3000/api/campaigns/test-campaign-id/advancements/pending"
     );

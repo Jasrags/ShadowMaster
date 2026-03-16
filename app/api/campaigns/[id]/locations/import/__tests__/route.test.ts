@@ -15,6 +15,12 @@ import type { Campaign, Location } from "@/lib/types";
 vi.mock("@/lib/auth/session");
 vi.mock("@/lib/storage/campaigns");
 vi.mock("@/lib/storage/locations");
+vi.mock("@/lib/security/rate-limit", () => ({
+  RateLimiter: { get: () => ({ isRateLimited: () => false }) },
+}));
+vi.mock("@/lib/security/ip", () => ({
+  getClientIp: () => "127.0.0.1",
+}));
 
 function createMockRequest(url: string, body?: unknown): NextRequest {
   const headers = new Headers();

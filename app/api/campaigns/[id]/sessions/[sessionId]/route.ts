@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
-import { getCampaignById, updateCampaign } from "@/lib/storage/campaigns";
+import { authorizeGM } from "@/lib/auth/campaign";
+import { updateCampaign } from "@/lib/storage/campaigns";
 import type { CampaignSession } from "@/lib/types";
 
 /**
@@ -20,19 +21,11 @@ export async function PUT(
     }
 
     const { id, sessionId } = await params;
-    const campaign = await getCampaignById(id);
-
-    if (!campaign) {
-      return NextResponse.json({ success: false, error: "Campaign not found" }, { status: 404 });
+    const auth = await authorizeGM(id, userId);
+    if (!auth.authorized || !auth.campaign) {
+      return NextResponse.json({ success: false, error: auth.error }, { status: auth.status });
     }
-
-    // Only GM can update sessions
-    if (campaign.gmId !== userId) {
-      return NextResponse.json(
-        { success: false, error: "Only the GM can update sessions" },
-        { status: 403 }
-      );
-    }
+    const campaign = auth.campaign;
 
     const sessions = campaign.sessions || [];
     const sessionIndex = sessions.findIndex((s) => s.id === sessionId);
@@ -86,19 +79,11 @@ export async function DELETE(
     }
 
     const { id, sessionId } = await params;
-    const campaign = await getCampaignById(id);
-
-    if (!campaign) {
-      return NextResponse.json({ success: false, error: "Campaign not found" }, { status: 404 });
+    const auth = await authorizeGM(id, userId);
+    if (!auth.authorized || !auth.campaign) {
+      return NextResponse.json({ success: false, error: auth.error }, { status: auth.status });
     }
-
-    // Only GM can delete sessions
-    if (campaign.gmId !== userId) {
-      return NextResponse.json(
-        { success: false, error: "Only the GM can delete sessions" },
-        { status: 403 }
-      );
-    }
+    const campaign = auth.campaign;
 
     const sessions = campaign.sessions || [];
     const filteredSessions = sessions.filter((s) => s.id !== sessionId);

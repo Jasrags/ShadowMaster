@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
-import { getUserById } from "@/lib/storage/users";
-import { getCampaignById } from "@/lib/storage/campaigns";
+import { authorizeGM } from "@/lib/auth/campaign";
 import { getUserCharacters } from "@/lib/storage/characters";
 import type { Character, ID } from "@/lib/types";
 
@@ -42,26 +41,12 @@ export async function GET(
       );
     }
 
-    const user = await getUserById(userId);
-    if (!user) {
-      return NextResponse.json({ success: false, error: "User not found" }, { status: 404 });
-    }
-
     const { id } = await params;
-    const campaign = await getCampaignById(id);
-
-    if (!campaign) {
-      return NextResponse.json({ success: false, error: "Campaign not found" }, { status: 404 });
+    const auth = await authorizeGM(id, userId);
+    if (!auth.authorized || !auth.campaign) {
+      return NextResponse.json({ success: false, error: auth.error }, { status: auth.status });
     }
-
-    // Only GMs can view pending characters
-    const isGM = campaign.gmId === userId;
-    if (!isGM) {
-      return NextResponse.json(
-        { success: false, error: "Only GMs can view pending characters" },
-        { status: 403 }
-      );
-    }
+    const campaign = auth.campaign;
 
     // Get all characters for the campaign
     const allMemberIds = [campaign.gmId, ...campaign.playerIds];

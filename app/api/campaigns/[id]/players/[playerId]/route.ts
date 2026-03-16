@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
-import { getCampaignById, removePlayerFromCampaign } from "@/lib/storage/campaigns";
+import { authorizeGM } from "@/lib/auth/campaign";
+import { removePlayerFromCampaign } from "@/lib/storage/campaigns";
 
 /**
  * DELETE /api/campaigns/[id]/players/[playerId] - Remove a player (GM only)
@@ -19,19 +20,11 @@ export async function DELETE(
     }
 
     const { id, playerId } = await params;
-    const campaign = await getCampaignById(id);
-
-    if (!campaign) {
-      return NextResponse.json({ success: false, error: "Campaign not found" }, { status: 404 });
+    const auth = await authorizeGM(id, userId);
+    if (!auth.authorized || !auth.campaign) {
+      return NextResponse.json({ success: false, error: auth.error }, { status: auth.status });
     }
-
-    // Only GM can remove players
-    if (campaign.gmId !== userId) {
-      return NextResponse.json(
-        { success: false, error: "Only the GM can remove players" },
-        { status: 403 }
-      );
-    }
+    const campaign = auth.campaign;
 
     // Check if player is actually in the campaign
     if (!campaign.playerIds.includes(playerId)) {

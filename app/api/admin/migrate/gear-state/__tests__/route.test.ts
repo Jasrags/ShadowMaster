@@ -31,6 +31,13 @@ vi.mock("@/lib/migrations/add-gear-state", () => ({
   getMigrationSummary: vi.fn(),
 }));
 
+vi.mock("@/lib/security/rate-limit", () => ({
+  RateLimiter: { get: () => ({ isRateLimited: () => false }) },
+}));
+vi.mock("@/lib/security/ip", () => ({
+  getClientIp: () => "127.0.0.1",
+}));
+
 import { getSession } from "@/lib/auth/session";
 import { getUserById } from "@/lib/storage/users";
 import { getAllCharacters, getCharacterById, updateCharacter } from "@/lib/storage/characters";

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
-import { getCampaignById } from "@/lib/storage/campaigns";
+import { authorizeGM } from "@/lib/auth/campaign";
 import { getUserCharacters, getAdvancementHistory } from "@/lib/storage/characters";
 import type { AdvancementRecord, Character } from "@/lib/types";
 
@@ -28,19 +28,11 @@ export async function GET(
     }
 
     const { id: campaignId } = await params;
-    const campaign = await getCampaignById(campaignId);
-
-    if (!campaign) {
-      return NextResponse.json({ success: false, error: "Campaign not found" }, { status: 404 });
+    const auth = await authorizeGM(campaignId, userId);
+    if (!auth.authorized || !auth.campaign) {
+      return NextResponse.json({ success: false, error: auth.error }, { status: auth.status });
     }
-
-    // Authorization: Only GM can view the full pending list for the campaign
-    if (campaign.gmId !== userId) {
-      return NextResponse.json(
-        { success: false, error: "Only the GM can view the pending advancement list" },
-        { status: 403 }
-      );
-    }
+    const campaign = auth.campaign;
 
     // Get all characters from all campaign members (GM + players)
     const allMemberIds = [campaign.gmId, ...campaign.playerIds];

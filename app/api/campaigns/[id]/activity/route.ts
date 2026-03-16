@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
-import { getUserById } from "@/lib/storage/users";
-import { getCampaignById } from "@/lib/storage/campaigns";
+import { authorizeMember } from "@/lib/auth/campaign";
 import { getCampaignActivity, getCampaignActivityCount } from "@/lib/storage/activity";
 
 /**
@@ -16,22 +15,9 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const user = await getUserById(userId);
-    if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
-    }
-
-    const campaign = await getCampaignById(campaignId);
-    if (!campaign) {
-      return NextResponse.json({ error: "Campaign not found" }, { status: 404 });
-    }
-
-    // Check if user is a member of the campaign
-    const isGm = campaign.gmId === user.id;
-    const isPlayer = campaign.playerIds.includes(user.id);
-
-    if (!isGm && !isPlayer) {
-      return NextResponse.json({ success: false, error: "Forbidden" }, { status: 403 });
+    const auth = await authorizeMember(campaignId, userId);
+    if (!auth.authorized || !auth.campaign) {
+      return NextResponse.json({ success: false, error: auth.error }, { status: auth.status });
     }
 
     // Get query parameters for pagination

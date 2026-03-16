@@ -9,13 +9,15 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { GET } from "../route";
 import { NextRequest } from "next/server";
 import * as sessionModule from "@/lib/auth/session";
-import * as campaignStorage from "@/lib/storage/campaigns";
+import * as campaignAuthModule from "@/lib/auth/campaign";
 import * as characterStorage from "@/lib/storage/characters";
 import type { Campaign, Character } from "@/lib/types";
 
 // Mock dependencies
 vi.mock("@/lib/auth/session");
-vi.mock("@/lib/storage/campaigns");
+vi.mock("@/lib/auth/campaign", () => ({
+  authorizeMember: vi.fn(),
+}));
 vi.mock("@/lib/storage/characters");
 
 // Helper to create a NextRequest
@@ -140,7 +142,12 @@ describe("GET /api/campaigns/[id]/characters", () => {
     });
 
     vi.mocked(sessionModule.getSession).mockResolvedValue("test-gm-id");
-    vi.mocked(campaignStorage.getCampaignById).mockResolvedValue(mockCampaign);
+    vi.mocked(campaignAuthModule.authorizeMember).mockResolvedValue({
+      authorized: true,
+      campaign: mockCampaign,
+      role: "gm",
+      status: 200,
+    });
     vi.mocked(characterStorage.getUserCharacters)
       .mockResolvedValueOnce([gmCharacter]) // GM's characters
       .mockResolvedValueOnce([playerCharacter]); // Player's characters
@@ -175,7 +182,12 @@ describe("GET /api/campaigns/[id]/characters", () => {
     });
 
     vi.mocked(sessionModule.getSession).mockResolvedValue("player-1");
-    vi.mocked(campaignStorage.getCampaignById).mockResolvedValue(mockCampaign);
+    vi.mocked(campaignAuthModule.authorizeMember).mockResolvedValue({
+      authorized: true,
+      campaign: mockCampaign,
+      role: "player",
+      status: 200,
+    });
     vi.mocked(characterStorage.getUserCharacters)
       .mockResolvedValueOnce([gmCharacter]) // GM's characters
       .mockResolvedValueOnce([playerCharacter]); // Player's characters
@@ -195,13 +207,14 @@ describe("GET /api/campaigns/[id]/characters", () => {
   });
 
   it("should return 403 when user is not a member", async () => {
-    const mockCampaign = createMockCampaign({
-      gmId: "test-gm-id",
-      playerIds: ["player-1"],
-    });
-
     vi.mocked(sessionModule.getSession).mockResolvedValue("non-member-id");
-    vi.mocked(campaignStorage.getCampaignById).mockResolvedValue(mockCampaign);
+    vi.mocked(campaignAuthModule.authorizeMember).mockResolvedValue({
+      authorized: false,
+      campaign: null,
+      role: null,
+      error: "Access denied: campaign membership required",
+      status: 403,
+    });
 
     const request = createMockRequest(
       "http://localhost:3000/api/campaigns/test-campaign-id/characters"
@@ -213,13 +226,18 @@ describe("GET /api/campaigns/[id]/characters", () => {
 
     expect(response.status).toBe(403);
     expect(data.success).toBe(false);
-    expect(data.error).toBe("Access denied");
     expect(characterStorage.getUserCharacters).not.toHaveBeenCalled();
   });
 
   it("should return 404 when campaign not found", async () => {
     vi.mocked(sessionModule.getSession).mockResolvedValue("test-gm-id");
-    vi.mocked(campaignStorage.getCampaignById).mockResolvedValue(null);
+    vi.mocked(campaignAuthModule.authorizeMember).mockResolvedValue({
+      authorized: false,
+      campaign: null,
+      role: null,
+      error: "Campaign not found",
+      status: 404,
+    });
 
     const request = createMockRequest(
       "http://localhost:3000/api/campaigns/nonexistent-id/characters"
@@ -250,7 +268,12 @@ describe("GET /api/campaigns/[id]/characters", () => {
     });
 
     vi.mocked(sessionModule.getSession).mockResolvedValue("test-gm-id");
-    vi.mocked(campaignStorage.getCampaignById).mockResolvedValue(mockCampaign);
+    vi.mocked(campaignAuthModule.authorizeMember).mockResolvedValue({
+      authorized: true,
+      campaign: mockCampaign,
+      role: "gm",
+      status: 200,
+    });
     vi.mocked(characterStorage.getUserCharacters).mockResolvedValue([
       campaignCharacter,
       otherCharacter,
@@ -274,7 +297,7 @@ describe("GET /api/campaigns/[id]/characters", () => {
     const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
 
     vi.mocked(sessionModule.getSession).mockResolvedValue("test-gm-id");
-    vi.mocked(campaignStorage.getCampaignById).mockRejectedValue(new Error("Storage error"));
+    vi.mocked(campaignAuthModule.authorizeMember).mockRejectedValue(new Error("Storage error"));
 
     const request = createMockRequest(
       "http://localhost:3000/api/campaigns/test-campaign-id/characters"
