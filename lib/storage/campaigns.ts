@@ -375,7 +375,11 @@ export async function updateCampaign(
 }
 
 /**
- * Delete a campaign
+ * Delete a campaign and all associated data:
+ * - Campaign JSON file
+ * - Campaign subdirectory (locations, grunt-teams)
+ * - Activity log
+ * - Unset campaignId on associated characters
  */
 export async function deleteCampaign(campaignId: string): Promise<void> {
   const campaign = await getCampaignById(campaignId);
@@ -383,6 +387,7 @@ export async function deleteCampaign(campaignId: string): Promise<void> {
     throw new Error(`Campaign with ID ${campaignId} not found`);
   }
 
+  // 1. Delete the main campaign file
   const filePath = getCampaignFilePath(campaignId);
   try {
     await fs.unlink(filePath);
@@ -390,6 +395,40 @@ export async function deleteCampaign(campaignId: string): Promise<void> {
     if ((error as NodeJS.ErrnoException).code !== "ENOENT") {
       throw error;
     }
+  }
+
+  // 2. Delete campaign subdirectory (locations, grunt-teams) recursively
+  const campaignSubDir = path.join(getDataDir(), sanitizePathSegment(campaignId));
+  try {
+    await fs.rm(campaignSubDir, { recursive: true, force: true });
+  } catch {
+    // Subdirectory may not exist — ignore
+  }
+
+  // 3. Delete activity log
+  const activityDir = process.env.ACTIVITY_DATA_DIR || path.join(process.cwd(), "data", "activity");
+  const activityFile = path.join(activityDir, `${sanitizePathSegment(campaignId)}.json`);
+  try {
+    await fs.unlink(activityFile);
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code !== "ENOENT") {
+      throw error;
+    }
+  }
+
+  // 4. Unset campaignId on characters that belong to this campaign
+  try {
+    const allCharacters = await getAllCharacters();
+    const affectedCharacters = allCharacters.filter((c) => c.campaignId === campaignId);
+    for (const character of affectedCharacters) {
+      await updateCharacter(character.ownerId, character.id, { campaignId: undefined });
+    }
+  } catch (error) {
+    // Log but don't fail the delete — campaign data is already removed
+    console.error(
+      `Warning: failed to unset campaignId on characters for campaign ${campaignId}:`,
+      error
+    );
   }
 }
 
