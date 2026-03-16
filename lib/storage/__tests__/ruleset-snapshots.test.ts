@@ -21,6 +21,7 @@ vi.mock("../base", () => {
     }),
     fileExists: vi.fn().mockImplementation((path: string) => Promise.resolve(storage.has(path))),
     listJsonFiles: vi.fn().mockResolvedValue([]),
+    withFileLock: vi.fn().mockImplementation((_path: string, fn: () => Promise<unknown>) => fn()),
     __storage: storage,
     __clearStorage: () => storage.clear(),
     __setData: (path: string, data: unknown) => storage.set(path, data),
@@ -115,6 +116,9 @@ beforeEach(() => {
     return Promise.resolve(storage.has(path));
   });
   vi.mocked(base.listJsonFiles).mockResolvedValue([]);
+  vi.mocked(
+    (base as typeof base & { withFileLock: typeof import("../base").withFileLock }).withFileLock
+  ).mockImplementation((_path: string, fn: () => Promise<unknown>) => fn());
 });
 
 // =============================================================================

@@ -8,7 +8,7 @@ import { promises as fs } from "fs";
 import path from "path";
 import { v4 as uuidv4 } from "uuid";
 import type { CampaignNotification } from "../types/campaign";
-import { sanitizePathSegment, writeJsonFile } from "./base";
+import { sanitizePathSegment, withFileLock, writeJsonFile } from "./base";
 
 function getDataDir(): string {
   return process.env.NOTIFICATION_DATA_DIR || path.join(process.cwd(), "data", "notifications");
@@ -44,34 +44,36 @@ export async function createNotification(
   const userId = notification.userId;
   const filePath = getFilePath(userId);
 
-  let notifications: CampaignNotification[] = [];
-  try {
-    const fileContent = await fs.readFile(filePath, "utf-8");
-    notifications = JSON.parse(fileContent) as CampaignNotification[];
-  } catch (error) {
-    if ((error as NodeJS.ErrnoException).code !== "ENOENT") {
-      throw error;
+  return withFileLock(filePath, async () => {
+    let notifications: CampaignNotification[] = [];
+    try {
+      const fileContent = await fs.readFile(filePath, "utf-8");
+      notifications = JSON.parse(fileContent) as CampaignNotification[];
+    } catch (error) {
+      if ((error as NodeJS.ErrnoException).code !== "ENOENT") {
+        throw error;
+      }
     }
-  }
 
-  const newNotification: CampaignNotification = {
-    ...notification,
-    id: uuidv4(),
-    createdAt: new Date().toISOString(),
-    read: false,
-    dismissed: false,
-  };
+    const newNotification: CampaignNotification = {
+      ...notification,
+      id: uuidv4(),
+      createdAt: new Date().toISOString(),
+      read: false,
+      dismissed: false,
+    };
 
-  // Add to the beginning of the array (most recent first)
-  notifications.unshift(newNotification);
+    // Add to the beginning of the array (most recent first)
+    notifications.unshift(newNotification);
 
-  // Limit to 100 notifications to keep files manageable
-  if (notifications.length > 100) {
-    notifications = notifications.slice(0, 100);
-  }
+    // Limit to 100 notifications to keep files manageable
+    if (notifications.length > 100) {
+      notifications = notifications.slice(0, 100);
+    }
 
-  await writeJsonFile(filePath, notifications);
-  return newNotification;
+    await writeJsonFile(filePath, notifications);
+    return newNotification;
+  });
 }
 
 /**
@@ -117,21 +119,25 @@ export async function updateNotification(
 ): Promise<CampaignNotification | null> {
   const filePath = getFilePath(userId);
   try {
-    const fileContent = await fs.readFile(filePath, "utf-8");
-    const notifications = JSON.parse(fileContent) as CampaignNotification[];
+    return await withFileLock(filePath, async () => {
+      const fileContent = await fs.readFile(filePath, "utf-8");
+      const notifications = JSON.parse(fileContent) as CampaignNotification[];
 
-    const index = notifications.findIndex((n) => n.id === notificationId);
-    if (index === -1) return null;
+      const target = notifications.find((n) => n.id === notificationId);
+      if (!target) return null;
 
-    const now = new Date().toISOString();
-    notifications[index] = {
-      ...notifications[index],
-      ...updates,
-      readAt: updates.read && !notifications[index].read ? now : notifications[index].readAt,
-    };
+      const now = new Date().toISOString();
+      const updatedNotification: CampaignNotification = {
+        ...target,
+        ...updates,
+        readAt: updates.read && !target.read ? now : target.readAt,
+      };
 
-    await writeJsonFile(filePath, notifications);
-    return notifications[index];
+      const updated = notifications.map((n) => (n.id === notificationId ? updatedNotification : n));
+
+      await writeJsonFile(filePath, updated);
+      return updatedNotification;
+    });
   } catch {
     return null;
   }
@@ -142,28 +148,30 @@ export async function updateNotification(
  */
 export async function markAllRead(userId: string, campaignId?: string): Promise<number> {
   const filePath = getFilePath(userId);
-  let count = 0;
   try {
-    const fileContent = await fs.readFile(filePath, "utf-8");
-    const notifications = JSON.parse(fileContent) as CampaignNotification[];
+    return await withFileLock(filePath, async () => {
+      const fileContent = await fs.readFile(filePath, "utf-8");
+      const notifications = JSON.parse(fileContent) as CampaignNotification[];
 
-    const now = new Date().toISOString();
+      const now = new Date().toISOString();
+      let count = 0;
 
-    const updated = notifications.map((n) => {
-      if (!n.read && (!campaignId || n.campaignId === campaignId)) {
-        count++;
-        return { ...n, read: true, readAt: now };
+      const updated = notifications.map((n) => {
+        if (!n.read && (!campaignId || n.campaignId === campaignId)) {
+          count++;
+          return { ...n, read: true, readAt: now };
+        }
+        return n;
+      });
+
+      if (count > 0) {
+        await writeJsonFile(filePath, updated);
       }
-      return n;
+      return count;
     });
-
-    if (count > 0) {
-      await writeJsonFile(filePath, updated);
-    }
   } catch {
     return 0;
   }
-  return count;
 }
 
 /**

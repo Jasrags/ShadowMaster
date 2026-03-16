@@ -8,7 +8,7 @@ import { promises as fs } from "fs";
 import path from "path";
 import { v4 as uuidv4 } from "uuid";
 import type { CampaignActivityEvent } from "../types/campaign";
-import { sanitizePathSegment, writeJsonFile } from "./base";
+import { sanitizePathSegment, withFileLock, writeJsonFile } from "./base";
 
 function getDataDir(): string {
   return process.env.ACTIVITY_DATA_DIR || path.join(process.cwd(), "data", "activity");
@@ -44,33 +44,34 @@ export async function logActivity(
   const campaignId = activity.campaignId;
   const filePath = getFilePath(campaignId);
 
-  let entries: CampaignActivityEvent[] = [];
-  try {
-    const fileContent = await fs.readFile(filePath, "utf-8");
-    entries = JSON.parse(fileContent) as CampaignActivityEvent[];
-  } catch (error) {
-    if ((error as NodeJS.ErrnoException).code !== "ENOENT") {
-      // Re-throw if it's not a "file not found" error
-      throw error;
+  return withFileLock(filePath, async () => {
+    let entries: CampaignActivityEvent[] = [];
+    try {
+      const fileContent = await fs.readFile(filePath, "utf-8");
+      entries = JSON.parse(fileContent) as CampaignActivityEvent[];
+    } catch (error) {
+      if ((error as NodeJS.ErrnoException).code !== "ENOENT") {
+        throw error;
+      }
     }
-  }
 
-  const newEvent: CampaignActivityEvent = {
-    ...activity,
-    id: uuidv4(),
-    timestamp: new Date().toISOString(),
-  };
+    const newEvent: CampaignActivityEvent = {
+      ...activity,
+      id: uuidv4(),
+      timestamp: new Date().toISOString(),
+    };
 
-  // Add to the beginning of the array (most recent first)
-  entries.unshift(newEvent);
+    // Add to the beginning of the array (most recent first)
+    entries.unshift(newEvent);
 
-  // Limit to 500 entries to prevent files growing too large
-  if (entries.length > 500) {
-    entries = entries.slice(0, 500);
-  }
+    // Limit to 500 entries to prevent files growing too large
+    if (entries.length > 500) {
+      entries = entries.slice(0, 500);
+    }
 
-  await writeJsonFile(filePath, entries);
-  return newEvent;
+    await writeJsonFile(filePath, entries);
+    return newEvent;
+  });
 }
 
 /**

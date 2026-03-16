@@ -19,6 +19,7 @@ vi.mock("../base", () => {
       storage.set(path, data);
       return Promise.resolve();
     }),
+    withFileLock: vi.fn().mockImplementation((_path: string, fn: () => Promise<unknown>) => fn()),
     __storage: storage,
     __clearStorage: () => storage.clear(),
   };
