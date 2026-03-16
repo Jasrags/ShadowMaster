@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { v4 as uuidv4 } from "uuid";
 import { getSession } from "@/lib/auth/session";
-import { getCampaignById, updateCampaign } from "@/lib/storage/campaigns";
+import { authorizeGM } from "@/lib/auth/campaign";
+import { updateCampaign } from "@/lib/storage/campaigns";
 import {
   getCharacterById,
   getUserCharacters,
@@ -30,19 +31,11 @@ export async function POST(
     }
 
     const { id: campaignId, sessionId } = await params;
-    const campaign = await getCampaignById(campaignId);
-
-    if (!campaign) {
-      return NextResponse.json({ success: false, error: "Campaign not found" }, { status: 404 });
+    const auth = await authorizeGM(campaignId, userId);
+    if (!auth.authorized || !auth.campaign) {
+      return NextResponse.json({ success: false, error: auth.error }, { status: auth.status });
     }
-
-    // Only GM can refresh Edge
-    if (campaign.gmId !== userId) {
-      return NextResponse.json(
-        { success: false, error: "Only the GM can refresh Edge" },
-        { status: 403 }
-      );
-    }
+    const campaign = auth.campaign;
 
     const body = await request.json();
     const { scope, characterId, reason } = body as {

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
-import { getCampaignById } from "@/lib/storage/campaigns";
+import { authorizeMember } from "@/lib/auth/campaign";
 import { getUserCharacters } from "@/lib/storage/characters";
 import type { Character } from "@/lib/types";
 
@@ -21,19 +21,12 @@ export async function GET(
     }
 
     const { id } = await params;
-    const campaign = await getCampaignById(id);
-
-    if (!campaign) {
-      return NextResponse.json({ success: false, error: "Campaign not found" }, { status: 404 });
+    const auth = await authorizeMember(id, userId);
+    if (!auth.authorized || !auth.campaign) {
+      return NextResponse.json({ success: false, error: auth.error }, { status: auth.status });
     }
-
-    // Check access
-    const isGM = campaign.gmId === userId;
-    const isPlayer = campaign.playerIds.includes(userId);
-
-    if (!isGM && !isPlayer) {
-      return NextResponse.json({ success: false, error: "Access denied" }, { status: 403 });
-    }
+    const campaign = auth.campaign;
+    const isGM = auth.role === "gm";
 
     // Get all characters for the campaign
     // First get GM's characters, then all players' characters

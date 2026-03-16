@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
+import { authorizeGM } from "@/lib/auth/campaign";
 import { importLocations } from "@/lib/storage/locations";
-import { getCampaignById } from "@/lib/storage/campaigns";
 import type { Location } from "@/lib/types";
 
 export async function POST(
@@ -18,18 +18,9 @@ export async function POST(
     }
 
     const { id: campaignId } = await params;
-    const campaign = await getCampaignById(campaignId);
-
-    if (!campaign) {
-      return NextResponse.json({ success: false, error: "Campaign not found" }, { status: 404 });
-    }
-
-    // Only GM can import
-    if (campaign.gmId !== userId) {
-      return NextResponse.json(
-        { success: false, error: "Only the GM can import locations" },
-        { status: 403 }
-      );
+    const auth = await authorizeGM(campaignId, userId);
+    if (!auth.authorized || !auth.campaign) {
+      return NextResponse.json({ success: false, error: auth.error }, { status: auth.status });
     }
 
     const body = await request.json();

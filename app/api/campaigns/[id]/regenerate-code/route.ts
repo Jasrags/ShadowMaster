@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
-import { getCampaignById, regenerateInviteCode } from "@/lib/storage/campaigns";
+import { authorizeGM } from "@/lib/auth/campaign";
+import { regenerateInviteCode } from "@/lib/storage/campaigns";
 import type { Campaign } from "@/lib/types";
 
 /**
@@ -20,18 +21,9 @@ export async function POST(
     }
 
     const { id } = await params;
-    const campaign = await getCampaignById(id);
-
-    if (!campaign) {
-      return NextResponse.json({ success: false, error: "Campaign not found" }, { status: 404 });
-    }
-
-    // Only GM can regenerate code
-    if (campaign.gmId !== userId) {
-      return NextResponse.json(
-        { success: false, error: "Only the GM can regenerate the invite code" },
-        { status: 403 }
-      );
+    const auth = await authorizeGM(id, userId);
+    if (!auth.authorized || !auth.campaign) {
+      return NextResponse.json({ success: false, error: auth.error }, { status: auth.status });
     }
 
     const updatedCampaign = await regenerateInviteCode(id);

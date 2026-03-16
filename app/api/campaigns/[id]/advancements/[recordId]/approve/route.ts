@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
-import { getCampaignById } from "@/lib/storage/campaigns";
+import { authorizeGM } from "@/lib/auth/campaign";
 import { getCharacterById, updateCharacter } from "@/lib/storage/characters";
 import { approveAdvancement } from "@/lib/rules/advancement/approval";
 
@@ -21,19 +21,11 @@ export async function POST(
     }
 
     const { id: campaignId, recordId } = await params;
-    const campaign = await getCampaignById(campaignId);
-
-    if (!campaign) {
-      return NextResponse.json({ success: false, error: "Campaign not found" }, { status: 404 });
+    const auth = await authorizeGM(campaignId, gmUserId);
+    if (!auth.authorized || !auth.campaign) {
+      return NextResponse.json({ success: false, error: auth.error }, { status: auth.status });
     }
-
-    // Authorization: Only GM can approve
-    if (campaign.gmId !== gmUserId) {
-      return NextResponse.json(
-        { success: false, error: "Only the GM can approve advancements" },
-        { status: 403 }
-      );
-    }
+    const campaign = auth.campaign;
 
     // Find the character associated with this campaign or just find by record?
     // Finding character by record is hard without knowing character ID.

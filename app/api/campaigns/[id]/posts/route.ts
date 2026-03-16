@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getCampaignPosts, createCampaignPost, getCampaignById } from "@/lib/storage/campaigns";
+import { getCampaignPosts, createCampaignPost } from "@/lib/storage/campaigns";
 import type { CampaignPost } from "@/lib/types";
 import { getSession } from "@/lib/auth/session";
+import { authorizeMember } from "@/lib/auth/campaign";
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
@@ -14,18 +15,11 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     }
 
     const { id } = await params;
-    const campaign = await getCampaignById(id);
-    if (!campaign) {
-      return NextResponse.json({ success: false, error: "Campaign not found" }, { status: 404 });
+    const auth = await authorizeMember(id, userId);
+    if (!auth.authorized || !auth.campaign) {
+      return NextResponse.json({ success: false, error: auth.error }, { status: auth.status });
     }
-
-    // Check access
-    const isGM = campaign.gmId === userId;
-    const isPlayer = campaign.playerIds.includes(userId);
-
-    if (!isGM && !isPlayer) {
-      return NextResponse.json({ success: false, error: "Access denied" }, { status: 403 });
-    }
+    const isGM = auth.role === "gm";
 
     let posts: CampaignPost[] = await getCampaignPosts(id);
 
@@ -49,18 +43,12 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     }
 
     const { id } = await params;
-    const campaign = await getCampaignById(id);
-    if (!campaign) {
-      return NextResponse.json({ success: false, error: "Campaign not found" }, { status: 404 });
+    const auth = await authorizeMember(id, userId);
+    if (!auth.authorized || !auth.campaign) {
+      return NextResponse.json({ success: false, error: auth.error }, { status: auth.status });
     }
-
-    // Only GM and Players can post
-    const isGm = campaign.gmId === userId;
-    const isPlayer = campaign.playerIds.includes(userId);
-
-    if (!isGm && !isPlayer) {
-      return NextResponse.json({ success: false, error: "Forbidden" }, { status: 403 });
-    }
+    const campaign = auth.campaign;
+    const isGm = auth.role === "gm";
 
     const body = await request.json();
 

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
-import { getCampaignById, updateCampaign } from "@/lib/storage/campaigns";
+import { authorizeGM } from "@/lib/auth/campaign";
+import { updateCampaign } from "@/lib/storage/campaigns";
 
 /**
  * PUT /api/campaigns/[id]/notes/[noteId] - Update a note (GM-only)
@@ -19,19 +20,11 @@ export async function PUT(
     }
 
     const { id, noteId } = await params;
-    const campaign = await getCampaignById(id);
-
-    if (!campaign) {
-      return NextResponse.json({ success: false, error: "Campaign not found" }, { status: 404 });
+    const auth = await authorizeGM(id, userId);
+    if (!auth.authorized || !auth.campaign) {
+      return NextResponse.json({ success: false, error: auth.error }, { status: auth.status });
     }
-
-    // Only GM can update notes
-    if (campaign.gmId !== userId) {
-      return NextResponse.json(
-        { success: false, error: "Only the GM can update notes" },
-        { status: 403 }
-      );
-    }
+    const campaign = auth.campaign;
 
     const notes = campaign.notes || [];
     const noteIndex = notes.findIndex((n) => n.id === noteId);
@@ -82,19 +75,11 @@ export async function DELETE(
     }
 
     const { id, noteId } = await params;
-    const campaign = await getCampaignById(id);
-
-    if (!campaign) {
-      return NextResponse.json({ success: false, error: "Campaign not found" }, { status: 404 });
+    const auth = await authorizeGM(id, userId);
+    if (!auth.authorized || !auth.campaign) {
+      return NextResponse.json({ success: false, error: auth.error }, { status: auth.status });
     }
-
-    // Only GM can delete notes
-    if (campaign.gmId !== userId) {
-      return NextResponse.json(
-        { success: false, error: "Only the GM can delete notes" },
-        { status: 403 }
-      );
-    }
+    const campaign = auth.campaign;
 
     const notes = campaign.notes || [];
     const filteredNotes = notes.filter((n) => n.id !== noteId);

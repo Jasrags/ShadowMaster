@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
-import { getCampaignById, saveCampaignAsTemplate } from "@/lib/storage/campaigns";
+import { authorizeGM } from "@/lib/auth/campaign";
+import { saveCampaignAsTemplate } from "@/lib/storage/campaigns";
 
 /**
  * POST /api/campaigns/[id]/template - Save campaign as template
@@ -19,18 +20,9 @@ export async function POST(
     }
 
     const { id } = await params;
-    const campaign = await getCampaignById(id);
-
-    if (!campaign) {
-      return NextResponse.json({ success: false, error: "Campaign not found" }, { status: 404 });
-    }
-
-    // Only GM can save as template
-    if (campaign.gmId !== userId) {
-      return NextResponse.json(
-        { success: false, error: "Only the GM can save this campaign as a template" },
-        { status: 403 }
-      );
+    const auth = await authorizeGM(id, userId);
+    if (!auth.authorized || !auth.campaign) {
+      return NextResponse.json({ success: false, error: auth.error }, { status: auth.status });
     }
 
     const body = await request.json();
