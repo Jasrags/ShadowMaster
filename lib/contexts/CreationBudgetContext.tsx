@@ -1183,6 +1183,10 @@ export function CreationBudgetProvider({
   // Get karma-to-nuyen conversion (2000¥ per karma)
   const karmaSpentGear = (creationState.budgets?.["karma-spent-gear"] as number) || 0;
   const KARMA_TO_NUYEN_RATE = 2000;
+  // Life Modules and Point Buy budget totals already include karma-to-nuyen conversion
+  const methodIncludesKarmaConversion =
+    creationState.creationMethodId === "life-modules" ||
+    creationState.creationMethodId === "point-buy";
 
   // Combine into full budget states
   const budgets = useMemo(() => {
@@ -1192,8 +1196,10 @@ export function CreationBudgetProvider({
       const spent = spentValues[budgetId] || 0;
       let total = totalData.total;
 
-      // Add karma-to-nuyen conversion to nuyen total
-      if (budgetId === "nuyen") {
+      // Add karma-to-nuyen conversion to nuyen total.
+      // Life Modules and Point Buy already include this in their budget totals,
+      // so only add it for Priority and Sum-to-Ten methods.
+      if (budgetId === "nuyen" && !methodIncludesKarmaConversion) {
         total += karmaSpentGear * KARMA_TO_NUYEN_RATE;
       }
 
@@ -1207,7 +1213,7 @@ export function CreationBudgetProvider({
     }
 
     return result;
-  }, [budgetTotals, spentValues, karmaSpentGear]);
+  }, [budgetTotals, spentValues, karmaSpentGear, methodIncludesKarmaConversion]);
 
   // Debounced validation
   useEffect(() => {

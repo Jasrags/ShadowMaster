@@ -209,18 +209,10 @@ interface RiggingSessionProviderProps {
 }
 
 export function RiggingSessionProvider({ character, children }: RiggingSessionProviderProps) {
-  const [riggingState, setRiggingState] = useState<RiggingState | null>(() => {
-    const built = buildRiggingStateFromCharacter(character);
-    return built.riggingState;
-  });
-  const [rccConfig, setRccConfig] = useState<RCCConfiguration | null>(() => {
-    const built = buildRiggingStateFromCharacter(character);
-    return built.rccConfig;
-  });
-  const [droneNetwork, setDroneNetwork] = useState<DroneNetwork | null>(() => {
-    const built = buildRiggingStateFromCharacter(character);
-    return built.droneNetwork;
-  });
+  const [initialBuilt] = useState(() => buildRiggingStateFromCharacter(character));
+  const [riggingState, setRiggingState] = useState<RiggingState | null>(initialBuilt.riggingState);
+  const [rccConfig, setRccConfig] = useState<RCCConfiguration | null>(initialBuilt.rccConfig);
+  const [droneNetwork, setDroneNetwork] = useState<DroneNetwork | null>(initialBuilt.droneNetwork);
   const [isLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 

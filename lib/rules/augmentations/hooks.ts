@@ -11,7 +11,7 @@
  * - Validating installations before committing
  */
 
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useEffect, useMemo } from "react";
 import type { CyberwareItem, BiowareItem, CyberwareGrade, BiowareGrade } from "@/lib/types";
 
 // =============================================================================
@@ -199,7 +199,7 @@ export function useCharacterAugmentations(characterId: string | null): Augmentat
   }, [characterId]);
 
   // Auto-fetch on mount and characterId change
-  useMemo(() => {
+  useEffect(() => {
     if (characterId) {
       fetchAugmentations();
     }
@@ -681,7 +681,7 @@ export function useAugmentationDetails(
   }, [characterId, augmentationId]);
 
   // Auto-fetch on mount and ID changes
-  useMemo(() => {
+  useEffect(() => {
     if (characterId && augmentationId) {
       fetchDetails();
     }

@@ -24,8 +24,20 @@ import type {
   Lifestyle,
   Weapon,
 } from "./index";
-import type { FreeSkillDesignations } from "@/lib/rules/skills/free-skills";
 import type { LifeModulesSelections } from "./life-modules";
+
+/**
+ * User's explicit designations for free skill allocations.
+ * Maps free skill type to array of designated skill IDs.
+ */
+export interface FreeSkillDesignations {
+  /** Skill IDs designated for magical free allocation */
+  magical?: string[];
+  /** Skill IDs designated for resonance free allocation */
+  resonance?: string[];
+  /** Skill IDs designated for active (any) free allocation */
+  active?: string[];
+}
 
 // =============================================================================
 // ATTRIBUTE IDS
