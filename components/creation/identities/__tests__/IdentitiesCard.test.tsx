@@ -7,7 +7,7 @@
  */
 
 import { describe, it, expect, vi, beforeEach, type Mock } from "vitest";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, within } from "@testing-library/react";
 import { IdentitiesCard } from "../IdentitiesCard";
 import { SinnerQuality, type Identity, type Lifestyle } from "@/lib/types";
 
@@ -452,7 +452,7 @@ describe("IdentitiesCard", () => {
 
       expect(screen.queryByTestId("identity-modal")).not.toBeInTheDocument();
 
-      const addButton = screen.getByTestId("header-action").querySelector("button")!;
+      const addButton = within(screen.getByTestId("header-action")).getByRole("button");
       fireEvent.click(addButton);
 
       expect(screen.getByTestId("identity-modal")).toBeInTheDocument();
@@ -463,7 +463,7 @@ describe("IdentitiesCard", () => {
       render(<IdentitiesCard state={state} updateState={mockUpdateState} />);
 
       // Open modal
-      const addButton = screen.getByTestId("header-action").querySelector("button")!;
+      const addButton = within(screen.getByTestId("header-action")).getByRole("button");
       fireEvent.click(addButton);
 
       // Save
@@ -504,7 +504,7 @@ describe("IdentitiesCard", () => {
       render(<IdentitiesCard state={state} updateState={mockUpdateState} />);
 
       // Open modal
-      const addButton = screen.getByTestId("header-action").querySelector("button")!;
+      const addButton = within(screen.getByTestId("header-action")).getByRole("button");
       fireEvent.click(addButton);
       expect(screen.getByTestId("identity-modal")).toBeInTheDocument();
 

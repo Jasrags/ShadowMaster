@@ -94,11 +94,6 @@ vi.mock("../SelectedQualityCard", () => ({
   ),
 }));
 
-// Capture the onAdd callback from the modal mock
-let capturedOnAdd:
-  | ((id: string, isPositive: boolean, spec?: string, level?: number) => void)
-  | null = null;
-
 vi.mock("../QualitySelectionModal", () => ({
   QualitySelectionModal: ({
     isOpen,
@@ -106,10 +101,23 @@ vi.mock("../QualitySelectionModal", () => ({
   }: {
     isOpen: boolean;
     onAdd: (id: string, isPositive: boolean, spec?: string, level?: number) => void;
-  }) => {
-    capturedOnAdd = onAdd;
-    return isOpen ? <div data-testid="quality-modal">Modal Open</div> : null;
-  },
+  }) =>
+    isOpen ? (
+      <div data-testid="quality-modal">
+        <button data-testid="modal-add-positive" onClick={() => onAdd("ambidextrous", true)}>
+          Add Positive
+        </button>
+        <button
+          data-testid="modal-add-positive-spec"
+          onClick={() => onAdd("ambidextrous", true, "Combat")}
+        >
+          Add Positive With Spec
+        </button>
+        <button data-testid="modal-add-negative" onClick={() => onAdd("gremlins", false)}>
+          Add Negative
+        </button>
+      </div>
+    ) : null,
 }));
 
 // Mock budget-modifiers
@@ -170,7 +178,6 @@ describe("QualitiesCard", () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    capturedOnAdd = null;
     mockUpdateState = vi.fn();
     mockGetBudget.mockReturnValue({ total: 25, spent: 0, remaining: 25 });
     (useQualities as Mock).mockReturnValue({
@@ -407,11 +414,9 @@ describe("QualitiesCard", () => {
       const state = createBaseState();
       render(<QualitiesCard state={state} updateState={mockUpdateState} />);
 
-      // Open modal to capture onAdd
+      // Open modal and add a positive quality
       fireEvent.click(screen.getByText("Add"));
-
-      expect(capturedOnAdd).not.toBeNull();
-      capturedOnAdd!("ambidextrous", true);
+      fireEvent.click(screen.getByTestId("modal-add-positive"));
 
       expect(mockUpdateState).toHaveBeenCalledWith({
         selections: expect.objectContaining({
@@ -426,8 +431,7 @@ describe("QualitiesCard", () => {
       render(<QualitiesCard state={state} updateState={mockUpdateState} />);
 
       fireEvent.click(screen.getByText("Add"));
-
-      capturedOnAdd!("gremlins", false);
+      fireEvent.click(screen.getByTestId("modal-add-negative"));
 
       expect(mockUpdateState).toHaveBeenCalledWith({
         selections: expect.objectContaining({
@@ -442,8 +446,7 @@ describe("QualitiesCard", () => {
       render(<QualitiesCard state={state} updateState={mockUpdateState} />);
 
       fireEvent.click(screen.getByText("Add"));
-
-      capturedOnAdd!("ambidextrous", true, "Combat");
+      fireEvent.click(screen.getByTestId("modal-add-positive-spec"));
 
       expect(mockUpdateState).toHaveBeenCalledWith({
         selections: expect.objectContaining({
