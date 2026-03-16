@@ -107,104 +107,26 @@ export interface QualityCatalog {
 // QUALITY EFFECTS TYPES
 // =============================================================================
 
-/**
- * Types of quality effects
- */
-export type EffectType =
-  | "dice-pool-modifier"
-  | "limit-modifier"
-  | "threshold-modifier"
-  | "wound-modifier"
-  | "attribute-modifier"
-  | "attribute-maximum"
-  | "resistance-modifier"
-  | "initiative-modifier"
-  | "healing-modifier"
-  | "karma-cost-modifier"
-  | "nuyen-cost-modifier"
-  | "time-modifier"
-  | "signature-modifier"
-  | "glitch-modifier"
-  | "special";
+// Effect types are defined in effects.ts (the unified effect system).
+// Re-export them here for backward compatibility with existing imports.
+export type { EffectType, EffectTrigger, EffectTarget, EffectCondition } from "./effects";
+
+import type { EffectType, EffectTrigger, EffectTarget, EffectCondition } from "./effects";
 
 /**
- * Triggers for when effects apply
- */
-export type EffectTrigger =
-  | "always"
-  | "skill-test"
-  | "attribute-test"
-  | "combat-action"
-  | "defense-test"
-  | "resistance-test"
-  | "social-test"
-  | "first-meeting"
-  | "magic-use"
-  | "matrix-action"
-  | "healing"
-  | "damage-taken"
-  | "fear-intimidation"
-  | "withdrawal"
-  | "on-exposure";
-
-/**
- * Target of an effect
- */
-export interface EffectTarget {
-  // Target a specific stat
-  stat?: "wound-threshold" | "overflow" | "initiative" | "edge-max" | string;
-
-  // Target a limit
-  limit?: "physical" | "mental" | "social" | "astral";
-
-  // Target an attribute
-  attribute?: string;
-
-  // Target a skill or skill group
-  skill?: string;
-  skillGroup?: string;
-
-  // Target a category of tests
-  testCategory?: "combat" | "social" | "technical" | "magic" | "matrix";
-
-  // Target specific action
-  matrixAction?: string;
-
-  // Self or others
-  affectsOthers?: boolean; // e.g., Quick Healer affects healing on self
-}
-
-/**
- * Conditions for effect application
- */
-export interface EffectCondition {
-  // Only applies in certain environments
-  environment?: string[]; // e.g., ["dim-light", "darkness"]
-
-  // Only applies against certain targets
-  targetType?: string[]; // e.g., ["spirit", "awakened"]
-
-  // Only when character has certain state
-  characterState?: string[]; // e.g., ["astrally-projecting"]
-
-  // Opposed test conditions
-  opposedBy?: string; // e.g., "assensing"
-
-  // Custom condition reference
-  customCondition?: string;
-}
-
-/**
- * Quality effect structure
+ * Quality effect structure.
+ * Uses the unified effect types from effects.ts.
  */
 export interface QualityEffect {
   id: string; // Unique effect identifier
   type: EffectType; // Category of effect
-  trigger: EffectTrigger; // When effect applies
+  triggers: EffectTrigger[]; // When effect applies (array for multi-trigger)
   target: EffectTarget; // What the effect modifies
   value: number | string; // Modifier value or formula
   condition?: EffectCondition; // Optional conditions
   description?: string; // Human-readable description
+  /** Negates a specific penalty by ID */
+  negates?: string;
 }
 
 // =============================================================================

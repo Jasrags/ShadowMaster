@@ -200,11 +200,9 @@ export type {
 } from "./qualities";
 
 // Unified Effect types (Issue #107 - /docs/plans/unified-effects-system.md)
+// Note: EffectType, EffectTrigger, EffectTarget, EffectCondition are now re-exported
+// from qualities.ts which delegates to effects.ts — single source of truth.
 export type {
-  EffectType as UnifiedEffectType,
-  EffectTrigger as UnifiedEffectTrigger,
-  EffectTarget as UnifiedEffectTarget,
-  EffectCondition as UnifiedEffectCondition,
   SpecificAction,
   EffectSourceType,
   Effect,

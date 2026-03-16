@@ -23,7 +23,7 @@ function makeResolvedEffect(overrides: Partial<ResolvedEffect> = {}): ResolvedEf
     effect: {
       id: "test-effect",
       type: "dice-pool-modifier",
-      trigger: "always",
+      triggers: ["always"],
       target: {},
       value: 1,
       description: "Test effect",
@@ -79,7 +79,7 @@ describe("processEffect - simple modifiers", () => {
       effect: {
         id: "e1",
         type: "dice-pool-modifier",
-        trigger: "always",
+        triggers: ["always"],
         target: {},
         value: 2,
       } as QualityEffect,
@@ -93,7 +93,7 @@ describe("processEffect - simple modifiers", () => {
       effect: {
         id: "e1",
         type: "limit-modifier",
-        trigger: "always",
+        triggers: ["always"],
         target: {},
         value: 1,
       } as QualityEffect,
@@ -107,7 +107,7 @@ describe("processEffect - simple modifiers", () => {
       effect: {
         id: "e1",
         type: "threshold-modifier",
-        trigger: "always",
+        triggers: ["always"],
         target: {},
         value: -1,
       } as QualityEffect,
@@ -121,7 +121,7 @@ describe("processEffect - simple modifiers", () => {
       effect: {
         id: "e1",
         type: "attribute-modifier",
-        trigger: "always",
+        triggers: ["always"],
         target: {},
         value: 1,
       } as QualityEffect,
@@ -135,7 +135,7 @@ describe("processEffect - simple modifiers", () => {
       effect: {
         id: "e1",
         type: "attribute-maximum",
-        trigger: "always",
+        triggers: ["always"],
         target: {},
         value: 1,
       } as QualityEffect,
@@ -149,7 +149,7 @@ describe("processEffect - simple modifiers", () => {
       effect: {
         id: "e1",
         type: "resistance-modifier",
-        trigger: "always",
+        triggers: ["always"],
         target: {},
         value: 2,
       } as QualityEffect,
@@ -163,7 +163,7 @@ describe("processEffect - simple modifiers", () => {
       effect: {
         id: "e1",
         type: "healing-modifier",
-        trigger: "always",
+        triggers: ["always"],
         target: {},
         value: 1,
       } as QualityEffect,
@@ -183,7 +183,7 @@ describe("processEffect - wound-modifier", () => {
       effect: {
         id: "e1",
         type: "wound-modifier",
-        trigger: "always",
+        triggers: ["always"],
         target: { stat: "wound-boxes-ignored" },
         value: 1,
       } as QualityEffect,
@@ -199,7 +199,7 @@ describe("processEffect - wound-modifier", () => {
       effect: {
         id: "e1",
         type: "wound-modifier",
-        trigger: "always",
+        triggers: ["always"],
         target: { stat: "wound-penalty-interval" },
         value: 1,
       } as QualityEffect,
@@ -215,7 +215,7 @@ describe("processEffect - wound-modifier", () => {
       effect: {
         id: "e1",
         type: "wound-modifier",
-        trigger: "always",
+        triggers: ["always"],
         target: {},
         value: -1,
       } as QualityEffect,
@@ -236,7 +236,7 @@ describe("processEffect - initiative-modifier", () => {
       effect: {
         id: "e1",
         type: "initiative-modifier",
-        trigger: "always",
+        triggers: ["always"],
         target: { stat: "initiative" },
         value: 1,
       } as QualityEffect,
@@ -252,7 +252,7 @@ describe("processEffect - initiative-modifier", () => {
       effect: {
         id: "e1",
         type: "initiative-modifier",
-        trigger: "always",
+        triggers: ["always"],
         target: {},
         value: 2,
       } as QualityEffect,
@@ -273,7 +273,7 @@ describe("processEffect - karma-cost-modifier", () => {
       effect: {
         id: "e1",
         type: "karma-cost-modifier",
-        trigger: "always",
+        triggers: ["always"],
         target: {},
         value: 2,
       } as QualityEffect,
@@ -296,7 +296,7 @@ describe("processEffect - nuyen-cost-modifier", () => {
       effect: {
         id: "e1",
         type: "nuyen-cost-modifier",
-        trigger: "always",
+        triggers: ["always"],
         target: {},
         value: -500,
       } as QualityEffect,
@@ -319,7 +319,7 @@ describe("processEffect - time-modifier", () => {
       effect: {
         id: "e1",
         type: "time-modifier",
-        trigger: "always",
+        triggers: ["always"],
         target: {},
         value: 0.5,
       } as QualityEffect,
@@ -341,7 +341,7 @@ describe("processEffect - default fallback", () => {
       effect: {
         id: "e1",
         type: "nonexistent-type" as never,
-        trigger: "always",
+        triggers: ["always"],
         target: {},
         value: 42,
       } as QualityEffect,
@@ -368,7 +368,7 @@ describe("registerEffectHandler", () => {
       effect: {
         id: "e1",
         type: "special",
-        trigger: "always",
+        triggers: ["always"],
         target: {},
         value: 3,
       } as QualityEffect,

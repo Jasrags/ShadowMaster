@@ -131,7 +131,7 @@ describe("Quality Effects Resolution", () => {
       const effect: QualityEffect = {
         id: "test-effect",
         type: "dice-pool-modifier",
-        trigger: "always",
+        triggers: ["always"],
         target: {},
         value: 2,
       };
@@ -144,7 +144,7 @@ describe("Quality Effects Resolution", () => {
       const effect: QualityEffect = {
         id: "test-effect",
         type: "dice-pool-modifier",
-        trigger: "always",
+        triggers: ["always"],
         target: {},
         value: "{{rating}}",
       };
@@ -162,7 +162,7 @@ describe("Quality Effects Resolution", () => {
       const effect: QualityEffect = {
         id: "test-effect",
         type: "dice-pool-modifier",
-        trigger: "always",
+        triggers: ["always"],
         target: {},
         value: "-{{rating}}",
       };
@@ -180,7 +180,7 @@ describe("Quality Effects Resolution", () => {
       const effect: QualityEffect = {
         id: "test-effect",
         type: "dice-pool-modifier",
-        trigger: "always",
+        triggers: ["always"],
         target: {},
         value: "invalid-expression",
       };
@@ -501,7 +501,7 @@ describe("Quality Effects Resolution", () => {
       const effect: QualityEffect = {
         id: "test-effect",
         type: "dice-pool-modifier",
-        trigger: "skill-test",
+        triggers: ["skill-test"],
         target: { skill: "firearms" },
         condition: {
           environment: ["dim-light"],
@@ -521,7 +521,7 @@ describe("Quality Effects Resolution", () => {
       const effect: QualityEffect = {
         id: "test-effect",
         type: "dice-pool-modifier",
-        trigger: "skill-test",
+        triggers: ["skill-test"],
         target: { skill: "firearms" },
         value: 1,
       };
@@ -537,7 +537,7 @@ describe("Quality Effects Resolution", () => {
       const effect: QualityEffect = {
         id: "test-effect",
         type: "dice-pool-modifier",
-        trigger: "skill-test",
+        triggers: ["skill-test"],
         target: { skill: "firearms" },
         condition: {
           environment: ["dim-light"],
@@ -567,7 +567,7 @@ describe("Quality Effects Resolution", () => {
           {
             id: "test-effect",
             type: "dice-pool-modifier",
-            trigger: "always",
+            triggers: ["always"],
             target: {},
             value: 2,
           },
@@ -594,14 +594,14 @@ describe("Quality Effects Resolution", () => {
           {
             id: "effect-1",
             type: "dice-pool-modifier",
-            trigger: "skill-test",
+            triggers: ["skill-test"],
             target: { skill: "firearms" },
             value: 2,
           },
           {
             id: "effect-2",
             type: "dice-pool-modifier",
-            trigger: "skill-test",
+            triggers: ["skill-test"],
             target: { skill: "stealth" },
             value: 1,
           },
@@ -637,7 +637,7 @@ describe("Quality Effects Resolution", () => {
               {
                 id: "level-1-effect",
                 type: "dice-pool-modifier",
-                trigger: "always",
+                triggers: ["always"],
                 target: {},
                 value: 1,
               },
@@ -651,7 +651,7 @@ describe("Quality Effects Resolution", () => {
               {
                 id: "level-2-effect",
                 type: "dice-pool-modifier",
-                trigger: "always",
+                triggers: ["always"],
                 target: {},
                 value: 2,
               },
@@ -688,7 +688,7 @@ describe("Quality Effects Resolution", () => {
           {
             id: "template-effect",
             type: "dice-pool-modifier",
-            trigger: "always",
+            triggers: ["always"],
             target: { skill: "{{specification}}" },
             value: "{{rating}}",
           },
@@ -724,7 +724,7 @@ describe("Quality Effects Resolution", () => {
           effect: {
             id: "effect-1",
             type: "dice-pool-modifier" as const,
-            trigger: "always" as EffectTrigger,
+            triggers: ["always"] as EffectTrigger[],
             target: {},
             value: 1,
           },
@@ -737,7 +737,7 @@ describe("Quality Effects Resolution", () => {
           effect: {
             id: "effect-2",
             type: "dice-pool-modifier" as const,
-            trigger: "skill-test" as EffectTrigger,
+            triggers: ["skill-test"] as EffectTrigger[],
             target: {},
             value: 2,
           },
@@ -761,7 +761,7 @@ describe("Quality Effects Resolution", () => {
           effect: {
             id: "effect-1",
             type: "dice-pool-modifier" as const,
-            trigger: "always" as EffectTrigger,
+            triggers: ["always"] as EffectTrigger[],
             target: { skill: "firearms" },
             value: 1,
           },
@@ -774,7 +774,7 @@ describe("Quality Effects Resolution", () => {
           effect: {
             id: "effect-2",
             type: "dice-pool-modifier" as const,
-            trigger: "always" as EffectTrigger,
+            triggers: ["always"] as EffectTrigger[],
             target: { skill: "stealth" },
             value: 2,
           },
