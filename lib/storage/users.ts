@@ -1,7 +1,15 @@
-import { promises as fs } from "fs";
 import path from "path";
 import { v4 as uuidv4 } from "uuid";
 import type { User, UserRole, AccountStatus } from "../types/user";
+import {
+  DATA_DIR,
+  sanitizePathSegment,
+  ensureDirectory,
+  readJsonFile,
+  writeJsonFile,
+  deleteFile,
+  readAllJsonFiles,
+} from "./base";
 
 export type NewUserData = Omit<
   User,
@@ -33,49 +41,29 @@ export type NewUserData = Omit<
   | "magicLinkTokenPrefix"
 >;
 
-function getDataDir(): string {
-  return process.env.USER_DATA_DIR || path.join(process.cwd(), "data", "users");
-}
-
-/**
- * Ensures the data directory exists, creating it if necessary
- */
-async function ensureDataDirectory(): Promise<void> {
-  try {
-    await fs.mkdir(getDataDir(), { recursive: true });
-  } catch (error) {
-    // Directory might already exist, which is fine
-    if ((error as NodeJS.ErrnoException).code !== "EEXIST") {
-      throw error;
-    }
-  }
+function getUsersDir(): string {
+  return process.env.USER_DATA_DIR || path.join(DATA_DIR, "users");
 }
 
 /**
  * Get the file path for a user by ID
  */
 function getUserFilePath(userId: string): string {
-  return path.join(getDataDir(), `${userId}.json`);
+  return path.join(getUsersDir(), `${sanitizePathSegment(userId)}.json`);
 }
 
 /**
  * Get user by ID
  */
 export async function getUserById(userId: string): Promise<User | null> {
-  try {
-    const filePath = getUserFilePath(userId);
-    const fileContent = await fs.readFile(filePath, "utf-8");
-    const user = JSON.parse(fileContent) as User;
-    // Normalize role to array for backward compatibility
-    user.role = normalizeUserRole(user.role);
-    // Ensure security fields have defaults
-    return normalizeUserDefaults(user);
-  } catch (error) {
-    if ((error as NodeJS.ErrnoException).code === "ENOENT") {
-      return null;
-    }
-    throw error;
-  }
+  const filePath = getUserFilePath(userId);
+  const user = await readJsonFile<User>(filePath);
+  if (!user) return null;
+
+  // Normalize role to array for backward compatibility
+  user.role = normalizeUserRole(user.role);
+  // Ensure security fields have defaults
+  return normalizeUserDefaults(user);
 }
 
 /**
@@ -166,33 +154,14 @@ function normalizeUserDefaults(user: User): User {
  * Get all users (for checking if first user)
  */
 export async function getAllUsers(): Promise<User[]> {
-  try {
-    await ensureDataDirectory();
-    const files = await fs.readdir(getDataDir());
-    const jsonFiles = files.filter((file) => file.endsWith(".json"));
+  const usersDir = getUsersDir();
+  await ensureDirectory(usersDir);
 
-    const users: User[] = [];
-    for (const file of jsonFiles) {
-      try {
-        const filePath = path.join(getDataDir(), file);
-        const fileContent = await fs.readFile(filePath, "utf-8");
-        const user = JSON.parse(fileContent) as User;
-        // Normalize role to array for backward compatibility
-        user.role = normalizeUserRole(user.role);
-        users.push(normalizeUserDefaults(user));
-      } catch (error) {
-        // Skip invalid files
-        console.error(`Error reading user file ${file}:`, error);
-      }
-    }
-    return users;
-  } catch (error) {
-    // If directory doesn't exist, return empty array
-    if ((error as NodeJS.ErrnoException).code === "ENOENT") {
-      return [];
-    }
-    throw error;
-  }
+  const rawUsers = await readAllJsonFiles<User>(usersDir, { skipCorrupt: true });
+  return rawUsers.map((user) => {
+    user.role = normalizeUserRole(user.role);
+    return normalizeUserDefaults(user);
+  });
 }
 
 /**
@@ -207,7 +176,7 @@ async function isFirstUser(): Promise<boolean> {
  * Create a new user
  */
 export async function createUser(userData: NewUserData): Promise<User> {
-  await ensureDataDirectory();
+  await ensureDirectory(getUsersDir());
 
   const isFirst = await isFirstUser();
   const role: UserRole[] = isFirst ? ["administrator"] : ["user"];
@@ -255,22 +224,8 @@ export async function createUser(userData: NewUserData): Promise<User> {
     magicLinkTokenPrefix: null,
   };
 
-  // Atomic write: write to temp file, then rename
   const filePath = getUserFilePath(user.id);
-  const tempFilePath = `${filePath}.tmp`;
-
-  try {
-    await fs.writeFile(tempFilePath, JSON.stringify(user, null, 2), "utf-8");
-    await fs.rename(tempFilePath, filePath);
-  } catch (error) {
-    // Clean up temp file if rename fails
-    try {
-      await fs.unlink(tempFilePath);
-    } catch {
-      // Ignore cleanup errors
-    }
-    throw error;
-  }
+  await writeJsonFile(filePath, user);
 
   return user;
 }
@@ -290,22 +245,8 @@ export async function updateUser(userId: string, updates: Partial<User>): Promis
     id: user.id, // Ensure ID cannot be changed
   };
 
-  // Atomic write: write to temp file, then rename
   const filePath = getUserFilePath(userId);
-  const tempFilePath = `${filePath}.tmp`;
-
-  try {
-    await fs.writeFile(tempFilePath, JSON.stringify(updatedUser, null, 2), "utf-8");
-    await fs.rename(tempFilePath, filePath);
-  } catch (error) {
-    // Clean up temp file if rename fails
-    try {
-      await fs.unlink(tempFilePath);
-    } catch {
-      // Ignore cleanup errors
-    }
-    throw error;
-  }
+  await writeJsonFile(filePath, updatedUser);
 
   return updatedUser;
 }
@@ -325,14 +266,7 @@ export async function deleteUser(userId: string): Promise<void> {
   await deleteUserCharacters(userId);
 
   const filePath = getUserFilePath(userId);
-  try {
-    await fs.unlink(filePath);
-  } catch (error) {
-    if ((error as NodeJS.ErrnoException).code !== "ENOENT") {
-      throw error;
-    }
-    // File doesn't exist, which is fine
-  }
+  await deleteFile(filePath);
 }
 
 /**
