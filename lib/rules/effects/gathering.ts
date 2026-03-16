@@ -48,8 +48,8 @@ export interface SourcedEffect {
 }
 
 /**
- * Type guard: checks if an effect object is a unified effect (has `triggers` array)
- * rather than an old-format quality effect (has singular `trigger` string).
+ * Type guard: checks if an effect object has the unified effect shape (has `triggers` array).
+ * Since #653, QualityEffect also uses `triggers` array, so all current effect types pass this guard.
  */
 function isUnifiedEffect(effect: unknown): effect is Effect {
   return (
@@ -93,7 +93,7 @@ function findCatalogItem(
 
 /**
  * Extract unified effects from a catalog item.
- * Returns only effects that use the new unified format (triggers array).
+ * Filters to effects with valid unified shape (triggers array, type, target).
  */
 function extractEffects(catalogItem: Record<string, unknown>): Effect[] {
   const effects = catalogItem.effects;

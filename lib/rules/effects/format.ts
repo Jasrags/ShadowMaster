@@ -283,7 +283,8 @@ export function formatEffectBadge(
 }
 
 /**
- * Check if an effect object is a unified effect (has `triggers` array).
+ * Check if an effect object has the unified effect shape (has `triggers` array).
+ * Since #653, all effect types (including QualityEffect) use `triggers` array.
  */
 export function isUnifiedEffect(effect: unknown): effect is Effect {
   return (
