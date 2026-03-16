@@ -12,7 +12,7 @@
  * - Adding/removing accessories
  */
 
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useEffect } from "react";
 import type { CyberwareGrade } from "@/lib/types";
 import type { CyberlimbLocation, CyberlimbEnhancementType } from "@/lib/types/cyberlimb";
 
@@ -310,7 +310,7 @@ export function useCharacterCyberlimbs(characterId: string | null): CyberlimbsSt
   }, [characterId]);
 
   // Auto-fetch on mount and characterId change
-  useMemo(() => {
+  useEffect(() => {
     if (characterId) {
       fetchCyberlimbs();
     }
@@ -658,7 +658,7 @@ export function useCyberlimbDetails(
   }, [characterId, limbId]);
 
   // Auto-fetch on mount and ID changes
-  useMemo(() => {
+  useEffect(() => {
     if (characterId && limbId) {
       fetchDetails();
     }
