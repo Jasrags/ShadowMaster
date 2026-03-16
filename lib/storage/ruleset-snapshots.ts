@@ -29,7 +29,14 @@ import type {
   MigrationStrategy,
   RuleModuleType,
 } from "../types";
-import { readJsonFile, writeJsonFile, ensureDirectory, fileExists, listJsonFiles } from "./base";
+import {
+  readJsonFile,
+  withFileLock,
+  writeJsonFile,
+  ensureDirectory,
+  fileExists,
+  listJsonFiles,
+} from "./base";
 import { loadRuleset } from "../rules/loader";
 import { produceMergedRuleset } from "../rules/merge";
 import type { RulesetLoadConfig } from "../rules/loader-types";
@@ -53,21 +60,23 @@ async function updateCurrentSnapshotIndex(
 ): Promise<void> {
   await ensureDirectory(SNAPSHOTS_DIR);
 
-  let index: CurrentSnapshotsIndex = {};
+  await withFileLock(CURRENT_SNAPSHOTS_INDEX, async () => {
+    let index: CurrentSnapshotsIndex = {};
 
-  // Read existing index if it exists
-  if (await fileExists(CURRENT_SNAPSHOTS_INDEX)) {
-    const existing = await readJsonFile<CurrentSnapshotsIndex>(CURRENT_SNAPSHOTS_INDEX);
-    if (existing) {
-      index = existing;
+    // Read existing index if it exists
+    if (await fileExists(CURRENT_SNAPSHOTS_INDEX)) {
+      const existing = await readJsonFile<CurrentSnapshotsIndex>(CURRENT_SNAPSHOTS_INDEX);
+      if (existing) {
+        index = existing;
+      }
     }
-  }
 
-  // Update the index for this edition
-  index[editionCode] = versionRef;
+    // Update the index for this edition
+    index[editionCode] = versionRef;
 
-  // Write updated index
-  await writeJsonFile(CURRENT_SNAPSHOTS_INDEX, index);
+    // Write updated index
+    await writeJsonFile(CURRENT_SNAPSHOTS_INDEX, index);
+  });
 }
 
 /**

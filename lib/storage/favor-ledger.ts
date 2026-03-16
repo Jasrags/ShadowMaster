@@ -22,7 +22,7 @@ import type {
   FavorTransactionType,
   CreateFavorTransactionRequest,
 } from "../types/contacts";
-import { ensureDirectory, readJsonFile, writeJsonFile } from "./base";
+import { ensureDirectory, readJsonFile, withFileLock, writeJsonFile } from "./base";
 
 // =============================================================================
 // PATH UTILITIES
@@ -124,44 +124,46 @@ export async function addFavorTransaction(
     requiresGmApproval?: boolean;
   }
 ): Promise<FavorTransaction> {
-  const ledger = await getFavorLedger(userId, characterId);
-  const now = new Date().toISOString();
-
-  const transaction: FavorTransaction = {
-    id: uuidv4(),
-    characterId,
-    contactId: request.contactId,
-    campaignId: request.campaignId,
-    sessionId: request.sessionId,
-    type: request.type,
-    description: request.description,
-    favorChange: request.favorChange,
-    loyaltyChange: request.loyaltyChange,
-    connectionChange: request.connectionChange,
-    nuyenSpent: request.nuyenSpent,
-    karmaSpent: request.karmaSpent,
-    serviceType: request.serviceType,
-    serviceId: request.serviceId,
-    serviceRisk: request.serviceRisk,
-    thresholdRequired: request.thresholdRequired,
-    rollResult: request.rollResult,
-    netHits: request.netHits,
-    success: request.success,
-    requiresGmApproval: request.requiresGmApproval ?? false,
-    timestamp: now,
-  };
-
-  // Append transaction to ledger and recalculate aggregates
-  const updatedLedger = computeAggregates({
-    ...ledger,
-    transactions: [...ledger.transactions, transaction],
-    updatedAt: now,
-  });
-
   const filePath = getFavorLedgerPath(userId, characterId);
-  await writeJsonFile(filePath, updatedLedger);
 
-  return transaction;
+  return withFileLock(filePath, async () => {
+    const ledger = await getFavorLedger(userId, characterId);
+    const now = new Date().toISOString();
+
+    const transaction: FavorTransaction = {
+      id: uuidv4(),
+      characterId,
+      contactId: request.contactId,
+      campaignId: request.campaignId,
+      sessionId: request.sessionId,
+      type: request.type,
+      description: request.description,
+      favorChange: request.favorChange,
+      loyaltyChange: request.loyaltyChange,
+      connectionChange: request.connectionChange,
+      nuyenSpent: request.nuyenSpent,
+      karmaSpent: request.karmaSpent,
+      serviceType: request.serviceType,
+      serviceId: request.serviceId,
+      serviceRisk: request.serviceRisk,
+      thresholdRequired: request.thresholdRequired,
+      rollResult: request.rollResult,
+      netHits: request.netHits,
+      success: request.success,
+      requiresGmApproval: request.requiresGmApproval ?? false,
+      timestamp: now,
+    };
+
+    // Append transaction to ledger and recalculate aggregates
+    const updatedLedger = computeAggregates({
+      ...ledger,
+      transactions: [...ledger.transactions, transaction],
+      updatedAt: now,
+    });
+
+    await writeJsonFile(filePath, updatedLedger);
+    return transaction;
+  });
 }
 
 /**
@@ -277,44 +279,46 @@ export async function approveFavorTransaction(
   transactionId: ID,
   gmUserId: ID
 ): Promise<FavorTransaction> {
-  const ledger = await getFavorLedger(userId, characterId);
-  const now = new Date().toISOString();
-
-  const transactionIndex = ledger.transactions.findIndex((t) => t.id === transactionId);
-
-  if (transactionIndex === -1) {
-    throw new Error(`Transaction ${transactionId} not found`);
-  }
-
-  const transaction = ledger.transactions[transactionIndex];
-
-  if (!transaction.requiresGmApproval) {
-    throw new Error(`Transaction ${transactionId} does not require approval`);
-  }
-
-  if (transaction.gmApproved !== undefined) {
-    throw new Error(`Transaction ${transactionId} has already been processed`);
-  }
-
-  const updatedTransaction: FavorTransaction = {
-    ...transaction,
-    gmApproved: true,
-    gmApprovedBy: gmUserId,
-    gmApprovedAt: now,
-  };
-
-  const updatedLedger: FavorLedger = {
-    ...ledger,
-    transactions: ledger.transactions.map((t, i) =>
-      i === transactionIndex ? updatedTransaction : t
-    ),
-    updatedAt: now,
-  };
-
   const filePath = getFavorLedgerPath(userId, characterId);
-  await writeJsonFile(filePath, updatedLedger);
 
-  return updatedTransaction;
+  return withFileLock(filePath, async () => {
+    const ledger = await getFavorLedger(userId, characterId);
+    const now = new Date().toISOString();
+
+    const transactionIndex = ledger.transactions.findIndex((t) => t.id === transactionId);
+
+    if (transactionIndex === -1) {
+      throw new Error(`Transaction ${transactionId} not found`);
+    }
+
+    const transaction = ledger.transactions[transactionIndex];
+
+    if (!transaction.requiresGmApproval) {
+      throw new Error(`Transaction ${transactionId} does not require approval`);
+    }
+
+    if (transaction.gmApproved !== undefined) {
+      throw new Error(`Transaction ${transactionId} has already been processed`);
+    }
+
+    const updatedTransaction: FavorTransaction = {
+      ...transaction,
+      gmApproved: true,
+      gmApprovedBy: gmUserId,
+      gmApprovedAt: now,
+    };
+
+    const updatedLedger: FavorLedger = {
+      ...ledger,
+      transactions: ledger.transactions.map((t, i) =>
+        i === transactionIndex ? updatedTransaction : t
+      ),
+      updatedAt: now,
+    };
+
+    await writeJsonFile(filePath, updatedLedger);
+    return updatedTransaction;
+  });
 }
 
 /**
@@ -334,45 +338,47 @@ export async function rejectFavorTransaction(
   gmUserId: ID,
   reason: string
 ): Promise<FavorTransaction> {
-  const ledger = await getFavorLedger(userId, characterId);
-  const now = new Date().toISOString();
-
-  const transactionIndex = ledger.transactions.findIndex((t) => t.id === transactionId);
-
-  if (transactionIndex === -1) {
-    throw new Error(`Transaction ${transactionId} not found`);
-  }
-
-  const transaction = ledger.transactions[transactionIndex];
-
-  if (!transaction.requiresGmApproval) {
-    throw new Error(`Transaction ${transactionId} does not require approval`);
-  }
-
-  if (transaction.gmApproved !== undefined) {
-    throw new Error(`Transaction ${transactionId} has already been processed`);
-  }
-
-  const updatedTransaction: FavorTransaction = {
-    ...transaction,
-    gmApproved: false,
-    gmApprovedBy: gmUserId,
-    gmApprovedAt: now,
-    rejectionReason: reason,
-  };
-
-  const updatedLedger: FavorLedger = {
-    ...ledger,
-    transactions: ledger.transactions.map((t, i) =>
-      i === transactionIndex ? updatedTransaction : t
-    ),
-    updatedAt: now,
-  };
-
   const filePath = getFavorLedgerPath(userId, characterId);
-  await writeJsonFile(filePath, updatedLedger);
 
-  return updatedTransaction;
+  return withFileLock(filePath, async () => {
+    const ledger = await getFavorLedger(userId, characterId);
+    const now = new Date().toISOString();
+
+    const transactionIndex = ledger.transactions.findIndex((t) => t.id === transactionId);
+
+    if (transactionIndex === -1) {
+      throw new Error(`Transaction ${transactionId} not found`);
+    }
+
+    const transaction = ledger.transactions[transactionIndex];
+
+    if (!transaction.requiresGmApproval) {
+      throw new Error(`Transaction ${transactionId} does not require approval`);
+    }
+
+    if (transaction.gmApproved !== undefined) {
+      throw new Error(`Transaction ${transactionId} has already been processed`);
+    }
+
+    const updatedTransaction: FavorTransaction = {
+      ...transaction,
+      gmApproved: false,
+      gmApprovedBy: gmUserId,
+      gmApprovedAt: now,
+      rejectionReason: reason,
+    };
+
+    const updatedLedger: FavorLedger = {
+      ...ledger,
+      transactions: ledger.transactions.map((t, i) =>
+        i === transactionIndex ? updatedTransaction : t
+      ),
+      updatedAt: now,
+    };
+
+    await writeJsonFile(filePath, updatedLedger);
+    return updatedTransaction;
+  });
 }
 
 /**
@@ -383,15 +389,17 @@ export async function rejectFavorTransaction(
  * @returns Updated ledger with recalculated aggregates
  */
 export async function recalculateAggregates(userId: ID, characterId: ID): Promise<FavorLedger> {
-  const ledger = await getFavorLedger(userId, characterId);
-  const now = new Date().toISOString();
-
-  const updated = computeAggregates({ ...ledger, updatedAt: now });
-
   const filePath = getFavorLedgerPath(userId, characterId);
-  await writeJsonFile(filePath, updated);
 
-  return updated;
+  return withFileLock(filePath, async () => {
+    const ledger = await getFavorLedger(userId, characterId);
+    const now = new Date().toISOString();
+
+    const updated = computeAggregates({ ...ledger, updatedAt: now });
+
+    await writeJsonFile(filePath, updated);
+    return updated;
+  });
 }
 
 // =============================================================================

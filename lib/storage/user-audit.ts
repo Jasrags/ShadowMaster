@@ -12,6 +12,7 @@ import { v4 as uuidv4 } from "uuid";
 import {
   ensureDirectory,
   readJsonFile,
+  withFileLock,
   writeJsonFile,
   readAllJsonFiles,
   listJsonFiles,
@@ -61,23 +62,27 @@ async function saveUserAuditEntries(userId: string, entries: UserAuditEntry[]): 
 export async function createUserAuditEntry(
   params: CreateUserAuditEntryParams
 ): Promise<UserAuditEntry> {
-  const entry: UserAuditEntry = {
-    id: uuidv4(),
-    timestamp: new Date().toISOString() as ISODateString,
-    action: params.action,
-    actor: params.actor,
-    targetUserId: params.targetUserId,
-    details: params.details || {},
-  };
+  const filePath = getUserAuditFilePath(params.targetUserId);
 
-  // Get existing entries and append the new one
-  const entries = await getUserAuditEntries(params.targetUserId);
-  entries.push(entry);
+  return withFileLock(filePath, async () => {
+    const entry: UserAuditEntry = {
+      id: uuidv4(),
+      timestamp: new Date().toISOString() as ISODateString,
+      action: params.action,
+      actor: params.actor,
+      targetUserId: params.targetUserId,
+      details: params.details || {},
+    };
 
-  // Save back to file
-  await saveUserAuditEntries(params.targetUserId, entries);
+    // Get existing entries and append the new one
+    const entries = await getUserAuditEntries(params.targetUserId);
+    entries.push(entry);
 
-  return entry;
+    // Save back to file
+    await saveUserAuditEntries(params.targetUserId, entries);
+
+    return entry;
+  });
 }
 
 /**
@@ -205,31 +210,35 @@ export async function archiveUserAuditLog(
   deletedByUserId: string,
   userMetadata: { email: string; username: string }
 ): Promise<void> {
-  const entries = await getUserAuditEntries(userId);
+  const filePath = getUserAuditFilePath(userId);
 
-  // Create a deletion entry to mark the end of the audit trail
-  const deletionEntry: UserAuditEntry = {
-    id: uuidv4(),
-    timestamp: new Date().toISOString() as ISODateString,
-    action: "user_deleted",
-    actor: { userId: deletedByUserId, role: "admin" },
-    targetUserId: userId,
-    details: {
-      archivedUser: userMetadata,
-      reason: "User account deleted",
-    },
-  };
+  await withFileLock(filePath, async () => {
+    const entries = await getUserAuditEntries(userId);
 
-  entries.push(deletionEntry);
+    // Create a deletion entry to mark the end of the audit trail
+    const deletionEntry: UserAuditEntry = {
+      id: uuidv4(),
+      timestamp: new Date().toISOString() as ISODateString,
+      action: "user_deleted",
+      actor: { userId: deletedByUserId, role: "admin" },
+      targetUserId: userId,
+      details: {
+        archivedUser: userMetadata,
+        reason: "User account deleted",
+      },
+    };
 
-  // Save to archive location (sibling to audit dir)
-  const archiveDir = path.join(path.dirname(getAuditDir()), "users-archived");
-  await ensureDirectory(archiveDir);
-  const archivePath = path.join(archiveDir, `${userId}-${Date.now()}.json`);
-  await writeJsonFile(archivePath, entries);
+    entries.push(deletionEntry);
 
-  // Remove the active audit log
-  await deleteUserAuditLog(userId);
+    // Save to archive location (sibling to audit dir)
+    const archiveDir = path.join(path.dirname(getAuditDir()), "users-archived");
+    await ensureDirectory(archiveDir);
+    const archivePath = path.join(archiveDir, `${userId}-${Date.now()}.json`);
+    await writeJsonFile(archivePath, entries);
+
+    // Remove the active audit log
+    await deleteUserAuditLog(userId);
+  });
 }
 
 /**
