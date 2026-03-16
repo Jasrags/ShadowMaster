@@ -230,8 +230,6 @@ function buildMatrixStateFromCharacter(character: Character): MatrixState | null
 interface MatrixSessionProviderProps {
   /** The character whose matrix session to manage */
   character: Character;
-  /** Callback when character data changes (e.g., equipment mutations) */
-  onCharacterUpdate: (updated: Character) => void;
   children: ReactNode;
 }
 

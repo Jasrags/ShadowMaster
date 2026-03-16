@@ -57,13 +57,9 @@ function makeVehicle(): Vehicle {
   };
 }
 
-function createWrapper(character = makeRiggerCharacter(), onUpdate = vi.fn()) {
+function createWrapper(character = makeRiggerCharacter()) {
   return function Wrapper({ children }: { children: ReactNode }) {
-    return (
-      <RiggingSessionProvider character={character} onCharacterUpdate={onUpdate}>
-        {children}
-      </RiggingSessionProvider>
-    );
+    return <RiggingSessionProvider character={character}>{children}</RiggingSessionProvider>;
   };
 }
 

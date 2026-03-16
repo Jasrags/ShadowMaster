@@ -149,13 +149,9 @@ function createMundaneCharacter(): Character {
 // Wrapper helpers
 // =============================================================================
 
-function createWrapper(character: Character, onUpdate = vi.fn()) {
+function createWrapper(character: Character) {
   return function Wrapper({ children }: { children: React.ReactNode }) {
-    return (
-      <MatrixSessionProvider character={character} onCharacterUpdate={onUpdate}>
-        {children}
-      </MatrixSessionProvider>
-    );
+    return <MatrixSessionProvider character={character}>{children}</MatrixSessionProvider>;
   };
 }
 
@@ -865,13 +861,10 @@ describe("MatrixSessionContext", () => {
   describe("character sync", () => {
     it("ASDF config changes update persona while preserving session state", () => {
       const character = createDeckerCharacter();
-      const onUpdate = vi.fn();
 
       const { result } = renderHook(() => useMatrixSession(), {
         wrapper: ({ children }: { children: React.ReactNode }) => (
-          <MatrixSessionProvider character={character} onCharacterUpdate={onUpdate}>
-            {children}
-          </MatrixSessionProvider>
+          <MatrixSessionProvider character={character}>{children}</MatrixSessionProvider>
         ),
       });
 
@@ -917,9 +910,7 @@ describe("MatrixSessionContext", () => {
       // Re-render with updated character via a new wrapper
       const { result: result2 } = renderHook(() => useMatrixSession(), {
         wrapper: ({ children }: { children: React.ReactNode }) => (
-          <MatrixSessionProvider character={updatedCharacter} onCharacterUpdate={onUpdate}>
-            {children}
-          </MatrixSessionProvider>
+          <MatrixSessionProvider character={updatedCharacter}>{children}</MatrixSessionProvider>
         ),
       });
 
@@ -932,13 +923,10 @@ describe("MatrixSessionContext", () => {
 
     it("handles character losing matrix hardware gracefully", () => {
       const character = createDeckerCharacter();
-      const onUpdate = vi.fn();
 
       let currentCharacter = character;
       const wrapper = ({ children }: { children: React.ReactNode }) => (
-        <MatrixSessionProvider character={currentCharacter} onCharacterUpdate={onUpdate}>
-          {children}
-        </MatrixSessionProvider>
+        <MatrixSessionProvider character={currentCharacter}>{children}</MatrixSessionProvider>
       );
 
       const { result, rerender } = renderHook(() => useMatrixSession(), { wrapper });
