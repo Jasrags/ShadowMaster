@@ -187,10 +187,6 @@ export type {
 // Quality types (additional types not re-exported from edition)
 export type {
   QualitySelection,
-  EffectType,
-  EffectTrigger,
-  EffectTarget,
-  EffectCondition,
   AcquisitionSource,
   QualityDynamicState,
   AddictionState,
@@ -200,11 +196,13 @@ export type {
 } from "./qualities";
 
 // Unified Effect types (Issue #107 - /docs/plans/unified-effects-system.md)
+// EffectType, EffectTrigger, EffectTarget, EffectCondition exported from effects.ts
+// (single source of truth — qualities.ts re-exports from here too)
 export type {
-  EffectType as UnifiedEffectType,
-  EffectTrigger as UnifiedEffectTrigger,
-  EffectTarget as UnifiedEffectTarget,
-  EffectCondition as UnifiedEffectCondition,
+  EffectType,
+  EffectTrigger,
+  EffectTarget,
+  EffectCondition,
   SpecificAction,
   EffectSourceType,
   Effect,

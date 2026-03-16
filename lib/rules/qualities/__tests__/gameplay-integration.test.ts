@@ -79,7 +79,7 @@ describe("Quality Gameplay Integration", () => {
           {
             id: "ignore-boxes",
             type: "wound-modifier",
-            trigger: "damage-taken",
+            triggers: ["damage-taken"],
             target: { stat: "wound-boxes-ignored" },
             value: 2,
           },
@@ -146,7 +146,7 @@ describe("Quality Gameplay Integration", () => {
           {
             id: "stealth-bonus",
             type: "dice-pool-modifier",
-            trigger: "skill-test",
+            triggers: ["skill-test"],
             target: { skill: "stealth" },
             value: 2,
           },
@@ -198,7 +198,7 @@ describe("Quality Gameplay Integration", () => {
           {
             id: "stealth-bonus",
             type: "dice-pool-modifier",
-            trigger: "skill-test",
+            triggers: ["skill-test"],
             target: { skill: "stealth" },
             value: 2,
           },
@@ -247,7 +247,7 @@ describe("Quality Gameplay Integration", () => {
           {
             id: "large-penalty",
             type: "dice-pool-modifier",
-            trigger: "skill-test",
+            triggers: ["skill-test"],
             target: {},
             value: -20,
           },
@@ -326,7 +326,7 @@ describe("Quality Gameplay Integration", () => {
           {
             id: "physical-limit-bonus",
             type: "limit-modifier",
-            trigger: "always",
+            triggers: ["always"],
             target: { limit: "physical" },
             value: 1,
           },
@@ -373,7 +373,7 @@ describe("Quality Gameplay Integration", () => {
           {
             id: "large-penalty",
             type: "limit-modifier",
-            trigger: "always",
+            triggers: ["always"],
             target: { limit: "physical" },
             value: -10,
           },
@@ -463,7 +463,7 @@ describe("Quality Gameplay Integration", () => {
           {
             id: "healing-bonus",
             type: "healing-modifier",
-            trigger: "healing",
+            triggers: ["healing"],
             target: { affectsOthers: false },
             value: 2,
           },
@@ -519,7 +519,7 @@ describe("Quality Gameplay Integration", () => {
           {
             id: "agility-bonus",
             type: "attribute-modifier",
-            trigger: "always",
+            triggers: ["always"],
             target: { attribute: "agility" },
             value: 1,
           },
@@ -569,7 +569,7 @@ describe("Quality Gameplay Integration", () => {
           {
             id: "agility-max-bonus",
             type: "attribute-maximum",
-            trigger: "always",
+            triggers: ["always"],
             target: { attribute: "agility" },
             value: 1,
           },

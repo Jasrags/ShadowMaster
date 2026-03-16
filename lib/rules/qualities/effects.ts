@@ -312,8 +312,9 @@ export function shouldApplyEffect(
     | DamageContext
     | CostContext
 ): boolean {
-  // Check trigger
-  if (!matchesTrigger(effect.trigger, context)) {
+  // Check triggers — at least one must match
+  const triggers = effect.triggers;
+  if (!triggers.some((t) => matchesTrigger(t, context))) {
     return false;
   }
 
@@ -396,7 +397,7 @@ export function filterEffectsByTrigger(
   effects: ResolvedEffect[],
   trigger: EffectTrigger
 ): ResolvedEffect[] {
-  return effects.filter((resolved) => resolved.effect.trigger === trigger);
+  return effects.filter((resolved) => resolved.effect.triggers.includes(trigger));
 }
 
 /**
