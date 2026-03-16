@@ -33,6 +33,7 @@ vi.mock("../base", () => {
       return Promise.resolve();
     }),
     listJsonFiles: vi.fn().mockResolvedValue([]),
+    withFileLock: vi.fn().mockImplementation((_path: string, fn: () => Promise<unknown>) => fn()),
     __storage: storage,
     __clearStorage: () => storage.clear(),
   };

@@ -7,7 +7,7 @@
 
 import path from "path";
 import type { ID, ActionHistory, ActionResult, ActionHistoryStats } from "../types";
-import { ensureDirectory, readJsonFile, writeJsonFile } from "./base";
+import { ensureDirectory, readJsonFile, writeJsonFile, withFileLock } from "./base";
 
 // =============================================================================
 // CONSTANTS
@@ -109,35 +109,35 @@ export async function saveActionResult(
   characterId: ID,
   result: ActionResult
 ): Promise<ActionHistory> {
-  const existing = await getActionHistory(userId, characterId);
-  const now = new Date().toISOString();
-
-  // Build base history (create fresh if none exists)
-  const history: ActionHistory = existing ?? {
-    characterId,
-    actions: [],
-    createdAt: now,
-    updatedAt: now,
-  };
-
-  // Ensure character directory exists for new histories
-  if (!existing) {
-    const characterDir = getCharacterDir(userId, characterId);
-    await ensureDirectory(characterDir);
-  }
-
-  // Add new action at the beginning (newest first), trim to max size
-  const updated: ActionHistory = {
-    ...history,
-    actions: [result, ...history.actions].slice(0, MAX_HISTORY_SIZE),
-    updatedAt: now,
-  };
-
-  // Save
   const filePath = getActionHistoryPath(userId, characterId);
-  await writeJsonFile(filePath, updated);
+  return withFileLock(filePath, async () => {
+    const existing = await getActionHistory(userId, characterId);
+    const now = new Date().toISOString();
 
-  return updated;
+    // Build base history (create fresh if none exists)
+    const history: ActionHistory = existing ?? {
+      characterId,
+      actions: [],
+      createdAt: now,
+      updatedAt: now,
+    };
+
+    // Ensure character directory exists for new histories
+    if (!existing) {
+      const characterDir = getCharacterDir(userId, characterId);
+      await ensureDirectory(characterDir);
+    }
+
+    // Add new action at the beginning (newest first), trim to max size
+    const updated: ActionHistory = {
+      ...history,
+      actions: [result, ...history.actions].slice(0, MAX_HISTORY_SIZE),
+      updatedAt: now,
+    };
+
+    await writeJsonFile(filePath, updated);
+    return updated;
+  });
 }
 
 /**
@@ -149,33 +149,33 @@ export async function updateActionResult(
   actionId: ID,
   updates: Partial<ActionResult>
 ): Promise<ActionResult | null> {
-  const history = await getActionHistory(userId, characterId);
-  if (!history) {
-    return null;
-  }
-
-  const actionIndex = history.actions.findIndex((a) => a.id === actionId);
-  if (actionIndex === -1) {
-    return null;
-  }
-
-  // Update the action immutably
-  const updatedAction: ActionResult = {
-    ...history.actions[actionIndex],
-    ...updates,
-  };
-
-  const updated: ActionHistory = {
-    ...history,
-    actions: history.actions.map((a, i) => (i === actionIndex ? updatedAction : a)),
-    updatedAt: new Date().toISOString(),
-  };
-
-  // Save
   const filePath = getActionHistoryPath(userId, characterId);
-  await writeJsonFile(filePath, updated);
+  return withFileLock(filePath, async () => {
+    const history = await getActionHistory(userId, characterId);
+    if (!history) {
+      return null;
+    }
 
-  return updatedAction;
+    const actionIndex = history.actions.findIndex((a) => a.id === actionId);
+    if (actionIndex === -1) {
+      return null;
+    }
+
+    // Update the action immutably
+    const updatedAction: ActionResult = {
+      ...history.actions[actionIndex],
+      ...updates,
+    };
+
+    const updated: ActionHistory = {
+      ...history,
+      actions: history.actions.map((a, i) => (i === actionIndex ? updatedAction : a)),
+      updatedAt: new Date().toISOString(),
+    };
+
+    await writeJsonFile(filePath, updated);
+    return updatedAction;
+  });
 }
 
 // =============================================================================

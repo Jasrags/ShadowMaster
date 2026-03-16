@@ -221,3 +221,57 @@ export async function ensureDataDirectories(): Promise<void> {
   ];
   await Promise.all(dirs.map((dir) => ensureDirectory(path.join(DATA_DIR, dir))));
 }
+
+// =============================================================================
+// ASYNC MUTEX FOR FILE INDEX OPERATIONS
+// =============================================================================
+
+/**
+ * Simple async mutex for serializing read-modify-write cycles on index files.
+ *
+ * Prevents concurrent requests from reading stale data and overwriting each
+ * other's changes. Scoped to single-process Node.js deployments.
+ *
+ * Usage:
+ *   const result = await withFileLock(indexPath, async () => {
+ *     const data = await readJsonFile(indexPath);
+ *     const updated = { ...data, newField: value };
+ *     await writeJsonFile(indexPath, updated);
+ *     return updated;
+ *   });
+ */
+const fileLocks = new Map<string, Promise<unknown>>();
+
+export async function withFileLock<T>(filePath: string, fn: () => Promise<T>): Promise<T> {
+  const existing = fileLocks.get(filePath) ?? Promise.resolve();
+
+  // Each caller gets its own result promise, isolated from predecessors.
+  // The chain promise tracks ordering; the caller promise tracks this fn's outcome.
+  let resolve!: (v: T | PromiseLike<T>) => void;
+  let reject!: (e: unknown) => void;
+  const callerPromise = new Promise<T>((res, rej) => {
+    resolve = res;
+    reject = rej;
+  });
+
+  // Wait for predecessor to settle (pass or fail), then run fn
+  const operation = existing
+    .then(
+      () => {},
+      () => {}
+    )
+    .then(() => fn())
+    .then(resolve, reject);
+
+  // Store the chain so the next caller waits for us
+  fileLocks.set(filePath, operation);
+
+  try {
+    return await callerPromise;
+  } finally {
+    // Clean up if we're still the latest operation (prevents memory leak)
+    if (fileLocks.get(filePath) === operation) {
+      fileLocks.delete(filePath);
+    }
+  }
+}
