@@ -2,11 +2,12 @@ import { NextRequest, NextResponse } from "next/server";
 import { requireAdmin, handleAdminAuthError } from "@/lib/auth/middleware";
 import { getAllUserAuditEntries } from "@/lib/storage/user-audit";
 import type { UserAuditAction, UserAuditEntry } from "@/lib/types/audit";
+import type { PaginationMeta } from "@/lib/types";
 
 interface SystemAuditLogResponse {
   success: boolean;
   entries?: UserAuditEntry[];
-  total?: number;
+  pagination?: PaginationMeta;
   error?: string;
 }
 
@@ -58,7 +59,12 @@ export async function GET(request: NextRequest): Promise<NextResponse<SystemAudi
     return NextResponse.json({
       success: true,
       entries,
-      total,
+      pagination: {
+        total,
+        limit,
+        offset,
+        hasMore: offset + entries.length < total,
+      },
     });
   } catch (error) {
     const authResponse = handleAdminAuthError(error);

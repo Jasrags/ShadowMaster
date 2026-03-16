@@ -222,8 +222,9 @@ describe("GET /api/users", () => {
     expect(data.success).toBe(true);
     expect(data.users).toHaveLength(3);
     expect(data.pagination.total).toBe(3);
-    expect(data.pagination.page).toBe(1);
+    expect(data.pagination.offset).toBe(0);
     expect(data.pagination.limit).toBe(20);
+    expect(data.pagination.hasMore).toBe(false);
   });
 
   it("should filter by search query (email)", async () => {
@@ -319,7 +320,7 @@ describe("GET /api/users", () => {
     const response = await GET(request);
     const data = await response.json();
 
-    expect(data.pagination.page).toBe(1);
+    expect(data.pagination.offset).toBe(0);
     expect(data.pagination.limit).toBe(20);
   });
 
@@ -341,15 +342,15 @@ describe("GET /api/users", () => {
     vi.mocked(middlewareModule.requireAdmin).mockResolvedValue(mockAdminUser);
     vi.mocked(usersModule.getAllUsers).mockResolvedValue(mockUsers);
 
-    const request = createMockRequest({ page: "2", limit: "1" });
+    const request = createMockRequest({ offset: "1", limit: "1" });
     const response = await GET(request);
     const data = await response.json();
 
     expect(response.status).toBe(200);
-    expect(data.pagination.page).toBe(2);
+    expect(data.pagination.offset).toBe(1);
     expect(data.pagination.limit).toBe(1);
     expect(data.pagination.total).toBe(3);
-    expect(data.pagination.totalPages).toBe(3);
+    expect(data.pagination.hasMore).toBe(true);
     expect(data.users).toHaveLength(1);
   });
 
@@ -382,7 +383,7 @@ describe("GET /api/users", () => {
 
       expect(response.status).toBe(200);
       expect(data.pagination.limit).toBeGreaterThanOrEqual(1);
-      expect(Number.isFinite(data.pagination.totalPages)).toBe(true);
+      expect(typeof data.pagination.hasMore).toBe("boolean");
     });
 
     it("should clamp limit above 100 to maximum of 100", async () => {
@@ -394,22 +395,22 @@ describe("GET /api/users", () => {
       expect(data.pagination.limit).toBeLessThanOrEqual(100);
     });
 
-    it("should clamp page=0 to minimum of 1", async () => {
-      const request = createMockRequest({ page: "0" });
+    it("should clamp offset=0 to minimum of 0", async () => {
+      const request = createMockRequest({ offset: "0" });
       const response = await GET(request);
       const data = await response.json();
 
       expect(response.status).toBe(200);
-      expect(data.pagination.page).toBeGreaterThanOrEqual(1);
+      expect(data.pagination.offset).toBe(0);
     });
 
-    it("should clamp negative page to minimum of 1", async () => {
-      const request = createMockRequest({ page: "-5" });
+    it("should clamp negative offset to minimum of 0", async () => {
+      const request = createMockRequest({ offset: "-5" });
       const response = await GET(request);
       const data = await response.json();
 
       expect(response.status).toBe(200);
-      expect(data.pagination.page).toBeGreaterThanOrEqual(1);
+      expect(data.pagination.offset).toBe(0);
     });
   });
 });

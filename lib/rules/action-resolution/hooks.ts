@@ -580,7 +580,7 @@ export function useActionHistory(
 
         if (data.success) {
           setActions(data.actions);
-          setTotal(data.total);
+          setTotal(data.pagination.total);
           if (data.stats) {
             setStats(data.stats);
           }
@@ -639,7 +639,7 @@ export function useActionHistory(
 
       if (data.success) {
         setActions(data.actions);
-        setTotal(data.total);
+        setTotal(data.pagination.total);
         if (data.stats) {
           setStats(data.stats);
         }

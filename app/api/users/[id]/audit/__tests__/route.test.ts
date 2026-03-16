@@ -145,7 +145,7 @@ describe("GET /api/users/[id]/audit", () => {
     expect(response.status).toBe(200);
     expect(data.success).toBe(true);
     expect(data.entries).toHaveLength(2);
-    expect(data.total).toBe(2);
+    expect(data.pagination.total).toBe(2);
     expect(auditModule.getUserAuditLog).toHaveBeenCalledWith(
       "target-user-id",
       expect.objectContaining({ limit: 50, offset: 0, order: "desc" })

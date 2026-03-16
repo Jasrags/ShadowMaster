@@ -34,6 +34,7 @@ import path from "path";
 
 const OVERWATCH_DIR = path.join(process.cwd(), "data", "matrix", "overwatch");
 // Directory is created at startup by ensureDataDirectories() in base.ts
+// (via instrumentation.ts). Requires Node.js runtime — not Edge-compatible.
 
 function getSessionFilePath(characterId: string): string {
   return path.join(OVERWATCH_DIR, `${sanitizePathSegment(characterId)}.json`);

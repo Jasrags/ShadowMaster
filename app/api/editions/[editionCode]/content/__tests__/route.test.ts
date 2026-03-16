@@ -87,9 +87,9 @@ describe("GET /api/editions/[editionCode]/content", () => {
     expect(response.status).toBe(200);
     expect(data.success).toBe(true);
     expect(data.items).toBeDefined();
-    expect(data.total).toBeGreaterThan(0);
-    expect(data.offset).toBe(0);
-    expect(data.limit).toBe(20);
+    expect(data.pagination.total).toBeGreaterThan(0);
+    expect(data.pagination.offset).toBe(0);
+    expect(data.pagination.limit).toBe(20);
     expect(editionsStorage.getEdition).toHaveBeenCalledWith("sr5");
     expect(editionsStorage.getAllBookPayloads).toHaveBeenCalledWith("sr5");
   });
@@ -165,7 +165,7 @@ describe("GET /api/editions/[editionCode]/content", () => {
     expect(response.status).toBe(200);
     expect(data.success).toBe(true);
     expect(data.items.length).toBe(2);
-    expect(data.limit).toBe(2);
+    expect(data.pagination.limit).toBe(2);
   });
 
   it("should cap limit at 100", async () => {
@@ -180,7 +180,7 @@ describe("GET /api/editions/[editionCode]/content", () => {
 
     expect(response.status).toBe(200);
     expect(data.success).toBe(true);
-    expect(data.limit).toBe(100);
+    expect(data.pagination.limit).toBe(100);
   });
 
   it("should respect offset parameter", async () => {
@@ -197,7 +197,7 @@ describe("GET /api/editions/[editionCode]/content", () => {
 
     expect(response.status).toBe(200);
     expect(data.success).toBe(true);
-    expect(data.offset).toBe(1);
+    expect(data.pagination.offset).toBe(1);
     // With 3 metatypes and offset 1, should return 2 items
     expect(data.items.length).toBe(2);
     // First item should be "elf" (second metatype)
@@ -266,6 +266,6 @@ describe("GET /api/editions/[editionCode]/content", () => {
     expect(response.status).toBe(200);
     expect(data.success).toBe(true);
     expect(data.items).toHaveLength(0);
-    expect(data.total).toBe(0);
+    expect(data.pagination.total).toBe(0);
   });
 });

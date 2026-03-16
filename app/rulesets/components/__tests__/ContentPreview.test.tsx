@@ -70,9 +70,12 @@ function mockFetchPages(totalItems: number, pageSize: number) {
         Promise.resolve({
           success: true,
           items,
-          total: totalItems,
-          offset,
-          limit,
+          pagination: {
+            total: totalItems,
+            limit,
+            offset,
+            hasMore: offset + items.length < totalItems,
+          },
         }),
     });
   });
@@ -183,9 +186,7 @@ describe("ContentPreview", () => {
         Promise.resolve({
           success: true,
           items: [{ id: "search-1", name: "Ares Predator", category: "gear" }],
-          total: 1,
-          offset: 0,
-          limit: 50,
+          pagination: { total: 1, limit: 50, offset: 0, hasMore: false },
           search: "ares",
         }),
     });
@@ -224,9 +225,7 @@ describe("ContentPreview", () => {
         Promise.resolve({
           success: true,
           items: [{ id: "magic-1", name: "Fireball", category: "magic" }],
-          total: 1,
-          offset: 0,
-          limit: 50,
+          pagination: { total: 1, limit: 50, offset: 0, hasMore: false },
           category: "magic",
         }),
     });

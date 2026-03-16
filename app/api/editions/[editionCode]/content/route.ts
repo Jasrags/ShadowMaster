@@ -85,9 +85,12 @@ export async function GET(
 
     const response: ContentPreviewResponse = {
       items,
-      total,
-      offset,
-      limit,
+      pagination: {
+        total,
+        limit,
+        offset,
+        hasMore: offset + items.length < total,
+      },
       category: category || undefined,
       search,
     };

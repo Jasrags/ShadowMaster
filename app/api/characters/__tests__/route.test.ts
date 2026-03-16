@@ -162,8 +162,8 @@ describe("GET /api/characters", () => {
     expect(response.status).toBe(200);
     expect(data.success).toBe(true);
     expect(data.characters).toEqual(mockCharacters);
-    expect(data.total).toBe(2);
-    expect(data.hasMore).toBe(false);
+    expect(data.pagination.total).toBe(2);
+    expect(data.pagination.hasMore).toBe(false);
     expect(characterStorageModule.searchCharacters).toHaveBeenCalledWith(
       expect.objectContaining({ userId: "test-user-id" })
     );
@@ -190,7 +190,7 @@ describe("GET /api/characters", () => {
     expect(response.status).toBe(200);
     expect(data.success).toBe(true);
     expect(data.characters).toEqual(draftCharacters);
-    expect(data.total).toBe(1);
+    expect(data.pagination.total).toBe(1);
     expect(characterStorageModule.searchCharacters).toHaveBeenCalledWith(
       expect.objectContaining({
         userId: "test-user-id",
@@ -220,7 +220,7 @@ describe("GET /api/characters", () => {
     expect(response.status).toBe(200);
     expect(data.success).toBe(true);
     expect(data.characters).toEqual(sr5Characters);
-    expect(data.total).toBe(2);
+    expect(data.pagination.total).toBe(2);
     expect(characterStorageModule.searchCharacters).toHaveBeenCalledWith(
       expect.objectContaining({
         userId: "test-user-id",

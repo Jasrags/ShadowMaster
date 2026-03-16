@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
     const limit = parseInt(searchParams.get("limit") || "50");
     const offset = parseInt(searchParams.get("offset") || "0");
 
-    const notifications = await getUserNotifications(user.id, {
+    const { notifications, total } = await getUserNotifications(user.id, {
       campaignId,
       unreadOnly,
       limit,
@@ -39,6 +39,12 @@ export async function GET(request: NextRequest) {
       success: true,
       notifications,
       unreadCount,
+      pagination: {
+        total,
+        limit,
+        offset,
+        hasMore: offset + notifications.length < total,
+      },
     });
   } catch (error) {
     console.error("Error fetching notifications:", error);

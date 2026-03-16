@@ -8,6 +8,7 @@
  */
 
 import type { EditionCode, BookCategory } from "./edition";
+import type { PaginationMeta } from "./core";
 
 // =============================================================================
 // CONTENT SUMMARY TYPES
@@ -138,9 +139,7 @@ export interface ContentPreviewItem {
  */
 export interface ContentPreviewResponse {
   items: ContentPreviewItem[];
-  total: number;
-  offset: number;
-  limit: number;
+  pagination: PaginationMeta;
   category?: string;
   /** Echo back the search term when filtering */
   search?: string;

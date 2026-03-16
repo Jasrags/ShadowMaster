@@ -97,7 +97,7 @@ export default function ContentPreview({ editionCode, category }: ContentPreview
 
         if (data.success) {
           setItems((prev) => (isFirstPage ? data.items : [...prev, ...data.items]));
-          setTotal(data.total);
+          setTotal(data.pagination?.total ?? 0);
         } else {
           setError(data.error || "Failed to load content");
         }

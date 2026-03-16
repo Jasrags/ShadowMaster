@@ -854,7 +854,12 @@ describe("useActionHistory", () => {
     it("should fetch history on mount", async () => {
       const mockActions = [createMockActionResult()];
       mockFetch.mockResolvedValueOnce({
-        json: () => Promise.resolve({ success: true, actions: mockActions, total: 1 }),
+        json: () =>
+          Promise.resolve({
+            success: true,
+            actions: mockActions,
+            pagination: { total: 1, limit: 20, offset: 0, hasMore: false },
+          }),
       });
 
       const { result } = renderHook(() => useActionHistory("char-1"));
@@ -877,7 +882,7 @@ describe("useActionHistory", () => {
           Promise.resolve({
             success: true,
             actions: [],
-            total: 10,
+            pagination: { total: 10, limit: 20, offset: 0, hasMore: false },
             stats: mockStats,
           }),
       });
@@ -914,7 +919,7 @@ describe("useActionHistory", () => {
           Promise.resolve({
             success: true,
             actions: [createMockActionResult()],
-            total: 5,
+            pagination: { total: 5, limit: 2, offset: 0, hasMore: true },
           }),
       });
 
@@ -933,7 +938,7 @@ describe("useActionHistory", () => {
           Promise.resolve({
             success: true,
             actions: [createMockActionResult()],
-            total: 1,
+            pagination: { total: 1, limit: 20, offset: 0, hasMore: false },
           }),
       });
 
@@ -954,10 +959,20 @@ describe("useActionHistory", () => {
 
       mockFetch
         .mockResolvedValueOnce({
-          json: () => Promise.resolve({ success: true, actions: firstBatch, total: 2 }),
+          json: () =>
+            Promise.resolve({
+              success: true,
+              actions: firstBatch,
+              pagination: { total: 2, limit: 1, offset: 0, hasMore: true },
+            }),
         })
         .mockResolvedValueOnce({
-          json: () => Promise.resolve({ success: true, actions: secondBatch, total: 2 }),
+          json: () =>
+            Promise.resolve({
+              success: true,
+              actions: secondBatch,
+              pagination: { total: 2, limit: 1, offset: 1, hasMore: false },
+            }),
         });
 
       const { result } = renderHook(() => useActionHistory("char-1", { limit: 1 }));
@@ -981,7 +996,7 @@ describe("useActionHistory", () => {
           Promise.resolve({
             success: true,
             actions: [createMockActionResult()],
-            total: 1,
+            pagination: { total: 1, limit: 20, offset: 0, hasMore: false },
           }),
       });
 
@@ -1007,10 +1022,20 @@ describe("useActionHistory", () => {
 
       mockFetch
         .mockResolvedValueOnce({
-          json: () => Promise.resolve({ success: true, actions: firstBatch, total: 1 }),
+          json: () =>
+            Promise.resolve({
+              success: true,
+              actions: firstBatch,
+              pagination: { total: 1, limit: 20, offset: 0, hasMore: false },
+            }),
         })
         .mockResolvedValueOnce({
-          json: () => Promise.resolve({ success: true, actions: refreshBatch, total: 1 }),
+          json: () =>
+            Promise.resolve({
+              success: true,
+              actions: refreshBatch,
+              pagination: { total: 1, limit: 20, offset: 0, hasMore: false },
+            }),
         });
 
       const { result } = renderHook(() => useActionHistory("char-1"));
@@ -1034,7 +1059,12 @@ describe("useActionHistory", () => {
           json: () => Promise.resolve({ success: false, error: "Initial error" }),
         })
         .mockResolvedValueOnce({
-          json: () => Promise.resolve({ success: true, actions: [], total: 0 }),
+          json: () =>
+            Promise.resolve({
+              success: true,
+              actions: [],
+              pagination: { total: 0, limit: 20, offset: 0, hasMore: false },
+            }),
         });
 
       const { result } = renderHook(() => useActionHistory("char-1"));

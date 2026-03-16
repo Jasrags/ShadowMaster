@@ -11,7 +11,7 @@ export async function GET(request: NextRequest) {
     // Get query parameters
     const searchParams = request.nextUrl.searchParams;
     const search = searchParams.get("search") || "";
-    const page = Math.max(1, parseInt(searchParams.get("page") || "1", 10) || 1);
+    const offset = Math.max(0, parseInt(searchParams.get("offset") || "0", 10) || 0);
     const limit = Math.max(1, Math.min(100, parseInt(searchParams.get("limit") || "20", 10) || 20));
     const ALLOWED_SORT_FIELDS = ["email", "username", "role", "createdAt"] as const;
     const ALLOWED_SORT_ORDERS = ["asc", "desc"] as const;
@@ -97,19 +97,15 @@ export async function GET(request: NextRequest) {
 
     // Apply pagination
     const total = filteredUsers.length;
-    const totalPages = Math.ceil(total / limit);
-    const startIndex = (page - 1) * limit;
-    const endIndex = startIndex + limit;
-    const paginatedUsers = filteredUsers.slice(startIndex, endIndex);
-
+    const paginatedUsers = filteredUsers.slice(offset, offset + limit);
     return NextResponse.json({
       success: true,
       users: paginatedUsers,
       pagination: {
-        page,
-        limit,
         total,
-        totalPages,
+        limit,
+        offset,
+        hasMore: offset + paginatedUsers.length < total,
       },
     });
   } catch (error) {
