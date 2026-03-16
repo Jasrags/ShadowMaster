@@ -116,6 +116,7 @@ function CommlinkRow({
       </span>
       <button
         onClick={() => onRemove(commlink.id || commlink.catalogId)}
+        aria-label={`Remove ${commlink.customName || commlink.name}`}
         className="shrink-0 rounded p-1 text-zinc-400 hover:bg-zinc-100 hover:text-red-500 dark:hover:bg-zinc-800"
       >
         <X className="h-3.5 w-3.5" />
@@ -160,6 +161,7 @@ function CyberdeckRow({
       </span>
       <button
         onClick={() => onRemove(cyberdeck.id || cyberdeck.catalogId)}
+        aria-label={`Remove ${cyberdeck.customName || cyberdeck.name}`}
         className="shrink-0 rounded p-1 text-zinc-400 hover:bg-zinc-100 hover:text-red-500 dark:hover:bg-zinc-800"
       >
         <X className="h-3.5 w-3.5" />
@@ -209,6 +211,7 @@ function DataSoftwareRow({
       </span>
       <button
         onClick={() => onRemove(software.id)}
+        aria-label={`Remove ${software.displayName}`}
         className="shrink-0 rounded p-1 text-zinc-400 hover:bg-zinc-100 hover:text-red-500 dark:hover:bg-zinc-800"
       >
         <X className="h-3.5 w-3.5" />
