@@ -109,28 +109,35 @@ export async function saveActionResult(
   characterId: ID,
   result: ActionResult
 ): Promise<ActionHistory> {
-  let history = await getActionHistory(userId, characterId);
+  const existing = await getActionHistory(userId, characterId);
+  const now = new Date().toISOString();
 
-  if (!history) {
-    history = await initializeActionHistory(userId, characterId);
+  // Build base history (create fresh if none exists)
+  const history: ActionHistory = existing ?? {
+    characterId,
+    actions: [],
+    createdAt: now,
+    updatedAt: now,
+  };
+
+  // Ensure character directory exists for new histories
+  if (!existing) {
+    const characterDir = getCharacterDir(userId, characterId);
+    await ensureDirectory(characterDir);
   }
 
-  // Add new action at the beginning (newest first)
-  history.actions.unshift(result);
-
-  // Trim to max size
-  if (history.actions.length > MAX_HISTORY_SIZE) {
-    history.actions = history.actions.slice(0, MAX_HISTORY_SIZE);
-  }
-
-  // Update timestamp
-  history.updatedAt = new Date().toISOString();
+  // Add new action at the beginning (newest first), trim to max size
+  const updated: ActionHistory = {
+    ...history,
+    actions: [result, ...history.actions].slice(0, MAX_HISTORY_SIZE),
+    updatedAt: now,
+  };
 
   // Save
   const filePath = getActionHistoryPath(userId, characterId);
-  await writeJsonFile(filePath, history);
+  await writeJsonFile(filePath, updated);
 
-  return history;
+  return updated;
 }
 
 /**
@@ -147,25 +154,28 @@ export async function updateActionResult(
     return null;
   }
 
-  const index = history.actions.findIndex((a) => a.id === actionId);
-  if (index === -1) {
+  const actionIndex = history.actions.findIndex((a) => a.id === actionId);
+  if (actionIndex === -1) {
     return null;
   }
 
-  // Update the action
-  history.actions[index] = {
-    ...history.actions[index],
+  // Update the action immutably
+  const updatedAction: ActionResult = {
+    ...history.actions[actionIndex],
     ...updates,
   };
 
-  // Update timestamp
-  history.updatedAt = new Date().toISOString();
+  const updated: ActionHistory = {
+    ...history,
+    actions: history.actions.map((a, i) => (i === actionIndex ? updatedAction : a)),
+    updatedAt: new Date().toISOString(),
+  };
 
   // Save
   const filePath = getActionHistoryPath(userId, characterId);
-  await writeJsonFile(filePath, history);
+  await writeJsonFile(filePath, updated);
 
-  return history.actions[index];
+  return updatedAction;
 }
 
 // =============================================================================
@@ -322,11 +332,14 @@ export async function clearActionHistory(userId: ID, characterId: ID): Promise<v
     return;
   }
 
-  history.actions = [];
-  history.updatedAt = new Date().toISOString();
+  const updated: ActionHistory = {
+    ...history,
+    actions: [],
+    updatedAt: new Date().toISOString(),
+  };
 
   const filePath = getActionHistoryPath(userId, characterId);
-  await writeJsonFile(filePath, history);
+  await writeJsonFile(filePath, updated);
 }
 
 /**
