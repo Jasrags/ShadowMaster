@@ -22,7 +22,14 @@ import type {
   OpposedTest,
   DEFAULT_ACTION_ALLOCATION,
 } from "../types";
-import { ensureDirectory, readJsonFile, writeJsonFile, deleteFile, listJsonFiles } from "./base";
+import {
+  ensureDirectory,
+  readJsonFile,
+  writeJsonFile,
+  deleteFile,
+  listJsonFiles,
+  withFileLock,
+} from "./base";
 
 // =============================================================================
 // CONSTANTS
@@ -116,111 +123,117 @@ async function writeIndex(index: CombatSessionIndex): Promise<void> {
  * Add a session to the index
  */
 async function addToIndex(session: CombatSession): Promise<void> {
-  const index = await readIndex();
+  await withFileLock(getIndexPath(), async () => {
+    const index = await readIndex();
 
-  const ownerList = index.byOwner[session.ownerId] || [];
-  const campaignList = session.campaignId ? index.byCampaign[session.campaignId] || [] : [];
+    const ownerList = index.byOwner[session.ownerId] || [];
+    const campaignList = session.campaignId ? index.byCampaign[session.campaignId] || [] : [];
 
-  const updatedIndex: CombatSessionIndex = {
-    ...index,
-    active: index.active.includes(session.id) ? index.active : [...index.active, session.id],
-    byOwner: {
-      ...index.byOwner,
-      [session.ownerId]: ownerList.includes(session.id) ? ownerList : [...ownerList, session.id],
-    },
-    byCampaign: session.campaignId
-      ? {
-          ...index.byCampaign,
-          [session.campaignId]: campaignList.includes(session.id)
-            ? campaignList
-            : [...campaignList, session.id],
-        }
-      : index.byCampaign,
-  };
+    const updatedIndex: CombatSessionIndex = {
+      ...index,
+      active: index.active.includes(session.id) ? index.active : [...index.active, session.id],
+      byOwner: {
+        ...index.byOwner,
+        [session.ownerId]: ownerList.includes(session.id) ? ownerList : [...ownerList, session.id],
+      },
+      byCampaign: session.campaignId
+        ? {
+            ...index.byCampaign,
+            [session.campaignId]: campaignList.includes(session.id)
+              ? campaignList
+              : [...campaignList, session.id],
+          }
+        : index.byCampaign,
+    };
 
-  await writeIndex(updatedIndex);
+    await writeIndex(updatedIndex);
+  });
 }
 
 /**
  * Move a session from active to completed in the index
  */
 async function moveToCompleted(sessionId: ID, ownerId: ID, campaignId?: ID): Promise<void> {
-  const index = await readIndex();
+  await withFileLock(getIndexPath(), async () => {
+    const index = await readIndex();
 
-  // Build updated owner index - remove sessionId, drop empty entries
-  const updatedByOwner = Object.fromEntries(
-    Object.entries({ ...index.byOwner })
-      .map(([key, ids]) => [key, key === ownerId ? ids.filter((id) => id !== sessionId) : ids])
-      .filter(([, ids]) => (ids as ID[]).length > 0)
-  );
+    // Build updated owner index - remove sessionId, drop empty entries
+    const updatedByOwner = Object.fromEntries(
+      Object.entries({ ...index.byOwner })
+        .map(([key, ids]) => [key, key === ownerId ? ids.filter((id) => id !== sessionId) : ids])
+        .filter(([, ids]) => (ids as ID[]).length > 0)
+    );
 
-  // Build updated campaign index - remove sessionId, drop empty entries
-  const updatedByCampaign = campaignId
-    ? Object.fromEntries(
-        Object.entries({ ...index.byCampaign })
-          .map(([key, ids]) => [
-            key,
-            key === campaignId ? ids.filter((id) => id !== sessionId) : ids,
-          ])
-          .filter(([, ids]) => (ids as ID[]).length > 0)
-      )
-    : index.byCampaign;
+    // Build updated campaign index - remove sessionId, drop empty entries
+    const updatedByCampaign = campaignId
+      ? Object.fromEntries(
+          Object.entries({ ...index.byCampaign })
+            .map(([key, ids]) => [
+              key,
+              key === campaignId ? ids.filter((id) => id !== sessionId) : ids,
+            ])
+            .filter(([, ids]) => (ids as ID[]).length > 0)
+        )
+      : index.byCampaign;
 
-  // Add to completed (newest first)
-  const newCompleted = [sessionId, ...index.completed];
-  const trimmedCompleted = newCompleted.slice(0, MAX_COMPLETED_SESSIONS);
-  const toRemove = newCompleted.slice(MAX_COMPLETED_SESSIONS);
+    // Add to completed (newest first)
+    const newCompleted = [sessionId, ...index.completed];
+    const trimmedCompleted = newCompleted.slice(0, MAX_COMPLETED_SESSIONS);
+    const toRemove = newCompleted.slice(MAX_COMPLETED_SESSIONS);
 
-  // Delete old session files
-  for (const id of toRemove) {
-    await deleteFile(getSessionPath(id));
-  }
+    // Delete old session files
+    for (const id of toRemove) {
+      await deleteFile(getSessionPath(id));
+    }
 
-  const updatedIndex: CombatSessionIndex = {
-    ...index,
-    active: index.active.filter((id) => id !== sessionId),
-    byOwner: updatedByOwner,
-    byCampaign: updatedByCampaign,
-    completed: trimmedCompleted,
-  };
+    const updatedIndex: CombatSessionIndex = {
+      ...index,
+      active: index.active.filter((id) => id !== sessionId),
+      byOwner: updatedByOwner,
+      byCampaign: updatedByCampaign,
+      completed: trimmedCompleted,
+    };
 
-  await writeIndex(updatedIndex);
+    await writeIndex(updatedIndex);
+  });
 }
 
 /**
  * Remove a session from the index entirely
  */
 async function removeFromIndex(sessionId: ID, ownerId: ID, campaignId?: ID): Promise<void> {
-  const index = await readIndex();
+  await withFileLock(getIndexPath(), async () => {
+    const index = await readIndex();
 
-  // Build updated owner index - remove sessionId, drop empty entries
-  const updatedByOwner = Object.fromEntries(
-    Object.entries(index.byOwner)
-      .map(([key, ids]) => [key, key === ownerId ? ids.filter((id) => id !== sessionId) : ids])
-      .filter(([, ids]) => (ids as ID[]).length > 0)
-  );
+    // Build updated owner index - remove sessionId, drop empty entries
+    const updatedByOwner = Object.fromEntries(
+      Object.entries(index.byOwner)
+        .map(([key, ids]) => [key, key === ownerId ? ids.filter((id) => id !== sessionId) : ids])
+        .filter(([, ids]) => (ids as ID[]).length > 0)
+    );
 
-  // Build updated campaign index - remove sessionId, drop empty entries
-  const updatedByCampaign = campaignId
-    ? Object.fromEntries(
-        Object.entries(index.byCampaign)
-          .map(([key, ids]) => [
-            key,
-            key === campaignId ? ids.filter((id) => id !== sessionId) : ids,
-          ])
-          .filter(([, ids]) => (ids as ID[]).length > 0)
-      )
-    : index.byCampaign;
+    // Build updated campaign index - remove sessionId, drop empty entries
+    const updatedByCampaign = campaignId
+      ? Object.fromEntries(
+          Object.entries(index.byCampaign)
+            .map(([key, ids]) => [
+              key,
+              key === campaignId ? ids.filter((id) => id !== sessionId) : ids,
+            ])
+            .filter(([, ids]) => (ids as ID[]).length > 0)
+        )
+      : index.byCampaign;
 
-  const updatedIndex: CombatSessionIndex = {
-    ...index,
-    active: index.active.filter((id) => id !== sessionId),
-    completed: index.completed.filter((id) => id !== sessionId),
-    byOwner: updatedByOwner,
-    byCampaign: updatedByCampaign,
-  };
+    const updatedIndex: CombatSessionIndex = {
+      ...index,
+      active: index.active.filter((id) => id !== sessionId),
+      completed: index.completed.filter((id) => id !== sessionId),
+      byOwner: updatedByOwner,
+      byCampaign: updatedByCampaign,
+    };
 
-  await writeIndex(updatedIndex);
+    await writeIndex(updatedIndex);
+  });
 }
 
 // =============================================================================
@@ -840,11 +853,13 @@ export async function createOpposedTest(
   await writeJsonFile(filePath, opposedTest);
 
   // Update the session→tests index
-  const index = await readOpposedIndex();
-  const sessionTests = index[opposedTest.combatSessionId] ?? [];
-  await writeOpposedIndex({
-    ...index,
-    [opposedTest.combatSessionId]: [...sessionTests, opposedTest.id],
+  await withFileLock(OPPOSED_INDEX_FILE, async () => {
+    const index = await readOpposedIndex();
+    const sessionTests = index[opposedTest.combatSessionId] ?? [];
+    await writeOpposedIndex({
+      ...index,
+      [opposedTest.combatSessionId]: [...sessionTests, opposedTest.id],
+    });
   });
 
   return opposedTest;
@@ -880,11 +895,13 @@ export async function updateOpposedTest(
 
   // If the test was just resolved, remove it from the index
   if (updated.state === "resolved" && test.state !== "resolved") {
-    const index = await readOpposedIndex();
-    const sessionTests = index[test.combatSessionId] ?? [];
-    await writeOpposedIndex({
-      ...index,
-      [test.combatSessionId]: sessionTests.filter((id) => id !== testId),
+    await withFileLock(OPPOSED_INDEX_FILE, async () => {
+      const index = await readOpposedIndex();
+      const sessionTests = index[test.combatSessionId] ?? [];
+      await writeOpposedIndex({
+        ...index,
+        [test.combatSessionId]: sessionTests.filter((id) => id !== testId),
+      });
     });
   }
 
