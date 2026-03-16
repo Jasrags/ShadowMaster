@@ -104,7 +104,8 @@ export function validateConstraint(
   const validator = constraintValidators[constraint.type];
 
   if (!validator) {
-    console.warn(`No validator for constraint type: ${constraint.type}`);
+    // Unknown constraint type — return null rather than logging in production.
+    // All supported types are registered in constraintValidators above.
     return null;
   }
 

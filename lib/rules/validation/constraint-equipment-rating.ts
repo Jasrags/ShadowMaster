@@ -83,7 +83,11 @@ function findCyberwareCatalogItem(
 // =============================================================================
 
 /**
- * Validate equipment ratings on character gear, cyberware, and foci
+ * Validate equipment ratings on character gear, cyberware, and foci.
+ *
+ * Returns only the first error to conform to the ConstraintValidator
+ * single-error contract. Use {@link validateEquipmentRatingsAll} when
+ * the caller needs every violation (e.g. UI highlighting).
  */
 export function validateEquipmentRatings(
   constraint: CreationConstraint,
@@ -91,6 +95,14 @@ export function validateEquipmentRatings(
 ): ValidationError | null {
   const errors = validateEquipmentRatingsInternal(context);
   return errors.length > 0 ? errors[0] : null;
+}
+
+/**
+ * Return all equipment rating validation errors (not just the first).
+ * Useful for UI code that needs to highlight every offending item.
+ */
+export function validateEquipmentRatingsAll(context: ValidationContext): ValidationError[] {
+  return validateEquipmentRatingsInternal(context);
 }
 
 /**

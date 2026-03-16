@@ -1,10 +1,5 @@
 /**
  * Skill Limit Constraint Validator
- *
- * Rules enforced:
- * - Base skill rating cap at creation is 6 (configurable via params.max)
- * - Rating 7 is only allowed with Aptitude quality for that SPECIFIC skill
- * - Only one skill can reach rating 7 at creation (Aptitude can only be taken once)
  */
 
 import type { CreationConstraint, ValidationError } from "@/lib/types";

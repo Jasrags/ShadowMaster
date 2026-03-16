@@ -1,3 +1,5 @@
+import type { PaginationMeta } from "./core";
+
 export type UserRole = "user" | "administrator" | "gamemaster";
 
 /**
@@ -119,7 +121,7 @@ export interface UpdateUserResponse {
 export interface UsersListResponse {
   success: boolean;
   users: PublicUser[];
-  pagination?: import("./core").PaginationMeta;
+  pagination?: PaginationMeta;
   error?: string;
 }
 
@@ -143,6 +145,6 @@ export interface SuspendUserResponse {
 export interface UserAuditLogResponse {
   success: boolean;
   entries?: import("./audit").UserAuditEntry[];
-  pagination?: import("./core").PaginationMeta;
+  pagination?: PaginationMeta;
   error?: string;
 }

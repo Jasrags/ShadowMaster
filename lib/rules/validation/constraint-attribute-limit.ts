@@ -1,10 +1,5 @@
 /**
  * Attribute Limit Constraint Validator
- *
- * Rules enforced:
- * - Only 1 Physical/Mental attribute can be at natural maximum at creation
- * - Exceptional Attribute quality allows 1 additional attribute at max
- * - Special attributes (Edge, Magic, Resonance) are NOT included in this limit
  */
 
 import type { CreationConstraint, ValidationError } from "@/lib/types";

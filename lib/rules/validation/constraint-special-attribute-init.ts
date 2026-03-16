@@ -1,13 +1,5 @@
 /**
  * Special Attribute Initialization Constraint Validator
- *
- * Rules enforced:
- * - Edge starts at metatype minimum value
- * - Magic starts at priority-determined value (0 for mundane)
- * - Resonance starts at priority-determined value (0 for non-technomancers)
- *
- * Note: This validates that special attributes don't exceed their allocated values,
- * not that they equal them exactly (players can spend special attribute points).
  */
 
 import type { CreationConstraint, ValidationError } from "@/lib/types";

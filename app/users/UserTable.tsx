@@ -56,7 +56,7 @@ export default function UserTable({ initialUsers }: UserTableProps) {
     try {
       const params = new URLSearchParams({
         search: debouncedSearch,
-        page: page.toString(),
+        offset: ((page - 1) * limit).toString(),
         limit: limit.toString(),
         sortBy,
         sortOrder,
