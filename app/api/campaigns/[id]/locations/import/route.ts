@@ -3,12 +3,25 @@ import { getSession } from "@/lib/auth/session";
 import { authorizeGM } from "@/lib/auth/campaign";
 import { importLocations } from "@/lib/storage/locations";
 import type { Location } from "@/lib/types";
+import { RateLimiter } from "@/lib/security/rate-limit";
+import { getClientIp } from "@/lib/security/ip";
+
+// 10 location imports per 15 minutes per IP
+const importLimiter = RateLimiter.get("location-import", { windowMs: 15 * 60 * 1000, max: 10 });
 
 export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ): Promise<NextResponse> {
   try {
+    const ip = getClientIp(request);
+    if (importLimiter.isRateLimited(ip)) {
+      return NextResponse.json(
+        { success: false, error: "Too many import requests. Please try again later." },
+        { status: 429 }
+      );
+    }
+
     const userId = await getSession();
     if (!userId) {
       return NextResponse.json(

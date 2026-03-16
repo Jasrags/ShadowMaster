@@ -3,6 +3,11 @@ import { getSession } from "@/lib/auth/session";
 import { importCharacter } from "@/lib/storage/characters";
 import { updateUser } from "@/lib/storage/users";
 import { UserSettings } from "@/lib/types/user";
+import { RateLimiter } from "@/lib/security/rate-limit";
+import { getClientIp } from "@/lib/security/ip";
+
+// 5 account imports per 15 minutes per IP
+const importLimiter = RateLimiter.get("account-import", { windowMs: 15 * 60 * 1000, max: 5 });
 
 /**
  * POST: Import user data and characters from a JSON file.
@@ -10,6 +15,15 @@ import { UserSettings } from "@/lib/types/user";
  */
 export async function POST(req: NextRequest) {
   try {
+    // Rate limiting
+    const ip = getClientIp(req);
+    if (importLimiter.isRateLimited(ip)) {
+      return NextResponse.json(
+        { success: false, error: "Too many import requests. Please try again later." },
+        { status: 429 }
+      );
+    }
+
     const userId = await getSession();
     if (!userId) {
       return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });

@@ -8,9 +8,23 @@ import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
 import { getUserById } from "@/lib/storage/users";
 import { importCharacter } from "@/lib/storage/characters";
+import { RateLimiter } from "@/lib/security/rate-limit";
+import { getClientIp } from "@/lib/security/ip";
+
+// 10 imports per 15 minutes per IP
+const importLimiter = RateLimiter.get("character-import", { windowMs: 15 * 60 * 1000, max: 10 });
 
 export async function POST(request: NextRequest) {
   try {
+    // Rate limiting
+    const ip = getClientIp(request);
+    if (importLimiter.isRateLimited(ip)) {
+      return NextResponse.json(
+        { success: false, error: "Too many import requests. Please try again later." },
+        { status: 429 }
+      );
+    }
+
     // Check authentication
     const userId = await getSession();
     if (!userId) {

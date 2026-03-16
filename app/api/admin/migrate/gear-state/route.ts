@@ -23,6 +23,8 @@ import {
   getMigrationSummary,
 } from "@/lib/migrations/add-gear-state";
 import type { Character } from "@/lib/types";
+import { RateLimiter } from "@/lib/security/rate-limit";
+import { getClientIp } from "@/lib/security/ip";
 
 // =============================================================================
 // HELPERS
@@ -68,7 +70,18 @@ async function requireAdmin(): Promise<
 // GET: Preview Migration
 // =============================================================================
 
+// 5 admin migration requests per 15 minutes per IP
+const migrationLimiter = RateLimiter.get("admin-migration", { windowMs: 15 * 60 * 1000, max: 5 });
+
 export async function GET(request: NextRequest): Promise<NextResponse> {
+  const ip = getClientIp(request);
+  if (migrationLimiter.isRateLimited(ip)) {
+    return NextResponse.json(
+      { success: false, error: "Too many requests. Please try again later." },
+      { status: 429 }
+    );
+  }
+
   const authResult = await requireAdmin();
   if (!authResult.authorized) {
     return authResult.response;
@@ -120,6 +133,14 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 // =============================================================================
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
+  const ip = getClientIp(request);
+  if (migrationLimiter.isRateLimited(ip)) {
+    return NextResponse.json(
+      { success: false, error: "Too many requests. Please try again later." },
+      { status: 429 }
+    );
+  }
+
   const authResult = await requireAdmin();
   if (!authResult.authorized) {
     return authResult.response;
