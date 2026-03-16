@@ -807,6 +807,20 @@ export async function endCombatSession(
 // =============================================================================
 
 const OPPOSED_TESTS_DIR = path.join(COMBAT_DIR, "opposed-tests");
+const OPPOSED_INDEX_FILE = path.join(OPPOSED_TESTS_DIR, "_index.json");
+
+/**
+ * Opposed test index: maps sessionId → testId[] for quick lookup
+ */
+type OpposedTestIndex = Record<ID, ID[]>;
+
+async function readOpposedIndex(): Promise<OpposedTestIndex> {
+  return (await readJsonFile<OpposedTestIndex>(OPPOSED_INDEX_FILE)) ?? {};
+}
+
+async function writeOpposedIndex(index: OpposedTestIndex): Promise<void> {
+  await writeJsonFile(OPPOSED_INDEX_FILE, index);
+}
 
 /**
  * Create an opposed test record
@@ -825,6 +839,14 @@ export async function createOpposedTest(
   const filePath = path.join(OPPOSED_TESTS_DIR, `${opposedTest.id}.json`);
   await writeJsonFile(filePath, opposedTest);
 
+  // Update the session→tests index
+  const index = await readOpposedIndex();
+  const sessionTests = index[opposedTest.combatSessionId] ?? [];
+  await writeOpposedIndex({
+    ...index,
+    [opposedTest.combatSessionId]: [...sessionTests, opposedTest.id],
+  });
+
   return opposedTest;
 }
 
@@ -837,7 +859,7 @@ export async function getOpposedTest(testId: ID): Promise<OpposedTest | null> {
 }
 
 /**
- * Update an opposed test
+ * Update an opposed test. Removes resolved tests from the index.
  */
 export async function updateOpposedTest(
   testId: ID,
@@ -856,20 +878,30 @@ export async function updateOpposedTest(
   const filePath = path.join(OPPOSED_TESTS_DIR, `${testId}.json`);
   await writeJsonFile(filePath, updated);
 
+  // If the test was just resolved, remove it from the index
+  if (updated.state === "resolved" && test.state !== "resolved") {
+    const index = await readOpposedIndex();
+    const sessionTests = index[test.combatSessionId] ?? [];
+    await writeOpposedIndex({
+      ...index,
+      [test.combatSessionId]: sessionTests.filter((id) => id !== testId),
+    });
+  }
+
   return updated;
 }
 
 /**
- * Get pending opposed tests for a combat session
+ * Get pending opposed tests for a combat session using the index.
  */
 export async function getPendingOpposedTests(sessionId: ID): Promise<OpposedTest[]> {
-  await ensureDirectory(OPPOSED_TESTS_DIR);
-  const testIds = await listJsonFiles(OPPOSED_TESTS_DIR);
+  const index = await readOpposedIndex();
+  const testIds = index[sessionId] ?? [];
 
   const pendingTests: OpposedTest[] = [];
   for (const id of testIds) {
     const test = await getOpposedTest(id);
-    if (test && test.combatSessionId === sessionId && test.state !== "resolved") {
+    if (test && test.state !== "resolved") {
       pendingTests.push(test);
     }
   }
