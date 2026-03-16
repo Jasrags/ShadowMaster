@@ -74,12 +74,9 @@ export async function createUserAuditEntry(
       details: params.details || {},
     };
 
-    // Get existing entries and append the new one
-    const entries = await getUserAuditEntries(params.targetUserId);
-    entries.push(entry);
-
-    // Save back to file
-    await saveUserAuditEntries(params.targetUserId, entries);
+    // Get existing entries and append the new one (immutable)
+    const existing = await getUserAuditEntries(params.targetUserId);
+    await saveUserAuditEntries(params.targetUserId, [...existing, entry]);
 
     return entry;
   });

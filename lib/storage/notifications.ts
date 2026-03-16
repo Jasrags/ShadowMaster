@@ -123,18 +123,20 @@ export async function updateNotification(
       const fileContent = await fs.readFile(filePath, "utf-8");
       const notifications = JSON.parse(fileContent) as CampaignNotification[];
 
-      const index = notifications.findIndex((n) => n.id === notificationId);
-      if (index === -1) return null;
+      const target = notifications.find((n) => n.id === notificationId);
+      if (!target) return null;
 
       const now = new Date().toISOString();
-      notifications[index] = {
-        ...notifications[index],
+      const updatedNotification: CampaignNotification = {
+        ...target,
         ...updates,
-        readAt: updates.read && !notifications[index].read ? now : notifications[index].readAt,
+        readAt: updates.read && !target.read ? now : target.readAt,
       };
 
-      await writeJsonFile(filePath, notifications);
-      return notifications[index];
+      const updated = notifications.map((n) => (n.id === notificationId ? updatedNotification : n));
+
+      await writeJsonFile(filePath, updated);
+      return updatedNotification;
     });
   } catch {
     return null;
