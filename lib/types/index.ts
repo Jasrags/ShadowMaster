@@ -286,6 +286,7 @@ export type {
   CreationVehicleBase,
   VehicleSelections,
   CreationSelections,
+  FreeSkillDesignations,
 } from "./creation-selections";
 
 // Creation selection type guards and accessors

@@ -23,6 +23,10 @@
  */
 
 import type { PriorityTableData } from "@/lib/rules/RulesetContext";
+import type { FreeSkillDesignations } from "@/lib/types";
+
+// Re-export for backwards compatibility
+export type { FreeSkillDesignations } from "@/lib/types";
 
 // =============================================================================
 // TYPES
@@ -52,19 +56,6 @@ export interface FreeSkillAllocationResult {
   unusedCount: number;
   /** Skill IDs that are receiving free allocation */
   allocatedSkillIds: string[];
-}
-
-/**
- * User's explicit designations for free skill allocations.
- * Maps free skill type to array of designated skill IDs.
- */
-export interface FreeSkillDesignations {
-  /** Skill IDs designated for magical free allocation */
-  magical?: string[];
-  /** Skill IDs designated for resonance free allocation */
-  resonance?: string[];
-  /** Skill IDs designated for active (any) free allocation */
-  active?: string[];
 }
 
 // =============================================================================
