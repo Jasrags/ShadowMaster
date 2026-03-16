@@ -9,6 +9,7 @@
 import { describe, it, expect, vi, beforeEach, type Mock } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { MagicPathCard } from "../MagicPathCard";
+import type { CreationState } from "@/lib/types";
 
 // Mock hooks
 vi.mock("@/lib/rules", () => ({
@@ -52,13 +53,32 @@ vi.mock("../../shared", () => ({
 vi.mock("../MagicPathModal", () => ({
   MagicPathModal: ({
     isOpen,
+    onClose,
     onConfirm,
+    availableOptions,
+    priorityLevel,
+    currentSelection,
+    magicPaths,
   }: {
     isOpen: boolean;
+    onClose: () => void;
     onConfirm: (pathId: string) => void;
+    availableOptions: Array<{ path: string }>;
+    priorityLevel?: string;
+    currentSelection: string | null;
+    magicPaths: Array<{ id: string; name: string }>;
   }) =>
     isOpen ? (
-      <div data-testid="magic-path-modal">
+      <div
+        data-testid="magic-path-modal"
+        data-priority={priorityLevel}
+        data-current={currentSelection}
+        data-options={availableOptions?.length}
+        data-paths={magicPaths?.length}
+      >
+        <button data-testid="modal-close" onClick={onClose}>
+          Close
+        </button>
         <button data-testid="modal-select-magician" onClick={() => onConfirm("magician")}>
           Select Magician
         </button>
@@ -158,26 +178,26 @@ const mockPriorityTable = {
   },
 };
 
-// Factory to create test state
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const createBaseState = (overrides: Record<string, any> = {}): any => ({
-  currentStep: 1,
-  priorities: { magic: "A" },
-  selections: {
-    metatype: "human",
-    positiveQualities: [],
-    qualitySpecifications: {},
-    qualityLevels: {},
-    ...overrides.selections,
-  },
-  budgets: {
-    "karma-spent-positive": 0,
-    "karma-gained-negative": 0,
-    ...overrides.budgets,
-  },
-  validation: { errors: [], warnings: [] },
-  ...overrides,
-});
+// Factory to create test state — uses partial shape cast to CreationState
+const createBaseState = (overrides: Record<string, unknown> = {}) =>
+  ({
+    currentStep: 1,
+    priorities: { magic: "A" },
+    selections: {
+      metatype: "human",
+      positiveQualities: [],
+      qualitySpecifications: {},
+      qualityLevels: {},
+      ...(overrides.selections as Record<string, unknown>),
+    },
+    budgets: {
+      "karma-spent-positive": 0,
+      "karma-gained-negative": 0,
+      ...(overrides.budgets as Record<string, unknown>),
+    },
+    validation: { errors: [], warnings: [] },
+    ...overrides,
+  }) as unknown as CreationState;
 
 describe("MagicPathCard", () => {
   let mockUpdateState: Mock;

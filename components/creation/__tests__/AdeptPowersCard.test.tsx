@@ -10,6 +10,7 @@
 import { describe, it, expect, vi, beforeEach, type Mock } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { AdeptPowersCard } from "../AdeptPowersCard";
+import type { CreationState } from "@/lib/types";
 
 // Mock hooks
 vi.mock("@/lib/rules", () => ({
@@ -101,6 +102,7 @@ vi.mock("../adept-powers", () => ({
     ) : null,
   AdeptPowerListItem: ({
     displayName,
+    activation,
     powerPointCost,
     isLeveled,
     level,
@@ -113,6 +115,7 @@ vi.mock("../adept-powers", () => ({
     onRemove,
   }: {
     displayName: string;
+    activation: string;
     powerPointCost: number;
     isLeveled: boolean;
     level?: number;
@@ -124,7 +127,11 @@ vi.mock("../adept-powers", () => ({
     specification?: string;
     onRemove: () => void;
   }) => (
-    <div data-testid={`power-item-${displayName}`} data-cost={powerPointCost}>
+    <div
+      data-testid={`power-item-${displayName}`}
+      data-cost={powerPointCost}
+      data-activation={activation}
+    >
       <span>{displayName}</span>
       {isLeveled && <span data-testid={`power-level-${displayName}`}>Level {level}</span>}
       {needsSpec && <span data-testid={`power-needs-spec-${displayName}`}>Needs Spec</span>}
@@ -161,12 +168,13 @@ vi.mock("lucide-react", () => ({
 
 // Mock constants
 vi.mock("@/lib/constants/magic", () => ({
-  ACTIVATION_ORDER: ["free", "simple", "complex", "interrupt"],
+  ACTIVATION_ORDER: ["free", "simple", "complex", "interrupt", "other"],
   ACTIVATION_LABELS: {
     free: "Free Action",
     simple: "Simple Action",
     complex: "Complex Action",
     interrupt: "Interrupt",
+    other: "Other",
   } as Record<string, string>,
 }));
 
@@ -244,24 +252,24 @@ const createMockGetBudget = (karmaRemaining = 25) => {
   });
 };
 
-// Factory to create test state
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const createBaseState = (overrides: Record<string, any> = {}): any => ({
-  currentStep: 1,
-  priorities: { magic: "A" },
-  selections: {
-    "magical-path": "adept",
-    adeptPowers: [],
-    ...overrides.selections,
-  },
-  budgets: {
-    "power-points-spent": 0,
-    "karma-spent-power-points": 0,
-    ...overrides.budgets,
-  },
-  validation: { errors: [], warnings: [] },
-  ...overrides,
-});
+// Factory to create test state — uses partial shape cast to CreationState
+const createBaseState = (overrides: Record<string, unknown> = {}) =>
+  ({
+    currentStep: 1,
+    priorities: { magic: "A" },
+    selections: {
+      "magical-path": "adept",
+      adeptPowers: [],
+      ...(overrides.selections as Record<string, unknown>),
+    },
+    budgets: {
+      "power-points-spent": 0,
+      "karma-spent-power-points": 0,
+      ...(overrides.budgets as Record<string, unknown>),
+    },
+    validation: { errors: [], warnings: [] },
+    ...overrides,
+  }) as unknown as CreationState;
 
 describe("AdeptPowersCard", () => {
   let mockUpdateState: Mock;
