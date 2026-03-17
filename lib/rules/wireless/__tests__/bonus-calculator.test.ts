@@ -6,8 +6,14 @@
  */
 
 import { describe, it, expect } from "vitest";
-import type { Character, CyberwareItem, Weapon, BiowareItem, ArmorItem } from "@/lib/types";
-import type { WirelessEffect } from "@/lib/types/wireless-effects";
+import type {
+  Character,
+  CyberwareItem,
+  Weapon,
+  BiowareItem,
+  ArmorItem,
+  WirelessEffect,
+} from "@/lib/types";
 import {
   isGlobalWirelessEnabled,
   isItemWirelessActive,

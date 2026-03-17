@@ -12,7 +12,7 @@ import type {
   StackingRule,
   UnifiedResolvedEffect,
   EffectResolutionResult,
-} from "@/lib/types/effects";
+} from "@/lib/types";
 
 /**
  * Per-type stacking rules from the effects plan document.

@@ -7,7 +7,7 @@
  * SR5 Core Rulebook p. 231
  */
 
-import type { DistanceBand, TerrainModifier, NoiseCalculation } from "@/lib/types/rigging";
+import type { DistanceBand, TerrainModifier, NoiseCalculation } from "@/lib/types";
 
 // =============================================================================
 // CONSTANTS - DISTANCE NOISE (SR5 p. 231)

@@ -53,8 +53,7 @@ import {
   type CyberlimbItem,
   type CyberlimbLocation,
 } from "../cyberlimb";
-import type { Character } from "@/lib/types/character";
-import type { CyberlimbCatalogItem, CyberwareCatalogItem } from "@/lib/types/edition";
+import type { Character, CyberlimbCatalogItem, CyberwareCatalogItem } from "@/lib/types";
 
 // =============================================================================
 // HELPER FUNCTIONS

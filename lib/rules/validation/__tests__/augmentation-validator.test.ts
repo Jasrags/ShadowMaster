@@ -8,10 +8,14 @@
 import { describe, it, expect } from "vitest";
 import { validateCharacter } from "../character-validator";
 import type { CharacterValidationContext } from "../types";
-import type { Character, CyberwareItem, BiowareItem } from "@/lib/types/character";
-import type { MergedRuleset } from "@/lib/types";
-import type { CreationState } from "@/lib/types/creation";
-import type { CyberlimbItem } from "@/lib/types/cyberlimb";
+import type {
+  MergedRuleset,
+  Character,
+  CyberwareItem,
+  BiowareItem,
+  CreationState,
+  CyberlimbItem,
+} from "@/lib/types";
 
 // =============================================================================
 // TEST FIXTURES

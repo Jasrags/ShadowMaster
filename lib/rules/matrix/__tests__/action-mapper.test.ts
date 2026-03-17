@@ -6,7 +6,7 @@
  */
 
 import { describe, it, expect } from "vitest";
-import type { ActionDefinition } from "@/lib/types/action-definitions";
+import type { ActionDefinition } from "@/lib/types";
 import {
   actionDefinitionToMatrixAction,
   subcategoryToMatrixCategory,

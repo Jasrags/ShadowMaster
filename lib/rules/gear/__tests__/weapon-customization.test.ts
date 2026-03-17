@@ -6,8 +6,7 @@
  */
 
 import { describe, it, expect } from "vitest";
-import type { Weapon } from "@/lib/types/character";
-import type { WeaponModificationCatalogItem } from "@/lib/types/edition";
+import type { Weapon, WeaponModificationCatalogItem } from "@/lib/types";
 import {
   validateModInstallation,
   getAvailableMounts,

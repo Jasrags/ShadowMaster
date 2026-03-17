@@ -7,23 +7,25 @@
  * Based on SR5 Core Rulebook Chapter 11: Riggers
  */
 
-import type { Character } from "@/lib/types/character";
 import type {
+  Character,
+  VehicleCatalogItem,
+  DroneCatalogItem,
+  HandlingRating,
+  VehicleActionType,
   RiggingState,
   ControlMode,
   VehicleTestType,
   SlavedDrone,
   SharedAutosoft,
   ActiveVehicleState,
-} from "@/lib/types/rigging";
-import type { VehicleCatalogItem, DroneCatalogItem, HandlingRating } from "@/lib/types/vehicles";
+} from "@/lib/types";
 import {
   getApplicableAutosofts,
   getControlModeBonus,
   getLimitTypeForTest,
   type VehicleActionValidation,
 } from "./action-validator";
-import type { VehicleActionType } from "@/lib/types/rigging";
 
 // =============================================================================
 // RESULT TYPES

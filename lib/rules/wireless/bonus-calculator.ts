@@ -9,14 +9,15 @@
  * @see Capability: character.inventory-management
  */
 
-import type { Character, CyberwareItem } from "@/lib/types";
 import type {
+  Character,
+  CyberwareItem,
   WirelessEffect,
   ActiveWirelessBonuses,
   AttributeKey,
   LimitKey,
   EffectConditionType,
-} from "@/lib/types/wireless-effects";
+} from "@/lib/types";
 import {
   EMPTY_WIRELESS_BONUSES,
   applyWirelessEffect,

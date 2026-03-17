@@ -7,8 +7,12 @@
  * validator expect MatrixAction objects.
  */
 
-import type { ActionDefinition, ActionSubcategory } from "@/lib/types/action-definitions";
-import type { MatrixAction, MatrixActionCategory } from "@/lib/types/matrix";
+import type {
+  ActionDefinition,
+  ActionSubcategory,
+  MatrixAction,
+  MatrixActionCategory,
+} from "@/lib/types";
 
 /**
  * Map ActionDefinition subcategory to MatrixActionCategory.

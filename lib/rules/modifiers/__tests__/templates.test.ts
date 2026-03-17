@@ -9,7 +9,7 @@
 
 import { describe, it, expect } from "vitest";
 import { MODIFIER_TEMPLATES, getModifierTemplate } from "../templates";
-import type { EffectType, EffectTrigger } from "@/lib/types/effects";
+import type { EffectType, EffectTrigger } from "@/lib/types";
 
 // =============================================================================
 // VALID VALUES

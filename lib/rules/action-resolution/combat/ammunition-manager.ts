@@ -9,13 +9,13 @@
  * @see Capability: character.inventory-management
  */
 
-import type { Weapon } from "@/lib/types";
 import type {
+  Weapon,
   WeaponAmmoState,
   MagazineItem,
   AmmunitionItem,
   AmmunitionCaliber,
-} from "@/lib/types/gear-state";
+} from "@/lib/types";
 
 // =============================================================================
 // CONSTANTS

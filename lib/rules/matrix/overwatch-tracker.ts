@@ -6,8 +6,7 @@
  * This service tracks the history of OS events for audit purposes.
  */
 
-import type { ID, ISODateString } from "@/lib/types";
-import type { OverwatchEvent, OverwatchSession } from "@/lib/types/matrix";
+import type { ID, ISODateString, OverwatchEvent, OverwatchSession } from "@/lib/types";
 import { OVERWATCH_THRESHOLD } from "@/lib/types/matrix";
 import { checkConvergence } from "./overwatch-calculator";
 

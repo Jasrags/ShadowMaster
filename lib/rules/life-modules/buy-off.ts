@@ -8,7 +8,7 @@
  * Pure functions — no side effects, no mutations.
  */
 
-import type { LifeModuleQualityGrant } from "@/lib/types/life-modules";
+import type { LifeModuleQualityGrant } from "@/lib/types";
 import type { QualityData } from "@/lib/rules/loader-types";
 
 // =============================================================================

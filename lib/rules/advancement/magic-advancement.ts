@@ -7,8 +7,12 @@
  * - Adept power purchases
  */
 
-import type { Character, MergedRuleset, AdeptPower } from "@/lib/types";
-import type { CampaignAdvancementSettings } from "@/lib/types/campaign";
+import type {
+  Character,
+  MergedRuleset,
+  AdeptPower,
+  CampaignAdvancementSettings,
+} from "@/lib/types";
 import type { AdvancementRulesData, LoadedRuleset, SpellData } from "@/lib/rules/loader-types";
 import { extractSpellsCatalog, extractAdeptPowersCatalog } from "@/lib/rules/magic";
 

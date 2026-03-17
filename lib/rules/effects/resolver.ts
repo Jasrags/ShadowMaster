@@ -8,13 +8,13 @@
  * @see Issue #108
  */
 
-import type { Character } from "@/lib/types";
-import type { MergedRuleset } from "@/lib/types/edition";
 import type {
+  Character,
+  MergedRuleset,
   EffectResolutionContext,
   EffectResolutionResult,
   UnifiedResolvedEffect,
-} from "@/lib/types/effects";
+} from "@/lib/types";
 import { effectApplies } from "./matching";
 import { applyStackingRules } from "./stacking";
 import { gatherEffectSources } from "./gathering";

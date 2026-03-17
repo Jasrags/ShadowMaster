@@ -9,7 +9,7 @@ import {
   getInitiativeDiceBonus,
   getBiofeedbackDamageType,
 } from "../cyberdeck-validator";
-import type { CyberdeckAttributeConfig } from "@/lib/types/matrix";
+import type { CyberdeckAttributeConfig } from "@/lib/types";
 
 describe("cyberdeck-validator", () => {
   // Standard Ares Predator cyberdeck array

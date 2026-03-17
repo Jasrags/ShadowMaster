@@ -5,8 +5,7 @@
  */
 
 import { describe, it, expect } from "vitest";
-import type { Character, Weapon, ArmorItem, GearItem } from "@/lib/types";
-import type { EquipmentReadiness } from "@/lib/types/gear-state";
+import type { Character, Weapon, ArmorItem, GearItem, EquipmentReadiness } from "@/lib/types";
 import {
   calculateEncumbrance,
   calculateMaxCapacity,

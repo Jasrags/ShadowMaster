@@ -5,7 +5,7 @@
  * against game rules. No React dependencies.
  */
 
-import type { CreationState, ValidationError } from "@/lib/types/creation";
+import type { CreationState, ValidationError } from "@/lib/types";
 import type { PriorityTableData } from "@/lib/rules/RulesetContext";
 import type { BudgetState } from "@/lib/contexts/CreationBudgetContext";
 import { LIFE_MODULES_MAX_GEAR_KARMA, LIFE_MODULES_MAX_NEGATIVE_QUALITIES } from "@/lib/types";

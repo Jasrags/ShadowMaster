@@ -7,13 +7,14 @@
  * SR5 Core Rulebook p. 452
  */
 
-import type { Character, CyberwareItem } from "@/lib/types/character";
 import type {
+  Character,
+  CyberwareItem,
   VehicleControlRig,
   RiggerVRMode,
   RiggingValidationError,
   RiggingValidationWarning,
-} from "@/lib/types/rigging";
+} from "@/lib/types";
 import { JUMPED_IN_INITIATIVE_BONUS, JUMPED_IN_HOTSIM_INITIATIVE_BONUS } from "@/lib/types/rigging";
 
 // =============================================================================

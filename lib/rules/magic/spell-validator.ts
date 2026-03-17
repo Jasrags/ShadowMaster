@@ -5,13 +5,14 @@
  * and spell compatibility checking.
  */
 
-import type { Character, AdeptPower } from "@/lib/types/character";
 import type {
+  Character,
+  AdeptPower,
   SpellValidationResult,
   MagicValidationError,
   MagicValidationWarning,
   SpellCategory,
-} from "@/lib/types/magic";
+} from "@/lib/types";
 import type {
   LoadedRuleset,
   SpellData,

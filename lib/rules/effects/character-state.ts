@@ -8,8 +8,7 @@
  * @see Issue #485
  */
 
-import type { Character } from "@/lib/types";
-import type { CharacterStateFlags } from "@/lib/types/effects";
+import type { Character, CharacterStateFlags } from "@/lib/types";
 
 /**
  * Build character state flags from quality dynamic state.

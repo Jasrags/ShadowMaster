@@ -14,7 +14,7 @@ import type {
   EffectTarget,
   EffectCondition,
 } from "@/lib/types";
-import type { TestContext, CombatContext, MagicContext, MatrixContext } from "@/lib/types/gameplay";
+import type { TestContext, CombatContext, MagicContext, MatrixContext } from "@/lib/types";
 import {
   resolveTemplateVariable,
   resolveEffectValue,

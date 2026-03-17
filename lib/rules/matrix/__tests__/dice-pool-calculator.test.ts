@@ -16,8 +16,7 @@ import {
   buildMatrixDefensePool,
   buildMatrixResistancePool,
 } from "../dice-pool-calculator";
-import type { MatrixAction, MatrixState, LoadedProgram } from "@/lib/types/matrix";
-import type { ISODateString } from "@/lib/types";
+import type { ISODateString, MatrixAction, MatrixState, LoadedProgram } from "@/lib/types";
 import { OVERWATCH_THRESHOLD } from "@/lib/types/matrix";
 import { createMockCharacter } from "@/__tests__/mocks/storage";
 

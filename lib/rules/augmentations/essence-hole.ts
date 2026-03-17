@@ -9,9 +9,7 @@
  * @satisfies Guarantee #2: Permanent link between Essence loss and Magic/Resonance reduction
  */
 
-import type { Character, EssenceHole } from "@/lib/types/character";
-import type { AugmentationRules } from "@/lib/types/edition";
-import type { MagicalPath } from "@/lib/types/core";
+import type { Character, EssenceHole, AugmentationRules, MagicalPath } from "@/lib/types";
 import { roundEssence, MAX_ESSENCE } from "./essence";
 
 // =============================================================================

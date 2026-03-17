@@ -6,8 +6,7 @@
  * modify character state directly.
  */
 
-import type { Character } from "@/lib/types/character";
-import type { EssenceMagicState } from "@/lib/types/magic";
+import type { Character, EssenceMagicState } from "@/lib/types";
 import type { AugmentationRulesData } from "../loader-types";
 
 // =============================================================================

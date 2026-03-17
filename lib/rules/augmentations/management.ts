@@ -15,12 +15,10 @@ import type {
   BiowareItem,
   CyberwareGrade,
   BiowareGrade,
-} from "@/lib/types/character";
-import type {
   CyberwareCatalogItem,
   BiowareCatalogItem,
   AugmentationRules,
-} from "@/lib/types/edition";
+} from "@/lib/types";
 import {
   calculateCyberwareEssence,
   calculateBiowareEssence,

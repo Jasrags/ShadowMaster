@@ -128,6 +128,9 @@ export type {
   CyberlimbEnhancementCatalogItem,
   CyberlimbAccessoryCatalogItem,
   CyberImplantWeaponCatalogItem,
+  // Weapon customization types
+  WeaponSubcategoryMountRegistry,
+  WeaponSizeCategory,
 } from "./edition";
 
 // Character types
@@ -214,6 +217,7 @@ export type {
   EffectResolutionResult,
   ActiveModifier,
   StackingRule,
+  CharacterStateFlags,
 } from "./effects";
 
 // Cyberware/Bioware grade multipliers and modifiers
@@ -285,6 +289,7 @@ export type {
   VehicleSelections,
   CreationSelections,
   FreeSkillDesignations,
+  SkillGroupValue,
 } from "./creation-selections";
 
 // Creation selection type guards and accessors

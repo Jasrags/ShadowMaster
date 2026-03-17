@@ -5,8 +5,7 @@
  * Each handler knows how to process its effect type and return appropriate values.
  */
 
-import type { QualityEffect, EffectType } from "@/lib/types";
-import type { ResolvedEffect } from "@/lib/types/gameplay";
+import type { QualityEffect, EffectType, ResolvedEffect } from "@/lib/types";
 
 /**
  * Handler function for a specific effect type

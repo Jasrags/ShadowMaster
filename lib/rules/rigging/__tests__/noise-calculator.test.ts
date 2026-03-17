@@ -17,7 +17,7 @@ import {
   type SpamZoneLevel,
   type StaticZoneLevel,
 } from "../noise-calculator";
-import type { TerrainModifier, DistanceBand } from "@/lib/types/rigging";
+import type { TerrainModifier, DistanceBand } from "@/lib/types";
 
 // =============================================================================
 // DISTANCE BAND TESTS

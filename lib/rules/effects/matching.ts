@@ -16,7 +16,7 @@ import type {
   EffectActionContext,
   EffectResolutionContext,
   CharacterStateFlags,
-} from "@/lib/types/effects";
+} from "@/lib/types";
 
 /**
  * Derive the set of active triggers implied by an action context.

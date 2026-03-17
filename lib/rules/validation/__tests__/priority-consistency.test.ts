@@ -8,9 +8,7 @@
 import { describe, it, expect } from "vitest";
 import { validateCharacter } from "../character-validator";
 import type { CharacterValidationContext } from "../types";
-import type { Character } from "@/lib/types/character";
-import type { MergedRuleset } from "@/lib/types";
-import type { CreationState } from "@/lib/types/creation";
+import type { MergedRuleset, Character, CreationState } from "@/lib/types";
 
 // =============================================================================
 // TEST FIXTURES

@@ -8,8 +8,16 @@
  * @see Capability: character.inventory-management
  */
 
-import type { Weapon, ArmorItem, GearItem, Character, BiowareItem } from "@/lib/types";
-import type { GearState, EquipmentReadiness, DeviceCondition } from "@/lib/types/gear-state";
+import type {
+  Weapon,
+  ArmorItem,
+  GearItem,
+  Character,
+  BiowareItem,
+  GearState,
+  EquipmentReadiness,
+  DeviceCondition,
+} from "@/lib/types";
 
 // =============================================================================
 // CONSTANTS

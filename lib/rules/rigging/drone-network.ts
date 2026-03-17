@@ -7,8 +7,9 @@
  * SR5 Core Rulebook p. 265-269
  */
 
-import type { CharacterDrone, CharacterAutosoft } from "@/lib/types/character";
 import type {
+  CharacterDrone,
+  CharacterAutosoft,
   DroneNetwork,
   SlavedDrone,
   SharedAutosoft,
@@ -16,7 +17,7 @@ import type {
   RCCConfiguration,
   DroneCommandType,
   RiggingValidationError,
-} from "@/lib/types/rigging";
+} from "@/lib/types";
 import { VEHICLE_CONDITION_BASE } from "@/lib/types/rigging";
 import { calculateMaxSlavedDrones } from "./rcc-validator";
 import { calculateDroneNoise, type SpamZoneLevel, type StaticZoneLevel } from "./noise-calculator";

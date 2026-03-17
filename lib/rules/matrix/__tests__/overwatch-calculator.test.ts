@@ -11,7 +11,7 @@ import {
   shouldAutoIncreaseOS,
   getOverwatchStatusDescription,
 } from "../overwatch-calculator";
-import type { MatrixAction, MatrixState, MatrixMode } from "@/lib/types/matrix";
+import type { MatrixAction, MatrixState, MatrixMode } from "@/lib/types";
 import { OVERWATCH_THRESHOLD } from "@/lib/types/matrix";
 import { createMockCharacter } from "@/__tests__/mocks/storage";
 

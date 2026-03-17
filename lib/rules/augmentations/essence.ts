@@ -14,8 +14,9 @@ import type {
   BiowareItem,
   CyberwareGrade,
   BiowareGrade,
-} from "@/lib/types/character";
-import type { CyberwareCatalogItem, BiowareCatalogItem } from "@/lib/types/edition";
+  CyberwareCatalogItem,
+  BiowareCatalogItem,
+} from "@/lib/types";
 import { getCyberwareGradeMultiplier, getBiowareGradeMultiplier } from "./grades";
 
 // =============================================================================

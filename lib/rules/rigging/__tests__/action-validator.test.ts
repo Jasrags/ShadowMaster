@@ -13,8 +13,8 @@ import {
   getControlModeDescription,
   getActionTypeDescription,
 } from "../action-validator";
-import type { Character } from "@/lib/types/character";
 import type {
+  Character,
   RiggingState,
   SlavedDrone,
   SharedAutosoft,
@@ -22,7 +22,7 @@ import type {
   DroneNetwork,
   RCCConfiguration,
   JumpedInState,
-} from "@/lib/types/rigging";
+} from "@/lib/types";
 
 // =============================================================================
 // TEST FIXTURES

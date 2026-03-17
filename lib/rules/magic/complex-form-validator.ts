@@ -5,12 +5,12 @@
  * Mirrors the spell-validator.ts pattern.
  */
 
-import type { Character } from "@/lib/types/character";
 import type {
+  Character,
   SpellValidationResult,
   MagicValidationError,
   MagicValidationWarning,
-} from "@/lib/types/magic";
+} from "@/lib/types";
 import type { LoadedRuleset, ComplexFormData } from "../loader-types";
 import { extractComplexForms } from "../loader";
 

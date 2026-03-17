@@ -8,9 +8,7 @@
 import { describe, it, expect } from "vitest";
 import { shapeshifterValidator, SHAPESHIFTER_ERROR_CODES } from "../shapeshifter-validator";
 import type { CharacterValidationContext, ValidationIssue } from "../types";
-import type { Character } from "@/lib/types/character";
-import type { MergedRuleset } from "@/lib/types";
-import type { CreationState } from "@/lib/types/creation";
+import type { MergedRuleset, Character, CreationState } from "@/lib/types";
 
 // =============================================================================
 // TEST FIXTURES

@@ -8,8 +8,14 @@
  * @see Capability: character.inventory-management
  */
 
-import type { Character, Weapon, ArmorItem, GearItem } from "@/lib/types";
-import type { EncumbranceState, EquipmentReadiness } from "@/lib/types/gear-state";
+import type {
+  Character,
+  Weapon,
+  ArmorItem,
+  GearItem,
+  EncumbranceState,
+  EquipmentReadiness,
+} from "@/lib/types";
 import { getAttributeValue } from "@/lib/rules/action-resolution/pool-builder";
 import { getContainerContentWeight, isContainer } from "@/lib/rules/inventory/container-manager";
 

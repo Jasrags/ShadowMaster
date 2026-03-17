@@ -7,8 +7,7 @@
  * @see Issue #448
  */
 
-import type { Character } from "@/lib/types";
-import type { CreationSelections, QualitySelectionValue } from "@/lib/types/creation-selections";
+import type { Character, CreationSelections, QualitySelectionValue } from "@/lib/types";
 
 /**
  * Extract quality ID from a selection value (string or SelectedQuality object).

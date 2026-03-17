@@ -5,13 +5,13 @@
  * Ensures programs exist in the ruleset and are compatible with devices.
  */
 
-import type { Character } from "@/lib/types";
-import type { CharacterProgram } from "@/lib/types/programs";
 import type {
+  Character,
+  CharacterProgram,
   MatrixDeviceType,
   MatrixValidationError,
   MatrixValidationWarning,
-} from "@/lib/types/matrix";
+} from "@/lib/types";
 import type { LoadedRuleset, ProgramCatalogItemData } from "../loader-types";
 import { getActiveCyberdeck } from "./cyberdeck-validator";
 

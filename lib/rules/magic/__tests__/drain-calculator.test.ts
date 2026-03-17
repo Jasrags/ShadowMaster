@@ -11,9 +11,8 @@ import {
   calculateDrainPreview,
   formatDrainSummary,
 } from "../drain-calculator";
-import type { Character } from "@/lib/types/character";
+import type { Character, BookPayload } from "@/lib/types";
 import type { LoadedRuleset } from "../../loader-types";
-import type { BookPayload } from "@/lib/types/edition";
 
 // =============================================================================
 // TEST FIXTURES

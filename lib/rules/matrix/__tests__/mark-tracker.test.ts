@@ -19,8 +19,7 @@ import {
   marksNeededForLevel,
   checkActionMarks,
 } from "../mark-tracker";
-import type { MatrixState, MatrixMark } from "@/lib/types/matrix";
-import type { ISODateString } from "@/lib/types";
+import type { ISODateString, MatrixState, MatrixMark } from "@/lib/types";
 import { MAX_MARKS, OVERWATCH_THRESHOLD } from "@/lib/types/matrix";
 
 // =============================================================================
