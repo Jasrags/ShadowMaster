@@ -23,6 +23,7 @@ import type {
   CreationMethod,
 } from "../types";
 import type { LoadedRuleset, LoadedBook, LoadResult, RulesetLoadConfig } from "./loader-types";
+import type { RuleModulePayloadMap } from "./module-payloads";
 import {
   getEdition,
   getAllEditions,
@@ -168,12 +169,16 @@ export async function loadAllCreationMethods(editionCode: EditionCode): Promise<
 // =============================================================================
 
 /**
- * Extract a specific module type from a loaded ruleset
+ * Extract a specific module type from a loaded ruleset.
+ *
+ * Return type is inferred from the module key via RuleModulePayloadMap.
+ * No explicit generic needed: `extractModule(ruleset, "gear")` returns
+ * `GearCatalogData | null`.
  */
-export function extractModule<T = Record<string, unknown>>(
+export function extractModule<T = never, K extends RuleModuleType = RuleModuleType>(
   ruleset: LoadedRuleset,
-  moduleType: RuleModuleType
-): T | null {
+  moduleType: K
+): [T] extends [never] ? RuleModulePayloadMap[K] | null : T | null {
   // Merge payloads from all books (core + sourcebooks) so that
   // sourcebook data with "append" merge strategy is included.
   // Arrays of objects with `id` fields are deduplicated; other values
@@ -221,7 +226,7 @@ export function extractModule<T = Record<string, unknown>>(
     }
   }
 
-  return merged as T | null;
+  return merged as [T] extends [never] ? RuleModulePayloadMap[K] | null : T | null;
 }
 
 /**

@@ -14,6 +14,7 @@
 import { v4 as uuidv4 } from "uuid";
 import type { ID, MergeStrategy, RuleModuleType, MergedRuleset, BookModuleEntry } from "../types";
 import type { LoadedRuleset } from "./loader-types";
+import type { RuleModulePayloadMap } from "./module-payloads";
 
 // =============================================================================
 // TYPES
@@ -414,13 +415,21 @@ export async function loadAndMergeRuleset(
 }
 
 /**
- * Get a module from a merged ruleset with type safety
+ * Get a module from a merged ruleset with type safety.
+ *
+ * Preferred: let the return type be inferred from the module key:
+ *   `getModule(ruleset, "gear")` → `GearCatalogData | undefined`
+ *
+ * Legacy: explicit generic override still supported for migration:
+ *   `getModule<{ metatypes: MetatypeData[] }>(ruleset, "metatypes")`
  */
-export function getModule<T = ModulePayload>(
+export function getModule<T = never, K extends RuleModuleType = RuleModuleType>(
   ruleset: MergedRuleset,
-  moduleType: RuleModuleType
-): T | undefined {
-  return ruleset.modules[moduleType] as T | undefined;
+  moduleType: K
+): [T] extends [never] ? RuleModulePayloadMap[K] | undefined : T | undefined {
+  return ruleset.modules[moduleType] as [T] extends [never]
+    ? RuleModulePayloadMap[K] | undefined
+    : T | undefined;
 }
 
 /**
