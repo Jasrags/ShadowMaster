@@ -77,7 +77,7 @@ function createMockRuleset(): MergedRuleset {
       },
     },
     createdAt: new Date().toISOString(),
-  } as unknown as MergedRuleset;
+  } as MergedRuleset;
 }
 
 function createContext(

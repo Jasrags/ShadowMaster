@@ -6,7 +6,7 @@
  */
 
 import type { GameplayLevelModifiers } from "@/lib/types/edition";
-import type { PriorityTableData } from "@/lib/rules/RulesetContext";
+import type { PriorityTableData } from "@/lib/rules/loader-types";
 import { LIFE_MODULES_KARMA_BUDGET, LIFE_MODULES_NUYEN_PER_KARMA } from "@/lib/types";
 import {
   POINT_BUY_KARMA_BUDGET,
@@ -63,7 +63,7 @@ export function calculateBudgetTotals(
   // Attribute points from priority
   const attrPriority = priorities.attributes;
   if (attrPriority && priorityTable.table[attrPriority]) {
-    const attrPoints = priorityTable.table[attrPriority].attributes as number;
+    const attrPoints = priorityTable.table[attrPriority].attributes;
     totals["attribute-points"] = {
       total: attrPoints || 0,
       label: "Attribute Points",
@@ -74,10 +74,7 @@ export function calculateBudgetTotals(
   // Skill points from priority
   const skillPriority = priorities.skills;
   if (skillPriority && priorityTable.table[skillPriority]) {
-    const skillData = priorityTable.table[skillPriority].skills as {
-      skillPoints: number;
-      skillGroupPoints: number;
-    };
+    const skillData = priorityTable.table[skillPriority].skills;
     totals["skill-points"] = {
       total: skillData?.skillPoints || 0,
       label: "Skill Points",
@@ -93,7 +90,7 @@ export function calculateBudgetTotals(
   // Resources (nuyen) from priority, with gameplay level multiplier
   const resourcePriority = priorities.resources;
   if (resourcePriority && priorityTable.table[resourcePriority]) {
-    const baseNuyen = priorityTable.table[resourcePriority].resources as number;
+    const baseNuyen = priorityTable.table[resourcePriority].resources;
     const multiplier = gameplayModifiers?.resourcesMultiplier ?? 1;
     totals["nuyen"] = {
       total: Math.round((baseNuyen || 0) * multiplier),
@@ -106,9 +103,7 @@ export function calculateBudgetTotals(
   const metatypePriority = priorities.metatype;
   const selectedMetatype = selections.metatype as string;
   if (metatypePriority && selectedMetatype && priorityTable.table[metatypePriority]) {
-    const metatypeData = priorityTable.table[metatypePriority].metatype as {
-      specialAttributePoints: Record<string, number>;
-    };
+    const metatypeData = priorityTable.table[metatypePriority].metatype;
     const specialPoints = metatypeData?.specialAttributePoints?.[selectedMetatype] || 0;
     totals["special-attribute-points"] = {
       total: specialPoints,
@@ -144,15 +139,7 @@ export function calculateBudgetTotals(
   const magicPriority = priorities.magic;
   const magicPath = selections["magical-path"] as string;
   if (magicPriority && priorityTable.table[magicPriority] && magicPath) {
-    const magicData = priorityTable.table[magicPriority].magic as {
-      options?: Array<{
-        path: string;
-        spells?: number;
-        complexForms?: number;
-        magicRating?: number;
-        resonanceRating?: number;
-      }>;
-    };
+    const magicData = priorityTable.table[magicPriority].magic;
     // Find the selected path's option to get spells/forms count
     const selectedOption = magicData?.options?.find((opt) => opt.path === magicPath);
 
