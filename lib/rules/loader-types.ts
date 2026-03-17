@@ -1585,3 +1585,16 @@ export interface ActionsCatalogData {
 // =============================================================================
 
 export type { InfectedTypeData, DiseaseStrainData, InfectedCatalogData } from "./infected/types";
+
+// =============================================================================
+// MODULE PAYLOAD TYPES (re-exported from module-payloads.ts)
+// =============================================================================
+
+export type {
+  MagicModulePayload,
+  LifestyleModulePayload,
+  LifestyleModificationCatalogItem,
+  SkillsModulePayload,
+  ProgramsModulePayload,
+  RuleModulePayloadMap,
+} from "./module-payloads";
