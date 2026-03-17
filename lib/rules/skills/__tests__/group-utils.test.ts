@@ -6,7 +6,7 @@
  */
 
 import { describe, it, expect } from "vitest";
-import type { SkillGroupValue } from "@/lib/types/creation-selections";
+import type { SkillGroupValue } from "@/lib/types";
 import {
   normalizeGroupValue,
   getGroupRating,

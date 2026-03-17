@@ -14,7 +14,7 @@ import type {
   EffectResolutionContext,
   SpecificAction,
   CharacterStateFlags,
-} from "@/lib/types/effects";
+} from "@/lib/types";
 
 export class EffectContextBuilder {
   private action: EffectActionContext | undefined;

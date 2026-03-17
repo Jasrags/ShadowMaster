@@ -12,7 +12,7 @@ import {
   KARMA_TO_NUYEN_LIMIT,
   SR5_KARMA_BUDGET,
 } from "../budget-calculator";
-import type { CreationSelections } from "@/lib/types/creation-selections";
+import type { CreationSelections } from "@/lib/types";
 
 // =============================================================================
 // TEST HELPERS

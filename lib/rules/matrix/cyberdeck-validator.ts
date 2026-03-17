@@ -5,13 +5,13 @@
  * Ensures ASDF assignments match the deck's attribute array.
  */
 
-import type { Character } from "@/lib/types";
 import type {
+  Character,
   CyberdeckAttributeConfig,
   CharacterCyberdeck,
   MatrixValidationError,
   MatrixValidationWarning,
-} from "@/lib/types/matrix";
+} from "@/lib/types";
 
 // =============================================================================
 // TYPES

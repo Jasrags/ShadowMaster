@@ -9,8 +9,7 @@
  * @see docs/specifications/gear-location-and-loadouts.md#concealment-integration
  */
 
-import type { Character, GearItem, Weapon, ArmorItem } from "@/lib/types";
-import type { EquipmentReadiness } from "@/lib/types/gear-state";
+import type { Character, GearItem, Weapon, ArmorItem, EquipmentReadiness } from "@/lib/types";
 import { normalizeReadiness } from "@/lib/types/gear-state";
 
 // =============================================================================

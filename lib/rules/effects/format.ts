@@ -7,7 +7,7 @@
  * @see Issue #448
  */
 
-import type { Effect, CharacterStateFlags } from "@/lib/types/effects";
+import type { Effect, CharacterStateFlags } from "@/lib/types";
 
 export interface EffectBadge {
   /** Compact display text, e.g., "+2 Sneaking" */

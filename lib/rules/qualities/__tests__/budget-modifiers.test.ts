@@ -1,6 +1,5 @@
 import { describe, it, expect } from "vitest";
-import type { CreationSelections } from "@/lib/types/creation-selections";
-import type { SelectedQuality } from "@/lib/types/creation-selections";
+import type { CreationSelections, SelectedQuality } from "@/lib/types";
 import {
   getQualityBudgetModifiers,
   applyJackOfAllTradesModifier,

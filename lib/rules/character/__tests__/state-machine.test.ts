@@ -19,7 +19,7 @@ import {
   type ValidationResult,
   type TransitionContext,
 } from "../state-machine";
-import type { Character, CharacterStatus } from "@/lib/types/character";
+import type { Character, CharacterStatus } from "@/lib/types";
 
 // =============================================================================
 // TEST FIXTURES

@@ -7,8 +7,7 @@
 
 import { describe, it, expect } from "vitest";
 import { materializeFromCreationState } from "../materialize";
-import type { Character } from "@/lib/types/character";
-import type { CreationState } from "@/lib/types/creation";
+import type { Character, CreationState } from "@/lib/types";
 
 // =============================================================================
 // TEST FIXTURES

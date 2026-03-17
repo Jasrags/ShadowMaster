@@ -7,14 +7,14 @@
  * attempts to crash the decker's persona.
  */
 
-import type { Character } from "@/lib/types";
 import type {
+  Character,
   MatrixState,
   MatrixAction,
   ConvergenceResult,
   ICSpawnData,
   MatrixMode,
-} from "@/lib/types/matrix";
+} from "@/lib/types";
 import { OVERWATCH_THRESHOLD } from "@/lib/types/matrix";
 
 // =============================================================================

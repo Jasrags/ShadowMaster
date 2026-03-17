@@ -10,15 +10,16 @@ import {
   getEffectivePool,
   estimateSuccessChance,
 } from "../dice-pool-calculator";
-import type { Character } from "@/lib/types/character";
 import type {
+  Character,
+  VehicleCatalogItem,
+  DroneCatalogItem,
   RiggingState,
   SlavedDrone,
   SharedAutosoft,
   VehicleControlRig,
   JumpedInState,
-} from "@/lib/types/rigging";
-import type { VehicleCatalogItem, DroneCatalogItem } from "@/lib/types/vehicles";
+} from "@/lib/types";
 import type { VehicleActionValidation, ActionBonus } from "../action-validator";
 
 // =============================================================================

@@ -24,7 +24,7 @@ import {
   createTestSlavedDrone,
   createTestJumpedInState,
 } from "./fixtures";
-import type { Character } from "@/lib/types/character";
+import type { Character } from "@/lib/types";
 
 // =============================================================================
 // DAMAGE TYPE TESTS

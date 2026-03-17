@@ -13,8 +13,7 @@ import type {
   PoolBuildOptions,
   EditionDiceRules,
 } from "@/lib/types";
-import type { EncumbranceState } from "@/lib/types/gear-state";
-import type { ActiveWirelessBonuses } from "@/lib/types/wireless-effects";
+import type { EncumbranceState, ActiveWirelessBonuses } from "@/lib/types";
 
 // Mock external dependencies
 vi.mock("@/lib/rules/encumbrance/calculator", () => ({

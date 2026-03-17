@@ -13,7 +13,7 @@ import {
   formatEssenceMagicState,
   getMagicDegradationSummary,
 } from "../essence-magic-link";
-import type { Character } from "@/lib/types/character";
+import type { Character } from "@/lib/types";
 import type { AugmentationRulesData } from "../../loader-types";
 
 // =============================================================================

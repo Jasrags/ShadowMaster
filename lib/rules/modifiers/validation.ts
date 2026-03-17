@@ -7,7 +7,7 @@
  * @see Issue #114
  */
 
-import type { EffectType, EffectTrigger } from "@/lib/types/effects";
+import type { EffectType, EffectTrigger } from "@/lib/types";
 import type { DurationPreset } from "./templates";
 import { getModifierTemplate } from "./templates";
 

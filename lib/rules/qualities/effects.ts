@@ -12,9 +12,7 @@ import type {
   EffectTrigger,
   EffectTarget,
   EffectCondition,
-} from "@/lib/types";
-import type { Character } from "@/lib/types";
-import type {
+  Character,
   GameplayContext,
   TestContext,
   CombatContext,
@@ -24,7 +22,7 @@ import type {
   DamageContext,
   CostContext,
   ResolvedEffect,
-} from "@/lib/types/gameplay";
+} from "@/lib/types";
 
 /**
  * Resolve template variables in effect values and targets

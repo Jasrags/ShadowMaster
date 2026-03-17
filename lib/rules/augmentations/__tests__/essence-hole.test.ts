@@ -20,7 +20,7 @@ import {
   formatEssenceHole,
   getMagicLossWarning,
 } from "../essence-hole";
-import type { Character, EssenceHole } from "@/lib/types/character";
+import type { Character, EssenceHole } from "@/lib/types";
 
 // =============================================================================
 // HELPER FUNCTIONS

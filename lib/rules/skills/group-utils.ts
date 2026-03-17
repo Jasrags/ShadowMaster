@@ -13,7 +13,7 @@
  *   group level using skill points. That must be done using karma.
  */
 
-import type { SkillGroupValue } from "@/lib/types/creation-selections";
+import type { SkillGroupValue } from "@/lib/types";
 
 // =============================================================================
 // TYPE HELPERS

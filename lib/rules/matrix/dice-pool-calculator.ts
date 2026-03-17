@@ -11,13 +11,15 @@
  * Integrates with the existing action resolution pool builder.
  */
 
-import type { Character, PoolModifier, ActionPool } from "@/lib/types";
 import type {
+  Character,
+  PoolModifier,
+  ActionPool,
   MatrixState,
   MatrixAction,
   CyberdeckAttributeConfig,
   LoadedProgram,
-} from "@/lib/types/matrix";
+} from "@/lib/types";
 import type { LoadedRuleset, ProgramCatalogItemData } from "../loader-types";
 import {
   buildActionPool,

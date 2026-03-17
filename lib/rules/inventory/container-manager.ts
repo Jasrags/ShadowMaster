@@ -7,12 +7,16 @@
  * @see docs/specifications/gear-location-and-loadouts.md
  */
 
-import type { Character, GearItem, Weapon, ArmorItem } from "@/lib/types";
 import type {
+  Character,
+  GearItem,
+  Weapon,
+  ArmorItem,
+  GearState,
   EquipmentReadiness,
   ContainmentRef,
   ContainerProperties,
-} from "@/lib/types/gear-state";
+} from "@/lib/types";
 
 // =============================================================================
 // CONSTANTS
@@ -411,8 +415,6 @@ export function moveItemBetweenContainers(
 // =============================================================================
 // INTERNAL HELPERS
 // =============================================================================
-
-import type { GearState } from "@/lib/types/gear-state";
 
 /**
  * Update the state of a specific item across all gear collections.

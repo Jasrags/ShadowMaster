@@ -12,7 +12,7 @@ import type {
   TrainingPeriod,
   CampaignEvent,
 } from "@/lib/types";
-import type { CampaignAdvancementSettings } from "@/lib/types/campaign";
+import type { CampaignAdvancementSettings } from "@/lib/types";
 import type { AdvancementRulesData } from "@/lib/rules/loader-types";
 import { getModule } from "../merge";
 import { calculateAdvancementTrainingTime } from "./training";

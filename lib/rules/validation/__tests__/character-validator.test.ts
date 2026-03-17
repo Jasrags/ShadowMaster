@@ -6,8 +6,14 @@
  */
 
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import type { Character, CharacterDraft } from "@/lib/types/character";
-import type { MergedRuleset, CreationMethod, Campaign, CreationState } from "@/lib/types";
+import type {
+  MergedRuleset,
+  CreationMethod,
+  Campaign,
+  CreationState,
+  Character,
+  CharacterDraft,
+} from "@/lib/types";
 import { FocusType } from "@/lib/types/edition";
 import {
   validateCharacter,

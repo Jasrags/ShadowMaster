@@ -10,8 +10,7 @@ import type {
   CharacterDrone,
   CharacterAutosoft,
   CyberwareItem,
-} from "@/lib/types/character";
-import type {
+  AutosoftCategory,
   RiggingState,
   DroneNetwork,
   SlavedDrone,
@@ -22,8 +21,7 @@ import type {
   RCCConfiguration,
   RiggerVRMode,
   RunningAutosoft,
-} from "@/lib/types/rigging";
-import type { AutosoftCategory } from "@/lib/types/vehicles";
+} from "@/lib/types";
 
 // =============================================================================
 // CHARACTER FIXTURES

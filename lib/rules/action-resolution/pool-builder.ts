@@ -12,8 +12,7 @@ import type {
   PoolBuildOptions,
   EditionDiceRules,
 } from "@/lib/types";
-import type { EncumbranceState } from "@/lib/types/gear-state";
-import type { EffectConditionType, ActiveWirelessBonuses } from "@/lib/types/wireless-effects";
+import type { EncumbranceState, EffectConditionType, ActiveWirelessBonuses } from "@/lib/types";
 import { DEFAULT_DICE_RULES } from "./dice-engine";
 import { calculateEncumbrance } from "../encumbrance/calculator";
 import { calculateContextualWirelessBonuses } from "../wireless/bonus-calculator";

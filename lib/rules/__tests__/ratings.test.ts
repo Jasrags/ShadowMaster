@@ -22,7 +22,7 @@ import type {
   RatingScalingConfig,
   CatalogItemRatingSpec,
   RatingValidationContext,
-} from "@/lib/types/ratings";
+} from "@/lib/types";
 
 // =============================================================================
 // CORE CALCULATION FUNCTIONS
@@ -806,7 +806,7 @@ import {
   getRatingOptionsUnified,
   isRatingValid,
 } from "../ratings";
-import type { RatingTable } from "@/lib/types/ratings";
+import type { RatingTable } from "@/lib/types";
 
 describe("hasUnifiedRatings", () => {
   it("should return true for item with ratings table", () => {

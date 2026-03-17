@@ -9,15 +9,15 @@
  * - Legality classification for Overwatch
  */
 
-import type { Character } from "@/lib/types";
 import type {
+  Character,
   MatrixState,
   MatrixAction,
   MatrixMark,
   MatrixValidationError,
   MatrixValidationWarning,
   MatrixDeviceType,
-} from "@/lib/types/matrix";
+} from "@/lib/types";
 import type { LoadedRuleset } from "../loader-types";
 import { hasValidMatrixHardware, hasMatrixAccess } from "./cyberdeck-validator";
 

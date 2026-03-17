@@ -13,13 +13,17 @@
  *    for post-creation use (advancement, combat, etc.)
  */
 
-import type { Character, CharacterDraft } from "@/lib/types/character";
-import type { CreationState } from "@/lib/types/creation";
-import type { CreationSelections, QualitySelectionValue } from "@/lib/types/creation-selections";
-import type { QualitySelection } from "@/lib/types/qualities";
-import type { MagicalPath } from "@/lib/types/core";
-import type { CharacterProgram } from "@/lib/types/programs";
-import type { CharacterDataSoftware } from "@/lib/types/character";
+import type {
+  Character,
+  CharacterDraft,
+  CreationState,
+  CreationSelections,
+  QualitySelectionValue,
+  QualitySelection,
+  MagicalPath,
+  CharacterProgram,
+  CharacterDataSoftware,
+} from "@/lib/types";
 
 // Map creation "magical-path" values to Character.magicalPath values
 const MAGICAL_PATH_MAP: Record<string, MagicalPath> = {

@@ -7,7 +7,7 @@
  * SR5 Core Rulebook p. 199 (Condition Monitors)
  */
 
-import type { SlavedDrone, DroneNetwork } from "@/lib/types/rigging";
+import type { SlavedDrone, DroneNetwork } from "@/lib/types";
 import { VEHICLE_CONDITION_BASE } from "@/lib/types/rigging";
 
 // =============================================================================

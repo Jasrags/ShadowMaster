@@ -20,7 +20,7 @@ import type {
   LifeModuleContactGrant,
   LifeModulePhase,
   QualityReplacement,
-} from "@/lib/types/life-modules";
+} from "@/lib/types";
 import {
   LIFE_MODULES_MAX_ACTIVE_SKILL,
   LIFE_MODULES_MAX_KNOWLEDGE_SKILL,

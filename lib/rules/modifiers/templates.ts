@@ -7,7 +7,7 @@
  * @see Issue #114
  */
 
-import type { Effect, EffectType, EffectTrigger } from "@/lib/types/effects";
+import type { Effect, EffectType, EffectTrigger } from "@/lib/types";
 
 // =============================================================================
 // TYPES

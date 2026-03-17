@@ -4,9 +4,14 @@
  * Types for comprehensive character validation during creation and finalization.
  */
 
-import type { Character, CharacterDraft } from "@/lib/types/character";
-import type { MergedRuleset, CreationMethod, Campaign } from "@/lib/types";
-import type { CreationState } from "@/lib/types/creation";
+import type {
+  MergedRuleset,
+  CreationMethod,
+  Campaign,
+  Character,
+  CharacterDraft,
+  CreationState,
+} from "@/lib/types";
 
 // =============================================================================
 // VALIDATION MODES

@@ -15,14 +15,13 @@ import {
   getAllSpells,
   getSpellsByCategory,
 } from "../spell-validator";
-import type { Character, AdeptPower } from "@/lib/types/character";
+import type { Character, AdeptPower, BookPayload } from "@/lib/types";
 import type {
   LoadedRuleset,
   SpellData,
   SpellsCatalogData,
   AdeptPowerCatalogItem,
 } from "../../loader-types";
-import type { BookPayload } from "@/lib/types/edition";
 
 // =============================================================================
 // TEST FIXTURES

@@ -7,13 +7,13 @@
  * SR5 Core Rulebook p. 229 (Biofeedback), p. 265-266 (Rigger rules)
  */
 
-import type { Character } from "@/lib/types/character";
 import type {
+  Character,
   RiggingState,
   RiggerVRMode,
   BiofeedbackResult,
   DumpshockResult,
-} from "@/lib/types/rigging";
+} from "@/lib/types";
 import { DUMPSHOCK_DAMAGE } from "@/lib/types/rigging";
 
 // =============================================================================

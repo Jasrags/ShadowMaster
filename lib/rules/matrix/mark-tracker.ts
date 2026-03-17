@@ -11,13 +11,14 @@
  * the target reboots.
  */
 
-import type { ID, ISODateString } from "@/lib/types";
 import type {
+  ID,
+  ISODateString,
   MatrixMark,
   MatrixState,
   MarkTargetType,
   MatrixValidationError,
-} from "@/lib/types/matrix";
+} from "@/lib/types";
 import { MAX_MARKS } from "@/lib/types/matrix";
 
 // =============================================================================

@@ -12,13 +12,11 @@ import type {
   CharacterRCC,
   CharacterDrone,
   CharacterAutosoft,
-} from "@/lib/types/character";
-import type {
   RCCConfiguration,
   RiggingValidationError,
   RiggingValidationWarning,
   RunningAutosoft,
-} from "@/lib/types/rigging";
+} from "@/lib/types";
 import { DRONE_SLAVE_LIMIT_MULTIPLIER } from "@/lib/types/rigging";
 
 // =============================================================================

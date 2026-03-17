@@ -10,12 +10,11 @@
  * - Guarantee: Server validates all budget calculations independently
  */
 
-import type { CreationSelections } from "@/lib/types/creation-selections";
 import {
   getQualityBudgetModifiers,
   FRIENDS_IN_HIGH_PLACES_CONTACT_MULTIPLIER,
 } from "@/lib/rules/qualities/budget-modifiers";
-import type { Contact } from "@/lib/types";
+import type { Contact, CreationSelections } from "@/lib/types";
 
 // =============================================================================
 // NUYEN CALCULATION

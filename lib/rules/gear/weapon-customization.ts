@@ -6,13 +6,15 @@
  * modification handling as defined in the Weapon Customization capability.
  */
 
-import type { Weapon, InstalledWeaponMod, WeaponMount } from "@/lib/types/character";
 import type {
+  Weapon,
+  InstalledWeaponMod,
+  WeaponMount,
   WeaponModificationCatalogItem,
   WeaponMountType,
   WeaponSubcategoryMountRegistry,
   WeaponSizeCategory,
-} from "@/lib/types/edition";
+} from "@/lib/types";
 
 // =============================================================================
 // TYPES

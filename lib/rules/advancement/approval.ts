@@ -4,8 +4,12 @@
  * Handles GM approval and rejection of character advancements in campaigns.
  */
 
-import type { Character, AdvancementRecord, Campaign } from "@/lib/types";
-import type { CampaignAdvancementSettings } from "@/lib/types/campaign";
+import type {
+  Character,
+  AdvancementRecord,
+  Campaign,
+  CampaignAdvancementSettings,
+} from "@/lib/types";
 import { applyAdvancement } from "./apply";
 
 /**

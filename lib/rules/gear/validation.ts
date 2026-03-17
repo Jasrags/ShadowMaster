@@ -24,8 +24,13 @@ import type {
   ItemLegality,
   Vehicle,
 } from "@/lib/types";
-import type { CharacterCyberdeck, CharacterCommlink } from "@/lib/types/matrix";
-import type { CharacterRCC, CharacterDrone, CharacterAutosoft } from "@/lib/types/character";
+import type {
+  CharacterCyberdeck,
+  CharacterCommlink,
+  CharacterRCC,
+  CharacterDrone,
+  CharacterAutosoft,
+} from "@/lib/types";
 
 // =============================================================================
 // CONSTANTS

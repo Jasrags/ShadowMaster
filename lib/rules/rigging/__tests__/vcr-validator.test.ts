@@ -15,7 +15,7 @@ import {
   createTestCharacterRCC,
   createTestCharacterDrone,
 } from "./fixtures";
-import type { CyberwareItem } from "@/lib/types/character";
+import type { CyberwareItem } from "@/lib/types";
 
 // =============================================================================
 // VCR DETECTION TESTS

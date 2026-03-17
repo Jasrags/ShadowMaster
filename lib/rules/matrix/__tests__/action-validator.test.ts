@@ -15,8 +15,7 @@ import {
   categorizeActions,
   getActionRequirementsSummary,
 } from "../action-validator";
-import type { MatrixAction, MatrixState, MatrixDeviceType } from "@/lib/types/matrix";
-import type { ISODateString } from "@/lib/types";
+import type { ISODateString, MatrixAction, MatrixState, MatrixDeviceType } from "@/lib/types";
 import { OVERWATCH_THRESHOLD } from "@/lib/types/matrix";
 import { createMockCharacter } from "@/__tests__/mocks/storage";
 

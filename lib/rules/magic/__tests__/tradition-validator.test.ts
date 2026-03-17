@@ -15,9 +15,8 @@ import {
   canSummonSpirits,
   findTradition,
 } from "../tradition-validator";
-import type { Character, AdeptPower } from "@/lib/types/character";
+import type { Character, AdeptPower, BookPayload } from "@/lib/types";
 import type { LoadedRuleset, TraditionData } from "../../loader-types";
-import type { BookPayload } from "@/lib/types/edition";
 
 // =============================================================================
 // TEST FIXTURES

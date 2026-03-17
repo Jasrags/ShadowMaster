@@ -10,8 +10,7 @@ import {
   characterOwnsProgram,
   calculateEffectiveSlotsUsed,
 } from "../program-validator";
-import type { Character } from "@/lib/types";
-import type { CharacterCyberdeck, MatrixDeviceType } from "@/lib/types/matrix";
+import type { Character, CharacterCyberdeck, MatrixDeviceType } from "@/lib/types";
 import type { LoadedRuleset, ProgramCatalogItemData } from "../../loader-types";
 import { createMockCharacter } from "@/__tests__/mocks/storage";
 

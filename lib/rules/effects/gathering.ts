@@ -8,11 +8,15 @@
  * @see Issue #108
  */
 
-import type { Character } from "@/lib/types";
-import type { MergedRuleset } from "@/lib/types/edition";
-import type { Quality } from "@/lib/types/qualities";
-import type { Effect, EffectSource, EffectSourceType } from "@/lib/types/effects";
-import type { EquipmentReadiness } from "@/lib/types/gear-state";
+import type {
+  Character,
+  MergedRuleset,
+  Quality,
+  Effect,
+  EffectSource,
+  EffectSourceType,
+  EquipmentReadiness,
+} from "@/lib/types";
 import { normalizeReadiness } from "@/lib/types/gear-state";
 import { resolveRatingBasedValue } from "./format";
 

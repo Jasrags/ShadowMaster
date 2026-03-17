@@ -9,14 +9,17 @@
  * @see docs/specifications/gear-location-and-loadouts.md#loadout-system
  */
 
-import type { Character, GearItem, Weapon, ArmorItem } from "@/lib/types";
 import type {
+  Character,
+  GearItem,
+  Weapon,
+  ArmorItem,
   EquipmentReadiness,
   Loadout,
   LoadoutDiff,
   StashLocationInfo,
   ContainmentRef,
-} from "@/lib/types/gear-state";
+} from "@/lib/types";
 
 // =============================================================================
 // TYPES

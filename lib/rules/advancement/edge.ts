@@ -5,8 +5,12 @@
  * Edge advancement has no training time (no downtime required).
  */
 
-import type { Character, MergedRuleset, AdvancementRecord } from "@/lib/types";
-import type { CampaignAdvancementSettings } from "@/lib/types/campaign";
+import type {
+  Character,
+  MergedRuleset,
+  AdvancementRecord,
+  CampaignAdvancementSettings,
+} from "@/lib/types";
 import type { AdvancementRulesData } from "@/lib/rules/loader-types";
 import { getModule } from "../merge";
 import { validateAttributeAdvancement } from "./validation";

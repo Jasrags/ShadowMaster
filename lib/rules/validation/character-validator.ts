@@ -17,9 +17,10 @@ import type {
   FocusItem,
   CyberwareItem,
   BiowareItem,
-} from "@/lib/types/character";
-import type { MergedRuleset, Campaign, CreationMethod } from "@/lib/types";
-import type { CreationState } from "@/lib/types/creation";
+  MergedRuleset,
+  Campaign,
+  CreationMethod,
+} from "@/lib/types";
 import {
   type CharacterValidationContext,
   type CharacterValidationResult,
@@ -39,8 +40,6 @@ import {
 import { validateAllQualities, validateKarmaLimits } from "../qualities";
 import { getModule } from "../merge";
 import { getGroupRating, isGroupBroken } from "../skills/group-utils";
-import type { CreationSelections } from "@/lib/types/creation-selections";
-import type { LanguageSkill, KnowledgeSkill, CharacterSpell } from "@/lib/types/character";
 import type {
   ComplexFormData,
   SkillGroupData,
@@ -67,7 +66,14 @@ import {
 import { isGradeAvailableAtCreation, applyGradeToAvailability } from "../augmentations/grades";
 import { isCyberlimb } from "@/lib/types/cyberlimb";
 import { CREATION_CONSTRAINTS } from "../gear/validation";
-import type { ArmorItem } from "@/lib/types";
+import type {
+  ArmorItem,
+  CreationState,
+  CreationSelections,
+  LanguageSkill,
+  KnowledgeSkill,
+  CharacterSpell,
+} from "@/lib/types";
 import { shapeshifterValidator } from "./shapeshifter-validator";
 
 // =============================================================================

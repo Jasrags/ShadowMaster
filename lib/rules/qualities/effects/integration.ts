@@ -5,9 +5,9 @@
  * These provide convenient entry points for dice pools, limits, wound modifiers, etc.
  */
 
-import type { Character } from "@/lib/types";
-import type { MergedRuleset } from "@/lib/types";
 import type {
+  Character,
+  MergedRuleset,
   TestContext,
   CombatContext,
   MagicContext,
@@ -16,7 +16,7 @@ import type {
   DamageContext,
   CostContext,
   ResolvedEffect,
-} from "@/lib/types/gameplay";
+} from "@/lib/types";
 import { getQualityDefinition } from "../utils";
 import { getActiveEffects, filterEffectsByTrigger } from "../effects";
 import { processEffect } from "./handlers";

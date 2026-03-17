@@ -5,9 +5,15 @@
  */
 
 import { describe, it, expect } from "vitest";
-import type { Weapon, ArmorItem, Character, BiowareItem, CharacterDrone } from "@/lib/types";
-import type { CyberlimbItem } from "@/lib/types/cyberlimb";
-import type { DeviceCondition } from "@/lib/types/gear-state";
+import type {
+  Weapon,
+  ArmorItem,
+  Character,
+  BiowareItem,
+  CharacterDrone,
+  CyberlimbItem,
+  DeviceCondition,
+} from "@/lib/types";
 import {
   getDefaultState,
   getValidTransitions,

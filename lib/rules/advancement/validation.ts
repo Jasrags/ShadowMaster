@@ -4,8 +4,13 @@
  * Validates advancement requests against character state and rules.
  */
 
-import type { Character, MergedRuleset, AdvancementType, CampaignEvent } from "@/lib/types";
-import type { CampaignAdvancementSettings } from "@/lib/types/campaign";
+import type {
+  Character,
+  MergedRuleset,
+  AdvancementType,
+  CampaignEvent,
+  CampaignAdvancementSettings,
+} from "@/lib/types";
 import type { AdvancementRulesData } from "@/lib/rules/loader-types";
 import { calculateAdvancementCost } from "./costs";
 import { validateDowntimeLimits } from "./downtime";

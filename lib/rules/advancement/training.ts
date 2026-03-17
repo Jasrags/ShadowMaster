@@ -5,8 +5,7 @@
  * as documented in Shadowrun 5e rules.
  */
 
-import type { AdvancementType } from "@/lib/types";
-import type { CampaignAdvancementSettings } from "@/lib/types/campaign";
+import type { AdvancementType, CampaignAdvancementSettings } from "@/lib/types";
 import type { AdvancementRulesData } from "@/lib/rules/loader-types";
 
 /**

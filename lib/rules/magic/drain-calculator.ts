@@ -5,8 +5,13 @@
  * spellcasting, summoning, binding, and rituals.
  */
 
-import type { Character } from "@/lib/types/character";
-import type { DrainResult, DrainBreakdown, DrainModifier, DrainAction } from "@/lib/types/magic";
+import type {
+  Character,
+  DrainResult,
+  DrainBreakdown,
+  DrainModifier,
+  DrainAction,
+} from "@/lib/types";
 import type { LoadedRuleset } from "../loader-types";
 import { findTradition, getDrainAttributes } from "./tradition-validator";
 import { getSpellDefinition } from "./spell-validator";

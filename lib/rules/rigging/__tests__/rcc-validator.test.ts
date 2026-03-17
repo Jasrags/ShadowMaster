@@ -23,7 +23,7 @@ import {
   createTestCharacterDrone,
   createTestCharacterAutosoft,
 } from "./fixtures";
-import type { CharacterRCC, CharacterAutosoft } from "@/lib/types/character";
+import type { CharacterRCC, CharacterAutosoft } from "@/lib/types";
 
 // =============================================================================
 // RCC CALCULATION TESTS

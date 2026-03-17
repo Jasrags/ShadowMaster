@@ -21,8 +21,12 @@ import {
   MAX_ESSENCE,
   ESSENCE_MIN_VIABLE,
 } from "../essence";
-import type { CyberwareCatalogItem, BiowareCatalogItem } from "@/lib/types/edition";
-import type { CyberwareItem, BiowareItem } from "@/lib/types/character";
+import type {
+  CyberwareCatalogItem,
+  BiowareCatalogItem,
+  CyberwareItem,
+  BiowareItem,
+} from "@/lib/types";
 
 // =============================================================================
 // PRECISION TESTS

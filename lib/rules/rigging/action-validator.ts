@@ -7,8 +7,9 @@
  * Based on SR5 Core Rulebook Chapter 11: Riggers
  */
 
-import type { Character } from "@/lib/types/character";
 import type {
+  Character,
+  AutosoftCategory,
   RiggingState,
   ControlMode,
   VehicleActionType,
@@ -17,8 +18,7 @@ import type {
   RiggingValidationWarning,
   SlavedDrone,
   SharedAutosoft,
-} from "@/lib/types/rigging";
-import type { AutosoftCategory } from "@/lib/types/vehicles";
+} from "@/lib/types";
 import { hasVehicleControlRig } from "./vcr-validator";
 import { hasRCC } from "./rcc-validator";
 

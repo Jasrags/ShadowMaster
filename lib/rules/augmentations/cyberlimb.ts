@@ -15,9 +15,11 @@
  * @see docs/capabilities/character.augmentation-systems.md
  */
 
-import type { Character, CyberwareGrade } from "@/lib/types/character";
-import type { CyberwareCatalogItem, CyberlimbCatalogItem } from "@/lib/types/edition";
 import type {
+  Character,
+  CyberwareGrade,
+  CyberwareCatalogItem,
+  CyberlimbCatalogItem,
   CyberlimbItem,
   CyberlimbLocation,
   CyberlimbType,
@@ -25,7 +27,7 @@ import type {
   CyberlimbEnhancement,
   CyberlimbAccessory,
   CyberlimbModificationEntry,
-} from "@/lib/types/cyberlimb";
+} from "@/lib/types";
 import {
   LIMB_HIERARCHY,
   LIMB_CM_BONUS,

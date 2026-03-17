@@ -8,13 +8,12 @@
  * Importable from both client and server code (no React dependencies).
  */
 
-import type { CreationSelections } from "@/lib/types/creation-selections";
+import type { CreationSelections, QualitySelectionValue } from "@/lib/types";
 import {
   getPositiveQualityIds,
   getPositiveQualities,
   getQualityId,
 } from "@/lib/types/creation-selections";
-import type { QualitySelectionValue } from "@/lib/types/creation-selections";
 
 // =============================================================================
 // TYPES

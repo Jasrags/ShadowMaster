@@ -5,12 +5,12 @@
  * magical path consistency checking.
  */
 
-import type { Character } from "@/lib/types/character";
 import type {
+  Character,
   TraditionValidationResult,
   MagicValidationError,
   MagicValidationWarning,
-} from "@/lib/types/magic";
+} from "@/lib/types";
 import type { LoadedRuleset, TraditionData, TraditionSpiritTypes } from "../loader-types";
 import { extractTraditions } from "../loader";
 

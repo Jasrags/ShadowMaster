@@ -13,8 +13,7 @@
  */
 
 import { useState, useCallback, useEffect } from "react";
-import type { CyberwareGrade } from "@/lib/types";
-import type { CyberlimbLocation, CyberlimbEnhancementType } from "@/lib/types/cyberlimb";
+import type { CyberwareGrade, CyberlimbLocation, CyberlimbEnhancementType } from "@/lib/types";
 
 // =============================================================================
 // TYPES

@@ -13,8 +13,7 @@ import {
   estimateResistanceHits,
   formatDamageCondition,
 } from "../drain-application";
-import type { Character } from "@/lib/types/character";
-import type { DrainResult } from "@/lib/types/magic";
+import type { Character, DrainResult } from "@/lib/types";
 
 // =============================================================================
 // TEST FIXTURES

@@ -22,8 +22,7 @@ import {
   removeSessionFromCollection,
   getCompletedSessions,
 } from "../overwatch-tracker";
-import type { OverwatchSession } from "@/lib/types/matrix";
-import type { ISODateString } from "@/lib/types";
+import type { ISODateString, OverwatchSession } from "@/lib/types";
 import { OVERWATCH_THRESHOLD } from "@/lib/types/matrix";
 
 // =============================================================================

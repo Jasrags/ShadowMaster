@@ -11,9 +11,8 @@ import {
   getComplexFormDefinition,
   getAllComplexForms,
 } from "../complex-form-validator";
-import type { Character } from "@/lib/types/character";
+import type { Character, BookPayload } from "@/lib/types";
 import type { LoadedRuleset, ComplexFormData } from "../../loader-types";
-import type { BookPayload } from "@/lib/types/edition";
 
 // =============================================================================
 // TEST FIXTURES

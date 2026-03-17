@@ -5,7 +5,7 @@
  * or creation method parameters. No React dependencies.
  */
 
-import type { GameplayLevelModifiers } from "@/lib/types/edition";
+import type { GameplayLevelModifiers } from "@/lib/types";
 import type { PriorityTableData } from "@/lib/rules/loader-types";
 import { LIFE_MODULES_KARMA_BUDGET, LIFE_MODULES_NUYEN_PER_KARMA } from "@/lib/types";
 import {

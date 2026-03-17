@@ -14,9 +14,15 @@
  */
 
 import { v4 as uuidv4 } from "uuid";
-import type { Character, CharacterStatus } from "@/lib/types/character";
-import type { AuditEntry, AuditActor, ActorRole, CreateAuditEntryParams } from "@/lib/types/audit";
-import type { ID } from "@/lib/types/core";
+import type {
+  Character,
+  CharacterStatus,
+  AuditEntry,
+  AuditActor,
+  ActorRole,
+  CreateAuditEntryParams,
+  ID,
+} from "@/lib/types";
 
 // =============================================================================
 // VALIDATION TYPES

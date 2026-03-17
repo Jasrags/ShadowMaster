@@ -13,7 +13,7 @@ import type {
   LifeModulesCatalog,
   LifeModuleSelection,
   LifeModulePhase,
-} from "@/lib/types/life-modules";
+} from "@/lib/types";
 
 // =============================================================================
 // PHASE ALIASES

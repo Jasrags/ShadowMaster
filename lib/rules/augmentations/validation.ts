@@ -17,12 +17,10 @@ import type {
   CyberwareGrade,
   BiowareGrade,
   ItemLegality,
-} from "@/lib/types";
-import type {
   CyberwareCatalogItem,
   BiowareCatalogItem,
   AugmentationRules,
-} from "@/lib/types/edition";
+} from "@/lib/types";
 import {
   calculateCyberwareEssence,
   calculateBiowareEssence,

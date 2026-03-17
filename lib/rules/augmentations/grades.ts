@@ -7,7 +7,7 @@
  * @satisfies Requirement: Essence expenditures MUST be calculated based on authoritative grade definitions
  */
 
-import type { CyberwareGrade, BiowareGrade } from "@/lib/types/character";
+import type { CyberwareGrade, BiowareGrade } from "@/lib/types";
 import {
   CYBERWARE_GRADE_MULTIPLIERS,
   CYBERWARE_GRADE_AVAILABILITY_MODIFIERS,

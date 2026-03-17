@@ -16,8 +16,13 @@ import {
   aggregateActiveWirelessBonuses,
   aggregateAugmentationBonuses,
 } from "../management";
-import type { Character, CyberwareItem, BiowareItem } from "@/lib/types/character";
-import type { CyberwareCatalogItem, BiowareCatalogItem } from "@/lib/types/edition";
+import type {
+  Character,
+  CyberwareItem,
+  BiowareItem,
+  CyberwareCatalogItem,
+  BiowareCatalogItem,
+} from "@/lib/types";
 
 // =============================================================================
 // HELPER FUNCTIONS

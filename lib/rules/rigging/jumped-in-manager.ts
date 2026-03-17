@@ -7,8 +7,8 @@
  * SR5 Core Rulebook p. 265-266
  */
 
-import type { Character } from "@/lib/types/character";
 import type {
+  Character,
   JumpedInState,
   RiggingState,
   RiggerVRMode,
@@ -16,7 +16,7 @@ import type {
   VehicleControlRig,
   RiggingValidationError,
   RiggingValidationWarning,
-} from "@/lib/types/rigging";
+} from "@/lib/types";
 import { JUMPED_IN_INITIATIVE_BONUS, JUMPED_IN_HOTSIM_INITIATIVE_BONUS } from "@/lib/types/rigging";
 import { getVehicleControlRig, hasVehicleControlRig } from "./vcr-validator";
 import { getDroneFromNetwork } from "./drone-network";
