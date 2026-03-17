@@ -229,7 +229,44 @@ export interface QualityData {
 export interface PriorityTableData {
   levels: string[];
   categories: Array<{ id: string; name: string; description?: string }>;
-  table: Record<string, Record<string, unknown>>;
+  table: Record<string, PriorityLevelEntry>;
+}
+
+/**
+ * A single priority level entry (e.g., "A", "B", "C", "D", "E").
+ * Each level defines what the character gets for metatype, attributes,
+ * magic/resonance, skills, and resources at that priority.
+ */
+export interface PriorityLevelEntry {
+  metatype?: {
+    available: string[];
+    specialAttributePoints: Record<string, number>;
+  };
+  attributes?: number;
+  magic?: {
+    options: PriorityMagicOption[];
+  };
+  skills?: {
+    skillPoints: number;
+    skillGroupPoints: number;
+  };
+  resources?: number;
+}
+
+/**
+ * A magic/resonance option within a priority level.
+ */
+export interface PriorityMagicOption {
+  path: string;
+  magicRating?: number;
+  resonanceRating?: number;
+  spells?: number;
+  complexForms?: number;
+  freeSkills?: Array<{
+    type: string;
+    rating: number;
+    count: number;
+  }>;
 }
 
 // =============================================================================

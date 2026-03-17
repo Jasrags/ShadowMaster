@@ -31,7 +31,7 @@ import type { ValidationContext } from "../constraint-validation";
  * Find a gear catalog item by ID or name
  */
 function findGearCatalogItem(ruleset: MergedRuleset, identifier: string): GearItemData | null {
-  const gearCatalog = getModule<GearCatalogData>(ruleset, "gear");
+  const gearCatalog = getModule(ruleset, "gear");
   if (!gearCatalog) return null;
 
   // Search GearItemData sub-arrays (browsable + hidden)
@@ -71,7 +71,7 @@ function findCyberwareCatalogItem(
   ruleset: MergedRuleset,
   identifier: string
 ): CyberwareCatalogItemData | null {
-  const cyberwareCatalog = getModule<CyberwareCatalogData>(ruleset, "cyberware");
+  const cyberwareCatalog = getModule(ruleset, "cyberware");
   if (!cyberwareCatalog) return null;
 
   const catalog = cyberwareCatalog.catalog || [];

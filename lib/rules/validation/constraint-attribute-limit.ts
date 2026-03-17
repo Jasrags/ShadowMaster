@@ -26,12 +26,7 @@ export function validateAttributeLimit(
   };
 
   // Get metatype limits from ruleset
-  const metatypesModule = getModule<{
-    metatypes: Array<{
-      id: string;
-      attributes: Record<string, { min: number; max: number }>;
-    }>;
-  }>(ruleset, "metatypes");
+  const metatypesModule = getModule(ruleset, "metatypes");
 
   if (!metatypesModule) return null;
 
