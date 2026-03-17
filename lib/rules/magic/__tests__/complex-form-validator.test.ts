@@ -33,7 +33,7 @@ function createMockComplexForm(overrides: Partial<ComplexFormData> = {}): Comple
 
 function createMockRuleset(complexForms?: ComplexFormData[]): LoadedRuleset {
   return {
-    edition: {} as LoadedRuleset["edition"],
+    edition: {} as unknown as LoadedRuleset["edition"],
     books: [
       {
         id: "core-rulebook",

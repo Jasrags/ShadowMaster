@@ -25,7 +25,7 @@ function createMockRuleset(): MergedRuleset {
     bookIds: ["core-rulebook"],
     modules: {},
     createdAt: new Date().toISOString(),
-  } as unknown as MergedRuleset;
+  } as MergedRuleset;
 }
 
 function createContext(

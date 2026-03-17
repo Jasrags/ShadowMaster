@@ -24,7 +24,7 @@ function createMockRuleset(): MergedRuleset {
     bookIds: ["core-rulebook", "run-faster"],
     modules: {},
     createdAt: new Date().toISOString(),
-  } as unknown as MergedRuleset;
+  } as MergedRuleset;
 }
 
 function createContext(
