@@ -89,7 +89,7 @@ export function advanceSpecialization(
   options: AdvanceSpecializationOptions = {}
 ): AdvanceSpecializationResult {
   // Extract advancement rules
-  const advancementRules = getModule<AdvancementRulesData>(ruleset, "advancement");
+  const advancementRules = getModule(ruleset, "advancement");
 
   // Validate advancement
   const validation = validateSpecializationAdvancement(character, skillId, ruleset, {

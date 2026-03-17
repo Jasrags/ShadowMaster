@@ -52,7 +52,7 @@ export function advanceEdge(
   options: AdvanceEdgeOptions = {}
 ): AdvanceEdgeResult {
   // Extract advancement rules
-  const advancementRules = getModule<AdvancementRulesData>(ruleset, "advancement");
+  const advancementRules = getModule(ruleset, "advancement");
 
   // Validate advancement
   const validation = validateAttributeAdvancement(character, "edge", newRating, ruleset, {

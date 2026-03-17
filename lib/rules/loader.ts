@@ -279,7 +279,7 @@ import type { MetatypeData } from "./loader-types";
  * Load metatypes from a ruleset
  */
 export function extractMetatypes(ruleset: LoadedRuleset): MetatypeData[] {
-  const ruleModule = extractModule<{ metatypes: MetatypeData[] }>(ruleset, "metatypes");
+  const ruleModule = extractModule(ruleset, "metatypes");
   return ruleModule?.metatypes || [];
 }
 
@@ -303,14 +303,7 @@ export function extractSkills(ruleset: LoadedRuleset): {
   exampleKnowledgeSkills: ExampleKnowledgeSkillData[];
   exampleLanguages: ExampleLanguageData[];
 } {
-  const ruleModule = extractModule<{
-    activeSkills: SkillData[];
-    skillGroups: SkillGroupData[];
-    knowledgeCategories: KnowledgeCategoryData[];
-    creationLimits: SkillCreationLimitsData;
-    exampleKnowledgeSkills: ExampleKnowledgeSkillData[];
-    exampleLanguages: ExampleLanguageData[];
-  }>(ruleset, "skills");
+  const ruleModule = extractModule(ruleset, "skills");
 
   return {
     activeSkills: ruleModule?.activeSkills || [],
@@ -336,10 +329,7 @@ export function extractQualities(ruleset: LoadedRuleset): {
   positive: QualityData[];
   negative: QualityData[];
 } {
-  const ruleModule = extractModule<{
-    positive: QualityData[];
-    negative: QualityData[];
-  }>(ruleset, "qualities");
+  const ruleModule = extractModule(ruleset, "qualities");
 
   return {
     positive: ruleModule?.positive || [],
@@ -353,7 +343,7 @@ import type { PriorityTableData } from "./loader-types";
  * Load priority table from a ruleset
  */
 export function extractPriorityTable(ruleset: LoadedRuleset): PriorityTableData | null {
-  return extractModule<PriorityTableData>(ruleset, "priorities");
+  return extractModule(ruleset, "priorities");
 }
 
 import type { MagicPathData } from "./loader-types";
@@ -362,7 +352,7 @@ import type { MagicPathData } from "./loader-types";
  * Load magic paths from a ruleset
  */
 export function extractMagicPaths(ruleset: LoadedRuleset): MagicPathData[] {
-  const ruleModule = extractModule<{ paths: MagicPathData[] }>(ruleset, "magic");
+  const ruleModule = extractModule(ruleset, "magic");
   return ruleModule?.paths || [];
 }
 
@@ -376,7 +366,7 @@ import type {
  * Load lifestyles from a ruleset
  */
 export function extractLifestyles(ruleset: LoadedRuleset): LifestyleData[] {
-  const ruleModule = extractModule<{ lifestyles: LifestyleData[] }>(ruleset, "lifestyle");
+  const ruleModule = extractModule(ruleset, "lifestyle");
   return ruleModule?.lifestyles || [];
 }
 
@@ -384,10 +374,7 @@ export function extractLifestyles(ruleset: LoadedRuleset): LifestyleData[] {
  * Load lifestyle metatype modifiers from a ruleset
  */
 export function extractLifestyleModifiers(ruleset: LoadedRuleset): Record<string, number> {
-  const ruleModule = extractModule<{ metatypeModifiers: Record<string, number> }>(
-    ruleset,
-    "lifestyle"
-  );
+  const ruleModule = extractModule(ruleset, "lifestyle");
   return ruleModule?.metatypeModifiers || {};
 }
 
@@ -397,7 +384,7 @@ export function extractLifestyleModifiers(ruleset: LoadedRuleset): Record<string
 export function extractLifestyleSubscriptions(
   ruleset: LoadedRuleset
 ): LifestyleSubscriptionCatalogItem[] {
-  const ruleModule = extractModule<LifestyleSubscriptionsCatalogData>(ruleset, "lifestyle");
+  const ruleModule = extractModule(ruleset, "lifestyle");
   return ruleModule?.subscriptions || [];
 }
 
@@ -411,7 +398,7 @@ import type { GearCatalogData } from "./loader-types";
  * Load gear catalog from a ruleset
  */
 export function extractGear(ruleset: LoadedRuleset): GearCatalogData | null {
-  const ruleModule = extractModule<GearCatalogData>(ruleset, "gear");
+  const ruleModule = extractModule(ruleset, "gear");
   return ruleModule;
 }
 
@@ -430,7 +417,7 @@ import type {
  * Load spells from a ruleset
  */
 export function extractSpells(ruleset: LoadedRuleset): SpellsCatalogData | null {
-  const ruleModule = extractModule<{ spells: SpellsCatalogData }>(ruleset, "magic");
+  const ruleModule = extractModule(ruleset, "magic");
   return ruleModule?.spells || null;
 }
 
@@ -438,7 +425,7 @@ export function extractSpells(ruleset: LoadedRuleset): SpellsCatalogData | null 
  * Load complex forms from a ruleset
  */
 export function extractComplexForms(ruleset: LoadedRuleset): ComplexFormData[] {
-  const ruleModule = extractModule<{ complexForms: ComplexFormData[] }>(ruleset, "magic");
+  const ruleModule = extractModule(ruleset, "magic");
   return ruleModule?.complexForms || [];
 }
 
@@ -446,7 +433,7 @@ export function extractComplexForms(ruleset: LoadedRuleset): ComplexFormData[] {
  * Load sprite types from a ruleset
  */
 export function extractSpriteTypes(ruleset: LoadedRuleset): SpriteTypeData[] {
-  const ruleModule = extractModule<{ spriteTypes: SpriteTypeData[] }>(ruleset, "magic");
+  const ruleModule = extractModule(ruleset, "magic");
   return ruleModule?.spriteTypes || [];
 }
 
@@ -454,7 +441,7 @@ export function extractSpriteTypes(ruleset: LoadedRuleset): SpriteTypeData[] {
  * Load sprite powers from a ruleset
  */
 export function extractSpritePowers(ruleset: LoadedRuleset): SpritePowerData[] {
-  const ruleModule = extractModule<{ spritePowers: SpritePowerData[] }>(ruleset, "magic");
+  const ruleModule = extractModule(ruleset, "magic");
   return ruleModule?.spritePowers || [];
 }
 
@@ -472,7 +459,7 @@ import type {
  * Load cyberware catalog from a ruleset
  */
 export function extractCyberware(ruleset: LoadedRuleset): CyberwareCatalogData | null {
-  const ruleModule = extractModule<CyberwareCatalogData>(ruleset, "cyberware");
+  const ruleModule = extractModule(ruleset, "cyberware");
   if (!ruleModule) return null;
 
   return {
@@ -492,7 +479,7 @@ export function extractCyberware(ruleset: LoadedRuleset): CyberwareCatalogData |
  * Load bioware catalog from a ruleset
  */
 export function extractBioware(ruleset: LoadedRuleset): BiowareCatalogData | null {
-  const ruleModule = extractModule<BiowareCatalogData>(ruleset, "bioware");
+  const ruleModule = extractModule(ruleset, "bioware");
   if (!ruleModule) return null;
 
   return {
@@ -527,10 +514,7 @@ import type { ContactTemplateData } from "../types";
  * Load contact templates from a ruleset
  */
 export function extractContactTemplates(ruleset: LoadedRuleset): ContactTemplateData[] {
-  const ruleModule = extractModule<{ templates: ContactTemplateData[] }>(
-    ruleset,
-    "contactTemplates"
-  );
+  const ruleModule = extractModule(ruleset, "contactTemplates");
   return ruleModule?.templates || [];
 }
 
@@ -544,7 +528,7 @@ import type { AdeptPowerCatalogItem } from "./loader-types";
  * Load adept powers from a ruleset
  */
 export function extractAdeptPowers(ruleset: LoadedRuleset): AdeptPowerCatalogItem[] {
-  const ruleModule = extractModule<{ powers: AdeptPowerCatalogItem[] }>(ruleset, "adeptPowers");
+  const ruleModule = extractModule(ruleset, "adeptPowers");
   return ruleModule?.powers || [];
 }
 
@@ -558,7 +542,7 @@ import type { LifeModulesCatalog } from "../types";
  * Load life modules catalog from a ruleset
  */
 export function extractLifeModules(ruleset: LoadedRuleset): LifeModulesCatalog | null {
-  const ruleModule = extractModule<LifeModulesCatalog>(ruleset, "lifeModules");
+  const ruleModule = extractModule(ruleset, "lifeModules");
   return ruleModule || null;
 }
 
@@ -572,7 +556,7 @@ import type { TraditionData } from "./loader-types";
  * Load traditions from a ruleset
  */
 export function extractTraditions(ruleset: LoadedRuleset): TraditionData[] {
-  const ruleModule = extractModule<{ traditions: TraditionData[] }>(ruleset, "magic");
+  const ruleModule = extractModule(ruleset, "magic");
   return ruleModule?.traditions || [];
 }
 
@@ -586,7 +570,7 @@ import type { MentorSpiritData } from "./loader-types";
  * Load mentor spirits from a ruleset
  */
 export function extractMentorSpirits(ruleset: LoadedRuleset): MentorSpiritData[] {
-  const ruleModule = extractModule<{ mentorSpirits: MentorSpiritData[] }>(ruleset, "magic");
+  const ruleModule = extractModule(ruleset, "magic");
   return ruleModule?.mentorSpirits || [];
 }
 
@@ -600,7 +584,7 @@ import type { RitualData, RitualKeywordData } from "./loader-types";
  * Load rituals from a ruleset
  */
 export function extractRituals(ruleset: LoadedRuleset): RitualData[] {
-  const ruleModule = extractModule<{ rituals: RitualData[] }>(ruleset, "magic");
+  const ruleModule = extractModule(ruleset, "magic");
   return ruleModule?.rituals || [];
 }
 
@@ -608,7 +592,7 @@ export function extractRituals(ruleset: LoadedRuleset): RitualData[] {
  * Load ritual keywords from a ruleset
  */
 export function extractRitualKeywords(ruleset: LoadedRuleset): RitualKeywordData[] {
-  const ruleModule = extractModule<{ ritualKeywords: RitualKeywordData[] }>(ruleset, "magic");
+  const ruleModule = extractModule(ruleset, "magic");
   return ruleModule?.ritualKeywords || [];
 }
 
@@ -630,7 +614,7 @@ import type {
  * Load vehicles catalog from a ruleset
  */
 export function extractVehicles(ruleset: LoadedRuleset): VehicleCatalogItemData[] {
-  const ruleModule = extractModule<VehiclesCatalogData>(ruleset, "vehicles");
+  const ruleModule = extractModule(ruleset, "vehicles");
   if (!ruleModule) return [];
 
   // Combine all vehicle types
@@ -649,7 +633,7 @@ export function extractVehiclesByCategory(ruleset: LoadedRuleset): {
   watercraft: VehicleCatalogItemData[];
   aircraft: VehicleCatalogItemData[];
 } {
-  const ruleModule = extractModule<VehiclesCatalogData>(ruleset, "vehicles");
+  const ruleModule = extractModule(ruleset, "vehicles");
   return {
     groundcraft: ruleModule?.groundcraft || [],
     watercraft: ruleModule?.watercraft || [],
@@ -661,7 +645,7 @@ export function extractVehiclesByCategory(ruleset: LoadedRuleset): {
  * Load vehicle categories metadata from a ruleset
  */
 export function extractVehicleCategories(ruleset: LoadedRuleset): VehicleCategoryData[] {
-  const ruleModule = extractModule<VehiclesCatalogData>(ruleset, "vehicles");
+  const ruleModule = extractModule(ruleset, "vehicles");
   return ruleModule?.categories || [];
 }
 
@@ -669,7 +653,7 @@ export function extractVehicleCategories(ruleset: LoadedRuleset): VehicleCategor
  * Load drones from a ruleset
  */
 export function extractDrones(ruleset: LoadedRuleset): DroneCatalogItemData[] {
-  const ruleModule = extractModule<VehiclesCatalogData>(ruleset, "vehicles");
+  const ruleModule = extractModule(ruleset, "vehicles");
   return ruleModule?.drones || [];
 }
 
@@ -677,7 +661,7 @@ export function extractDrones(ruleset: LoadedRuleset): DroneCatalogItemData[] {
  * Load drone size categories from a ruleset
  */
 export function extractDroneSizes(ruleset: LoadedRuleset): DroneSizeData[] {
-  const ruleModule = extractModule<VehiclesCatalogData>(ruleset, "vehicles");
+  const ruleModule = extractModule(ruleset, "vehicles");
   return ruleModule?.droneSizes || [];
 }
 
@@ -685,7 +669,7 @@ export function extractDroneSizes(ruleset: LoadedRuleset): DroneSizeData[] {
  * Load RCCs (Rigger Command Consoles) from a ruleset
  */
 export function extractRCCs(ruleset: LoadedRuleset): RCCCatalogItemData[] {
-  const ruleModule = extractModule<VehiclesCatalogData>(ruleset, "vehicles");
+  const ruleModule = extractModule(ruleset, "vehicles");
   return ruleModule?.rccs || [];
 }
 
@@ -693,7 +677,7 @@ export function extractRCCs(ruleset: LoadedRuleset): RCCCatalogItemData[] {
  * Load autosofts from a ruleset
  */
 export function extractAutosofts(ruleset: LoadedRuleset): AutosoftCatalogItemData[] {
-  const ruleModule = extractModule<VehiclesCatalogData>(ruleset, "vehicles");
+  const ruleModule = extractModule(ruleset, "vehicles");
   return ruleModule?.autosofts || [];
 }
 
@@ -701,7 +685,7 @@ export function extractAutosofts(ruleset: LoadedRuleset): AutosoftCatalogItemDat
  * Load complete vehicles module data from a ruleset
  */
 export function extractVehiclesCatalog(ruleset: LoadedRuleset): VehiclesCatalogData | null {
-  return extractModule<VehiclesCatalogData>(ruleset, "vehicles");
+  return extractModule(ruleset, "vehicles");
 }
 
 // =============================================================================
@@ -714,7 +698,7 @@ import type { ProgramCatalogItemData, ProgramsCatalogData } from "./loader-types
  * Load all programs from a ruleset
  */
 export function extractPrograms(ruleset: LoadedRuleset): ProgramCatalogItemData[] {
-  const ruleModule = extractModule<ProgramsCatalogData>(ruleset, "programs");
+  const ruleModule = extractModule(ruleset, "programs");
   if (!ruleModule) return [];
 
   return [
@@ -732,7 +716,7 @@ export function extractProgramsByCategory(ruleset: LoadedRuleset): {
   hacking: ProgramCatalogItemData[];
   agents: ProgramCatalogItemData[];
 } {
-  const ruleModule = extractModule<ProgramsCatalogData>(ruleset, "programs");
+  const ruleModule = extractModule(ruleset, "programs");
   return {
     common: ruleModule?.common || [],
     hacking: ruleModule?.hacking || [],
@@ -744,7 +728,7 @@ export function extractProgramsByCategory(ruleset: LoadedRuleset): {
  * Load common programs from a ruleset
  */
 export function extractCommonPrograms(ruleset: LoadedRuleset): ProgramCatalogItemData[] {
-  const ruleModule = extractModule<ProgramsCatalogData>(ruleset, "programs");
+  const ruleModule = extractModule(ruleset, "programs");
   return ruleModule?.common || [];
 }
 
@@ -752,7 +736,7 @@ export function extractCommonPrograms(ruleset: LoadedRuleset): ProgramCatalogIte
  * Load hacking programs from a ruleset
  */
 export function extractHackingPrograms(ruleset: LoadedRuleset): ProgramCatalogItemData[] {
-  const ruleModule = extractModule<ProgramsCatalogData>(ruleset, "programs");
+  const ruleModule = extractModule(ruleset, "programs");
   return ruleModule?.hacking || [];
 }
 
@@ -760,7 +744,7 @@ export function extractHackingPrograms(ruleset: LoadedRuleset): ProgramCatalogIt
  * Load agent programs from a ruleset
  */
 export function extractAgentPrograms(ruleset: LoadedRuleset): ProgramCatalogItemData[] {
-  const ruleModule = extractModule<ProgramsCatalogData>(ruleset, "programs");
+  const ruleModule = extractModule(ruleset, "programs");
   return ruleModule?.agents || [];
 }
 
@@ -768,7 +752,7 @@ export function extractAgentPrograms(ruleset: LoadedRuleset): ProgramCatalogItem
  * Load complete programs module data from a ruleset
  */
 export function extractProgramsCatalog(ruleset: LoadedRuleset): ProgramsCatalogData | null {
-  return extractModule<ProgramsCatalogData>(ruleset, "programs");
+  return extractModule(ruleset, "programs");
 }
 
 import type { DataSoftwareCatalogData, DataSoftwareCatalogItemData } from "./loader-types";
@@ -778,12 +762,7 @@ import type { DataSoftwareCatalogData, DataSoftwareCatalogItemData } from "./loa
  * Data software is stored in the programs module alongside regular programs.
  */
 export function extractDataSoftwareCatalog(ruleset: LoadedRuleset): DataSoftwareCatalogData | null {
-  const programsModule = extractModule<{
-    datasofts?: DataSoftwareCatalogItemData[];
-    mapsofts?: DataSoftwareCatalogItemData[];
-    shopsofts?: DataSoftwareCatalogItemData[];
-    tutorsofts?: DataSoftwareCatalogItemData[];
-  }>(ruleset, "programs");
+  const programsModule = extractModule(ruleset, "programs");
 
   if (!programsModule) return null;
 
@@ -815,7 +794,7 @@ import type { FocusCatalogItemData } from "./loader-types";
  * Load foci from a ruleset
  */
 export function extractFoci(ruleset: LoadedRuleset): FocusCatalogItemData[] {
-  const ruleModule = extractModule<{ foci: FocusCatalogItemData[] }>(ruleset, "foci");
+  const ruleModule = extractModule(ruleset, "foci");
   return ruleModule?.foci || [];
 }
 
@@ -829,7 +808,7 @@ import type { SpiritsCatalogData } from "./loader-types";
  * Load spirits from a ruleset
  */
 export function extractSpirits(ruleset: LoadedRuleset): SpiritsCatalogData | null {
-  const ruleModule = extractModule<SpiritsCatalogData>(ruleset, "spirits");
+  const ruleModule = extractModule(ruleset, "spirits");
   return ruleModule || null;
 }
 
@@ -851,7 +830,7 @@ import type {
 export function extractWeaponModifications(
   ruleset: LoadedRuleset
 ): WeaponModificationCatalogItemData[] {
-  const ruleModule = extractModule<ModificationsCatalogData>(ruleset, "modifications");
+  const ruleModule = extractModule(ruleset, "modifications");
   return ruleModule?.weaponMods || [];
 }
 
@@ -861,7 +840,7 @@ export function extractWeaponModifications(
 export function extractArmorModifications(
   ruleset: LoadedRuleset
 ): ArmorModificationCatalogItemData[] {
-  const ruleModule = extractModule<ModificationsCatalogData>(ruleset, "modifications");
+  const ruleModule = extractModule(ruleset, "modifications");
   return ruleModule?.armorMods || [];
 }
 
@@ -871,7 +850,7 @@ export function extractArmorModifications(
 export function extractCyberwareModifications(
   ruleset: LoadedRuleset
 ): CyberwareModificationCatalogItemData[] {
-  const ruleModule = extractModule<ModificationsCatalogData>(ruleset, "modifications");
+  const ruleModule = extractModule(ruleset, "modifications");
   return ruleModule?.cyberwareMods || [];
 }
 
@@ -881,7 +860,7 @@ export function extractCyberwareModifications(
 export function extractGearModifications(
   ruleset: LoadedRuleset
 ): GearModificationCatalogItemData[] {
-  const ruleModule = extractModule<ModificationsCatalogData>(ruleset, "modifications");
+  const ruleModule = extractModule(ruleset, "modifications");
   return ruleModule?.gearMods || [];
 }
 
@@ -889,7 +868,7 @@ export function extractGearModifications(
  * Load complete modifications catalog from a ruleset
  */
 export function extractModifications(ruleset: LoadedRuleset): ModificationsCatalogData | null {
-  return extractModule<ModificationsCatalogData>(ruleset, "modifications");
+  return extractModule(ruleset, "modifications");
 }
 
 // =============================================================================
@@ -902,7 +881,7 @@ import type { AdvancementRulesData } from "./loader-types";
  * Load advancement rules from a ruleset
  */
 export function extractAdvancement(ruleset: LoadedRuleset): AdvancementRulesData {
-  const ruleModule = extractModule<AdvancementRulesData>(ruleset, "advancement");
+  const ruleModule = extractModule(ruleset, "advancement");
 
   return (
     ruleModule || {
@@ -929,7 +908,7 @@ import type { InfectedCatalogData } from "./infected/types";
  * Load infected catalog from a ruleset
  */
 export function extractInfected(ruleset: LoadedRuleset): InfectedCatalogData | null {
-  const ruleModule = extractModule<InfectedCatalogData>(ruleset, "infected");
+  const ruleModule = extractModule(ruleset, "infected");
   if (!ruleModule) return null;
 
   return {
@@ -957,7 +936,7 @@ export interface ActionsCatalogData {
  * Extract actions from a ruleset
  */
 export function extractActions(ruleset: LoadedRuleset): ActionsCatalogData | null {
-  const ruleModule = extractModule<ActionsCatalogData>(ruleset, "actions");
+  const ruleModule = extractModule(ruleset, "actions");
 
   if (!ruleModule) return null;
 

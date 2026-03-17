@@ -92,7 +92,7 @@ export function advanceSkill(
   options: AdvanceSkillOptions = {}
 ): AdvanceSkillResult {
   // Extract advancement rules
-  const advancementRules = getModule<AdvancementRulesData>(ruleset, "advancement");
+  const advancementRules = getModule(ruleset, "advancement");
 
   // Validate advancement (including downtime limits if applicable)
   const validation = validateSkillAdvancement(character, skillId, newRating, ruleset, {

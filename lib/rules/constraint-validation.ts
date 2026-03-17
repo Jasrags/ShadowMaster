@@ -330,12 +330,7 @@ export function getMetatypeAttributeLimits(
   metatypeId: string,
   ruleset: MergedRuleset
 ): Record<string, { min: number; max: number }> | null {
-  const metatypesModule = getModule<{
-    metatypes: Array<{
-      id: string;
-      attributes: Record<string, { min: number; max: number } | { base: number }>;
-    }>;
-  }>(ruleset, "metatypes");
+  const metatypesModule = getModule(ruleset, "metatypes");
 
   if (!metatypesModule) return null;
 

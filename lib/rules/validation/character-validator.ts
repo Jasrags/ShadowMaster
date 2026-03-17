@@ -164,15 +164,7 @@ const priorityConsistencyValidator: ValidatorDefinition = {
     }
 
     // Load priority table from ruleset
-    const prioritiesModule = getModule<{
-      table: Record<
-        string,
-        {
-          metatype: { available: string[] };
-          magic: { options: Array<{ path: string }> };
-        }
-      >;
-    }>(ruleset, "priorities");
+    const prioritiesModule = getModule(ruleset, "priorities");
 
     if (!prioritiesModule?.table) {
       return issues;
@@ -184,7 +176,7 @@ const priorityConsistencyValidator: ValidatorDefinition = {
 
     const metatypeLevel = priorities.metatype;
     if (metatypeLevel && character.metatype && table[metatypeLevel]) {
-      const availableMetatypes = table[metatypeLevel].metatype.available;
+      const availableMetatypes = table[metatypeLevel].metatype?.available ?? [];
       if (!availableMetatypes.includes(character.metatype)) {
         issues.push({
           code: "PRIORITY_METATYPE_INVALID",
@@ -208,7 +200,7 @@ const priorityConsistencyValidator: ValidatorDefinition = {
       if (rawMagicalPath && rawMagicalPath !== "mundane") {
         // Map character field values back to priority table values (e.g. "full-mage" → "magician")
         const priorityPath = CHARACTER_TO_PRIORITY_PATH[rawMagicalPath] ?? rawMagicalPath;
-        const availablePaths = table[magicLevel].magic.options.map((o) => o.path);
+        const availablePaths = (table[magicLevel].magic?.options ?? []).map((o) => o.path);
 
         if (!availablePaths.includes(priorityPath)) {
           issues.push({
@@ -220,7 +212,7 @@ const priorityConsistencyValidator: ValidatorDefinition = {
         }
       } else {
         // Mundane with non-E magic priority is a waste
-        const magicOptions = table[magicLevel].magic.options;
+        const magicOptions = table[magicLevel].magic?.options ?? [];
         if (magicOptions.length > 0) {
           issues.push({
             code: "PRIORITY_MAGIC_WASTED",
@@ -1526,7 +1518,7 @@ const complexFormValidator: ValidatorDefinition = {
     }
 
     // Get complex forms catalog from merged ruleset
-    const magicModule = getModule<{ complexForms?: ComplexFormData[] }>(ruleset, "magic");
+    const magicModule = getModule(ruleset, "magic");
     const formsCatalog = magicModule?.complexForms || [];
 
     const invalidForms: string[] = [];
@@ -1641,16 +1633,7 @@ const spellValidator: ValidatorDefinition = {
     // Spell limit check from priority table
     if (creationState?.priorities?.magic) {
       const magicLevel = creationState.priorities.magic;
-      const prioritiesModule = getModule<{
-        table: Record<
-          string,
-          {
-            magic: {
-              options: Array<{ path: string; spells?: number }>;
-            };
-          }
-        >;
-      }>(ruleset, "priorities");
+      const prioritiesModule = getModule(ruleset, "priorities");
 
       if (prioritiesModule?.table) {
         const levelData = prioritiesModule.table[magicLevel];
@@ -1671,7 +1654,7 @@ const spellValidator: ValidatorDefinition = {
     }
 
     // Get spells catalog from merged ruleset
-    const magicModule = getModule<{ spells?: SpellsCatalogData }>(ruleset, "magic");
+    const magicModule = getModule(ruleset, "magic");
     const spellsCatalog = magicModule?.spells;
 
     // Flatten all spell categories into a single lookup set
@@ -1778,7 +1761,7 @@ const adeptPowerValidator: ValidatorDefinition = {
     }
 
     // Get adept powers catalog from merged ruleset
-    const adeptModule = getModule<{ powers: AdeptPowerCatalogItem[] }>(ruleset, "adeptPowers");
+    const adeptModule = getModule(ruleset, "adeptPowers");
     const powersCatalog = adeptModule?.powers || [];
     const catalogMap = new Map(powersCatalog.map((p) => [p.id, p]));
 
@@ -1946,7 +1929,7 @@ const fociValidator: ValidatorDefinition = {
     }
 
     // Get foci catalog from merged ruleset
-    const fociModule = getModule<{ foci: FocusCatalogItemData[] }>(ruleset, "foci");
+    const fociModule = getModule(ruleset, "foci");
     const fociCatalog = fociModule?.foci || [];
     const catalogMap = new Map(fociCatalog.map((f) => [f.id, f]));
 
@@ -2058,7 +2041,7 @@ const skillGroupConstraintValidator: ValidatorDefinition = {
     const skillKarmaSpent = selections.skillKarmaSpent;
 
     // Get skill group definitions from merged ruleset to map group -> member skills
-    const skillsModule = getModule<{ skillGroups?: SkillGroupData[] }>(ruleset, "skills");
+    const skillsModule = getModule(ruleset, "skills");
     const skillGroupDefs = skillsModule?.skillGroups || [];
 
     for (const [groupId, groupValue] of Object.entries(skillGroups)) {
@@ -2280,7 +2263,7 @@ const nuyenBudgetValidator: ValidatorDefinition = {
     const priorities = creationState.priorities || {};
 
     // Get priority table from ruleset
-    const priorityTable = getModule<PriorityTableData>(ruleset, "priorities");
+    const priorityTable = getModule(ruleset, "priorities");
     if (!priorityTable) {
       // No priority table = can't validate nuyen budget
       return issues;

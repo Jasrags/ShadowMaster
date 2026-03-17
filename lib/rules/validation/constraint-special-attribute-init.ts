@@ -31,12 +31,7 @@ export function validateSpecialAttributeInit(
   const errors: string[] = [];
 
   // Get metatype data for edge limits
-  const metatypesModule = getModule<{
-    metatypes: Array<{
-      id: string;
-      attributes: Record<string, { min: number; max: number }>;
-    }>;
-  }>(ruleset, "metatypes");
+  const metatypesModule = getModule(ruleset, "metatypes");
 
   const metatype = metatypesModule?.metatypes.find(
     (m) => m.id === character.metatype?.toLowerCase()
@@ -68,20 +63,7 @@ export function validateSpecialAttributeInit(
       // Get the base magic from priority table
       const magicPriority = creationState?.priorities?.magic;
       if (magicPriority && ruleset) {
-        const prioritiesModule = getModule<{
-          table: Record<
-            string,
-            {
-              magic?: {
-                options?: Array<{
-                  path: string;
-                  magicRating?: number;
-                  resonanceRating?: number;
-                }>;
-              };
-            }
-          >;
-        }>(ruleset, "priorities");
+        const prioritiesModule = getModule(ruleset, "priorities");
 
         if (prioritiesModule?.table?.[magicPriority]?.magic?.options) {
           const option = prioritiesModule.table[magicPriority].magic.options.find(
@@ -115,19 +97,7 @@ export function validateSpecialAttributeInit(
       // Technomancers should have resonance from priority
       const magicPriority = creationState?.priorities?.magic;
       if (magicPriority && ruleset) {
-        const prioritiesModule = getModule<{
-          table: Record<
-            string,
-            {
-              magic?: {
-                options?: Array<{
-                  path: string;
-                  resonanceRating?: number;
-                }>;
-              };
-            }
-          >;
-        }>(ruleset, "priorities");
+        const prioritiesModule = getModule(ruleset, "priorities");
 
         if (prioritiesModule?.table?.[magicPriority]?.magic?.options) {
           const option = prioritiesModule.table[magicPriority].magic.options.find(

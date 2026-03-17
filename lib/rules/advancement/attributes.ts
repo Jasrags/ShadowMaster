@@ -91,7 +91,7 @@ export function advanceAttribute(
   options: AdvanceAttributeOptions = {}
 ): AdvanceAttributeResult {
   // Extract advancement rules from ruleset
-  const advancementRules = getModule<AdvancementRulesData>(ruleset, "advancement");
+  const advancementRules = getModule(ruleset, "advancement");
 
   // Validate advancement (including downtime limits if applicable)
   const validation = validateAttributeAdvancement(character, attributeId, newRating, ruleset, {
