@@ -15,7 +15,7 @@
  * @see /docs/capabilities/campaign.social-governance.md
  */
 
-import type { SocialContact, ContactServiceType } from "../types/contacts";
+import type { SocialContact, ContactServiceType } from "@/lib/types";
 
 // =============================================================================
 // CONSTANTS
@@ -42,9 +42,17 @@ export interface OrganizationDefinition {
   name: string;
   /** Description of the organization */
   description: string;
-  /** Connection bonus when using this organization */
+  /**
+   * Connection bonus when using this organization.
+   * The wiring layer should derive the contact's Connection rating
+   * from this bonus (e.g., base Connection + bonus).
+   */
   connectionBonus: number;
-  /** Karma cost to acquire this organization as a contact */
+  /**
+   * Karma cost to acquire this organization as a contact.
+   * Counts against the positive quality karma limit (25 karma in SR5).
+   * The wiring layer must enforce the quality budget cap.
+   */
   karmaCost: number;
 }
 
@@ -150,10 +158,10 @@ export function validateOrganizationContact(contact: SocialContact): Organizatio
 
   const errors: Array<{ field: string; message: string }> = [];
 
-  if (contact.loyalty > ORGANIZATION_MAX_LOYALTY) {
+  if (contact.loyalty < 1 || contact.loyalty > ORGANIZATION_MAX_LOYALTY) {
     errors.push({
       field: "loyalty",
-      message: `Organization contacts cannot have Loyalty above ${ORGANIZATION_MAX_LOYALTY} (faceless contact), got ${contact.loyalty}`,
+      message: `Organization contacts must have Loyalty of exactly ${ORGANIZATION_MAX_LOYALTY}, got ${contact.loyalty}`,
     });
   }
 

@@ -49,7 +49,7 @@ function createMockContact(overrides: Partial<SocialContact> = {}): SocialContac
 describe("getOrganizationDefinitions", () => {
   it("should return all organization definitions", () => {
     const orgs = getOrganizationDefinitions();
-    expect(orgs.length).toBeGreaterThanOrEqual(5);
+    expect(orgs).toHaveLength(5);
   });
 
   it("should include Street Gang with correct values", () => {
@@ -108,10 +108,11 @@ describe("validateOrganizationContact", () => {
     expect(result.valid).toBe(true);
   });
 
-  it("should allow Loyalty 0 for organization contacts", () => {
+  it("should reject Loyalty 0 for organization contacts (invalid SR5 data)", () => {
     const contact = createMockContact({ loyalty: 0, group: "organization" });
     const result = validateOrganizationContact(contact);
-    expect(result.valid).toBe(true);
+    expect(result.valid).toBe(false);
+    expect(result.errors).toContainEqual(expect.objectContaining({ field: "loyalty" }));
   });
 });
 
