@@ -52,20 +52,34 @@ describe("getOrganizationDefinitions", () => {
     expect(orgs).toHaveLength(5);
   });
 
-  it("should include Street Gang with correct values", () => {
+  it("should include Street Gang with correct values (no SIN required)", () => {
     const orgs = getOrganizationDefinitions();
     const streetGang = orgs.find((o) => o.id === "street-gang");
     expect(streetGang).toBeDefined();
     expect(streetGang!.connectionBonus).toBe(1);
     expect(streetGang!.karmaCost).toBe(5);
+    expect(streetGang!.sinnerRequired).toBe(false);
   });
 
-  it("should include Lone Star/GOD with highest connection bonus", () => {
+  it("should include Lone Star/GOD with highest connection bonus (SIN required)", () => {
     const orgs = getOrganizationDefinitions();
     const loneStar = orgs.find((o) => o.id === "lone-star-god");
     expect(loneStar).toBeDefined();
     expect(loneStar!.connectionBonus).toBe(3);
     expect(loneStar!.karmaCost).toBe(12);
+    expect(loneStar!.sinnerRequired).toBe(true);
+  });
+
+  it("should have correct SINner requirements per Run Faster p. 177", () => {
+    const orgs = getOrganizationDefinitions();
+    const byId = Object.fromEntries(orgs.map((o) => [o.id, o]));
+
+    // N, Y, N, Y, Y per the sourcebook table
+    expect(byId["street-gang"].sinnerRequired).toBe(false);
+    expect(byId["city-government"].sinnerRequired).toBe(true);
+    expect(byId["humanis-policlub"].sinnerRequired).toBe(false);
+    expect(byId["order-of-st-sylvester"].sinnerRequired).toBe(true);
+    expect(byId["lone-star-god"].sinnerRequired).toBe(true);
   });
 });
 

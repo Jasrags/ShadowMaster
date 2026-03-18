@@ -54,6 +54,11 @@ export interface OrganizationDefinition {
    * The wiring layer must enforce the quality budget cap.
    */
   karmaCost: number;
+  /**
+   * Whether the character must have a SIN (National or Corporate SINner
+   * quality) to use this organization as a contact (Run Faster p. 177).
+   */
+  sinnerRequired: boolean;
 }
 
 /** Validation result for an organization contact */
@@ -83,6 +88,7 @@ const ORGANIZATION_DEFINITIONS: readonly OrganizationDefinition[] = [
     description: "Local street-level criminal organization",
     connectionBonus: 1,
     karmaCost: 5,
+    sinnerRequired: false,
   },
   {
     id: "city-government",
@@ -90,6 +96,7 @@ const ORGANIZATION_DEFINITIONS: readonly OrganizationDefinition[] = [
     description: "Municipal government offices and bureaucracy",
     connectionBonus: 1,
     karmaCost: 3,
+    sinnerRequired: true,
   },
   {
     id: "humanis-policlub",
@@ -97,6 +104,7 @@ const ORGANIZATION_DEFINITIONS: readonly OrganizationDefinition[] = [
     description: "Anti-metahuman political organization",
     connectionBonus: 2,
     karmaCost: 10,
+    sinnerRequired: false,
   },
   {
     id: "order-of-st-sylvester",
@@ -104,6 +112,7 @@ const ORGANIZATION_DEFINITIONS: readonly OrganizationDefinition[] = [
     description: "Catholic religious order with magical connections",
     connectionBonus: 2,
     karmaCost: 8,
+    sinnerRequired: true,
   },
   {
     id: "lone-star-god",
@@ -111,6 +120,7 @@ const ORGANIZATION_DEFINITIONS: readonly OrganizationDefinition[] = [
     description: "Law enforcement and Grid Overwatch Division",
     connectionBonus: 3,
     karmaCost: 12,
+    sinnerRequired: true,
   },
 ];
 
