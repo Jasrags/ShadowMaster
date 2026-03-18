@@ -1431,14 +1431,14 @@ export async function applyMigration(
   const migrationPath = path.join(migrationsDir, `${migration.plan.id}.json`);
   await writeJsonFile(migrationPath, migration);
 
-  // Apply the migration steps to the character
-  // For now, we just update the sync status and ruleset reference
-  // The actual data transformations are handled by the migration engine
+  // WARNING: This function updates metadata (snapshot ref, karma) but does NOT
+  // apply character data mutations — those are not yet implemented (#739).
+  // The sync status is set to "outdated" (not "synchronized") to reflect this.
   const updates: Partial<Character> = {
     rulesetSnapshotId: migration.plan.targetVersion.snapshotId,
     rulesetVersion: migration.plan.targetVersion,
-    syncStatus: "synchronized" as SyncStatus,
-    legalityStatus: "rules-legal" as LegalityStatus,
+    syncStatus: "outdated" as SyncStatus,
+    legalityStatus: "draft" as LegalityStatus,
     lastSyncAt: new Date().toISOString(),
     pendingMigration: undefined,
     // Karma adjustment if applicable

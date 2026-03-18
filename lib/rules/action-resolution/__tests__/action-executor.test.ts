@@ -1079,9 +1079,26 @@ describe("executeOpposedTest", () => {
 // =============================================================================
 
 describe("applyStateChanges", () => {
-  it("should accept changes without producing console output", async () => {
-    const consoleSpy = vi.spyOn(console, "log").mockImplementation(() => {});
+  it("should no-op for empty changes array", async () => {
+    await expect(applyStateChanges([])).resolves.toBeUndefined();
+  });
 
+  it("should throw NotImplementedError for non-empty changes", async () => {
+    const changes: StateChange[] = [
+      {
+        entityId: "char-1",
+        entityType: "character",
+        field: "edge",
+        previousValue: 3,
+        newValue: 2,
+        description: "Spent Edge",
+      },
+    ];
+
+    await expect(applyStateChanges(changes)).rejects.toThrow("not yet implemented");
+  });
+
+  it("should include change count and entity count in error message", async () => {
     const changes: StateChange[] = [
       {
         entityId: "char-1",
@@ -1109,18 +1126,18 @@ describe("applyStateChanges", () => {
       },
     ];
 
-    await applyStateChanges(changes);
-
-    expect(consoleSpy).not.toHaveBeenCalled();
-
-    consoleSpy.mockRestore();
+    await expect(applyStateChanges(changes)).rejects.toThrow(
+      "3 change(s) across 2 entity/entities"
+    );
   });
 });
 
 describe("rollbackStateChanges", () => {
-  it("should reverse changes and swap values without console output", async () => {
-    const consoleSpy = vi.spyOn(console, "log").mockImplementation(() => {});
+  it("should no-op for empty changes array", async () => {
+    await expect(rollbackStateChanges([])).resolves.toBeUndefined();
+  });
 
+  it("should throw NotImplementedError for non-empty changes (delegates to applyStateChanges)", async () => {
     const changes: StateChange[] = [
       {
         entityId: "char-1",
@@ -1130,21 +1147,9 @@ describe("rollbackStateChanges", () => {
         newValue: 2,
         description: "Spent Edge",
       },
-      {
-        entityId: "char-1",
-        entityType: "character",
-        field: "karma",
-        previousValue: 10,
-        newValue: 8,
-        description: "Spent karma",
-      },
     ];
 
-    await rollbackStateChanges(changes);
-
-    expect(consoleSpy).not.toHaveBeenCalled();
-
-    consoleSpy.mockRestore();
+    await expect(rollbackStateChanges(changes)).rejects.toThrow("not yet implemented");
   });
 });
 

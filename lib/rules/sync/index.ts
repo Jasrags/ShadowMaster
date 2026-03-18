@@ -45,6 +45,7 @@ export {
   getPendingSteps,
   updatePlanWithSelection,
   createRemovalOptions,
+  NotImplementedError,
 } from "./migration-engine";
 export type { ValidationResult, UserSelection } from "./migration-engine";
 
