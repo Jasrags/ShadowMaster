@@ -75,6 +75,26 @@ describe("getMaintenanceDeadline", () => {
 
     expect(deadline).toBe("2025-02-15T00:00:00.000Z");
   });
+
+  it("should clamp to last day of month when source day exceeds target month length", () => {
+    // Jan 31 + 1 month → Feb 29 (2024 is leap year), not Mar 2
+    expect(getMaintenanceDeadline("2024-01-31T00:00:00Z", 1)).toBe("2024-02-29T00:00:00.000Z");
+  });
+
+  it("should clamp Mar 31 + 1 month to Apr 30", () => {
+    expect(getMaintenanceDeadline("2024-03-31T00:00:00Z", 1)).toBe("2024-04-30T00:00:00.000Z");
+  });
+
+  it("should handle Jan 31 + 1 month in non-leap year", () => {
+    expect(getMaintenanceDeadline("2025-01-31T00:00:00Z", 1)).toBe("2025-02-28T00:00:00.000Z");
+  });
+
+  it("should not clamp when target month has enough days", () => {
+    // Jan 30 + 1 month in leap year → Feb has 29, but 30 > 29 so clamp to 29
+    expect(getMaintenanceDeadline("2024-01-30T00:00:00Z", 1)).toBe("2024-02-29T00:00:00.000Z");
+    // Jan 28 + 1 month → Feb 28 (no clamping needed)
+    expect(getMaintenanceDeadline("2024-01-28T00:00:00Z", 1)).toBe("2024-02-28T00:00:00.000Z");
+  });
 });
 
 // =============================================================================
@@ -139,7 +159,7 @@ describe("checkMaintenanceStatus", () => {
     expect(result.overdue).toBe(true);
   });
 
-  it("should skip non-active contacts", () => {
+  it("should skip non-active contacts with null deadline", () => {
     const contact = createMockContact({
       loyalty: 1,
       status: "burned",
@@ -149,9 +169,10 @@ describe("checkMaintenanceStatus", () => {
 
     expect(result.status).toBe("not-applicable");
     expect(result.overdue).toBe(false);
+    expect(result.deadline).toBeNull();
   });
 
-  it("should return 'at-risk' when contact has Loyalty 0", () => {
+  it("should return 'at-risk' with null deadline when contact has Loyalty 0", () => {
     const contact = createMockContact({
       loyalty: 0,
       lastContactedAt: "2024-01-01T00:00:00Z",
@@ -160,6 +181,7 @@ describe("checkMaintenanceStatus", () => {
 
     expect(result.status).toBe("at-risk");
     expect(result.contactLost).toBe(true);
+    expect(result.deadline).toBeNull();
   });
 });
 
@@ -210,6 +232,14 @@ describe("resolveMaintenanceCheck", () => {
 
     expect(result.contactLost).toBe(false);
     expect(result.newLoyalty).toBe(2);
+  });
+
+  it("should throw for currentLoyalty < 1", () => {
+    expect(() => resolveMaintenanceCheck(0, 2)).toThrow("currentLoyalty must be >= 1");
+  });
+
+  it("should throw for negative hits", () => {
+    expect(() => resolveMaintenanceCheck(3, -1)).toThrow("hits must be >= 0");
   });
 });
 
@@ -280,5 +310,25 @@ describe("getOverdueContacts", () => {
 
   it("should return empty array for empty contacts list", () => {
     expect(getOverdueContacts([], "2024-01-01T00:00:00Z")).toHaveLength(0);
+  });
+
+  it("should include at-risk contacts (Loyalty 0)", () => {
+    const contacts = [
+      createMockContact({
+        id: "c1",
+        loyalty: 0,
+        lastContactedAt: "2024-01-01T00:00:00Z",
+      }),
+      createMockContact({
+        id: "c2",
+        loyalty: 6,
+        lastContactedAt: "2024-01-01T00:00:00Z",
+      }),
+    ];
+
+    const results = getOverdueContacts(contacts, "2024-02-01T00:00:00Z");
+    expect(results).toHaveLength(1);
+    expect(results[0].contact.id).toBe("c1");
+    expect(results[0].maintenanceStatus.status).toBe("at-risk");
   });
 });

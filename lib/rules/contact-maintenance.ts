@@ -40,8 +40,8 @@ export interface MaintenanceStatus {
   status: MaintenanceStatusType;
   /** Whether the contact is past their maintenance deadline */
   overdue: boolean;
-  /** When the next interaction is required */
-  deadline: ISODateString;
+  /** When the next interaction is required. Null when not-applicable or at-risk. */
+  deadline: ISODateString | null;
   /** Whether the contact is effectively lost (Loyalty 0) */
   contactLost: boolean;
 }
@@ -79,7 +79,14 @@ export function getMaintenanceDeadline(
   loyalty: number
 ): ISODateString {
   const date = new Date(lastContactedAt);
-  date.setUTCMonth(date.getUTCMonth() + loyalty);
+  const sourceDay = date.getUTCDate();
+
+  // Add months, then clamp to last valid day of target month
+  // to avoid JavaScript's setUTCMonth overflow (e.g., Jan 31 + 1mo → Mar 2)
+  date.setUTCMonth(date.getUTCMonth() + loyalty, 1); // set day=1 first to avoid overflow
+  const maxDay = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth() + 1, 0)).getUTCDate();
+  date.setUTCDate(Math.min(sourceDay, maxDay));
+
   return date.toISOString();
 }
 
@@ -106,7 +113,7 @@ export function checkMaintenanceStatus(
     return {
       status: "not-applicable",
       overdue: false,
-      deadline: "",
+      deadline: null,
       contactLost: false,
     };
   }
@@ -116,7 +123,7 @@ export function checkMaintenanceStatus(
     return {
       status: "at-risk",
       overdue: false,
-      deadline: "",
+      deadline: null,
       contactLost: true,
     };
   }
@@ -148,14 +155,22 @@ export function checkMaintenanceStatus(
  * the contact's Loyalty decreases by 1. If Loyalty reaches 0, the
  * contact is lost by the next job.
  *
- * @param currentLoyalty - Contact's current loyalty rating
- * @param hits - Number of hits rolled on the Loyalty test
+ * @param currentLoyalty - Contact's current loyalty rating (must be >= 1)
+ * @param hits - Number of hits rolled on the Loyalty test (must be >= 0)
  * @returns Result with loyalty change and lost status
+ * @throws Error if currentLoyalty < 1 or hits < 0
  */
 export function resolveMaintenanceCheck(
   currentLoyalty: number,
   hits: number
 ): MaintenanceCheckResult {
+  if (currentLoyalty < 1) {
+    throw new Error(`resolveMaintenanceCheck: currentLoyalty must be >= 1, got ${currentLoyalty}`);
+  }
+  if (hits < 0) {
+    throw new Error(`resolveMaintenanceCheck: hits must be >= 0, got ${hits}`);
+  }
+
   const success = hits >= MAINTENANCE_TEST_THRESHOLD;
 
   if (success) {
@@ -182,14 +197,14 @@ export function resolveMaintenanceCheck(
 // =============================================================================
 
 /**
- * Find all contacts that are past their maintenance deadline.
+ * Find all contacts that need GM attention: overdue or at-risk (Loyalty 0).
  *
  * Only active contacts are checked — burned, deceased, inactive, and
  * missing contacts are excluded.
  *
  * @param contacts - All contacts to check
  * @param currentDate - Current date for comparison
- * @returns Array of overdue contacts with their maintenance status
+ * @returns Array of contacts needing attention with their maintenance status
  */
 export function getOverdueContacts(
   contacts: readonly SocialContact[],
@@ -200,5 +215,7 @@ export function getOverdueContacts(
       contact,
       maintenanceStatus: checkMaintenanceStatus(contact, currentDate),
     }))
-    .filter((result) => result.maintenanceStatus.overdue);
+    .filter(
+      (result) => result.maintenanceStatus.overdue || result.maintenanceStatus.status === "at-risk"
+    );
 }
