@@ -158,3 +158,14 @@ export {
   isSecondaryServiceUse,
   type LoyaltyImprovementCost,
 } from "./chips";
+
+// Contact relationship maintenance (Run Faster) - Client-safe
+export {
+  getMaintenanceDeadline,
+  checkMaintenanceStatus,
+  resolveMaintenanceCheck,
+  getOverdueContacts,
+  type MaintenanceStatus,
+  type MaintenanceStatusType,
+  type MaintenanceCheckResult,
+} from "./contact-maintenance";
