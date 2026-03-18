@@ -29,6 +29,25 @@ import type {
 import { applyMigration, updateSyncStatus } from "@/lib/storage/characters";
 
 // =============================================================================
+// ERRORS
+// =============================================================================
+
+/**
+ * Thrown when a migration action is invoked that has not yet been implemented.
+ * Prevents silent no-ops from misleading callers into thinking data was changed.
+ *
+ * @see https://github.com/Jasrags/ShadowMaster/issues/739
+ */
+export class NotImplementedError extends Error {
+  readonly code = "NOT_IMPLEMENTED" as const;
+
+  constructor(message: string) {
+    super(message);
+    this.name = "NotImplementedError";
+  }
+}
+
+// =============================================================================
 // TYPES
 // =============================================================================
 
@@ -293,9 +312,9 @@ export async function executeMigration(
     // Update sync status to migrating
     await updateSyncStatus(userId, character.id, "migrating", character.legalityStatus || "draft");
 
-    // Apply each step
+    // Apply each step — currently throws NotImplementedError for all action
+    // types since character data mutation is not yet implemented (#739).
     for (const step of plan.steps) {
-      // Apply the step
       await applyMigrationStep(character, step);
       appliedSteps.push(step);
     }
@@ -322,7 +341,7 @@ export async function executeMigration(
       rollbackAvailable: true,
     };
   } catch (error) {
-    // Rollback on error
+    // Rollback on error — preserve original legality status, don't claim synchronized
     await updateSyncStatus(userId, character.id, "outdated", character.legalityStatus || "draft");
 
     return {
@@ -336,39 +355,35 @@ export async function executeMigration(
 
 /**
  * Apply a single migration step to a character
+ *
+ * @throws {NotImplementedError} Always — character data mutation is not yet
+ *   implemented. See https://github.com/Jasrags/ShadowMaster/issues/739
+ *   for the full implementation plan.
  */
 async function applyMigrationStep(_character: Character, step: MigrationStep): Promise<void> {
-  // In a full implementation, this would modify the character
-  // based on the step's action and the affected item type.
-  // For now, we just validate the step can be applied.
-
-  switch (step.action) {
-    case "update":
-      // Update to new value
-      break;
-
-    case "replace":
-      // Replace with a user-selected alternative
-      if (step.after === undefined) {
-        throw new Error(`Replace action requires a new value`);
-      }
-      break;
-
-    case "remove":
-      // Remove the item from the character
-      break;
-
-    case "archive":
-      // Move to legacy storage
-      break;
-
-    case "adjust-karma":
-      // Apply karma adjustment
-      break;
-
-    default:
-      throw new Error(`Unknown migration action: ${step.action}`);
+  // Validate step shape before throwing so callers still get useful errors
+  // for clearly-invalid input.
+  if (step.action === "replace" && step.after === undefined) {
+    throw new Error("Replace action requires a new value");
   }
+
+  const knownActions: readonly MigrationAction[] = [
+    "update",
+    "replace",
+    "remove",
+    "archive",
+    "adjust-karma",
+  ];
+
+  if (!knownActions.includes(step.action)) {
+    throw new Error(`Unknown migration action: ${step.action}`);
+  }
+
+  throw new NotImplementedError(
+    `applyMigrationStep: '${step.action}' action is not yet implemented. ` +
+      "Character data will not be modified. " +
+      "See https://github.com/Jasrags/ShadowMaster/issues/739"
+  );
 }
 
 // =============================================================================

@@ -28,6 +28,7 @@ import {
   ValidationResult,
   ValidationError,
 } from "./action-validator";
+import { NotImplementedError } from "@/lib/rules/sync/migration-engine";
 import { executeRoll, executeReroll, DEFAULT_DICE_RULES } from "./dice-engine";
 import { buildActionPool } from "./pool-builder";
 import * as actionHistoryStorage from "@/lib/storage/action-history";
@@ -517,25 +518,25 @@ export async function executeGeneralAction(request: ExecutionRequest): Promise<E
 // =============================================================================
 
 /**
- * Apply a batch of state changes
- * This would update character/session data based on the changes
+ * Apply a batch of state changes to character/session data.
+ *
+ * @throws {NotImplementedError} Always — entity state mutation is not yet
+ *   implemented. See https://github.com/Jasrags/ShadowMaster/issues/739
+ *   for the full implementation plan.
  */
 export async function applyStateChanges(changes: StateChange[]): Promise<void> {
-  // Group changes by entity
-  const byEntity = new Map<string, StateChange[]>();
-  for (const change of changes) {
-    const key = `${change.entityType}:${change.entityId}`;
-    if (!byEntity.has(key)) {
-      byEntity.set(key, []);
-    }
-    byEntity.get(key)!.push(change);
+  if (changes.length === 0) {
+    return; // Nothing to apply — no error
   }
 
-  // Apply changes to each entity
-  // This is a simplified implementation - would need actual storage updates
-  for (const [_key, _entityChanges] of byEntity) {
-    // TODO: implement actual state mutation (see migration-engine)
-  }
+  // Group changes by entity for the error message
+  const entityKeys = new Set(changes.map((c) => `${c.entityType}:${c.entityId}`));
+
+  throw new NotImplementedError(
+    `applyStateChanges: entity state mutation is not yet implemented. ` +
+      `${changes.length} change(s) across ${entityKeys.size} entity/entities would be lost. ` +
+      "See https://github.com/Jasrags/ShadowMaster/issues/739"
+  );
 }
 
 /**

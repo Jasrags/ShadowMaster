@@ -15,6 +15,7 @@ import {
   getPendingSteps,
   updatePlanWithSelection,
   createRemovalOptions,
+  NotImplementedError,
 } from "../migration-engine";
 import { createMockCharacter } from "@/__tests__/mocks/storage";
 import type {
@@ -454,72 +455,42 @@ describe("Migration Engine", () => {
       );
     });
 
-    it("should apply migration to storage on success", async () => {
-      const character = createMockCharacter({ id: "char-123" });
-      const plan = createMockMigrationPlan({
-        characterId: "char-123",
-        steps: [createMockMigrationStep()],
-      });
-
-      await executeMigration("user-123", character, plan);
-
-      expect(applyMigration).toHaveBeenCalledWith(
-        "user-123",
-        "char-123",
-        expect.objectContaining({
-          plan,
-          appliedBy: "user-123",
-          canRollback: true,
-        })
-      );
-    });
-
-    it("should update sync status to synchronized on success", async () => {
-      const character = createMockCharacter({ id: "char-123" });
-      const plan = createMockMigrationPlan({
-        characterId: "char-123",
-        steps: [createMockMigrationStep()],
-      });
-
-      await executeMigration("user-123", character, plan);
-
-      // Second call should be to synchronized
-      expect(updateSyncStatus).toHaveBeenCalledWith(
-        "user-123",
-        "char-123",
-        "synchronized",
-        "rules-legal"
-      );
-    });
-
-    it("should return success result with applied steps", async () => {
+    it("should succeed with empty steps (no mutations needed)", async () => {
       const updatedCharacter = createMockCharacter({ id: "char-123", name: "Updated" });
       vi.mocked(applyMigration).mockResolvedValue(updatedCharacter);
 
       const character = createMockCharacter({ id: "char-123" });
-      const steps = [
-        createMockMigrationStep({ changeId: "c1" }),
-        createMockMigrationStep({ changeId: "c2" }),
-      ];
       const plan = createMockMigrationPlan({
         characterId: "char-123",
-        steps,
+        steps: [],
       });
 
       const result = await executeMigration("user-123", character, plan);
 
       expect(result.success).toBe(true);
       expect(result.character).toBe(updatedCharacter);
-      expect(result.appliedSteps).toHaveLength(2);
+      expect(result.appliedSteps).toHaveLength(0);
       expect(result.rollbackAvailable).toBe(true);
     });
 
-    it("should revert sync status on error", async () => {
-      vi.mocked(applyMigration).mockRejectedValue(new Error("Storage error"));
+    it("should fail with NotImplementedError when steps have actions", async () => {
+      const character = createMockCharacter({ id: "char-123" });
+      const plan = createMockMigrationPlan({
+        characterId: "char-123",
+        steps: [createMockMigrationStep({ action: "update" })],
+      });
 
+      const result = await executeMigration("user-123", character, plan);
+
+      expect(result.success).toBe(false);
+      expect(result.error).toContain("not yet implemented");
+      expect(result.appliedSteps).toHaveLength(0);
+    });
+
+    it("should revert sync status to outdated on NotImplementedError", async () => {
       const character = createMockCharacter({
         id: "char-123",
-        legalityStatus: "legacy",
+        legalityStatus: "rules-legal",
       });
       const plan = createMockMigrationPlan({
         characterId: "char-123",
@@ -528,25 +499,24 @@ describe("Migration Engine", () => {
 
       await executeMigration("user-123", character, plan);
 
-      // Should revert to outdated status
-      expect(updateSyncStatus).toHaveBeenCalledWith("user-123", "char-123", "outdated", "legacy");
+      expect(updateSyncStatus).toHaveBeenCalledWith(
+        "user-123",
+        "char-123",
+        "outdated",
+        "rules-legal"
+      );
     });
 
-    it("should return error result on failure", async () => {
-      vi.mocked(applyMigration).mockRejectedValue(new Error("Something went wrong"));
-
+    it("should not call applyMigration when steps throw", async () => {
       const character = createMockCharacter({ id: "char-123" });
       const plan = createMockMigrationPlan({
         characterId: "char-123",
         steps: [createMockMigrationStep()],
       });
 
-      const result = await executeMigration("user-123", character, plan);
+      await executeMigration("user-123", character, plan);
 
-      expect(result.success).toBe(false);
-      expect(result.error).toBe("Something went wrong");
-      expect(result.appliedSteps).toHaveLength(1); // Step was applied before error
-      expect(result.rollbackAvailable).toBe(true);
+      expect(applyMigration).not.toHaveBeenCalled();
     });
 
     it("should handle replace action with undefined after value", async () => {
@@ -565,6 +535,31 @@ describe("Migration Engine", () => {
 
       expect(result.success).toBe(false);
       expect(result.error).toContain("Replace action requires a new value");
+    });
+
+    it("should throw NotImplementedError for each action type", async () => {
+      const actions = ["update", "replace", "remove", "archive", "adjust-karma"] as const;
+
+      for (const action of actions) {
+        vi.clearAllMocks();
+        vi.mocked(applyMigration).mockResolvedValue(createMockCharacter());
+
+        const character = createMockCharacter({ id: "char-123" });
+        const step = createMockMigrationStep({
+          action,
+          after: action === "replace" ? { replacement: true } : { value: 1 },
+        });
+        const plan = createMockMigrationPlan({
+          characterId: "char-123",
+          steps: [step],
+        });
+
+        const result = await executeMigration("user-123", character, plan);
+
+        expect(result.success).toBe(false);
+        expect(result.error).toContain("not yet implemented");
+        expect(result.error).toContain(action);
+      }
     });
   });
 
