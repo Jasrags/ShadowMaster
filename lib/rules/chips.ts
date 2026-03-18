@@ -62,7 +62,7 @@ export function calculateChipGain(params: {
 }): number {
   const { favorRating, direction } = params;
 
-  if (favorRating === 0) {
+  if (favorRating <= 0) {
     return 0;
   }
 
@@ -89,7 +89,7 @@ export function calculateRepaymentCost(
 ): number {
   const absoluteOwed = Math.abs(chipsOwed);
 
-  if (options?.marketValuePerChip !== undefined) {
+  if (options?.marketValuePerChip !== undefined && options.marketValuePerChip > 0) {
     return absoluteOwed * options.marketValuePerChip * REPAYMENT_MULTIPLIER;
   }
 
@@ -164,25 +164,46 @@ export interface LoyaltyImprovementCost {
 }
 
 /**
- * Calculate the cost to improve a contact's Loyalty via chips.
+ * Calculate the cost to improve a contact's Loyalty by one level via chips.
  *
+ * Per Run Faster p. 177, loyalty is improved one level at a time.
  * Cost = target Loyalty level in both chips and downtime weeks.
- * For example, improving to Loyalty 4 costs 4 chips + 4 weeks of downtime.
+ * For example, improving from Loyalty 3 → 4 costs 4 chips + 4 weeks of downtime.
  *
- * @param currentLoyalty - Current loyalty rating
- * @param targetLoyalty - Desired loyalty rating
+ * To improve multiple levels, call this function once per step.
+ *
+ * @param currentLoyalty - Current loyalty rating (minimum 1)
+ * @param targetLoyalty - Desired loyalty rating (must be currentLoyalty + 1)
  * @returns Cost breakdown or validation error
  */
 export function calculateLoyaltyImprovementCost(
   currentLoyalty: number,
   targetLoyalty: number
 ): LoyaltyImprovementCost {
+  if (currentLoyalty < 1) {
+    return {
+      valid: false,
+      chipsRequired: 0,
+      downtimeWeeks: 0,
+      reason: `Current loyalty (${currentLoyalty}) must be at least 1`,
+    };
+  }
+
   if (targetLoyalty <= currentLoyalty) {
     return {
       valid: false,
       chipsRequired: 0,
       downtimeWeeks: 0,
       reason: `Target loyalty (${targetLoyalty}) must be higher than current loyalty (${currentLoyalty})`,
+    };
+  }
+
+  if (targetLoyalty !== currentLoyalty + 1) {
+    return {
+      valid: false,
+      chipsRequired: 0,
+      downtimeWeeks: 0,
+      reason: `Loyalty can only be improved one level at a time (${currentLoyalty} → ${currentLoyalty + 1})`,
     };
   }
 

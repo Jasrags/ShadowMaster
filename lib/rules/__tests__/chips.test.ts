@@ -84,6 +84,11 @@ describe("calculateChipGain", () => {
     expect(calculateChipGain({ favorRating: 0, direction: "character-requests" })).toBe(0);
     expect(calculateChipGain({ favorRating: 0, direction: "character-provides" })).toBe(0);
   });
+
+  it("should return 0 for negative favor rating", () => {
+    expect(calculateChipGain({ favorRating: -2, direction: "character-requests" })).toBe(0);
+    expect(calculateChipGain({ favorRating: -1, direction: "character-provides" })).toBe(0);
+  });
 });
 
 // =============================================================================
@@ -117,6 +122,12 @@ describe("calculateRepaymentCost with nuyen", () => {
   it("should return nuyen amount for cash payment", () => {
     const result = calculateRepaymentCost(1, { marketValuePerChip: 1000 });
     expect(result).toBe(2000); // 1 × 1000 × 2
+  });
+
+  it("should fall back to chip-based cost when marketValuePerChip is 0", () => {
+    // Zero market value is invalid — falls back to chip multiplier
+    const result = calculateRepaymentCost(3, { marketValuePerChip: 0 });
+    expect(result).toBe(6); // 3 × 2 (chip-based, not nuyen-based)
   });
 });
 
@@ -192,6 +203,7 @@ describe("calculateLoyaltyImprovementCost", () => {
   it("should require chips equal to target loyalty level", () => {
     // Improving from Loyalty 2 → 3 costs 3 chips
     const result = calculateLoyaltyImprovementCost(2, 3);
+    expect(result.valid).toBe(true);
     expect(result.chipsRequired).toBe(3);
   });
 
@@ -200,12 +212,10 @@ describe("calculateLoyaltyImprovementCost", () => {
     expect(result.downtimeWeeks).toBe(3);
   });
 
-  it("should handle improvement by multiple levels", () => {
-    // Improving from Loyalty 1 → 4: costs 4 chips + 4 weeks
-    // (target level determines cost, not the delta)
+  it("should reject multi-level jumps (must improve one level at a time)", () => {
     const result = calculateLoyaltyImprovementCost(1, 4);
-    expect(result.chipsRequired).toBe(4);
-    expect(result.downtimeWeeks).toBe(4);
+    expect(result.valid).toBe(false);
+    expect(result.reason).toContain("one level at a time");
   });
 
   it("should reject invalid improvements (same level)", () => {
@@ -224,11 +234,27 @@ describe("calculateLoyaltyImprovementCost", () => {
     expect(result.valid).toBe(false);
   });
 
+  it("should reject currentLoyalty below minimum (1)", () => {
+    const result = calculateLoyaltyImprovementCost(0, 1);
+    expect(result.valid).toBe(false);
+    expect(result.reason).toContain("at least 1");
+  });
+
   it("should allow improvement to max loyalty (6)", () => {
     const result = calculateLoyaltyImprovementCost(5, 6);
     expect(result.valid).toBe(true);
     expect(result.chipsRequired).toBe(6);
     expect(result.downtimeWeeks).toBe(6);
+  });
+
+  it("should correctly price each single-step improvement", () => {
+    // Verify the full ladder: 1→2=2, 2→3=3, 3→4=4, 4→5=5, 5→6=6
+    for (let current = 1; current < 6; current++) {
+      const result = calculateLoyaltyImprovementCost(current, current + 1);
+      expect(result.valid).toBe(true);
+      expect(result.chipsRequired).toBe(current + 1);
+      expect(result.downtimeWeeks).toBe(current + 1);
+    }
   });
 });
 
