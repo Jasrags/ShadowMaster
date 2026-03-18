@@ -10,6 +10,13 @@
  * Family (+1 Karma): +1 Loyalty for tests, −1 chip to improve loyalty,
  * but −1 Loyalty for actual job performance (they worry about you).
  *
+ * NOTE: This module is a standalone rules layer. The SocialContact type does
+ * not yet have `relationshipQualities` or `loyaltyImprovementBlocked` fields.
+ * Those will be added when the integration layer wires these rules to the
+ * storage/API layer. Callers must manage persistence of returned flags
+ * (e.g., IntimidationResult.loyaltyImprovementBlocked) in their own state
+ * until the type extension lands.
+ *
  * @see /docs/capabilities/campaign.social-governance.md
  */
 
@@ -23,25 +30,25 @@ export type RelationshipQuality = "blackmail" | "family";
 /** Modifiers applied by the Blackmail relationship quality */
 export interface BlackmailModifiers {
   /** Favors cost 0 chips (free) */
-  favorChipCostOverride: 0;
+  favorChipCostOverride: number;
   /** Must use Intimidation for interactions */
-  requiredSkill: "intimidation";
+  requiredSkill: string;
   /** Contact cannot voluntarily leave the relationship */
-  contactCanLeave: false;
+  contactCanLeave: boolean;
   /** Karma cost to acquire this quality */
-  karmaCost: 2;
+  karmaCost: number;
 }
 
 /** Modifiers applied by the Family relationship quality */
 export interface FamilyModifiers {
   /** Bonus to loyalty when rolling tests */
-  loyaltyTestBonus: 1;
+  loyaltyTestBonus: number;
   /** Discount on chips required to improve loyalty */
-  loyaltyImprovementChipDiscount: 1;
+  loyaltyImprovementChipDiscount: number;
   /** Penalty to loyalty for actual job performance */
-  jobPerformanceLoyaltyPenalty: -1;
+  jobPerformanceLoyaltyPenalty: number;
   /** Karma cost to acquire this quality */
-  karmaCost: 1;
+  karmaCost: number;
 }
 
 /** Result of a social mechanic resolution */
@@ -59,11 +66,11 @@ export interface SocialMechanicResult {
 /** Result of an intimidation action */
 export interface IntimidationResult {
   /** Change to loyalty (always -1) */
-  loyaltyChange: -1;
-  /** New loyalty value */
+  loyaltyChange: number;
+  /** New loyalty value (clamped to 0 minimum) */
   newLoyalty: number;
   /** Whether loyalty improvement is permanently blocked */
-  loyaltyImprovementBlocked: true;
+  loyaltyImprovementBlocked: boolean;
   /** Whether the contact is lost (loyalty 0) */
   contactLost: boolean;
 }
@@ -234,11 +241,16 @@ export function calculateReputationLoyaltyCostModifier(
  * Intimidation immediately reduces Loyalty by 1 and permanently blocks
  * any future loyalty improvement for this contact.
  *
- * @param currentLoyalty - Contact's current loyalty
+ * @param currentLoyalty - Contact's current loyalty (must be >= 1)
  * @returns Result with loyalty change and permanent block flag
+ * @throws Error if currentLoyalty < 1
  */
 export function resolveIntimidation(currentLoyalty: number): IntimidationResult {
-  const newLoyalty = currentLoyalty - 1;
+  if (currentLoyalty < 1) {
+    throw new Error(`resolveIntimidation: currentLoyalty must be >= 1, got ${currentLoyalty}`);
+  }
+
+  const newLoyalty = Math.max(0, currentLoyalty - 1);
 
   return {
     loyaltyChange: -1,
@@ -254,16 +266,26 @@ export function resolveIntimidation(currentLoyalty: number): IntimidationResult 
  * Success (character hits > contact hits) maintains current Loyalty.
  * Failure or tie reduces Loyalty by 1.
  *
- * @param currentLoyalty - Contact's current loyalty
- * @param characterHits - Hits from the character's roll
- * @param contactHits - Hits from the contact's opposing roll
+ * @param currentLoyalty - Contact's current loyalty (must be >= 1)
+ * @param characterHits - Hits from the character's roll (must be >= 0)
+ * @param contactHits - Hits from the contact's opposing roll (must be >= 0)
  * @returns Result with success/failure and loyalty change
+ * @throws Error if currentLoyalty < 1 or hits < 0
  */
 export function resolveConSeduction(
   currentLoyalty: number,
   characterHits: number,
   contactHits: number
 ): SocialMechanicResult {
+  if (currentLoyalty < 1) {
+    throw new Error(`resolveConSeduction: currentLoyalty must be >= 1, got ${currentLoyalty}`);
+  }
+  if (characterHits < 0 || contactHits < 0) {
+    throw new Error(
+      `resolveConSeduction: hits must be >= 0, got character=${characterHits}, contact=${contactHits}`
+    );
+  }
+
   const success = characterHits > contactHits;
 
   if (success) {
@@ -275,7 +297,7 @@ export function resolveConSeduction(
     };
   }
 
-  const newLoyalty = currentLoyalty - 1;
+  const newLoyalty = Math.max(0, currentLoyalty - 1);
 
   return {
     success: false,

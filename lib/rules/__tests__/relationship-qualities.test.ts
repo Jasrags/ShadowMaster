@@ -199,6 +199,16 @@ describe("resolveIntimidation", () => {
     const result = resolveIntimidation(3);
     expect(result.contactLost).toBe(false);
   });
+
+  it("should clamp newLoyalty to 0 minimum", () => {
+    const result = resolveIntimidation(1);
+    expect(result.newLoyalty).toBe(0);
+    // Not -1
+  });
+
+  it("should throw for currentLoyalty < 1", () => {
+    expect(() => resolveIntimidation(0)).toThrow("currentLoyalty must be >= 1");
+  });
 });
 
 // =============================================================================
@@ -229,5 +239,20 @@ describe("resolveConSeduction", () => {
     const result = resolveConSeduction(1, 0, 3);
     expect(result.contactLost).toBe(true);
     expect(result.newLoyalty).toBe(0);
+  });
+
+  it("should return newLoyalty and contactLost on success path", () => {
+    const result = resolveConSeduction(4, 3, 1);
+    expect(result.newLoyalty).toBe(4);
+    expect(result.contactLost).toBe(false);
+  });
+
+  it("should throw for currentLoyalty < 1", () => {
+    expect(() => resolveConSeduction(0, 2, 1)).toThrow("currentLoyalty must be >= 1");
+  });
+
+  it("should throw for negative hits", () => {
+    expect(() => resolveConSeduction(3, -1, 2)).toThrow("hits must be >= 0");
+    expect(() => resolveConSeduction(3, 2, -1)).toThrow("hits must be >= 0");
   });
 });
