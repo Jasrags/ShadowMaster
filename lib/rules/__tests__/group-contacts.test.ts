@@ -125,7 +125,7 @@ describe("canOrganizationCallFavor", () => {
     const contact = createMockContact({ group: "organization" });
     const result = canOrganizationCallFavor(contact);
     expect(result.allowed).toBe(false);
-    expect(result.reason).toContain("organization");
+    expect(result.reason).toContain("Organization");
   });
 
   it("should allow favor calls for personal contacts", () => {
