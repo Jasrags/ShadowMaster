@@ -4,22 +4,127 @@
  * Central integration functions for applying quality effects to gameplay systems.
  * This module provides convenient wrappers that combine quality effects with
  * base calculations for wound modifiers, dice pools, limits, etc.
+ *
+ * As of the Phase 1 unification (#741), these functions use the unified
+ * effects pipeline (`lib/rules/effects/`) for gathering and context matching
+ * instead of the legacy quality-only pipeline. The unified pipeline gathers
+ * effects from ALL sources (qualities, gear, cyberware, bioware, adept powers,
+ * active modifiers).
  */
 
-import type { Character } from "@/lib/types";
-import type { MergedRuleset } from "@/lib/types";
+import type { Character, MergedRuleset, EffectResolutionContext } from "@/lib/types";
 import {
-  getDicePoolModifiers,
-  getLimitModifiers,
-  getWoundModifierModifiers,
-  getLifestyleCostModifiers,
-  getHealingModifiers,
-  getAttributeModifiers,
-  getAttributeMaximumModifiers,
-} from "./effects/integration";
-import { calculateWithdrawalPenalties } from "./dynamic-state/addiction";
-import { calculateAllergyPenalties } from "./dynamic-state/allergy";
+  gatherEffectSources,
+  EffectContextBuilder,
+  buildCharacterStateFlags,
+  effectApplies,
+} from "../effects";
+import type { SourcedEffect } from "../effects";
 import { calculateTotalLifestyleModifier } from "./dynamic-state/dependents";
+
+// =============================================================================
+// INTERNAL HELPERS
+// =============================================================================
+
+/** Resolved effect with source metadata and computed value. */
+interface ResolvedEffectEntry {
+  source: SourcedEffect["source"];
+  effect: SourcedEffect["effect"];
+  resolvedValue: number;
+}
+
+/**
+ * Gather all applicable effects for a character in a given context,
+ * resolving per-rating values. Returns flat array of resolved effects
+ * with their source metadata and computed numeric values.
+ */
+function getApplicableEffects(
+  character: Character,
+  ruleset: MergedRuleset,
+  context: EffectResolutionContext
+): ResolvedEffectEntry[] {
+  const allSources = gatherEffectSources(character, ruleset);
+  const applicable = allSources.filter((s) => effectApplies(s.effect, context));
+  return resolveSourcedEffects(applicable);
+}
+
+/**
+ * Gather ALL effects from a character, resolved but unfiltered by context.
+ * Used for effect types like wound-modifier and healing-modifier that don't
+ * map to a specific EffectActionContext but need to be found by type.
+ */
+function getAllResolvedEffects(
+  character: Character,
+  ruleset: MergedRuleset
+): ResolvedEffectEntry[] {
+  const allSources = gatherEffectSources(character, ruleset);
+  return resolveSourcedEffects(allSources);
+}
+
+/**
+ * Resolve a list of sourced effects into entries with computed values.
+ */
+function resolveSourcedEffects(sources: SourcedEffect[]): ResolvedEffectEntry[] {
+  return sources.map(({ effect, source }) => {
+    let resolvedValue: number;
+    if (typeof effect.value === "number") {
+      resolvedValue = effect.value;
+    } else if (
+      typeof effect.value === "object" &&
+      effect.value !== null &&
+      typeof effect.value.perRating === "number"
+    ) {
+      resolvedValue = effect.value.perRating * (source.rating ?? 1);
+    } else {
+      resolvedValue = 0;
+    }
+
+    if (effect.requiresWireless && !source.wirelessEnabled) {
+      resolvedValue = 0;
+    }
+
+    if (source.wirelessEnabled && effect.wirelessOverride?.bonusValue) {
+      resolvedValue += effect.wirelessOverride.bonusValue;
+    }
+
+    return { source, effect, resolvedValue };
+  });
+}
+
+/**
+ * Sum resolved values for effects matching a specific effect type.
+ */
+function sumByType(
+  effects: Array<{ effect: SourcedEffect["effect"]; resolvedValue: number }>,
+  effectType: string
+): number {
+  return effects
+    .filter((e) => e.effect.type === effectType)
+    .reduce((sum, e) => sum + e.resolvedValue, 0);
+}
+
+/**
+ * Sum resolved values for effects matching a specific effect type AND target.
+ */
+function sumByTypeAndTarget(
+  effects: Array<{ effect: SourcedEffect["effect"]; resolvedValue: number }>,
+  effectType: string,
+  targetKey: string,
+  targetValue: string
+): number {
+  return effects
+    .filter(
+      (e) =>
+        e.effect.type === effectType &&
+        e.effect.target &&
+        (e.effect.target as Record<string, unknown>)[targetKey] === targetValue
+    )
+    .reduce((sum, e) => sum + e.resolvedValue, 0);
+}
+
+// =============================================================================
+// PUBLIC API
+// =============================================================================
 
 /**
  * Calculate wound modifier with quality effects
@@ -36,22 +141,34 @@ export function calculateWoundModifier(
 ): number {
   const damage = character.condition[damageTrack === "physical" ? "physicalDamage" : "stunDamage"];
 
-  // Get quality effects for wound modifiers
-  const woundModifiers = getWoundModifierModifiers(character, ruleset, damage);
+  // Gather all effects unfiltered — wound-modifier effects use triggers like
+  // "damage-taken" that don't map to a specific EffectActionContext type.
+  // We match by effect type directly instead.
+  const effects = getAllResolvedEffects(character, ruleset);
 
-  // Default interval is 3 boxes per -1 modifier
-  const interval = woundModifiers.penaltyInterval || 3;
-  const boxesIgnored = woundModifiers.boxesIgnored || 0;
+  // Extract wound modifier data
+  let boxesIgnored = 0;
+  const penaltyInterval = 3; // Default: 3 boxes per -1 modifier
+
+  for (const { effect, resolvedValue } of effects) {
+    if (effect.type === "wound-modifier") {
+      boxesIgnored += resolvedValue;
+    }
+  }
 
   // Calculate effective damage (after ignoring boxes)
   const effectiveDamage = Math.max(0, damage - boxesIgnored);
 
   // Calculate modifier: -1 per interval
-  return -Math.floor(effectiveDamage / interval);
+  return -Math.floor(effectiveDamage / penaltyInterval);
 }
 
 /**
  * Calculate skill dice pool with quality effects
+ *
+ * Uses the unified effects pipeline which gathers effects from ALL sources
+ * (qualities, gear, cyberware, bioware, adept powers) and handles
+ * state-dependent triggers (withdrawal, allergy exposure) automatically.
  *
  * @param character - Character
  * @param ruleset - Merged ruleset
@@ -79,52 +196,20 @@ export function calculateSkillDicePool(
   const attributeValue = character.attributes[attribute] || 0;
   let pool = attributeValue + skillRating;
 
-  // Get quality modifiers
-  const qualityModifiers = getDicePoolModifiers(
-    character,
-    ruleset,
-    skill,
-    undefined, // skillGroup
-    context
-  );
-  pool += qualityModifiers;
+  // Build unified effect context
+  const ctxBuilder = EffectContextBuilder.forSkillTest(skill)
+    .withAttribute(attribute)
+    .withCharacterState(buildCharacterStateFlags(character));
 
-  // @deprecated Imperative withdrawal/allergy penalties — kept as fallback until
-  // unified effect pipeline (Issue #485) is verified end-to-end.
-  // TODO: Remove once unified pipeline handles all state-dependent triggers.
-  const allQualities = [
-    ...(character.positiveQualities || []),
-    ...(character.negativeQualities || []),
-  ];
-  for (const selection of allQualities) {
-    if (selection.dynamicState?.type === "addiction") {
-      const withdrawalPenalty = calculateWithdrawalPenalties(
-        character,
-        selection.qualityId || selection.id || ""
-      );
-      if (withdrawalPenalty > 0) {
-        // Withdrawal penalties apply to Physical and Mental tests
-        const isPhysicalOrMental =
-          ["body", "agility", "reaction", "strength"].includes(attribute) ||
-          ["logic", "intuition", "willpower"].includes(attribute);
-        if (isPhysicalOrMental) {
-          pool -= withdrawalPenalty;
-        }
-      }
-    }
+  if (context.testCategory) {
+    ctxBuilder.withSkillCategory(context.testCategory);
   }
 
-  for (const selection of allQualities) {
-    if (selection.dynamicState?.type === "allergy") {
-      const allergyPenalty = calculateAllergyPenalties(
-        character,
-        selection.qualityId || selection.id || ""
-      );
-      if (allergyPenalty > 0) {
-        pool -= allergyPenalty;
-      }
-    }
-  }
+  const effectContext = ctxBuilder.build();
+  const effects = getApplicableEffects(character, ruleset, effectContext);
+
+  // Apply dice pool modifiers
+  pool += sumByType(effects, "dice-pool-modifier");
 
   return Math.max(0, pool); // Pool cannot go below 0
 }
@@ -168,7 +253,6 @@ export function calculateLimit(
       break;
     }
     case "astral": {
-      // Astral limit is typically same as mental
       const logic = character.attributes.logic || 1;
       const intuition = character.attributes.intuition || 1;
       const willpower = character.attributes.willpower || 1;
@@ -177,10 +261,15 @@ export function calculateLimit(
     }
   }
 
-  // Get quality modifiers
-  const qualityModifiers = getLimitModifiers(character, ruleset, limitType);
+  // Use unified pipeline for limit modifiers
+  const context = EffectContextBuilder.forSkillTest("")
+    .withCharacterState(buildCharacterStateFlags(character))
+    .build();
+  const effects = getApplicableEffects(character, ruleset, context);
 
-  return Math.max(1, baseLimit + qualityModifiers); // Limit cannot go below 1
+  const limitModifier = sumByTypeAndTarget(effects, "limit-modifier", "limit", limitType);
+
+  return Math.max(1, baseLimit + limitModifier); // Limit cannot go below 1
 }
 
 /**
@@ -196,8 +285,19 @@ export function calculateLifestyleCost(
   ruleset: MergedRuleset,
   baseCost: number
 ): number {
-  // Get quality modifiers (from effects system)
-  const qualityMultiplier = getLifestyleCostModifiers(character, ruleset, baseCost);
+  // Use unified pipeline for cost modifiers
+  const context = EffectContextBuilder.forSkillTest("")
+    .withCharacterState(buildCharacterStateFlags(character))
+    .build();
+  const effects = getApplicableEffects(character, ruleset, context);
+
+  // Accumulate nuyen-cost-modifier as percentage multiplier
+  let qualityMultiplier = 1.0;
+  for (const { effect, resolvedValue } of effects) {
+    if (effect.type === "nuyen-cost-modifier") {
+      qualityMultiplier += resolvedValue / 100;
+    }
+  }
 
   // Get dependents modifiers (from dynamic state)
   const dependentsModifier = calculateTotalLifestyleModifier(character);
@@ -205,10 +305,6 @@ export function calculateLifestyleCost(
 
   // Apply modifiers
   const totalCost = baseCost * qualityMultiplier * dependentsMultiplier;
-
-  // Apply SINner tax rates (if applicable)
-  // Note: SINner tax rates would be applied here if we had SINner quality effects
-  // For now, this is a placeholder for future implementation
 
   return Math.max(0, totalCost);
 }
@@ -230,9 +326,15 @@ export function calculateHealingDicePool(
   affectsSelf: boolean,
   basePool: number
 ): number {
-  const qualityModifiers = getHealingModifiers(character, ruleset, healingType, affectsSelf);
+  // Gather all effects unfiltered — healing effects use the "healing" trigger
+  // which doesn't map to a specific EffectActionContext type.
+  // We match by effect type directly instead.
+  const effects = getAllResolvedEffects(character, ruleset);
 
-  return Math.max(0, basePool + qualityModifiers);
+  // Sum healing modifiers
+  const modifier = sumByType(effects, "healing-modifier");
+
+  return Math.max(0, basePool + modifier);
 }
 
 /**
@@ -249,9 +351,17 @@ export function calculateAttributeValue(
   attribute: string
 ): number {
   const baseValue = character.attributes[attribute] || 0;
-  const qualityModifiers = getAttributeModifiers(character, ruleset, attribute);
 
-  return Math.max(0, baseValue + qualityModifiers);
+  // Use unified pipeline — attribute modifiers match via "always" trigger
+  const context = EffectContextBuilder.forSkillTest("")
+    .withAttribute(attribute)
+    .withCharacterState(buildCharacterStateFlags(character))
+    .build();
+  const effects = getApplicableEffects(character, ruleset, context);
+
+  const modifier = sumByTypeAndTarget(effects, "attribute-modifier", "attribute", attribute);
+
+  return Math.max(0, baseValue + modifier);
 }
 
 /**
@@ -269,7 +379,23 @@ export function calculateAttributeMaximum(
   attribute: string,
   baseMaximum: number
 ): number {
-  const qualityModifiers = getAttributeMaximumModifiers(character, ruleset, attribute);
+  // Use unified pipeline
+  const context = EffectContextBuilder.forSkillTest("")
+    .withAttribute(attribute)
+    .withCharacterState(buildCharacterStateFlags(character))
+    .build();
+  const effects = getApplicableEffects(character, ruleset, context);
 
-  return baseMaximum + qualityModifiers;
+  // Sum attribute-maximum effects targeting this attribute
+  let maxModifier = 0;
+  for (const { effect, resolvedValue } of effects) {
+    if (effect.type === "attribute-maximum") {
+      const target = effect.target as Record<string, unknown> | undefined;
+      if (target?.attribute === attribute || target?.stat === attribute) {
+        maxModifier += resolvedValue;
+      }
+    }
+  }
+
+  return baseMaximum + maxModifier;
 }
