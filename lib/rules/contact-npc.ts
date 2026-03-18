@@ -49,7 +49,7 @@ export interface NpcDerivedStats {
   initiative: number;
   /** Charisma + Willpower */
   composure: number;
-  /** Willpower + Logic */
+  /** Charisma + Intuition */
   judgeIntentions: number;
   /** Body ÷ 2 (rounded up) + 8 */
   physicalConditionMonitor: number;
@@ -233,7 +233,7 @@ export function generateContactStatBlock(connectionRating: number): ContactStatB
   const derived: NpcDerivedStats = {
     initiative: baseAttributes.reaction + baseAttributes.intuition,
     composure: baseAttributes.charisma + baseAttributes.willpower,
-    judgeIntentions: baseAttributes.willpower + baseAttributes.logic,
+    judgeIntentions: baseAttributes.charisma + baseAttributes.intuition,
     physicalConditionMonitor: Math.ceil(baseAttributes.body / 2) + 8,
     stunConditionMonitor: Math.ceil(baseAttributes.willpower / 2) + 8,
   };

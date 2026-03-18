@@ -106,20 +106,24 @@ describe("generateContactStatBlock", () => {
     expect(block.baseAttributes.willpower).toBe(3);
   });
 
-  it("should calculate derived stats", () => {
+  it("should calculate derived stats with concrete values", () => {
     const block = generateContactStatBlock(3);
-    // Initiative = Reaction + Intuition
-    expect(block.derived.initiative).toBe(
-      block.baseAttributes.reaction + block.baseAttributes.intuition
-    );
-    // Composure = Charisma + Willpower
-    expect(block.derived.composure).toBe(
-      block.baseAttributes.charisma + block.baseAttributes.willpower
-    );
+    // All base attributes are 3 (human average)
+    expect(block.derived.initiative).toBe(6); // REA 3 + INT 3
+    expect(block.derived.composure).toBe(6); // CHA 3 + WIL 3
+    expect(block.derived.judgeIntentions).toBe(6); // CHA 3 + INT 3 (SR5 p. 152)
+    expect(block.derived.physicalConditionMonitor).toBe(10); // ceil(3/2) + 8
+    expect(block.derived.stunConditionMonitor).toBe(10); // ceil(3/2) + 8
   });
 
-  it("should throw for invalid Connection rating", () => {
+  it("should throw for out-of-range Connection rating", () => {
     expect(() => generateContactStatBlock(0)).toThrow("Connection rating");
     expect(() => generateContactStatBlock(13)).toThrow("Connection rating");
+    expect(() => generateContactStatBlock(-1)).toThrow("Connection rating");
+  });
+
+  it("should throw for non-integer Connection rating", () => {
+    expect(() => generateContactStatBlock(2.5)).toThrow("Connection rating");
+    expect(() => generateContactStatBlock(NaN)).toThrow("Connection rating");
   });
 });
