@@ -51,16 +51,9 @@ export {
 
 export { registerEffectHandler, getEffectHandler, processEffect } from "./effects/handlers";
 
-export {
-  getAllCharacterEffects,
-  getDicePoolModifiers,
-  getLimitModifiers,
-  getWoundModifierModifiers,
-  getAttributeModifiers,
-  getAttributeMaximumModifiers,
-  getLifestyleCostModifiers,
-  getHealingModifiers,
-} from "./effects/integration";
+// Legacy integration functions removed in #741 Phase 2+3.
+// All gameplay-integration functions now use the unified effects pipeline
+// (lib/rules/effects/) instead of the legacy quality-only integration.
 
 // Dynamic state management functions
 export {
@@ -75,8 +68,6 @@ export {
   makeCravingTest,
   beginWithdrawal,
   recordDose,
-  attemptRecovery,
-  calculateWithdrawalPenalties,
 } from "./dynamic-state/addiction";
 
 export {
@@ -84,7 +75,6 @@ export {
   beginExposure,
   endExposure,
   calculateAllergyPenalties,
-  applyAllergyDamage,
 } from "./dynamic-state/allergy";
 
 export {
@@ -92,7 +82,6 @@ export {
   calculateLifestyleModifier,
   calculateTotalLifestyleModifier,
   calculateTimeCommitment,
-  calculateTotalTimeCommitment,
 } from "./dynamic-state/dependents";
 
 // Gameplay integration functions
