@@ -185,3 +185,15 @@ export {
   type IntimidationResult,
   type SocialMechanicResult,
 } from "./relationship-qualities";
+
+// "I Know a Guy" Edge contact acquisition (Run Faster) - Client-safe
+export {
+  calculateEdgeCost,
+  validateIKnowAGuy,
+  createEdgeContactSpec,
+  calculateConfirmationKarmaCost,
+  canConfirmEdgeContact,
+  type IKnowAGuyValidation,
+  type EdgeContactSpec,
+  type KarmaConfirmationCheck,
+} from "./i-know-a-guy";
