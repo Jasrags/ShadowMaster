@@ -274,11 +274,31 @@ describe("Verification: Organization Contacts", () => {
     expect(orgs).toHaveLength(5);
 
     const byId = Object.fromEntries(orgs.map((o) => [o.id, o]));
-    expect(byId["street-gang"]).toMatchObject({ connectionBonus: 1, karmaCost: 5 });
-    expect(byId["city-government"]).toMatchObject({ connectionBonus: 1, karmaCost: 3 });
-    expect(byId["humanis-policlub"]).toMatchObject({ connectionBonus: 2, karmaCost: 10 });
-    expect(byId["order-of-st-sylvester"]).toMatchObject({ connectionBonus: 2, karmaCost: 8 });
-    expect(byId["lone-star-god"]).toMatchObject({ connectionBonus: 3, karmaCost: 12 });
+    expect(byId["street-gang"]).toMatchObject({
+      connectionBonus: 1,
+      karmaCost: 5,
+      sinnerRequired: false,
+    });
+    expect(byId["city-government"]).toMatchObject({
+      connectionBonus: 1,
+      karmaCost: 3,
+      sinnerRequired: true,
+    });
+    expect(byId["humanis-policlub"]).toMatchObject({
+      connectionBonus: 2,
+      karmaCost: 10,
+      sinnerRequired: false,
+    });
+    expect(byId["order-of-st-sylvester"]).toMatchObject({
+      connectionBonus: 2,
+      karmaCost: 8,
+      sinnerRequired: true,
+    });
+    expect(byId["lone-star-god"]).toMatchObject({
+      connectionBonus: 3,
+      karmaCost: 12,
+      sinnerRequired: true,
+    });
   });
 });
 
