@@ -147,3 +147,14 @@ export {
   isCapacityBased,
   isSlotBased,
 } from "./modifications";
+
+// Chip economy (Run Faster contact mechanics) - Client-safe
+export {
+  calculateChipGain,
+  calculateRepaymentCost,
+  getDebtTimeframe,
+  calculateChipDiceBonus,
+  calculateLoyaltyImprovementCost,
+  isSecondaryServiceUse,
+  type LoyaltyImprovementCost,
+} from "./chips";
