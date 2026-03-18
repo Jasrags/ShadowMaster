@@ -209,3 +209,17 @@ export {
   type OrganizationValidation,
   type OrganizationFavorCheck,
 } from "./group-contacts";
+
+// Payment mechanics (Run Faster) - Client-safe
+export {
+  getScripExchangeRates,
+  getScripExchangeRate,
+  convertNuyenToScrip,
+  convertScripToNuyen,
+  calculateBarterValue,
+  getPaymentPreferenceTable,
+  getPaymentPreference,
+  type ScripExchangeRate,
+  type BarterModifiers,
+  type PaymentPreferenceEntry,
+} from "./payment-mechanics";
