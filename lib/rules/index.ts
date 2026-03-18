@@ -197,3 +197,15 @@ export {
   type EdgeContactSpec,
   type KarmaConfirmationCheck,
 } from "./i-know-a-guy";
+
+// Group/organization contact restrictions (Run Faster) - Client-safe
+export {
+  validateOrganizationContact,
+  canOrganizationCallFavor,
+  isAllowedServiceForOrganization,
+  getOrganizationDefinition,
+  getOrganizationDefinitions,
+  type OrganizationDefinition,
+  type OrganizationValidation,
+  type OrganizationFavorCheck,
+} from "./group-contacts";

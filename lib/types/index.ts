@@ -564,6 +564,8 @@ export type {
   ContactVisibility,
   SocialContact,
   ContactArchetype,
+  ContactServiceType,
+  ContactPreferredPayment,
   // Favor ledger types
   FavorTransactionType,
   FavorRiskLevel,
