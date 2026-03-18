@@ -485,6 +485,7 @@ describe("Migration Engine", () => {
       expect(result.success).toBe(false);
       expect(result.error).toContain("not yet implemented");
       expect(result.appliedSteps).toHaveLength(0);
+      expect(result.rollbackAvailable).toBe(false);
     });
 
     it("should revert sync status to outdated on NotImplementedError", async () => {

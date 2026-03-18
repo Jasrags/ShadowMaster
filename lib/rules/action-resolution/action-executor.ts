@@ -28,7 +28,7 @@ import {
   ValidationResult,
   ValidationError,
 } from "./action-validator";
-import { NotImplementedError } from "@/lib/rules/sync/migration-engine";
+import { NotImplementedError } from "@/lib/rules/sync";
 import { executeRoll, executeReroll, DEFAULT_DICE_RULES } from "./dice-engine";
 import { buildActionPool } from "./pool-builder";
 import * as actionHistoryStorage from "@/lib/storage/action-history";

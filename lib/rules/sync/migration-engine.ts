@@ -331,8 +331,8 @@ export async function executeMigration(
     // Apply the migration to storage
     const updatedCharacter = await applyMigration(userId, character.id, appliedMigrationRecord);
 
-    // Update sync status to synchronized
-    await updateSyncStatus(userId, character.id, "synchronized", "rules-legal");
+    // Update sync status — use "outdated"/"draft" until real mutations are implemented (#739)
+    await updateSyncStatus(userId, character.id, "outdated", "draft");
 
     return {
       success: true,
