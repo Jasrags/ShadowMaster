@@ -60,7 +60,7 @@ const MAX_VINTAGE_PERCENT = 10;
 const MASTER_CRAFTED_PERCENT = 20;
 
 /** Provenance multipliers */
-const PROVENANCE_MULTIPLIERS: Record<string, number> = {
+const PROVENANCE_MULTIPLIERS: Record<NonNullable<BarterModifiers["provenance"]>, number> = {
   recent: 2,
   historical: 3,
 };
@@ -89,14 +89,22 @@ const PAYMENT_PREFERENCE_TABLE: readonly PaymentPreferenceEntry[] = [
   { roll: 2, description: "Cash (hard currency)", paymentType: "cash-hard-currency" },
   { roll: 3, description: "Service (drek jobs)", paymentType: "service-drek-jobs" },
   { roll: 4, description: "Cash (corp scrip)", paymentType: "cash-corporate-scrip" },
-  { roll: 5, description: "Barter (profession items)", paymentType: "barter-profession-items" },
+  {
+    roll: 5,
+    description: "Barter (items needed for the profession)",
+    paymentType: "barter-profession-items",
+  },
   { roll: 6, description: "Service (shadowrunner job)", paymentType: "service-shadowrun-job" },
   { roll: 7, description: "Cash (credstick)", paymentType: "cash-credstick" },
   { roll: 8, description: "Cash (credstick)", paymentType: "cash-credstick" },
   { roll: 9, description: "Barter (easy-to-sell items)", paymentType: "barter-easy-to-sell" },
-  { roll: 10, description: "Service (free labor)", paymentType: "service-free-labor" },
+  { roll: 10, description: "Service (free-labor jobs)", paymentType: "service-free-labor" },
   { roll: 11, description: "Barter (hobby/vice items)", paymentType: "barter-hobby-vice" },
-  { roll: 12, description: "Cash (foreign electronic currency)", paymentType: "cash-credstick" },
+  {
+    roll: 12,
+    description: "Cash (ECC or other foreign electronic currency)",
+    paymentType: "cash-hard-currency",
+  },
 ];
 
 // =============================================================================
@@ -128,6 +136,9 @@ export function getScripExchangeRate(corporationId: string): ScripExchangeRate |
  * @returns Amount in corporate scrip
  */
 export function convertNuyenToScrip(nuyen: number, rateToOneNuyen: number): number {
+  if (rateToOneNuyen <= 0) {
+    throw new Error(`convertNuyenToScrip: rateToOneNuyen must be positive, got ${rateToOneNuyen}`);
+  }
   return nuyen * rateToOneNuyen;
 }
 
@@ -135,10 +146,14 @@ export function convertNuyenToScrip(nuyen: number, rateToOneNuyen: number): numb
  * Convert corporate scrip to nuyen.
  *
  * @param scrip - Amount in corporate scrip
- * @param rateToOneNuyen - Scrip units per 1 nuyen
+ * @param rateToOneNuyen - Scrip units per 1 nuyen (must be > 0)
  * @returns Amount in nuyen
+ * @throws Error if rateToOneNuyen is not positive
  */
 export function convertScripToNuyen(scrip: number, rateToOneNuyen: number): number {
+  if (rateToOneNuyen <= 0) {
+    throw new Error(`convertScripToNuyen: rateToOneNuyen must be positive, got ${rateToOneNuyen}`);
+  }
   return scrip / rateToOneNuyen;
 }
 
@@ -154,11 +169,16 @@ export function convertScripToNuyen(scrip: number, rateToOneNuyen: number): numb
  * - Provenance: 2× (recent/living) or 3× (historical/deceased)
  * - Master Crafted: +20%
  *
- * @param baseValue - Item's base nuyen value
+ * @param baseValue - Item's base nuyen value (must be >= 0)
  * @param modifiers - Optional barter quality modifiers
  * @returns Adjusted barter value (rounded to nearest integer)
+ * @throws Error if baseValue is negative or non-finite
  */
 export function calculateBarterValue(baseValue: number, modifiers: BarterModifiers): number {
+  if (!Number.isFinite(baseValue) || baseValue < 0) {
+    throw new Error(`calculateBarterValue: baseValue must be non-negative, got ${baseValue}`);
+  }
+
   let multiplier = 1;
 
   // Vintage: +1% per decade, capped at 10%

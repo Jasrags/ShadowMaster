@@ -73,6 +73,11 @@ describe("convertNuyenToScrip", () => {
   it("should return 0 for 0 nuyen", () => {
     expect(convertNuyenToScrip(0, 5)).toBe(0);
   });
+
+  it("should throw for non-positive rate", () => {
+    expect(() => convertNuyenToScrip(100, 0)).toThrow("rateToOneNuyen must be positive");
+    expect(() => convertNuyenToScrip(100, -1)).toThrow("rateToOneNuyen must be positive");
+  });
 });
 
 describe("convertScripToNuyen", () => {
@@ -92,6 +97,10 @@ describe("convertScripToNuyen", () => {
 
   it("should return 0 for 0 scrip", () => {
     expect(convertScripToNuyen(0, 5)).toBe(0);
+  });
+
+  it("should throw for division by zero rate", () => {
+    expect(() => convertScripToNuyen(100, 0)).toThrow("rateToOneNuyen must be positive");
   });
 });
 
@@ -142,6 +151,22 @@ describe("calculateBarterValue", () => {
   it("should handle 0 vintage decades", () => {
     expect(calculateBarterValue(1000, { vintageDecades: 0 })).toBe(1000);
   });
+
+  it("should apply +1% for exactly 1 decade", () => {
+    expect(calculateBarterValue(1000, { vintageDecades: 1 })).toBe(1010);
+  });
+
+  it("should cap at exactly 10% for 10 decades", () => {
+    expect(calculateBarterValue(1000, { vintageDecades: 10 })).toBe(1100);
+  });
+
+  it("should throw for negative base value", () => {
+    expect(() => calculateBarterValue(-500, {})).toThrow("baseValue must be non-negative");
+  });
+
+  it("should throw for NaN base value", () => {
+    expect(() => calculateBarterValue(NaN, {})).toThrow("baseValue must be non-negative");
+  });
 });
 
 // =============================================================================
@@ -183,6 +208,11 @@ describe("getPaymentPreference", () => {
   it("should return cash-corporate-scrip for roll 4", () => {
     const pref = getPaymentPreference(4);
     expect(pref!.paymentType).toBe("cash-corporate-scrip");
+  });
+
+  it("should return cash-hard-currency for roll 12 (foreign electronic currency)", () => {
+    const pref = getPaymentPreference(12);
+    expect(pref!.paymentType).toBe("cash-hard-currency");
   });
 
   it("should return undefined for invalid rolls", () => {
