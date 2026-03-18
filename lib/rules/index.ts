@@ -223,3 +223,14 @@ export {
   type BarterModifiers,
   type PaymentPreferenceEntry,
 } from "./payment-mechanics";
+
+// Contact NPC building (Run Faster) - Client-safe
+export {
+  getNpcBuildTable,
+  getNpcBuildEntry,
+  generateContactStatBlock,
+  type NpcBuildEntry,
+  type ContactStatBlock,
+  type NpcBaseAttributes,
+  type NpcDerivedStats,
+} from "./contact-npc";
