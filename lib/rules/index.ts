@@ -169,3 +169,19 @@ export {
   type MaintenanceStatusType,
   type MaintenanceCheckResult,
 } from "./contact-maintenance";
+
+// Relationship qualities (Run Faster contact mechanics) - Client-safe
+export {
+  getBlackmailModifiers,
+  getFamilyModifiers,
+  getEffectiveLoyaltyForTest,
+  getChipCostModifier,
+  calculateReputationLoyaltyCostModifier,
+  resolveIntimidation,
+  resolveConSeduction,
+  type RelationshipQuality,
+  type ChipCostAdjustment,
+  type ReputationCostModifier,
+  type IntimidationResult,
+  type SocialMechanicResult,
+} from "./relationship-qualities";
