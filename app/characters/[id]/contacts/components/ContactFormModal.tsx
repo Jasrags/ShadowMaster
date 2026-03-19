@@ -16,6 +16,10 @@ import { X } from "lucide-react";
 import type { SocialContact, CreateContactRequest, ContactArchetype } from "@/lib/types";
 import type { Theme } from "@/lib/themes";
 import { THEMES, DEFAULT_THEME } from "@/lib/themes";
+import {
+  getOrganizationDefinitions,
+  type OrganizationDefinition,
+} from "@/lib/rules/group-contacts";
 
 interface ContactFormModalProps {
   isOpen: boolean;
@@ -71,9 +75,13 @@ export function ContactFormModal({
     notes: "",
   });
 
+  const [isOrganizationContact, setIsOrganizationContact] = useState(false);
+  const [selectedOrg, setSelectedOrg] = useState<OrganizationDefinition | null>(null);
   const [specializationInput, setSpecializationInput] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const orgDefinitions = getOrganizationDefinitions();
 
   // Reset form when modal opens/closes or contact changes
   useEffect(() => {
@@ -105,6 +113,8 @@ export function ContactFormModal({
       }
       setSpecializationInput("");
       setError(null);
+      setIsOrganizationContact(contact?.group === "organization" || false);
+      setSelectedOrg(null);
     }
   }, [isOpen, contact]);
 
@@ -261,6 +271,82 @@ export function ContactFormModal({
                   </select>
                 </div>
 
+                {/* Organization Toggle */}
+                <div className="space-y-2">
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={isOrganizationContact}
+                      onChange={(e) => {
+                        const isOrg = e.target.checked;
+                        setIsOrganizationContact(isOrg);
+                        if (isOrg) {
+                          setFormData({ ...formData, loyalty: 1 });
+                        }
+                        if (!isOrg) {
+                          setSelectedOrg(null);
+                        }
+                      }}
+                      className="rounded border-border"
+                    />
+                    <span className="text-xs font-mono text-muted-foreground uppercase">
+                      Organization Contact
+                    </span>
+                  </label>
+
+                  {isOrganizationContact && (
+                    <div className="space-y-2">
+                      <select
+                        value={selectedOrg?.id || ""}
+                        onChange={(e) => {
+                          const org = orgDefinitions.find((o) => o.id === e.target.value);
+                          setSelectedOrg(org || null);
+                          if (org) {
+                            setFormData({
+                              ...formData,
+                              name: formData.name || org.name,
+                              connection: org.connectionBonus,
+                              loyalty: 1,
+                            });
+                          }
+                        }}
+                        className={`w-full px-3 py-2 text-sm rounded border ${t.colors.border} bg-background text-foreground`}
+                      >
+                        <option value="">Select organization...</option>
+                        {orgDefinitions.map((org) => (
+                          <option key={org.id} value={org.id}>
+                            {org.name} (C+{org.connectionBonus}, {org.karmaCost}K)
+                          </option>
+                        ))}
+                      </select>
+
+                      {selectedOrg && (
+                        <div className="p-2 rounded bg-violet-500/10 border border-violet-500/30 text-xs space-y-1">
+                          <div className="text-violet-400 font-mono">{selectedOrg.name}</div>
+                          <div className="text-muted-foreground">{selectedOrg.description}</div>
+                          <div className="flex gap-4 mt-1">
+                            <span className="text-muted-foreground">
+                              Connection:{" "}
+                              <span className="text-foreground">
+                                +{selectedOrg.connectionBonus}
+                              </span>
+                            </span>
+                            <span className="text-muted-foreground">
+                              Karma: <span className="text-pink-400">{selectedOrg.karmaCost}K</span>
+                            </span>
+                            {selectedOrg.sinnerRequired && (
+                              <span className="text-amber-400">SIN Required</span>
+                            )}
+                          </div>
+                          <div className="text-muted-foreground/70 mt-1">
+                            Legwork and networking only — no favors or chips
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+
                 {/* Connection & Loyalty */}
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1">
@@ -283,20 +369,24 @@ export function ContactFormModal({
                   </div>
                   <div className="space-y-1">
                     <Label className="text-xs font-mono text-muted-foreground uppercase">
-                      Loyalty (1-6)
+                      Loyalty (1-6){isOrganizationContact ? " (locked to 1)" : ""}
                     </Label>
                     <Input
                       type="number"
                       min={1}
-                      max={6}
+                      max={isOrganizationContact ? 1 : 6}
                       value={formData.loyalty}
+                      disabled={isOrganizationContact}
                       onChange={(e) =>
                         setFormData({
                           ...formData,
-                          loyalty: Math.max(1, Math.min(6, parseInt(e.target.value) || 1)),
+                          loyalty: Math.max(
+                            1,
+                            Math.min(isOrganizationContact ? 1 : 6, parseInt(e.target.value) || 1)
+                          ),
                         })
                       }
-                      className={`w-full px-3 py-2 rounded border ${t.colors.border} bg-background text-foreground`}
+                      className={`w-full px-3 py-2 rounded border ${t.colors.border} bg-background text-foreground ${isOrganizationContact ? "opacity-50" : ""}`}
                     />
                   </div>
                 </div>

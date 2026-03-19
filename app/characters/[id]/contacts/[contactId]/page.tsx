@@ -25,6 +25,13 @@ import { THEMES, DEFAULT_THEME } from "@/lib/themes";
 import { Section } from "../../components/Section";
 import { ContactFormModal } from "../components/ContactFormModal";
 import { CallFavorModal } from "../components/CallFavorModal";
+import { SpendChipsModal } from "../components/SpendChipsModal";
+import {
+  STATUS_STYLES,
+  TRANSACTION_TYPE_LABELS,
+  getFavorBalanceStyle,
+} from "../components/contact-constants";
+import { checkMaintenanceStatus } from "@/lib/rules/contact-maintenance";
 
 function ArrowLeftIcon({ className }: { className?: string }) {
   return (
@@ -38,51 +45,6 @@ function ArrowLeftIcon({ className }: { className?: string }) {
     </svg>
   );
 }
-
-const STATUS_STYLES: Record<string, { bg: string; text: string; border: string }> = {
-  active: {
-    bg: "bg-emerald-500/10",
-    text: "text-emerald-400",
-    border: "border-emerald-500/30",
-  },
-  burned: {
-    bg: "bg-red-500/10",
-    text: "text-red-400",
-    border: "border-red-500/30",
-  },
-  inactive: {
-    bg: "bg-zinc-500/10",
-    text: "text-zinc-400",
-    border: "border-zinc-500/30",
-  },
-  missing: {
-    bg: "bg-amber-500/10",
-    text: "text-amber-400",
-    border: "border-amber-500/30",
-  },
-  deceased: {
-    bg: "bg-purple-500/10",
-    text: "text-purple-400",
-    border: "border-purple-500/30",
-  },
-};
-
-const TYPE_LABELS: Record<string, { label: string; color: string }> = {
-  favor_called: { label: "Favor Called", color: "text-blue-400" },
-  favor_failed: { label: "Favor Failed", color: "text-red-400" },
-  favor_granted: { label: "Favor Granted", color: "text-emerald-400" },
-  favor_owed: { label: "Favor Owed", color: "text-amber-400" },
-  favor_repaid: { label: "Favor Repaid", color: "text-emerald-400" },
-  loyalty_change: { label: "Loyalty Change", color: "text-pink-400" },
-  connection_change: { label: "Connection Change", color: "text-cyan-400" },
-  contact_burned: { label: "Contact Burned", color: "text-red-400" },
-  contact_acquired: { label: "Contact Acquired", color: "text-emerald-400" },
-  contact_reactivated: { label: "Contact Reactivated", color: "text-blue-400" },
-  status_change: { label: "Status Changed", color: "text-purple-400" },
-  gift: { label: "Gift Given", color: "text-amber-400" },
-  betrayal: { label: "Betrayal", color: "text-red-400" },
-  reputation_effect: { label: "Reputation Effect", color: "text-orange-400" },
-};
 
 interface CharacterData {
   id: string;
@@ -109,6 +71,7 @@ export default function ContactDetailPage({
   const [actionLoading, setActionLoading] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showCallFavorModal, setShowCallFavorModal] = useState(false);
+  const [showSpendChipsModal, setShowSpendChipsModal] = useState(false);
 
   const theme = THEMES[DEFAULT_THEME];
   const statusStyle = contact
@@ -248,6 +211,35 @@ export default function ContactDetailPage({
     }
   };
 
+  // Handle spend chips
+  const handleSpendChips = async (data: {
+    action: "dice-bonus" | "loyalty-improvement";
+    chipsToSpend?: number;
+    targetLoyalty?: number;
+    notes?: string;
+  }) => {
+    const response = await fetch(
+      `/api/characters/${characterId}/contacts/${contactId}/spend-chips`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      }
+    );
+
+    const result = await response.json();
+    if (!result.success) {
+      throw new Error(result.error || "Failed to spend chips");
+    }
+
+    if (result.contact) {
+      setContact(result.contact);
+    }
+    if (result.transaction) {
+      setTransactions((prev) => [result.transaction, ...prev]);
+    }
+  };
+
   // Handle delete contact
   const handleDelete = async () => {
     if (!confirm("Are you sure you want to delete this contact? This cannot be undone.")) {
@@ -303,19 +295,40 @@ export default function ContactDetailPage({
     );
   }
 
-  const favorBalance = contact.favorBalance;
-  const favorBalanceText =
-    favorBalance > 0
-      ? `${favorBalance} owed to you`
-      : favorBalance < 0
-        ? `${Math.abs(favorBalance)} owed by you`
-        : "Even";
-  const favorBalanceColor =
-    favorBalance > 0
-      ? "text-emerald-400"
-      : favorBalance < 0
-        ? "text-amber-400"
-        : "text-muted-foreground";
+  const favorStyle = getFavorBalanceStyle(contact.favorBalance);
+  const maintenanceStatus = checkMaintenanceStatus(contact, new Date().toISOString());
+
+  const MAINTENANCE_STYLES: Record<
+    string,
+    { bg: string; text: string; border: string; label: string }
+  > = {
+    current: {
+      bg: "bg-emerald-500/10",
+      text: "text-emerald-400",
+      border: "border-emerald-500/30",
+      label: "Current",
+    },
+    overdue: {
+      bg: "bg-red-500/10",
+      text: "text-red-400",
+      border: "border-red-500/30",
+      label: "Overdue",
+    },
+    "at-risk": {
+      bg: "bg-amber-500/10",
+      text: "text-amber-400",
+      border: "border-amber-500/30",
+      label: "At Risk",
+    },
+    "not-applicable": {
+      bg: "bg-zinc-500/10",
+      text: "text-zinc-400",
+      border: "border-zinc-500/30",
+      label: "N/A",
+    },
+  };
+  const maintStyle =
+    MAINTENANCE_STYLES[maintenanceStatus.status] || MAINTENANCE_STYLES["not-applicable"];
 
   return (
     <div className={`min-h-screen ${theme.colors.background} p-4 sm:p-6 lg:p-8`}>
@@ -360,6 +373,32 @@ export default function ContactDetailPage({
                 >
                   {contact.status}
                 </span>
+                {contact.relationshipQualities?.includes("blackmail") && (
+                  <span
+                    className="text-xs font-mono uppercase px-2 py-1 rounded border bg-red-500/10 text-red-400 border-red-500/30"
+                    title="Favors are free via Intimidation; contact cannot leave"
+                  >
+                    Blackmail
+                  </span>
+                )}
+                {contact.relationshipQualities?.includes("family") && (
+                  <span
+                    className="text-xs font-mono uppercase px-2 py-1 rounded border bg-blue-500/10 text-blue-400 border-blue-500/30"
+                    title="+1 Loyalty for tests, −1 chip to improve, −1 Loyalty for job performance"
+                  >
+                    Family
+                  </span>
+                )}
+                {contact.group === "organization" && (
+                  <span className="text-xs font-mono uppercase px-2 py-1 rounded border bg-violet-500/10 text-violet-400 border-violet-500/30">
+                    Organization
+                  </span>
+                )}
+                {contact.pendingKarmaConfirmation && (
+                  <span className="text-xs font-mono uppercase px-2 py-1 rounded border bg-amber-500/10 text-amber-400 border-amber-500/30">
+                    Pending Confirmation
+                  </span>
+                )}
               </div>
 
               <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
@@ -415,11 +454,15 @@ export default function ContactDetailPage({
                 <div className="text-[10px] text-muted-foreground uppercase">Loyalty</div>
                 <div className="text-3xl font-bold text-pink-400">{contact.loyalty}</div>
               </div>
-              <div
-                className={`p-4 rounded ${theme.colors.card} border ${theme.colors.border} col-span-2`}
-              >
+              <div className={`p-4 rounded ${theme.colors.card} border ${theme.colors.border}`}>
                 <div className="text-[10px] text-muted-foreground uppercase">Favor Balance</div>
-                <div className={`text-xl font-bold ${favorBalanceColor}`}>{favorBalanceText}</div>
+                <div className={`text-xl font-bold ${favorStyle.color}`}>{favorStyle.text}</div>
+              </div>
+              <div className={`p-4 rounded ${theme.colors.card} border ${theme.colors.border}`}>
+                <div className="text-[10px] text-muted-foreground uppercase">Chips</div>
+                <div className="text-xl font-bold text-cyan-400">
+                  {Math.abs(contact.favorBalance)}
+                </div>
               </div>
             </div>
           </div>
@@ -440,6 +483,34 @@ export default function ContactDetailPage({
               <p className="text-sm text-foreground">{contact.notes}</p>
             </div>
           )}
+
+          {/* Maintenance Status */}
+          {maintenanceStatus.status !== "not-applicable" && (
+            <div className={`mt-4 p-3 rounded border ${maintStyle.border} ${maintStyle.bg}`}>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span
+                    className={`text-xs font-mono uppercase px-2 py-0.5 rounded ${maintStyle.bg} ${maintStyle.text} border ${maintStyle.border}`}
+                  >
+                    {maintStyle.label}
+                  </span>
+                  <span className="text-xs text-muted-foreground">
+                    Maintenance every {contact.loyalty} month{contact.loyalty !== 1 ? "s" : ""}
+                  </span>
+                </div>
+                {maintenanceStatus.deadline && (
+                  <span className={`text-xs font-mono ${maintStyle.text}`}>
+                    Deadline: {new Date(maintenanceStatus.deadline).toLocaleDateString()}
+                  </span>
+                )}
+              </div>
+              {maintenanceStatus.contactLost && (
+                <div className="mt-2 text-xs text-red-400">
+                  Contact will be lost by the next job (Loyalty 0)
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Actions */}
@@ -452,6 +523,44 @@ export default function ContactDetailPage({
               >
                 <Phone className="w-4 h-4" />
                 Call Favor
+              </Button>
+            )}
+
+            {contact.pendingKarmaConfirmation && (
+              <Button
+                onPress={async () => {
+                  setActionLoading(true);
+                  try {
+                    const response = await fetch(
+                      `/api/characters/${characterId}/contacts/${contactId}/confirm-edge`,
+                      { method: "POST", headers: { "Content-Type": "application/json" } }
+                    );
+                    const result = await response.json();
+                    if (!result.success) throw new Error(result.error);
+                    setContact(result.contact);
+                    if (character && result.karmaRemaining !== undefined) {
+                      setCharacter({ ...character, karmaCurrent: result.karmaRemaining });
+                    }
+                  } catch (err) {
+                    setError(err instanceof Error ? err.message : "Confirmation failed");
+                  } finally {
+                    setActionLoading(false);
+                  }
+                }}
+                isDisabled={actionLoading}
+                className="flex items-center gap-2 px-4 py-2 rounded border border-amber-500/30 text-amber-400 hover:bg-amber-500/10 transition-colors"
+              >
+                <CheckCircle className="w-4 h-4" />
+                Confirm with Karma
+              </Button>
+            )}
+
+            {contact.status === "active" && contact.favorBalance > 0 && (
+              <Button
+                onPress={() => setShowSpendChipsModal(true)}
+                className="flex items-center gap-2 px-4 py-2 rounded border border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/10 transition-colors"
+              >
+                Spend Chips
               </Button>
             )}
 
@@ -528,7 +637,7 @@ export default function ContactDetailPage({
           ) : (
             <div className="space-y-2">
               {transactions.map((tx) => {
-                const typeInfo = TYPE_LABELS[tx.type] || {
+                const typeInfo = TRANSACTION_TYPE_LABELS[tx.type] || {
                   label: tx.type,
                   color: "text-muted-foreground",
                 };
@@ -606,6 +715,15 @@ export default function ContactDetailPage({
         services={favorServices}
         characterNuyen={character.nuyen}
         characterKarma={character.karmaCurrent}
+        theme={theme}
+      />
+
+      {/* Spend Chips Modal */}
+      <SpendChipsModal
+        isOpen={showSpendChipsModal}
+        onClose={() => setShowSpendChipsModal(false)}
+        onSubmit={handleSpendChips}
+        contact={contact}
         theme={theme}
       />
     </div>
