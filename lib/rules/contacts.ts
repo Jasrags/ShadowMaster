@@ -19,6 +19,7 @@ import type {
   CreateContactRequest,
   SocialCapital,
 } from "../types/contacts";
+import { validateOrganizationContact } from "./group-contacts";
 
 // =============================================================================
 // EDITION-SPECIFIC LIMITS
@@ -146,12 +147,23 @@ export function validateContact(
     }
   }
 
+  // Organization contact validation (Run Faster p. 179)
+  const contactWithGroup = contact as Partial<SocialContact>;
+  if (contactWithGroup.group === "organization") {
+    const orgResult = validateOrganizationContact(contactWithGroup as SocialContact);
+    if (!orgResult.valid) {
+      for (const err of orgResult.errors) {
+        errors.push(err.message);
+      }
+    }
+  }
+
   // Warnings for edge cases
   if (contact.connection === 1 && contact.loyalty === 1) {
     warnings.push("Very low connection and loyalty - contact may not be useful");
   }
 
-  if (contact.loyalty === 1) {
+  if (contact.loyalty === 1 && contactWithGroup.group !== "organization") {
     warnings.push("Loyalty 1 contacts may betray you for minimal gain");
   }
 
@@ -576,4 +588,21 @@ export function resolveSharedContact(
     effectiveLoyalty: 1,
     favorCostMultiplier: 2,
   };
+}
+
+// =============================================================================
+// LOYALTY IMPROVEMENT CHECKS
+// =============================================================================
+
+/**
+ * Check whether a contact's loyalty can be improved
+ *
+ * Returns false when loyaltyImprovementBlocked is set (e.g., after using
+ * Intimidation on a Blackmail relationship — Run Faster p. 177).
+ *
+ * @param contact - Contact to check
+ * @returns Whether loyalty improvement is allowed
+ */
+export function isLoyaltyImprovementAllowed(contact: SocialContact): boolean {
+  return !contact.loyaltyImprovementBlocked;
 }

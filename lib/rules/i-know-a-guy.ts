@@ -7,10 +7,9 @@
  * (Connection + Loyalty) after the mission to become permanent.
  * Edge does not refresh until Karma is earned (next session).
  *
- * NOTE: This module is a standalone rules layer. The SocialContact type
- * does not yet have a `pendingKarmaConfirmation` field or an "edge"
- * acquisition method value. Those will be added when the integration
- * layer wires these rules to the storage/API layer.
+ * Integration: SocialContact now has `pendingKarmaConfirmation` field and
+ * `"edge"` acquisition method. Use `updateCharacterContact()` from the
+ * storage layer to set these fields when creating Edge-acquired contacts.
  *
  * @see /docs/capabilities/campaign.social-governance.md
  */
