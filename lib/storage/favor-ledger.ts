@@ -503,7 +503,12 @@ function computeAggregates(ledger: FavorLedger): FavorLedger {
     }
 
     // Favors called vs owed
-    if (t.type === "favor_called" || t.type === "favor_granted") {
+    if (
+      t.type === "favor_called" ||
+      t.type === "favor_granted" ||
+      t.type === "chip_spent_dice_bonus" ||
+      t.type === "chip_spent_loyalty"
+    ) {
       if (t.favorChange < 0) {
         totalFavorsOwed += Math.abs(t.favorChange);
       } else {

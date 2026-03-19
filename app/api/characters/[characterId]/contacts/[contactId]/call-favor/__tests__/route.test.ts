@@ -541,6 +541,12 @@ describe("POST /api/characters/[characterId]/contacts/[contactId]/call-favor", (
         karmaCost: 0,
         favorCost: 1,
         totalCost: { nuyen: 100, karma: 0, favors: 1 },
+        chipCostBreakdown: {
+          originalFavorCost: 1,
+          secondarySurcharge: 0,
+          qualityAdjustment: { adjustedCost: 1, reason: "No quality modifier" },
+          finalChipCost: 1,
+        },
       });
       vi.mocked(resolveFavorCall).mockReturnValue({
         success: true,
@@ -601,6 +607,12 @@ describe("POST /api/characters/[characterId]/contacts/[contactId]/call-favor", (
         karmaCost: 0,
         favorCost: 1,
         totalCost: { nuyen: 200, karma: 0, favors: 1 },
+        chipCostBreakdown: {
+          originalFavorCost: 1,
+          secondarySurcharge: 0,
+          qualityAdjustment: { adjustedCost: 1, reason: "No quality modifier" },
+          finalChipCost: 1,
+        },
       });
       vi.mocked(resolveFavorCall).mockReturnValue({
         success: true,
@@ -658,6 +670,12 @@ describe("POST /api/characters/[characterId]/contacts/[contactId]/call-favor", (
         karmaCost: 0,
         favorCost: 1,
         totalCost: { nuyen: 500, karma: 0, favors: 1 },
+        chipCostBreakdown: {
+          originalFavorCost: 1,
+          secondarySurcharge: 0,
+          qualityAdjustment: { adjustedCost: 1, reason: "No quality modifier" },
+          finalChipCost: 1,
+        },
       });
       vi.mocked(resolveFavorCall).mockReturnValue({
         success: true,
@@ -714,6 +732,12 @@ describe("POST /api/characters/[characterId]/contacts/[contactId]/call-favor", (
         karmaCost: 3,
         favorCost: 1,
         totalCost: { nuyen: 0, karma: 3, favors: 1 },
+        chipCostBreakdown: {
+          originalFavorCost: 1,
+          secondarySurcharge: 0,
+          qualityAdjustment: { adjustedCost: 1, reason: "No quality modifier" },
+          finalChipCost: 1,
+        },
       });
       vi.mocked(resolveFavorCall).mockReturnValue({
         success: true,
@@ -770,6 +794,12 @@ describe("POST /api/characters/[characterId]/contacts/[contactId]/call-favor", (
         karmaCost: 0,
         favorCost: 1,
         totalCost: { nuyen: 0, karma: 0, favors: 1 },
+        chipCostBreakdown: {
+          originalFavorCost: 1,
+          secondarySurcharge: 0,
+          qualityAdjustment: { adjustedCost: 1, reason: "No quality modifier" },
+          finalChipCost: 1,
+        },
       });
       vi.mocked(resolveFavorCall).mockReturnValue({
         success: true,
@@ -830,6 +860,12 @@ describe("POST /api/characters/[characterId]/contacts/[contactId]/call-favor", (
         karmaCost: 0,
         favorCost: 1,
         totalCost: { nuyen: 100, karma: 0, favors: 1 },
+        chipCostBreakdown: {
+          originalFavorCost: 1,
+          secondarySurcharge: 0,
+          qualityAdjustment: { adjustedCost: 1, reason: "No quality modifier" },
+          finalChipCost: 1,
+        },
       });
       vi.mocked(resolveFavorCall).mockReturnValue({
         success: true,
@@ -894,6 +930,12 @@ describe("POST /api/characters/[characterId]/contacts/[contactId]/call-favor", (
         karmaCost: 0,
         favorCost: 1,
         totalCost: { nuyen: 0, karma: 0, favors: 1 },
+        chipCostBreakdown: {
+          originalFavorCost: 1,
+          secondarySurcharge: 0,
+          qualityAdjustment: { adjustedCost: 1, reason: "No quality modifier" },
+          finalChipCost: 1,
+        },
       });
       vi.mocked(resolveFavorCall).mockReturnValue({
         success: true,
@@ -953,6 +995,12 @@ describe("POST /api/characters/[characterId]/contacts/[contactId]/call-favor", (
         karmaCost: 0,
         favorCost: 1,
         totalCost: { nuyen: 0, karma: 0, favors: 1 },
+        chipCostBreakdown: {
+          originalFavorCost: 1,
+          secondarySurcharge: 0,
+          qualityAdjustment: { adjustedCost: 1, reason: "No quality modifier" },
+          finalChipCost: 1,
+        },
       });
       vi.mocked(resolveFavorCall).mockReturnValue({
         success: true,
@@ -1013,6 +1061,12 @@ describe("POST /api/characters/[characterId]/contacts/[contactId]/call-favor", (
         karmaCost: 0,
         favorCost: 1,
         totalCost: { nuyen: 0, karma: 0, favors: 1 },
+        chipCostBreakdown: {
+          originalFavorCost: 1,
+          secondarySurcharge: 0,
+          qualityAdjustment: { adjustedCost: 1, reason: "No quality modifier" },
+          finalChipCost: 1,
+        },
       });
       vi.mocked(resolveFavorCall).mockReturnValue({
         success: false,
@@ -1070,6 +1124,12 @@ describe("POST /api/characters/[characterId]/contacts/[contactId]/call-favor", (
         karmaCost: 0,
         favorCost: 1,
         totalCost: { nuyen: 0, karma: 0, favors: 1 },
+        chipCostBreakdown: {
+          originalFavorCost: 1,
+          secondarySurcharge: 0,
+          qualityAdjustment: { adjustedCost: 1, reason: "No quality modifier" },
+          finalChipCost: 1,
+        },
       });
       vi.mocked(resolveFavorCall).mockReturnValue({
         success: false,
@@ -1128,6 +1188,12 @@ describe("POST /api/characters/[characterId]/contacts/[contactId]/call-favor", (
         karmaCost: 0,
         favorCost: 1,
         totalCost: { nuyen: 0, karma: 0, favors: 1 },
+        chipCostBreakdown: {
+          originalFavorCost: 1,
+          secondarySurcharge: 0,
+          qualityAdjustment: { adjustedCost: 1, reason: "No quality modifier" },
+          finalChipCost: 1,
+        },
       });
       vi.mocked(resolveFavorCall).mockReturnValue({
         success: false,
@@ -1186,6 +1252,12 @@ describe("POST /api/characters/[characterId]/contacts/[contactId]/call-favor", (
         karmaCost: 0,
         favorCost: 1,
         totalCost: { nuyen: 0, karma: 0, favors: 1 },
+        chipCostBreakdown: {
+          originalFavorCost: 1,
+          secondarySurcharge: 0,
+          qualityAdjustment: { adjustedCost: 1, reason: "No quality modifier" },
+          finalChipCost: 1,
+        },
       });
       vi.mocked(resolveFavorCall).mockReturnValue({
         success: false,
@@ -1251,6 +1323,12 @@ describe("POST /api/characters/[characterId]/contacts/[contactId]/call-favor", (
         karmaCost: 0,
         favorCost: 1,
         totalCost: { nuyen: 0, karma: 0, favors: 1 },
+        chipCostBreakdown: {
+          originalFavorCost: 1,
+          secondarySurcharge: 0,
+          qualityAdjustment: { adjustedCost: 1, reason: "No quality modifier" },
+          finalChipCost: 1,
+        },
       });
       vi.mocked(resolveFavorCall).mockReturnValue({
         success: true,
@@ -1283,7 +1361,8 @@ describe("POST /api/characters/[characterId]/contacts/[contactId]/call-favor", (
         mockService,
         mockCharacter,
         4,
-        3 // opposingRoll
+        3, // opposingRoll
+        1 // chipCostBreakdown.finalChipCost
       );
     });
 
@@ -1309,6 +1388,12 @@ describe("POST /api/characters/[characterId]/contacts/[contactId]/call-favor", (
         karmaCost: 0,
         favorCost: 1,
         totalCost: { nuyen: 0, karma: 0, favors: 1 },
+        chipCostBreakdown: {
+          originalFavorCost: 1,
+          secondarySurcharge: 0,
+          qualityAdjustment: { adjustedCost: 1, reason: "No quality modifier" },
+          finalChipCost: 1,
+        },
       });
       vi.mocked(resolveFavorCall).mockReturnValue({
         success: true,
@@ -1366,6 +1451,12 @@ describe("POST /api/characters/[characterId]/contacts/[contactId]/call-favor", (
         karmaCost: 0,
         favorCost: 1,
         totalCost: { nuyen: 0, karma: 0, favors: 1 },
+        chipCostBreakdown: {
+          originalFavorCost: 1,
+          secondarySurcharge: 0,
+          qualityAdjustment: { adjustedCost: 1, reason: "No quality modifier" },
+          finalChipCost: 1,
+        },
       });
       vi.mocked(resolveFavorCall).mockReturnValue({
         success: true,
