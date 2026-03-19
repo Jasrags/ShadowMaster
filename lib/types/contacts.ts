@@ -822,6 +822,53 @@ export interface ContactStateChangeRequest {
 /**
  * Request to call a favor
  */
+/**
+ * Request to acquire a contact via "I Know a Guy" (Edge spend)
+ */
+export interface EdgeAcquireRequest {
+  /** Desired Connection rating (1-12) */
+  connection: number;
+  /** Contact archetype */
+  archetype: string;
+  /** Contact name */
+  name: string;
+  /** Optional description */
+  description?: string;
+}
+
+/**
+ * Response from Edge contact acquisition
+ */
+export interface EdgeAcquireResponse {
+  success: boolean;
+  contact?: SocialContact;
+  edgeSpent?: number;
+  edgeRemaining?: number;
+  karmaCostToConfirm?: number;
+  error?: string;
+}
+
+/**
+ * Response from confirming an Edge contact with Karma
+ */
+export interface ConfirmEdgeResponse {
+  success: boolean;
+  contact?: SocialContact;
+  karmaSpent?: number;
+  karmaRemaining?: number;
+  error?: string;
+}
+
+/**
+ * Response from expiring unconfirmed Edge contacts
+ */
+export interface ExpireEdgeResponse {
+  success: boolean;
+  expiredCount?: number;
+  expiredContactIds?: string[];
+  error?: string;
+}
+
 export interface CallFavorRequest {
   serviceId: string;
   serviceType?: string;
