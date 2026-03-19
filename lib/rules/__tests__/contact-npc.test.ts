@@ -10,8 +10,10 @@ import {
   getNpcBuildTable,
   getNpcBuildEntry,
   generateContactStatBlock,
+  getMetatypeBaseAttributes,
   type NpcBuildEntry,
   type ContactStatBlock,
+  type NpcMetatype,
 } from "../contact-npc";
 
 // =============================================================================
@@ -125,5 +127,135 @@ describe("generateContactStatBlock", () => {
   it("should throw for non-integer Connection rating", () => {
     expect(() => generateContactStatBlock(2.5)).toThrow("Connection rating");
     expect(() => generateContactStatBlock(NaN)).toThrow("Connection rating");
+  });
+
+  it("should default to human metatype", () => {
+    const block = generateContactStatBlock(4);
+    expect(block.metatype).toBe("human");
+  });
+
+  it("should include metatype in stat block", () => {
+    const block = generateContactStatBlock(4, "ork");
+    expect(block.metatype).toBe("ork");
+  });
+});
+
+// =============================================================================
+// METATYPE BASE ATTRIBUTES
+// =============================================================================
+
+describe("getMetatypeBaseAttributes", () => {
+  it("returns human average attributes (all 3s)", () => {
+    const attrs = getMetatypeBaseAttributes("human");
+    expect(attrs.body).toBe(3);
+    expect(attrs.agility).toBe(3);
+    expect(attrs.reaction).toBe(3);
+    expect(attrs.strength).toBe(3);
+    expect(attrs.charisma).toBe(3);
+    expect(attrs.intuition).toBe(3);
+    expect(attrs.logic).toBe(3);
+    expect(attrs.willpower).toBe(3);
+  });
+
+  it("returns elf racial minimums (AGI 2, CHA 3, rest 1)", () => {
+    const attrs = getMetatypeBaseAttributes("elf");
+    expect(attrs.agility).toBe(2);
+    expect(attrs.charisma).toBe(3);
+    expect(attrs.body).toBe(1);
+    expect(attrs.strength).toBe(1);
+  });
+
+  it("returns dwarf racial minimums (BOD 3, STR 3, WIL 2)", () => {
+    const attrs = getMetatypeBaseAttributes("dwarf");
+    expect(attrs.body).toBe(3);
+    expect(attrs.strength).toBe(3);
+    expect(attrs.willpower).toBe(2);
+    expect(attrs.agility).toBe(1);
+  });
+
+  it("returns ork racial minimums (BOD 4, STR 3)", () => {
+    const attrs = getMetatypeBaseAttributes("ork");
+    expect(attrs.body).toBe(4);
+    expect(attrs.strength).toBe(3);
+    expect(attrs.agility).toBe(1);
+    expect(attrs.charisma).toBe(1);
+  });
+
+  it("returns troll racial minimums (BOD 5, STR 5)", () => {
+    const attrs = getMetatypeBaseAttributes("troll");
+    expect(attrs.body).toBe(5);
+    expect(attrs.strength).toBe(5);
+    expect(attrs.agility).toBe(1);
+    expect(attrs.charisma).toBe(1);
+  });
+
+  it("returns a copy (not a reference)", () => {
+    const attrs1 = getMetatypeBaseAttributes("human");
+    const attrs2 = getMetatypeBaseAttributes("human");
+    attrs1.body = 99;
+    expect(attrs2.body).toBe(3);
+  });
+
+  it("throws for unknown metatype", () => {
+    expect(() => getMetatypeBaseAttributes("gnome" as NpcMetatype)).toThrow("Unknown metatype");
+  });
+});
+
+// =============================================================================
+// METATYPE STAT BLOCK GENERATION
+// =============================================================================
+
+describe("generateContactStatBlock — metatype support", () => {
+  it("generates ork stat block with correct base attributes and derived stats", () => {
+    const block = generateContactStatBlock(4, "ork");
+
+    expect(block.baseAttributes.body).toBe(4);
+    expect(block.baseAttributes.strength).toBe(3);
+    expect(block.baseAttributes.agility).toBe(1);
+
+    // Derived: initiative = REA(1) + INT(1) = 2
+    expect(block.derived.initiative).toBe(2);
+    // Physical CM: ceil(4/2) + 8 = 10
+    expect(block.derived.physicalConditionMonitor).toBe(10);
+    // Stun CM: ceil(1/2) + 8 = 9
+    expect(block.derived.stunConditionMonitor).toBe(9);
+  });
+
+  it("generates troll stat block with higher body-based derived stats", () => {
+    const block = generateContactStatBlock(6, "troll");
+
+    expect(block.baseAttributes.body).toBe(5);
+    expect(block.baseAttributes.strength).toBe(5);
+    // Physical CM: ceil(5/2) + 8 = 11
+    expect(block.derived.physicalConditionMonitor).toBe(11);
+  });
+
+  it("generates elf stat block with higher charisma-based derived stats", () => {
+    const block = generateContactStatBlock(3, "elf");
+
+    expect(block.baseAttributes.charisma).toBe(3);
+    expect(block.baseAttributes.agility).toBe(2);
+    // Composure: CHA(3) + WIL(1) = 4
+    expect(block.derived.composure).toBe(4);
+    // Judge Intentions: CHA(3) + INT(1) = 4
+    expect(block.derived.judgeIntentions).toBe(4);
+  });
+
+  it("generates dwarf stat block with willpower-based derived stats", () => {
+    const block = generateContactStatBlock(3, "dwarf");
+
+    expect(block.baseAttributes.willpower).toBe(2);
+    // Stun CM: ceil(2/2) + 8 = 9
+    expect(block.derived.stunConditionMonitor).toBe(9);
+  });
+
+  it("preserves build points regardless of metatype", () => {
+    const human = generateContactStatBlock(6, "human");
+    const troll = generateContactStatBlock(6, "troll");
+
+    expect(human.bonusAttributePoints).toBe(troll.bonusAttributePoints);
+    expect(human.totalSkillPoints).toBe(troll.totalSkillPoints);
+    expect(human.specialAttributePoints).toBe(troll.specialAttributePoints);
+    expect(human.nuyen).toBe(troll.nuyen);
   });
 });
