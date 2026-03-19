@@ -115,7 +115,7 @@ export async function POST(
       );
     }
 
-    // Check prerequisites
+    // Check prerequisites (includes org contact gate)
     const prereqCheck = canCallFavor(contact, service, character);
     if (!prereqCheck.allowed) {
       return NextResponse.json(
@@ -129,11 +129,19 @@ export async function POST(
       );
     }
 
-    // Calculate costs
+    // Calculate costs (applies chip modifiers: secondary surcharge, quality adjustments)
     const costs = calculateFavorCost(service, contact, character, rushJob);
+    const { chipCostBreakdown } = costs;
 
-    // Resolve the favor call
-    const resolution = resolveFavorCall(contact, service, character, diceRoll, opposingRoll);
+    // Resolve the favor call with adjusted chip cost
+    const resolution = resolveFavorCall(
+      contact,
+      service,
+      character,
+      diceRoll,
+      opposingRoll,
+      chipCostBreakdown.finalChipCost
+    );
 
     // Apply resource costs
     const updatedCharacter = { ...character };
@@ -204,6 +212,7 @@ export async function POST(
         criticalGlitch: resolution.criticalGlitch,
         burned: resolution.burned,
         burnReason: resolution.burnReason,
+        chipCostBreakdown,
       },
       costs: {
         favor: resolution.favorConsumed,

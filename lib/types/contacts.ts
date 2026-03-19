@@ -9,7 +9,7 @@
 
 import type { ID, ISODateString, Metadata } from "./core";
 import type { EditionCode } from "./edition";
-import type { RelationshipQuality } from "../rules/relationship-qualities";
+import type { RelationshipQuality, ChipCostAdjustment } from "../rules/relationship-qualities";
 
 // =============================================================================
 // CONTACT CORE TYPES
@@ -316,7 +316,9 @@ export type FavorTransactionType =
   | "status_change" // Contact status changed (missing, deceased, etc.)
   | "gift" // Gift given to contact (nuyen/items)
   | "betrayal" // Contact betrayed character or vice versa
-  | "reputation_effect"; // Street cred/notoriety affected relationship
+  | "reputation_effect" // Street cred/notoriety affected relationship
+  | "chip_spent_dice_bonus" // Chips spent for negotiation dice bonus
+  | "chip_spent_loyalty"; // Chips spent to improve loyalty
 
 /**
  * Risk level for a favor or service
@@ -894,6 +896,50 @@ export interface SocialCapitalResponse {
 }
 
 /**
+ * Breakdown of how chip cost was calculated for a favor
+ */
+export interface ChipCostBreakdown {
+  /** Original favor cost from service definition */
+  originalFavorCost: number;
+  /** +1 surcharge for using contact outside their archetype */
+  secondarySurcharge: number;
+  /** Adjustment from relationship qualities (blackmail=free, family=-1) */
+  qualityAdjustment: ChipCostAdjustment;
+  /** Final chip cost after all adjustments */
+  finalChipCost: number;
+}
+
+/**
+ * Request to spend chips for dice bonus or loyalty improvement
+ */
+export interface SpendChipsRequest {
+  action: "dice-bonus" | "loyalty-improvement";
+  /** Number of chips to spend (for dice-bonus) */
+  chipsToSpend?: number;
+  /** Target loyalty level (for loyalty-improvement, must be current + 1) */
+  targetLoyalty?: number;
+  notes?: string;
+}
+
+/**
+ * Response from spending chips
+ */
+export interface SpendChipsResponse {
+  success: boolean;
+  /** Dice bonus granted (for dice-bonus action) */
+  diceBonus?: number;
+  /** New loyalty rating (for loyalty-improvement action) */
+  newLoyalty?: number;
+  /** Chips deducted */
+  chipsSpent: number;
+  /** Updated contact */
+  contact?: SocialContact;
+  /** Transaction record */
+  transaction?: FavorTransaction;
+  error?: string;
+}
+
+/**
  * Response for favor call resolution
  */
 export interface CallFavorResponse {
@@ -906,6 +952,7 @@ export interface CallFavorResponse {
     burned?: boolean;
     burnReason?: string;
     serviceResult?: string;
+    chipCostBreakdown?: ChipCostBreakdown;
   };
   transaction?: FavorTransaction;
   contact?: SocialContact;

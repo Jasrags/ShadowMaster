@@ -16,7 +16,11 @@ import type {
   FavorServiceDefinition,
   FavorTransaction,
   FavorRiskLevel,
+  ChipCostBreakdown,
 } from "../types/contacts";
+import { isSecondaryServiceUse } from "./chips";
+import { getChipCostModifier } from "./relationship-qualities";
+import { canOrganizationCallFavor } from "./group-contacts";
 
 // =============================================================================
 // FAVOR PREREQUISITES
@@ -46,6 +50,12 @@ export function canCallFavor(
 ): FavorCallCheck {
   const reasons: string[] = [];
   const warnings: string[] = [];
+
+  // Organization contact restriction (Run Faster p. 179)
+  const orgCheck = canOrganizationCallFavor(contact);
+  if (!orgCheck.allowed) {
+    reasons.push(orgCheck.reason!);
+  }
 
   // Contact status check
   if (contact.status !== "active") {
@@ -159,25 +169,44 @@ export function calculateFavorCost(
   nuyenCost: number;
   karmaCost: number;
   totalCost: { nuyen: number; karma: number; favors: number };
+  chipCostBreakdown: ChipCostBreakdown;
 } {
   let nuyenCost = calculateNuyenCost(service, contact);
   const karmaCost = service.karmaCost || 0;
-  const favorCost = service.favorCost;
+  const originalFavorCost = service.favorCost;
 
   // Rush job multiplier
   if (rushJob && service.canRush && service.rushCostMultiplier) {
     nuyenCost = Math.ceil(nuyenCost * service.rushCostMultiplier);
   }
 
+  // Secondary service surcharge: +1 chip for off-archetype use
+  const secondarySurcharge = isSecondaryServiceUse(contact, service) ? 1 : 0;
+  const baseCostWithSurcharge = originalFavorCost + secondarySurcharge;
+
+  // Relationship quality adjustment (blackmail=free, family=-1)
+  const qualities = contact.relationshipQualities ?? [];
+  const qualityAdjustment = getChipCostModifier(baseCostWithSurcharge, qualities);
+
+  const finalChipCost = qualityAdjustment.adjustedCost;
+
+  const chipCostBreakdown: ChipCostBreakdown = {
+    originalFavorCost,
+    secondarySurcharge,
+    qualityAdjustment,
+    finalChipCost,
+  };
+
   return {
-    favorCost,
+    favorCost: finalChipCost,
     nuyenCost,
     karmaCost,
     totalCost: {
       nuyen: nuyenCost,
       karma: karmaCost,
-      favors: favorCost,
+      favors: finalChipCost,
     },
+    chipCostBreakdown,
   };
 }
 
@@ -216,7 +245,8 @@ export function resolveFavorCall(
   service: FavorServiceDefinition,
   character: Character,
   diceRoll: number,
-  opposingRoll?: number
+  opposingRoll?: number,
+  adjustedFavorCost?: number
 ): FavorResolution {
   let netHits: number;
   let success: boolean;
@@ -238,8 +268,9 @@ export function resolveFavorCall(
   const glitch = diceRoll === 0;
   const criticalGlitch = glitch && contact.loyalty <= 2;
 
-  // Calculate favor consumption
-  const favorConsumed = success ? service.favorCost : Math.floor(service.favorCost / 2);
+  // Calculate favor consumption (use adjusted cost if provided)
+  const effectiveFavorCost = adjustedFavorCost ?? service.favorCost;
+  const favorConsumed = success ? effectiveFavorCost : Math.floor(effectiveFavorCost / 2);
 
   // Calculate loyalty change
   let loyaltyChange = 0;
