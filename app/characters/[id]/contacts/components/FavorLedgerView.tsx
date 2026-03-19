@@ -72,7 +72,14 @@ export function FavorLedgerView({ ledger, contacts, theme }: FavorLedgerViewProp
       tx.success !== undefined ? (tx.success ? "Yes" : "No") : "",
     ]);
 
-    const csv = [headers, ...rows].map((row) => row.join(",")).join("\n");
+    const escapeCsvField = (v: unknown): string => {
+      const s = String(v ?? "");
+      if (/[",\n\r]/.test(s) || /^[=+\-@]/.test(s)) {
+        return `"${s.replace(/"/g, '""')}"`;
+      }
+      return s;
+    };
+    const csv = [headers, ...rows].map((row) => row.map(escapeCsvField).join(",")).join("\n");
     const blob = new Blob([csv], { type: "text/csv" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");

@@ -3,7 +3,6 @@
 import React, { useState, useEffect, use } from "react";
 import { Link, Button } from "react-aria-components";
 import {
-  ArrowLeft,
   Edit,
   Phone,
   MapPin,
@@ -14,6 +13,7 @@ import {
   Flame,
   RefreshCw,
   Trash2,
+  ArrowLeft,
 } from "lucide-react";
 import type {
   SocialContact,
@@ -33,18 +33,35 @@ import {
 } from "../components/contact-constants";
 import { checkMaintenanceStatus } from "@/lib/rules/contact-maintenance";
 
-function ArrowLeftIcon({ className }: { className?: string }) {
-  return (
-    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2}
-        d="M10 19l-7-7m0 0l7-7m-7 7h18"
-      />
-    </svg>
-  );
-}
+const MAINTENANCE_STYLES: Record<
+  string,
+  { bg: string; text: string; border: string; label: string }
+> = {
+  current: {
+    bg: "bg-emerald-500/10",
+    text: "text-emerald-400",
+    border: "border-emerald-500/30",
+    label: "Current",
+  },
+  overdue: {
+    bg: "bg-red-500/10",
+    text: "text-red-400",
+    border: "border-red-500/30",
+    label: "Overdue",
+  },
+  "at-risk": {
+    bg: "bg-amber-500/10",
+    text: "text-amber-400",
+    border: "border-amber-500/30",
+    label: "At Risk",
+  },
+  "not-applicable": {
+    bg: "bg-zinc-500/10",
+    text: "text-zinc-400",
+    border: "border-zinc-500/30",
+    label: "N/A",
+  },
+};
 
 interface CharacterData {
   id: string;
@@ -240,6 +257,27 @@ export default function ContactDetailPage({
     }
   };
 
+  // Handle confirm Edge contact
+  const handleConfirmEdge = async () => {
+    setActionLoading(true);
+    try {
+      const response = await fetch(
+        `/api/characters/${characterId}/contacts/${contactId}/confirm-edge`,
+        { method: "POST", headers: { "Content-Type": "application/json" } }
+      );
+      const result = await response.json();
+      if (!result.success) throw new Error(result.error);
+      setContact(result.contact);
+      if (character && result.karmaRemaining !== undefined) {
+        setCharacter({ ...character, karmaCurrent: result.karmaRemaining });
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Confirmation failed");
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
   // Handle delete contact
   const handleDelete = async () => {
     if (!confirm("Are you sure you want to delete this contact? This cannot be undone.")) {
@@ -297,36 +335,6 @@ export default function ContactDetailPage({
 
   const favorStyle = getFavorBalanceStyle(contact.favorBalance);
   const maintenanceStatus = checkMaintenanceStatus(contact, new Date().toISOString());
-
-  const MAINTENANCE_STYLES: Record<
-    string,
-    { bg: string; text: string; border: string; label: string }
-  > = {
-    current: {
-      bg: "bg-emerald-500/10",
-      text: "text-emerald-400",
-      border: "border-emerald-500/30",
-      label: "Current",
-    },
-    overdue: {
-      bg: "bg-red-500/10",
-      text: "text-red-400",
-      border: "border-red-500/30",
-      label: "Overdue",
-    },
-    "at-risk": {
-      bg: "bg-amber-500/10",
-      text: "text-amber-400",
-      border: "border-amber-500/30",
-      label: "At Risk",
-    },
-    "not-applicable": {
-      bg: "bg-zinc-500/10",
-      text: "text-zinc-400",
-      border: "border-zinc-500/30",
-      label: "N/A",
-    },
-  };
   const maintStyle =
     MAINTENANCE_STYLES[maintenanceStatus.status] || MAINTENANCE_STYLES["not-applicable"];
 
@@ -339,7 +347,7 @@ export default function ContactDetailPage({
             href={`/characters/${characterId}/contacts`}
             className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-emerald-400 transition-colors"
           >
-            <ArrowLeftIcon className="w-4 h-4" />
+            <ArrowLeft className="w-4 h-4" />
             Back to Contacts
           </Link>
           <div className="flex items-center gap-2">
@@ -528,25 +536,7 @@ export default function ContactDetailPage({
 
             {contact.pendingKarmaConfirmation && (
               <Button
-                onPress={async () => {
-                  setActionLoading(true);
-                  try {
-                    const response = await fetch(
-                      `/api/characters/${characterId}/contacts/${contactId}/confirm-edge`,
-                      { method: "POST", headers: { "Content-Type": "application/json" } }
-                    );
-                    const result = await response.json();
-                    if (!result.success) throw new Error(result.error);
-                    setContact(result.contact);
-                    if (character && result.karmaRemaining !== undefined) {
-                      setCharacter({ ...character, karmaCurrent: result.karmaRemaining });
-                    }
-                  } catch (err) {
-                    setError(err instanceof Error ? err.message : "Confirmation failed");
-                  } finally {
-                    setActionLoading(false);
-                  }
-                }}
+                onPress={handleConfirmEdge}
                 isDisabled={actionLoading}
                 className="flex items-center gap-2 px-4 py-2 rounded border border-amber-500/30 text-amber-400 hover:bg-amber-500/10 transition-colors"
               >

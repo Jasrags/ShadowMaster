@@ -5,7 +5,7 @@ import { ModalOverlay, Modal, Dialog, Button } from "react-aria-components";
 import type { ContactArchetype } from "@/lib/types";
 import type { Theme } from "@/lib/themes";
 import { THEMES, DEFAULT_THEME } from "@/lib/themes";
-import { calculateEdgeCost } from "@/lib/rules/i-know-a-guy";
+import { calculateEdgeCost, calculateConfirmationKarmaCost } from "@/lib/rules/i-know-a-guy";
 
 interface IKnowAGuyModalProps {
   isOpen: boolean;
@@ -40,7 +40,7 @@ export function IKnowAGuyModal({
 
   const edgeCost = calculateEdgeCost(connection);
   const canAfford = currentEdge >= edgeCost;
-  const karmaCostToConfirm = connection + 1; // Connection + Loyalty(1)
+  const karmaCostToConfirm = calculateConfirmationKarmaCost(connection);
 
   const handleSubmit = async () => {
     if (!name.trim() || !archetype.trim()) return;
