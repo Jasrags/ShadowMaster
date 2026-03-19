@@ -473,6 +473,53 @@ export async function updateContactFavorBalance(
 }
 
 // =============================================================================
+// RUN FASTER FIELD HELPERS
+// =============================================================================
+
+/**
+ * Update relationship qualities on a contact
+ *
+ * @param userId - Character owner ID
+ * @param characterId - Character ID
+ * @param contactId - Contact ID
+ * @param qualities - New relationship qualities array
+ * @returns Updated contact
+ */
+export async function updateRelationshipQualities(
+  userId: ID,
+  characterId: ID,
+  contactId: ID,
+  qualities: import("../rules/relationship-qualities").RelationshipQuality[]
+): Promise<SocialContact> {
+  return updateCharacterContact(userId, characterId, contactId, {
+    relationshipQualities: qualities,
+  });
+}
+
+/**
+ * Mark whether a contact's loyalty improvement is blocked
+ *
+ * Typically set after using Intimidation on a Blackmail relationship
+ * (Run Faster p. 177).
+ *
+ * @param userId - Character owner ID
+ * @param characterId - Character ID
+ * @param contactId - Contact ID
+ * @param blocked - Whether loyalty improvement is blocked
+ * @returns Updated contact
+ */
+export async function markLoyaltyBlocked(
+  userId: ID,
+  characterId: ID,
+  contactId: ID,
+  blocked: boolean
+): Promise<SocialContact> {
+  return updateCharacterContact(userId, characterId, contactId, {
+    loyaltyImprovementBlocked: blocked,
+  });
+}
+
+// =============================================================================
 // CAMPAIGN CONTACT OPERATIONS
 // =============================================================================
 

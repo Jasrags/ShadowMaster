@@ -10,12 +10,11 @@
  * Family (+1 Karma): +1 Loyalty for tests, −1 chip to improve loyalty,
  * but −1 Loyalty for actual job performance (they worry about you).
  *
- * NOTE: This module is a standalone rules layer. The SocialContact type does
- * not yet have `relationshipQualities` or `loyaltyImprovementBlocked` fields.
- * Those will be added when the integration layer wires these rules to the
- * storage/API layer. Callers must manage persistence of returned flags
- * (e.g., IntimidationResult.loyaltyImprovementBlocked) in their own state
- * until the type extension lands.
+ * Integration: SocialContact now has `relationshipQualities` and
+ * `loyaltyImprovementBlocked` fields. Use `updateRelationshipQualities()`
+ * and `markLoyaltyBlocked()` from the storage layer to persist state.
+ * The validation pipeline checks `loyaltyImprovementBlocked` via
+ * `isLoyaltyImprovementAllowed()` in `lib/rules/contacts.ts`.
  *
  * @see /docs/capabilities/campaign.social-governance.md
  */

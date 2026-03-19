@@ -8,9 +8,9 @@
  * - Contractual obligations; leaves a data trail
  * - Karma cost counts against positive quality limit
  *
- * NOTE: This module is a standalone rules layer. Integration with the
- * existing contact validation pipeline (`lib/rules/contacts.ts`) and
- * favor system (`lib/rules/favors.ts`) will be done in a wiring PR.
+ * Integration: `validateContact()` in `lib/rules/contacts.ts` now calls
+ * `validateOrganizationContact()` for contacts with `group: "organization"`.
+ * The favor system integration will be done in a follow-up PR.
  *
  * @see /docs/capabilities/campaign.social-governance.md
  */

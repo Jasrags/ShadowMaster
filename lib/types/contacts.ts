@@ -9,6 +9,7 @@
 
 import type { ID, ISODateString, Metadata } from "./core";
 import type { EditionCode } from "./edition";
+import type { RelationshipQuality } from "../rules/relationship-qualities";
 
 // =============================================================================
 // CONTACT CORE TYPES
@@ -203,10 +204,23 @@ export interface SocialContact {
   lastContactedAt?: ISODateString;
 
   /** How the contact was acquired */
-  acquisitionMethod?: "creation" | "networking" | "introduction" | "event" | "karma";
+  acquisitionMethod?: "creation" | "networking" | "introduction" | "event" | "karma" | "edge";
 
   /** Session ID when contact was acquired (if in campaign) */
   acquisitionSessionId?: ID;
+
+  // ---------------------------------------------------------------------------
+  // Run Faster Extensions (pp. 177-178)
+  // ---------------------------------------------------------------------------
+
+  /** Relationship qualities (Run Faster pp. 177-178) */
+  relationshipQualities?: RelationshipQuality[];
+
+  /** Whether loyalty improvement is permanently blocked (via Intimidation) */
+  loyaltyImprovementBlocked?: boolean;
+
+  /** Whether this contact is pending Karma confirmation (I Know a Guy) */
+  pendingKarmaConfirmation?: boolean;
 
   createdAt: ISODateString;
   updatedAt?: ISODateString;
@@ -788,6 +802,11 @@ export interface UpdateContactRequest {
   status?: ContactStatus;
   favorBalance?: number;
   lastContactedAt?: ISODateString;
+  // Run Faster extensions (pp. 177-178)
+  relationshipQualities?: RelationshipQuality[];
+  loyaltyImprovementBlocked?: boolean;
+  pendingKarmaConfirmation?: boolean;
+  acquisitionMethod?: SocialContact["acquisitionMethod"];
 }
 
 /**
