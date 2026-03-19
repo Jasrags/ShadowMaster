@@ -496,6 +496,8 @@ export interface Character {
     overflowDamage?: number;
     /** Current Edge points available (defaults to edge attribute if undefined) */
     edgeCurrent?: number;
+    /** Edge refresh blocked until Karma earned (I Know a Guy, Run Faster p. 178) */
+    edgeRefreshBlocked?: boolean;
   };
 
   /** Active modifiers applied by GM or system conditions */
