@@ -19,7 +19,7 @@ import type {
   CreateContactRequest,
   SocialCapital,
 } from "../types/contacts";
-import { validateOrganizationContact } from "./group-contacts";
+import { validateOrganizationContact, getOrganizationDefinition } from "./group-contacts";
 
 // =============================================================================
 // EDITION-SPECIFIC LIMITS
@@ -281,6 +281,69 @@ export function validateContactBudget(
     pointsRequired,
     pointsAvailable,
   };
+}
+
+// =============================================================================
+// ORGANIZATION KARMA BUDGET
+// =============================================================================
+
+/**
+ * Get the positive quality karma limit for an edition.
+ *
+ * All current editions use 25 karma. Centralized here as the single
+ * source of truth for organization contact budget validation.
+ */
+export function getPositiveQualityKarmaLimit(_editionCode: string): number {
+  return 25;
+}
+
+/**
+ * Validate that an organization contact's karma cost fits within the
+ * positive quality budget (Run Faster p. 179).
+ *
+ * Organization contact karma costs count against the positive quality
+ * karma limit (25 in SR5).
+ *
+ * @param organizationId - Organization definition ID
+ * @param currentQualityKarmaSpent - Karma already spent on positive qualities (must be >= 0)
+ * @param editionCode - Edition for karma limit lookup
+ * @returns Validation result with cost
+ */
+export function validateOrgContactKarmaBudget(
+  organizationId: string,
+  currentQualityKarmaSpent: number,
+  editionCode: string = "sr5"
+): { allowed: boolean; karmaCost: number; reason?: string } {
+  if (currentQualityKarmaSpent < 0) {
+    return {
+      allowed: false,
+      karmaCost: 0,
+      reason: "Invalid karma spent value",
+    };
+  }
+
+  const org = getOrganizationDefinition(organizationId);
+
+  if (!org) {
+    return {
+      allowed: false,
+      karmaCost: 0,
+      reason: `Unknown organization: ${organizationId}`,
+    };
+  }
+
+  const limit = getPositiveQualityKarmaLimit(editionCode);
+  const remaining = limit - currentQualityKarmaSpent;
+
+  if (org.karmaCost > remaining) {
+    return {
+      allowed: false,
+      karmaCost: org.karmaCost,
+      reason: `Organization karma cost (${org.karmaCost}) exceeds remaining positive quality budget (${remaining} of ${limit})`,
+    };
+  }
+
+  return { allowed: true, karmaCost: org.karmaCost };
 }
 
 // =============================================================================
@@ -597,12 +660,63 @@ export function resolveSharedContact(
 /**
  * Check whether a contact's loyalty can be improved
  *
- * Returns false when loyaltyImprovementBlocked is set (e.g., after using
- * Intimidation on a Blackmail relationship — Run Faster p. 177).
+ * Returns false when:
+ * - loyaltyImprovementBlocked is set (Intimidation — Run Faster p. 177)
+ * - contact is an organization contact (Loyalty capped at 1 — Run Faster p. 179)
  *
  * @param contact - Contact to check
  * @returns Whether loyalty improvement is allowed
  */
 export function isLoyaltyImprovementAllowed(contact: SocialContact): boolean {
-  return !contact.loyaltyImprovementBlocked;
+  if (contact.loyaltyImprovementBlocked) {
+    return false;
+  }
+
+  // Organization contacts are capped at Loyalty 1
+  if (contact.group === "organization") {
+    return false;
+  }
+
+  return true;
+}
+
+/**
+ * Validate a loyalty update for a contact
+ *
+ * Enforces organization contact cap (Loyalty ≤ 1) and edition max.
+ *
+ * @param contact - Contact being updated
+ * @param newLoyalty - Proposed new loyalty value
+ * @param editionCode - Edition for max loyalty
+ * @returns Validation result
+ */
+export function validateLoyaltyUpdate(
+  contact: SocialContact,
+  newLoyalty: number,
+  editionCode: string
+): { allowed: boolean; reason?: string } {
+  const minLoyalty = getMinLoyalty(editionCode);
+  if (newLoyalty < minLoyalty) {
+    return {
+      allowed: false,
+      reason: `Loyalty cannot be less than ${minLoyalty}`,
+    };
+  }
+
+  if (contact.group === "organization" && newLoyalty > 1) {
+    return {
+      allowed: false,
+      reason: "Organization contacts cannot have Loyalty above 1",
+    };
+  }
+
+  const maxLoyalty = getMaxLoyalty(editionCode);
+  if (newLoyalty > maxLoyalty) {
+    return {
+      allowed: false,
+      reason: `Loyalty cannot exceed ${maxLoyalty} for ${editionCode}`,
+    };
+  }
+
+  return { allowed: true };
 }
