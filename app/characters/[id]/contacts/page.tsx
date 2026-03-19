@@ -17,6 +17,9 @@ import { ContactFormModal } from "./components/ContactFormModal";
 import { CallFavorModal } from "./components/CallFavorModal";
 import { FavorLedgerView } from "./components/FavorLedgerView";
 import { NetworkingAction } from "./components/NetworkingAction";
+import { IKnowAGuyModal } from "./components/IKnowAGuyModal";
+import { ConfirmEdgeContactModal } from "./components/ConfirmEdgeContactModal";
+import { checkMaintenanceStatus } from "@/lib/rules/contact-maintenance";
 
 function ArrowLeftIcon({ className }: { className?: string }) {
   return (
@@ -37,6 +40,7 @@ interface CharacterData {
   nuyen: number;
   karmaCurrent: number;
   editionCode: string;
+  edgeCurrent: number;
 }
 
 interface FavorLedgerData {
@@ -90,8 +94,12 @@ export default function ContactsPage({ params }: { params: Promise<{ id: string 
   const [searchQuery, setSearchQuery] = useState("");
   const [filterArchetype, setFilterArchetype] = useState<string>("all");
   const [filterStatus, setFilterStatus] = useState<string>("all");
+  const [filterOverdue, setFilterOverdue] = useState(false);
+  const [sortBy, setSortBy] = useState<"name" | "connection" | "loyalty" | "chips">("name");
   const [showAddModal, setShowAddModal] = useState(false);
   const [showCallFavorModal, setShowCallFavorModal] = useState(false);
+  const [showIKnowAGuyModal, setShowIKnowAGuyModal] = useState(false);
+  const [confirmingEdgeContact, setConfirmingEdgeContact] = useState<SocialContact | null>(null);
   const [selectedContact, setSelectedContact] = useState<SocialContact | null>(null);
 
   const theme = THEMES[DEFAULT_THEME];
@@ -114,7 +122,11 @@ export default function ContactsPage({ params }: { params: Promise<{ id: string 
 
         if (!charData.success) throw new Error(charData.error);
 
-        setCharacter(charData.character);
+        const charObj = charData.character;
+        setCharacter({
+          ...charObj,
+          edgeCurrent: charObj.condition?.edgeCurrent ?? charObj.specialAttributes?.edge ?? 0,
+        });
         setContacts(contactsData.contacts || []);
         setSocialCapital(socialCapData.socialCapital || null);
         setFavorLedger(ledgerData.ledger || null);
@@ -145,25 +157,45 @@ export default function ContactsPage({ params }: { params: Promise<{ id: string 
   }, [characterId]);
 
   // Filter contacts
-  const filteredContacts = contacts.filter((c) => {
-    if (searchQuery) {
-      const query = searchQuery.toLowerCase();
-      if (
-        !c.name.toLowerCase().includes(query) &&
-        !c.archetype.toLowerCase().includes(query) &&
-        !(c.location || "").toLowerCase().includes(query)
-      ) {
+  const now = new Date().toISOString();
+  const filteredContacts = contacts
+    .filter((c) => {
+      if (searchQuery) {
+        const query = searchQuery.toLowerCase();
+        if (
+          !c.name.toLowerCase().includes(query) &&
+          !c.archetype.toLowerCase().includes(query) &&
+          !(c.location || "").toLowerCase().includes(query)
+        ) {
+          return false;
+        }
+      }
+      if (filterArchetype !== "all" && c.archetype !== filterArchetype) {
         return false;
       }
-    }
-    if (filterArchetype !== "all" && c.archetype !== filterArchetype) {
-      return false;
-    }
-    if (filterStatus !== "all" && c.status !== filterStatus) {
-      return false;
-    }
-    return true;
-  });
+      if (filterStatus !== "all" && c.status !== filterStatus) {
+        return false;
+      }
+      if (filterOverdue) {
+        const maint = checkMaintenanceStatus(c, now);
+        if (!maint.overdue && maint.status !== "at-risk") {
+          return false;
+        }
+      }
+      return true;
+    })
+    .sort((a, b) => {
+      switch (sortBy) {
+        case "connection":
+          return b.connection - a.connection;
+        case "loyalty":
+          return b.loyalty - a.loyalty;
+        case "chips":
+          return Math.abs(b.favorBalance) - Math.abs(a.favorBalance);
+        default:
+          return a.name.localeCompare(b.name);
+      }
+    });
 
   // Get unique archetypes for filter
   const uniqueArchetypes = [...new Set(contacts.map((c) => c.archetype))].sort();
@@ -224,6 +256,57 @@ export default function ContactsPage({ params }: { params: Promise<{ id: string 
     }
   };
 
+  // Handle I Know a Guy
+  const handleIKnowAGuy = async (data: {
+    connection: number;
+    archetype: string;
+    name: string;
+    description?: string;
+  }) => {
+    const response = await fetch(`/api/characters/${characterId}/contacts/edge-acquire`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+
+    const result = await response.json();
+    if (!result.success) {
+      throw new Error(result.error || "Failed to acquire contact");
+    }
+
+    setContacts((prev) => [...prev, result.contact]);
+    if (character) {
+      setCharacter({
+        ...character,
+        edgeCurrent: result.edgeRemaining ?? character.edgeCurrent,
+      });
+    }
+  };
+
+  // Handle confirm Edge contact
+  const handleConfirmEdgeContact = async (contact: SocialContact) => {
+    const response = await fetch(
+      `/api/characters/${characterId}/contacts/${contact.id}/confirm-edge`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+
+    const result = await response.json();
+    if (!result.success) {
+      throw new Error(result.error || "Failed to confirm contact");
+    }
+
+    setContacts((prev) => prev.map((c) => (c.id === contact.id ? result.contact : c)));
+    if (character) {
+      setCharacter({
+        ...character,
+        karmaCurrent: result.karmaRemaining ?? character.karmaCurrent,
+      });
+    }
+  };
+
   // Handle networking success
   const handleNetworkingSuccess = useCallback((suggestedContact: Partial<SocialContact>) => {
     // Pre-fill the add contact modal with suggested values
@@ -275,16 +358,24 @@ export default function ContactsPage({ params }: { params: Promise<{ id: string 
               Back to {character.name}
             </Link>
           </div>
-          <Button
-            onPress={() => {
-              setSelectedContact(null);
-              setShowAddModal(true);
-            }}
-            className={`flex items-center gap-2 px-4 py-2 rounded ${theme.colors.accentBg} text-white`}
-          >
-            <Plus className="w-4 h-4" />
-            Add Contact
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button
+              onPress={() => setShowIKnowAGuyModal(true)}
+              className="flex items-center gap-2 px-4 py-2 rounded border border-amber-500/30 text-amber-400 hover:bg-amber-500/10 transition-colors"
+            >
+              I Know a Guy
+            </Button>
+            <Button
+              onPress={() => {
+                setSelectedContact(null);
+                setShowAddModal(true);
+              }}
+              className={`flex items-center gap-2 px-4 py-2 rounded ${theme.colors.accentBg} text-white`}
+            >
+              <Plus className="w-4 h-4" />
+              Add Contact
+            </Button>
+          </div>
         </div>
 
         {/* Page Title */}
@@ -385,6 +476,25 @@ export default function ContactsPage({ params }: { params: Promise<{ id: string 
                 <option value="missing">Missing</option>
                 <option value="deceased">Deceased</option>
               </select>
+              <label className="flex items-center gap-2 px-3 py-2 rounded border border-border bg-background cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={filterOverdue}
+                  onChange={(e) => setFilterOverdue(e.target.checked)}
+                  className="rounded border-border"
+                />
+                <span className="text-sm text-red-400">Overdue</span>
+              </label>
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
+                className={`px-3 py-2 rounded border ${theme.colors.border} bg-background text-foreground`}
+              >
+                <option value="name">Sort: Name</option>
+                <option value="connection">Sort: Connection</option>
+                <option value="loyalty">Sort: Loyalty</option>
+                <option value="chips">Sort: Chips</option>
+              </select>
             </div>
 
             {/* Contact Grid */}
@@ -410,6 +520,11 @@ export default function ContactsPage({ params }: { params: Promise<{ id: string 
                       setSelectedContact(contact);
                       setShowCallFavorModal(true);
                     }}
+                    onConfirmEdge={
+                      contact.pendingKarmaConfirmation
+                        ? () => setConfirmingEdgeContact(contact)
+                        : undefined
+                    }
                   />
                 ))}
               </div>
@@ -466,6 +581,28 @@ export default function ContactsPage({ params }: { params: Promise<{ id: string 
           contact={selectedContact}
           services={favorServices as unknown as import("@/lib/types").FavorServiceDefinition[]}
           characterNuyen={character.nuyen}
+          characterKarma={character.karmaCurrent}
+          theme={theme}
+        />
+      )}
+
+      {/* I Know a Guy Modal */}
+      <IKnowAGuyModal
+        isOpen={showIKnowAGuyModal}
+        onClose={() => setShowIKnowAGuyModal(false)}
+        onSubmit={handleIKnowAGuy}
+        currentEdge={character.edgeCurrent}
+        archetypes={archetypes}
+        theme={theme}
+      />
+
+      {/* Confirm Edge Contact Modal */}
+      {confirmingEdgeContact && (
+        <ConfirmEdgeContactModal
+          isOpen={!!confirmingEdgeContact}
+          onClose={() => setConfirmingEdgeContact(null)}
+          onConfirm={() => handleConfirmEdgeContact(confirmingEdgeContact)}
+          contact={confirmingEdgeContact}
           characterKarma={character.karmaCurrent}
           theme={theme}
         />
