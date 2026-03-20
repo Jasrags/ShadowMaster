@@ -198,7 +198,7 @@ export function ContactFormModal({
           ${isExiting ? "animate-out zoom-out-95 duration-200" : ""}
         `}
       >
-        <Dialog className="outline-none">
+        <Dialog className={`outline-none rounded-xl ${t.colors.card}`}>
           {({ close }) => (
             <form onSubmit={handleSubmit} className="flex flex-col">
               {/* Header */}
