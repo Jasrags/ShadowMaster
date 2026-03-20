@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import { Button, Label, Input, TextField } from "react-aria-components";
 import type { ContactArchetype, SocialContact } from "@/lib/types";
 import type { Theme } from "@/lib/themes";
@@ -78,19 +78,18 @@ export function NetworkingAction({
   const archetypeList = archetypes.length > 0 ? archetypes.map((a) => a.name) : DEFAULT_ARCHETYPES;
 
   // Calculate dice pool from character stats
-  const charisma = characterAttributes?.charisma ?? 0;
-  const etiquette = characterSkills?.etiquette ?? characterSkills?.Etiquette ?? 0;
-  const negotiation = characterSkills?.negotiation ?? characterSkills?.Negotiation ?? 0;
+  // Attributes use full lowercase names ("charisma") in character data; fallback to short code ("cha")
+  const charisma = characterAttributes?.charisma ?? characterAttributes?.cha ?? 0;
+  const etiquette = characterSkills?.etiquette ?? 0;
+  const negotiation = characterSkills?.negotiation ?? 0;
   const bestSkill = Math.max(etiquette, negotiation);
   const bestSkillName = etiquette >= negotiation ? "Etiquette" : "Negotiation";
   const baseDicePool = charisma + bestSkill;
-  const hasStats = charisma > 0 && bestSkill > 0;
+  const hasStats = charisma > 0 || bestSkill > 0;
 
-  // Pool label for DiceRoller context
-  const contextLabel = useMemo(
-    () => (hasStats ? `Charisma ${charisma} + ${bestSkillName} ${bestSkill}` : "Networking"),
-    [hasStats, charisma, bestSkillName, bestSkill]
-  );
+  const contextLabel = hasStats
+    ? `Charisma ${charisma} + ${bestSkillName} ${bestSkill}`
+    : "Networking";
 
   const handleDiceRoll = useCallback((rollResult: RollResult) => {
     setDiceRoll(rollResult.hits);
