@@ -8,6 +8,8 @@ import type {
   SocialCapital,
   ContactArchetype,
   CreateContactRequest,
+  FavorLedger,
+  FavorServiceDefinition,
 } from "@/lib/types";
 import { THEMES, DEFAULT_THEME, type Theme, type ThemeId } from "@/lib/themes";
 import { Section } from "../components/Section";
@@ -43,26 +45,6 @@ interface CharacterData {
   edgeCurrent: number;
 }
 
-interface FavorLedgerData {
-  characterId: string;
-  transactions: Array<{
-    id: string;
-    contactId: string;
-    type: string;
-    description: string;
-    favorChange: number;
-    timestamp: string;
-    [key: string]: unknown;
-  }>;
-  totalFavorsCalled: number;
-  totalFavorsOwed: number;
-  totalNuyenSpent: number;
-  totalKarmaSpent: number;
-  burnedContactsCount: number;
-  createdAt: string;
-  updatedAt: string;
-}
-
 type TabId = "contacts" | "networking" | "ledger";
 
 export default function ContactsPage({ params }: { params: Promise<{ id: string }> }) {
@@ -72,20 +54,9 @@ export default function ContactsPage({ params }: { params: Promise<{ id: string 
   const [character, setCharacter] = useState<CharacterData | null>(null);
   const [contacts, setContacts] = useState<SocialContact[]>([]);
   const [socialCapital, setSocialCapital] = useState<SocialCapital | null>(null);
-  const [favorLedger, setFavorLedger] = useState<FavorLedgerData | null>(null);
+  const [favorLedger, setFavorLedger] = useState<FavorLedger | null>(null);
   const [archetypes, setArchetypes] = useState<ContactArchetype[]>([]);
-  const [favorServices, setFavorServices] = useState<
-    Array<{
-      id: string;
-      name: string;
-      description: string;
-      minimumConnection: number;
-      minimumLoyalty: number;
-      favorCost: number;
-      riskLevel: string;
-      [key: string]: unknown;
-    }>
-  >([]);
+  const [favorServices, setFavorServices] = useState<FavorServiceDefinition[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -101,6 +72,7 @@ export default function ContactsPage({ params }: { params: Promise<{ id: string 
   const [showIKnowAGuyModal, setShowIKnowAGuyModal] = useState(false);
   const [confirmingEdgeContact, setConfirmingEdgeContact] = useState<SocialContact | null>(null);
   const [selectedContact, setSelectedContact] = useState<SocialContact | null>(null);
+  const [prefillContact, setPrefillContact] = useState<Partial<SocialContact> | null>(null);
 
   const theme = THEMES[DEFAULT_THEME];
 
@@ -310,7 +282,7 @@ export default function ContactsPage({ params }: { params: Promise<{ id: string 
   // Handle networking success
   const handleNetworkingSuccess = useCallback((suggestedContact: Partial<SocialContact>) => {
     // Pre-fill the add contact modal with suggested values
-    setSelectedContact(suggestedContact as SocialContact);
+    setPrefillContact(suggestedContact);
     setShowAddModal(true);
   }, []);
 
@@ -546,11 +518,7 @@ export default function ContactsPage({ params }: { params: Promise<{ id: string 
 
         {activeTab === "ledger" && favorLedger && (
           <Section title="Favor Ledger" theme={theme}>
-            <FavorLedgerView
-              ledger={favorLedger as unknown as import("@/lib/types").FavorLedger}
-              contacts={contacts}
-              theme={theme}
-            />
+            <FavorLedgerView ledger={favorLedger} contacts={contacts} theme={theme} />
           </Section>
         )}
       </div>
@@ -560,9 +528,10 @@ export default function ContactsPage({ params }: { params: Promise<{ id: string 
         isOpen={showAddModal}
         onClose={() => {
           setShowAddModal(false);
-          setSelectedContact(null);
+          setPrefillContact(null);
         }}
         onSubmit={handleAddContact}
+        prefillContact={prefillContact}
         archetypes={archetypes}
         maxContactPoints={socialCapital?.maxContactPoints || 0}
         usedContactPoints={socialCapital?.usedContactPoints || 0}
@@ -579,7 +548,7 @@ export default function ContactsPage({ params }: { params: Promise<{ id: string 
           }}
           onSubmit={handleCallFavor}
           contact={selectedContact}
-          services={favorServices as unknown as import("@/lib/types").FavorServiceDefinition[]}
+          services={favorServices}
           characterNuyen={character.nuyen}
           characterKarma={character.karmaCurrent}
           theme={theme}

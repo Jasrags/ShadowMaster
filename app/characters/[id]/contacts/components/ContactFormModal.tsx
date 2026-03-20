@@ -26,6 +26,7 @@ interface ContactFormModalProps {
   onClose: () => void;
   onSubmit: (data: CreateContactRequest) => Promise<void>;
   contact?: SocialContact; // If editing
+  prefillContact?: Partial<SocialContact> | null; // Pre-fill from networking
   archetypes?: ContactArchetype[];
   maxContactPoints?: number;
   usedContactPoints?: number;
@@ -55,6 +56,7 @@ export function ContactFormModal({
   onClose,
   onSubmit,
   contact,
+  prefillContact,
   archetypes,
   maxContactPoints = 0,
   usedContactPoints = 0,
@@ -86,17 +88,18 @@ export function ContactFormModal({
   // Reset form when modal opens/closes or contact changes
   useEffect(() => {
     if (isOpen) {
-      if (contact) {
+      const source = contact ?? prefillContact;
+      if (source) {
         setFormData({
-          name: contact.name,
-          connection: contact.connection,
-          loyalty: contact.loyalty,
-          archetype: contact.archetype,
-          description: contact.description || "",
-          specializations: contact.specializations || [],
-          location: contact.location || "",
-          metatype: contact.metatype || "",
-          notes: contact.notes || "",
+          name: source.name || "",
+          connection: source.connection ?? 1,
+          loyalty: source.loyalty ?? 1,
+          archetype: source.archetype || "",
+          description: source.description || "",
+          specializations: source.specializations || [],
+          location: source.location || "",
+          metatype: source.metatype || "",
+          notes: source.notes || "",
         });
       } else {
         setFormData({
@@ -113,10 +116,10 @@ export function ContactFormModal({
       }
       setSpecializationInput("");
       setError(null);
-      setIsOrganizationContact(contact?.group === "organization" || false);
+      setIsOrganizationContact(source?.group === "organization" || false);
       setSelectedOrg(null);
     }
-  }, [isOpen, contact]);
+  }, [isOpen, contact, prefillContact]);
 
   // Calculate point cost
   const pointCost = formData.connection + formData.loyalty;
