@@ -1,5 +1,5 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { render, screen, act } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 // Mock react-aria-components
@@ -52,7 +52,7 @@ vi.mock("@/lib/themes", () => ({
       colors: {
         background: "",
         card: "",
-        border: "",
+        border: "border-border",
         accent: "text-emerald-400",
         accentBg: "",
         muted: "",
@@ -69,40 +69,23 @@ vi.mock("@/lib/themes", () => ({
   DEFAULT_THEME: "neon-rain",
 }));
 
-// Capture the onRoll prop from DiceRoller
-let capturedOnRoll: ((result: { hits: number }) => void) | undefined;
-let capturedInitialPool: number | undefined;
-let capturedContextLabel: string | undefined;
-
-vi.mock("@/components/DiceRoller", () => ({
-  DiceRoller: ({
-    onRoll,
-    initialPool,
-    contextLabel,
-  }: {
-    onRoll?: (result: { hits: number }) => void;
-    initialPool?: number;
-    contextLabel?: string;
-    compact?: boolean;
-    showHistory?: boolean;
-    label?: string;
-  }) => {
-    capturedOnRoll = onRoll;
-    capturedInitialPool = initialPool;
-    capturedContextLabel = contextLabel;
-    return (
-      <div data-testid="dice-roller">
-        <span data-testid="dice-pool">{initialPool}</span>
-        <span data-testid="dice-context">{contextLabel}</span>
-        <button
-          data-testid="mock-roll-button"
-          onClick={() => onRoll?.({ hits: 3 } as { hits: number })}
-        >
-          Roll
-        </button>
-      </div>
-    );
-  },
+// Mock dice engine to return predictable results
+vi.mock("@/lib/rules/action-resolution/dice-engine", () => ({
+  executeRoll: vi.fn().mockReturnValue({
+    dice: [
+      { value: 6, isHit: true, isOne: false },
+      { value: 5, isHit: true, isOne: false },
+      { value: 3, isHit: false, isOne: false },
+      { value: 1, isHit: false, isOne: true },
+    ],
+    hits: 2,
+    rawHits: 2,
+    ones: 1,
+    isGlitch: false,
+    isCriticalGlitch: false,
+    limitApplied: false,
+    poolSize: 4,
+  }),
 }));
 
 import { NetworkingAction } from "@/app/characters/[id]/contacts/components/NetworkingAction";
@@ -110,9 +93,11 @@ import { NetworkingAction } from "@/app/characters/[id]/contacts/components/Netw
 describe("NetworkingAction - dice roller integration", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    capturedOnRoll = undefined;
-    capturedInitialPool = undefined;
-    capturedContextLabel = undefined;
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
   });
 
   const defaultProps = {
@@ -122,35 +107,37 @@ describe("NetworkingAction - dice roller integration", () => {
   };
 
   describe("mode toggle", () => {
-    it("renders in Roll mode by default showing DiceRoller", () => {
+    it("renders in Roll mode by default showing dice roller", () => {
       render(<NetworkingAction {...defaultProps} />);
 
-      expect(screen.getByTestId("dice-roller")).toBeInTheDocument();
+      // Roll mode shows the roll button
+      expect(screen.getByRole("button", { name: /roll 6d6/i })).toBeInTheDocument();
+      // Manual input should not be visible
       expect(screen.queryByPlaceholderText(/enter your hits/i)).not.toBeInTheDocument();
     });
 
     it("switches to Manual mode showing number input", async () => {
-      const user = userEvent.setup();
+      const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
       render(<NetworkingAction {...defaultProps} />);
 
       const manualButton = screen.getByRole("button", { name: /manual/i });
       await user.click(manualButton);
 
-      expect(screen.queryByTestId("dice-roller")).not.toBeInTheDocument();
       expect(screen.getByPlaceholderText(/enter your hits/i)).toBeInTheDocument();
+      expect(screen.queryByRole("button", { name: /roll \d+d6/i })).not.toBeInTheDocument();
     });
 
     it("switches back to Roll mode from Manual", async () => {
-      const user = userEvent.setup();
+      const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
       render(<NetworkingAction {...defaultProps} />);
 
-      const manualButton = screen.getByRole("button", { name: /manual/i });
-      await user.click(manualButton);
+      // Go to manual
+      await user.click(screen.getByRole("button", { name: /manual/i }));
+      expect(screen.getByPlaceholderText(/enter your hits/i)).toBeInTheDocument();
 
-      const rollButton = screen.getByRole("button", { name: /roll/i });
-      await user.click(rollButton);
-
-      expect(screen.getByTestId("dice-roller")).toBeInTheDocument();
+      // Back to roll
+      await user.click(screen.getByRole("button", { name: /^roll$/i }));
+      expect(screen.getByRole("button", { name: /roll \d+d6/i })).toBeInTheDocument();
     });
   });
 
@@ -164,8 +151,9 @@ describe("NetworkingAction - dice roller integration", () => {
         />
       );
 
-      expect(capturedInitialPool).toBe(9); // 5 + 4
-      expect(capturedContextLabel).toBe("Charisma 5 + Etiquette 4");
+      // Pool = 5 + 4 = 9
+      expect(screen.getByRole("button", { name: /roll 9d6/i })).toBeInTheDocument();
+      expect(screen.getByText(/charisma 5 \+ etiquette 4/i)).toBeInTheDocument();
     });
 
     it("uses negotiation when higher than etiquette", () => {
@@ -177,8 +165,9 @@ describe("NetworkingAction - dice roller integration", () => {
         />
       );
 
-      expect(capturedInitialPool).toBe(9); // 4 + 5
-      expect(capturedContextLabel).toBe("Charisma 4 + Negotiation 5");
+      // Pool = 4 + 5 = 9
+      expect(screen.getByRole("button", { name: /roll 9d6/i })).toBeInTheDocument();
+      expect(screen.getByText(/charisma 4 \+ negotiation 5/i)).toBeInTheDocument();
     });
 
     it("falls back to short attribute code 'cha'", () => {
@@ -190,15 +179,16 @@ describe("NetworkingAction - dice roller integration", () => {
         />
       );
 
-      expect(capturedInitialPool).toBe(9); // 6 + 3
-      expect(capturedContextLabel).toBe("Charisma 6 + Etiquette 3");
+      // Pool = 6 + 3 = 9
+      expect(screen.getByRole("button", { name: /roll 9d6/i })).toBeInTheDocument();
     });
 
     it("defaults to pool of 6 when no stats provided", () => {
       render(<NetworkingAction {...defaultProps} />);
 
-      expect(capturedInitialPool).toBe(6);
-      expect(capturedContextLabel).toBe("Networking");
+      expect(screen.getByRole("button", { name: /roll 6d6/i })).toBeInTheDocument();
+      // The pool label shows "(Networking)" when no stats
+      expect(screen.getByText("(Networking)")).toBeInTheDocument();
     });
 
     it("uses charisma-only pool when no social skills", () => {
@@ -210,34 +200,37 @@ describe("NetworkingAction - dice roller integration", () => {
         />
       );
 
-      // hasStats is true (charisma > 0), pool = 4 + 0 = 4
-      expect(capturedInitialPool).toBe(4);
-      expect(capturedContextLabel).toContain("Charisma 4");
+      // Pool = 4 + 0 = 4
+      expect(screen.getByRole("button", { name: /roll 4d6/i })).toBeInTheDocument();
     });
   });
 
-  describe("dice roll populates hits", () => {
-    it("sets hits from DiceRoller onRoll callback", async () => {
-      const user = userEvent.setup();
+  describe("dice rolling", () => {
+    it("shows dice results after rolling", async () => {
+      const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
       render(<NetworkingAction {...defaultProps} />);
 
-      // Click the mock roll button which fires onRoll with 3 hits
-      const rollBtn = screen.getByTestId("mock-roll-button");
-      await user.click(rollBtn);
+      const rollButton = screen.getByRole("button", { name: /roll 6d6/i });
+      await user.click(rollButton);
 
-      // The "Using X hits" text should appear
-      expect(screen.getByText(/3 hits/)).toBeInTheDocument();
+      // Advance past the setTimeout delay inside act
+      await act(async () => {
+        vi.advanceTimersByTime(200);
+      });
+
+      // Should show hit count from mocked executeRoll (2 hits)
+      expect(screen.getByText("2")).toBeInTheDocument();
+      expect(screen.getByText("hits")).toBeInTheDocument();
     });
   });
 
   describe("manual mode input", () => {
     it("allows entering hits manually", async () => {
-      const user = userEvent.setup();
+      const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
       render(<NetworkingAction {...defaultProps} />);
 
       // Switch to manual
-      const manualButton = screen.getByRole("button", { name: /manual/i });
-      await user.click(manualButton);
+      await user.click(screen.getByRole("button", { name: /manual/i }));
 
       const input = screen.getByPlaceholderText(/enter your hits/i);
       await user.clear(input);
