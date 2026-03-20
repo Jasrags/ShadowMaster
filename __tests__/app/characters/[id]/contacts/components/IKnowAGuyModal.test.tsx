@@ -68,13 +68,6 @@ vi.mock("@/lib/rules/i-know-a-guy", () => ({
 import { IKnowAGuyModal } from "@/app/characters/[id]/contacts/components/IKnowAGuyModal";
 import type { ContactArchetype } from "@/lib/types";
 
-const defaultProps = {
-  isOpen: true,
-  onClose: vi.fn(),
-  onSubmit: vi.fn().mockResolvedValue(undefined),
-  currentEdge: 6,
-};
-
 const sampleArchetypes = [
   {
     id: "fixer",
@@ -99,10 +92,19 @@ const sampleArchetypes = [
 ] satisfies ContactArchetype[];
 
 describe("IKnowAGuyModal", () => {
+  const onClose = vi.fn();
+  const onSubmit = vi.fn().mockResolvedValue(undefined);
+
+  const defaultProps = {
+    isOpen: true,
+    onClose,
+    onSubmit,
+    currentEdge: 6,
+  };
+
   beforeEach(() => {
     vi.clearAllMocks();
-    defaultProps.onSubmit = vi.fn().mockResolvedValue(undefined);
-    defaultProps.onClose = vi.fn();
+    onSubmit.mockResolvedValue(undefined);
   });
 
   it("renders title 'I Know a Guy' when open", () => {

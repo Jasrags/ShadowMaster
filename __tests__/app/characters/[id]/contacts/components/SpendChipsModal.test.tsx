@@ -60,6 +60,33 @@ vi.mock("@/lib/themes", () => ({
   DEFAULT_THEME: "neon-rain",
 }));
 
+vi.mock("@/lib/rules/chips", () => ({
+  calculateChipDiceBonus: (chips: number) => Math.min(chips, 4),
+  calculateLoyaltyImprovementCost: (current: number, target: number) =>
+    target > 6
+      ? {
+          valid: false,
+          chipsRequired: 0,
+          downtimeWeeks: 0,
+          reason: "Target loyalty (7) exceeds maximum loyalty (6)",
+        }
+      : target !== current + 1
+        ? {
+            valid: false,
+            chipsRequired: 0,
+            downtimeWeeks: 0,
+            reason: "Loyalty can only be improved one level at a time",
+          }
+        : { valid: true, chipsRequired: target, downtimeWeeks: target },
+}));
+
+vi.mock("@/lib/rules/relationship-qualities", () => ({
+  getChipCostModifier: (cost: number) => ({
+    adjustedCost: cost,
+    reason: "No quality modifier",
+  }),
+}));
+
 const makeContact = (overrides = {}): SocialContact => ({
   id: "cnt-test",
   characterId: "char-1",
@@ -81,8 +108,9 @@ const makeContact = (overrides = {}): SocialContact => ({
   ...overrides,
 });
 
-// Lazy import to allow vi.mock calls to settle before loading the module
-const renderModal = async (
+import { SpendChipsModal } from "@/app/characters/[id]/contacts/components/SpendChipsModal";
+
+const renderModal = (
   props: Partial<{
     isOpen: boolean;
     onClose: () => void;
@@ -95,9 +123,6 @@ const renderModal = async (
     contact: SocialContact;
   }> = {}
 ) => {
-  const { SpendChipsModal } =
-    await import("@/app/characters/[id]/contacts/components/SpendChipsModal");
-
   const defaults = {
     isOpen: true,
     onClose: vi.fn(),
@@ -164,11 +189,8 @@ describe("SpendChipsModal", () => {
       const user = userEvent.setup();
       await renderModal({ contact: makeContact({ favorBalance: 3 }) });
 
-      const btn2 = screen.getAllByRole("button").find((btn) => btn.textContent?.trim() === "2");
-
-      if (btn2) {
-        await user.click(btn2);
-      }
+      const btn2 = screen.getByRole("button", { name: "2" });
+      await user.click(btn2);
 
       expect(screen.getByText(/\+\d+ dice.*negotiation|\d+ dice.*roll/i)).toBeInTheDocument();
     });
@@ -214,11 +236,8 @@ describe("SpendChipsModal", () => {
       });
 
       // Select 2 chips
-      const btn2 = screen.getAllByRole("button").find((btn) => btn.textContent?.trim() === "2");
-
-      if (btn2) {
-        await user.click(btn2);
-      }
+      const btn2 = screen.getByRole("button", { name: "2" });
+      await user.click(btn2);
 
       const submitButton = screen.getByRole("button", {
         name: /spend|confirm|submit/i,
