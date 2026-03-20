@@ -344,7 +344,7 @@ export function NetworkingAction({
 
             {diceMode === "roll" ? (
               <div
-                className="p-3 rounded-lg border border-zinc-700 bg-zinc-900 text-zinc-100"
+                className="p-4 rounded-lg border border-zinc-700/50 bg-zinc-900/95 text-zinc-100 shadow-inner"
                 style={{ colorScheme: "dark" }}
               >
                 <DiceRoller

@@ -43,7 +43,7 @@ function DiceFace({ value, isHit, isOne, isAnimating, size = "md" }: DiceFacePro
   };
 
   const baseClasses = `
-    relative font-mono font-bold rounded-lg border-2 flex items-center justify-center
+    relative overflow-hidden font-mono font-bold rounded-lg border-2 flex items-center justify-center
     transition-all duration-300
     ${sizeClasses[size]}
     ${isAnimating ? "animate-bounce" : ""}
