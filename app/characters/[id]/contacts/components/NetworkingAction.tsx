@@ -1,16 +1,21 @@
 "use client";
 
-import React, { useState } from "react";
-import { Button, Label, Input, TextField, TextArea } from "react-aria-components";
+import React, { useState, useMemo, useCallback } from "react";
+import { Button, Label, Input, TextField } from "react-aria-components";
 import type { ContactArchetype, SocialContact } from "@/lib/types";
 import type { Theme } from "@/lib/themes";
 import { THEMES, DEFAULT_THEME } from "@/lib/themes";
-import { Search, Users, DollarSign, Clock, CheckCircle, XCircle } from "lucide-react";
+import { Search, DollarSign, Clock, CheckCircle, XCircle, Dice5, PenLine } from "lucide-react";
+import { DiceRoller, type RollResult } from "@/components/DiceRoller";
 
 interface NetworkingActionProps {
   characterId: string;
   archetypes: ContactArchetype[];
   characterNuyen: number;
+  /** Character attributes keyed by code (e.g. "charisma") */
+  characterAttributes?: Record<string, number>;
+  /** Character skills keyed by name (e.g. "etiquette", "negotiation") */
+  characterSkills?: Record<string, number>;
   onSuccess?: (suggestedContact: Partial<SocialContact>) => void;
   theme?: Theme;
 }
@@ -29,6 +34,8 @@ interface NetworkingResult {
   };
   message: string;
 }
+
+type DiceMode = "roll" | "manual";
 
 const DEFAULT_ARCHETYPES = [
   "Fixer",
@@ -52,6 +59,8 @@ export function NetworkingAction({
   characterId,
   archetypes,
   characterNuyen,
+  characterAttributes,
+  characterSkills,
   onSuccess,
   theme,
 }: NetworkingActionProps) {
@@ -61,11 +70,31 @@ export function NetworkingAction({
   const [location, setLocation] = useState("");
   const [nuyenBudget, setNuyenBudget] = useState(0);
   const [diceRoll, setDiceRoll] = useState(0);
+  const [diceMode, setDiceMode] = useState<DiceMode>("roll");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<NetworkingResult | null>(null);
 
   const archetypeList = archetypes.length > 0 ? archetypes.map((a) => a.name) : DEFAULT_ARCHETYPES;
+
+  // Calculate dice pool from character stats
+  const charisma = characterAttributes?.charisma ?? 0;
+  const etiquette = characterSkills?.etiquette ?? characterSkills?.Etiquette ?? 0;
+  const negotiation = characterSkills?.negotiation ?? characterSkills?.Negotiation ?? 0;
+  const bestSkill = Math.max(etiquette, negotiation);
+  const bestSkillName = etiquette >= negotiation ? "Etiquette" : "Negotiation";
+  const baseDicePool = charisma + bestSkill;
+  const hasStats = charisma > 0 && bestSkill > 0;
+
+  // Pool label for DiceRoller context
+  const contextLabel = useMemo(
+    () => (hasStats ? `Charisma ${charisma} + ${bestSkillName} ${bestSkill}` : "Networking"),
+    [hasStats, charisma, bestSkillName, bestSkill]
+  );
+
+  const handleDiceRoll = useCallback((rollResult: RollResult) => {
+    setDiceRoll(rollResult.hits);
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -279,23 +308,74 @@ export function NetworkingAction({
             </div>
           </div>
 
-          {/* Dice Roll */}
-          <TextField className="space-y-1">
-            <Label className="text-xs font-mono text-muted-foreground uppercase">
-              Dice Roll Result *
-            </Label>
-            <Input
-              type="number"
-              min={0}
-              value={diceRoll}
-              onChange={(e) => setDiceRoll(parseInt(e.target.value) || 0)}
-              className={`w-full px-3 py-2 rounded border ${t.colors.border} bg-background text-foreground`}
-              placeholder="Enter your hits"
-            />
-            <div className="text-[10px] text-muted-foreground">
-              Charisma + Etiquette (or Negotiation)
+          {/* Dice Roll Section */}
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <Label className="text-xs font-mono text-muted-foreground uppercase">
+                Dice Roll *
+              </Label>
+              {/* Mode Toggle */}
+              <div className="flex items-center gap-0.5 p-0.5 bg-muted/30 rounded">
+                <button
+                  type="button"
+                  onClick={() => setDiceMode("roll")}
+                  className={`flex items-center gap-1 px-2 py-1 rounded text-[10px] font-mono transition-colors ${
+                    diceMode === "roll"
+                      ? "bg-background text-foreground shadow-sm"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  <Dice5 className="w-3 h-3" />
+                  Roll
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setDiceMode("manual")}
+                  className={`flex items-center gap-1 px-2 py-1 rounded text-[10px] font-mono transition-colors ${
+                    diceMode === "manual"
+                      ? "bg-background text-foreground shadow-sm"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  <PenLine className="w-3 h-3" />
+                  Manual
+                </button>
+              </div>
             </div>
-          </TextField>
+
+            {diceMode === "roll" ? (
+              <div className={`p-3 rounded border ${t.colors.border} bg-muted/20`}>
+                <DiceRoller
+                  initialPool={hasStats ? baseDicePool : 6}
+                  compact
+                  showHistory={false}
+                  label="Dice Pool"
+                  contextLabel={contextLabel}
+                  onRoll={handleDiceRoll}
+                />
+                {diceRoll > 0 && (
+                  <div className="mt-3 pt-3 border-t border-border text-xs font-mono text-muted-foreground">
+                    Using <span className={t.colors.accent}>{diceRoll} hits</span> for networking
+                    check
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="space-y-1">
+                <Input
+                  type="number"
+                  min={0}
+                  value={diceRoll}
+                  onChange={(e) => setDiceRoll(Math.max(0, parseInt(e.target.value) || 0))}
+                  className={`w-full px-3 py-2 rounded border ${t.colors.border} bg-background text-foreground`}
+                  placeholder="Enter your hits (5s and 6s)"
+                />
+                <div className="text-[10px] text-muted-foreground">
+                  Roll Charisma + Etiquette (or Negotiation) and enter the number of hits
+                </div>
+              </div>
+            )}
+          </div>
 
           {/* Submit */}
           <Button

@@ -43,6 +43,8 @@ interface CharacterData {
   karmaCurrent: number;
   editionCode: string;
   edgeCurrent: number;
+  attributes: Record<string, number>;
+  skills: Record<string, number>;
 }
 
 type TabId = "contacts" | "networking" | "ledger";
@@ -98,6 +100,8 @@ export default function ContactsPage({ params }: { params: Promise<{ id: string 
         setCharacter({
           ...charObj,
           edgeCurrent: charObj.condition?.edgeCurrent ?? charObj.specialAttributes?.edge ?? 0,
+          attributes: charObj.attributes || {},
+          skills: charObj.skills || {},
         });
         setContacts(contactsData.contacts || []);
         setSocialCapital(socialCapData.socialCapital || null);
@@ -510,6 +514,8 @@ export default function ContactsPage({ params }: { params: Promise<{ id: string 
               characterId={characterId}
               archetypes={archetypes}
               characterNuyen={character.nuyen}
+              characterAttributes={character.attributes}
+              characterSkills={character.skills}
               onSuccess={handleNetworkingSuccess}
               theme={theme}
             />
