@@ -343,7 +343,10 @@ export function NetworkingAction({
             </div>
 
             {diceMode === "roll" ? (
-              <div className={`p-3 rounded border ${t.colors.border} bg-muted/20`}>
+              <div
+                className="p-3 rounded-lg border border-zinc-700 bg-zinc-900 text-zinc-100"
+                style={{ colorScheme: "dark" }}
+              >
                 <DiceRoller
                   initialPool={hasStats ? baseDicePool : 6}
                   compact
@@ -353,8 +356,8 @@ export function NetworkingAction({
                   onRoll={handleDiceRoll}
                 />
                 {diceRoll > 0 && (
-                  <div className="mt-3 pt-3 border-t border-border text-xs font-mono text-muted-foreground">
-                    Using <span className={t.colors.accent}>{diceRoll} hits</span> for networking
+                  <div className="mt-3 pt-3 border-t border-zinc-700 text-xs font-mono text-zinc-400">
+                    Using <span className="text-emerald-400">{diceRoll} hits</span> for networking
                     check
                   </div>
                 )}
