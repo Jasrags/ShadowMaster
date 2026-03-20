@@ -12,7 +12,7 @@ import type { EditionCode } from "@/lib/types";
 
 type IntersectionCallback = (entries: IntersectionObserverEntry[]) => void;
 
-let intersectionCallback: IntersectionCallback;
+let intersectionCallback: IntersectionCallback | undefined;
 const observedElements = new Set<Element>();
 
 class MockIntersectionObserver {
@@ -31,6 +31,10 @@ class MockIntersectionObserver {
 }
 
 async function triggerIntersection(isIntersecting: boolean) {
+  // Wait for the component to mount and create its IntersectionObserver
+  await waitFor(() => {
+    expect(intersectionCallback).toBeDefined();
+  });
   const entries = Array.from(observedElements).map(
     (target) =>
       ({
@@ -40,7 +44,7 @@ async function triggerIntersection(isIntersecting: boolean) {
       }) as unknown as IntersectionObserverEntry
   );
   await act(async () => {
-    intersectionCallback(entries);
+    intersectionCallback!(entries);
   });
 }
 
@@ -87,6 +91,7 @@ describe("ContentPreview", () => {
   const editionCode: EditionCode = "sr5";
 
   beforeEach(() => {
+    intersectionCallback = undefined;
     vi.stubGlobal("IntersectionObserver", MockIntersectionObserver);
     observedElements.clear();
   });
