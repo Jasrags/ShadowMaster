@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect, useRef } from "react";
 import { Dice5 } from "lucide-react";
 import { executeRoll, type RollExecutionResult } from "@/lib/rules/action-resolution/dice-engine";
 
@@ -59,12 +59,25 @@ export function InlineDiceRoller({
 }: InlineDiceRollerProps) {
   const [rollResult, setRollResult] = useState<RollExecutionResult | null>(null);
   const [isRolling, setIsRolling] = useState(false);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Clear stale results when dice pool changes
+  useEffect(() => {
+    setRollResult(null);
+  }, [dicePool]);
+
+  // Cleanup timer on unmount
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
+  }, []);
 
   const handleRoll = useCallback(() => {
     if (dicePool <= 0) return;
     setIsRolling(true);
     // Brief delay for visual feedback
-    setTimeout(() => {
+    timerRef.current = setTimeout(() => {
       const result = executeRoll(dicePool);
       setRollResult(result);
       onHitsChange(result.hits);

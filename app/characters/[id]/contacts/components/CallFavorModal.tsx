@@ -373,7 +373,10 @@ export function CallFavorModal({
                     <div className="flex items-center gap-0.5 p-0.5 bg-muted/30 rounded">
                       <button
                         type="button"
-                        onClick={() => setDiceMode("roll")}
+                        onClick={() => {
+                          setDiceMode("roll");
+                          setDiceRoll(0);
+                        }}
                         className={`flex items-center gap-1 px-2 py-1 rounded text-[10px] font-mono transition-colors ${
                           diceMode === "roll"
                             ? "bg-background text-foreground shadow-sm"
@@ -385,7 +388,10 @@ export function CallFavorModal({
                       </button>
                       <button
                         type="button"
-                        onClick={() => setDiceMode("manual")}
+                        onClick={() => {
+                          setDiceMode("manual");
+                          setDiceRoll(0);
+                        }}
                         className={`flex items-center gap-1 px-2 py-1 rounded text-[10px] font-mono transition-colors ${
                           diceMode === "manual"
                             ? "bg-background text-foreground shadow-sm"
