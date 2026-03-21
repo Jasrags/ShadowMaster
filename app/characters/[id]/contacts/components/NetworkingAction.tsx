@@ -1,16 +1,21 @@
 "use client";
 
-import React, { useState } from "react";
-import { Button, Label, Input, TextField, TextArea } from "react-aria-components";
+import React, { useState, useCallback } from "react";
+import { Button, Label, Input, TextField } from "react-aria-components";
 import type { ContactArchetype, SocialContact } from "@/lib/types";
 import type { Theme } from "@/lib/themes";
 import { THEMES, DEFAULT_THEME } from "@/lib/themes";
-import { Search, Users, DollarSign, Clock, CheckCircle, XCircle } from "lucide-react";
+import { Search, DollarSign, Clock, CheckCircle, XCircle, Dice5, PenLine } from "lucide-react";
+import { executeRoll, type RollExecutionResult } from "@/lib/rules/action-resolution/dice-engine";
 
 interface NetworkingActionProps {
   characterId: string;
   archetypes: ContactArchetype[];
   characterNuyen: number;
+  /** Character attributes keyed by code (e.g. "charisma") */
+  characterAttributes?: Record<string, number>;
+  /** Character skills keyed by name (e.g. "etiquette", "negotiation") */
+  characterSkills?: Record<string, number>;
   onSuccess?: (suggestedContact: Partial<SocialContact>) => void;
   theme?: Theme;
 }
@@ -30,6 +35,8 @@ interface NetworkingResult {
   message: string;
 }
 
+type DiceMode = "roll" | "manual";
+
 const DEFAULT_ARCHETYPES = [
   "Fixer",
   "Street Doc",
@@ -48,10 +55,136 @@ const DEFAULT_ARCHETYPES = [
   "Rigger",
 ];
 
+// =============================================================================
+// INLINE DICE DISPLAY (theme-aware)
+// =============================================================================
+
+function DieFace({ value, isHit, isOne }: { value: number; isHit: boolean; isOne: boolean }) {
+  const color = isHit
+    ? "bg-emerald-500/20 border-emerald-500/60 text-emerald-600 dark:text-emerald-400"
+    : isOne
+      ? "bg-red-500/20 border-red-500/60 text-red-600 dark:text-red-400"
+      : "bg-muted/50 border-border text-muted-foreground";
+
+  return (
+    <div
+      className={`inline-flex items-center justify-center w-9 h-9 rounded-md border text-sm font-mono font-bold ${color}`}
+      title={isHit ? "Hit!" : isOne ? "Glitch" : "Miss"}
+    >
+      {value}
+    </div>
+  );
+}
+
+function InlineDiceRoller({
+  dicePool,
+  poolLabel,
+  onHitsChange,
+  theme,
+}: {
+  dicePool: number;
+  poolLabel: string;
+  onHitsChange: (hits: number) => void;
+  theme: Theme;
+}) {
+  const [rollResult, setRollResult] = useState<RollExecutionResult | null>(null);
+  const [isRolling, setIsRolling] = useState(false);
+
+  const handleRoll = useCallback(() => {
+    if (dicePool <= 0) return;
+    setIsRolling(true);
+    // Brief delay for visual feedback
+    setTimeout(() => {
+      const result = executeRoll(dicePool);
+      setRollResult(result);
+      onHitsChange(result.hits);
+      setIsRolling(false);
+    }, 150);
+  }, [dicePool, onHitsChange]);
+
+  return (
+    <div className="space-y-3">
+      {/* Pool Info */}
+      <div className="flex items-center justify-between">
+        <div className="text-xs font-mono text-muted-foreground">
+          <span className="uppercase">Dice Pool: </span>
+          <span className={theme.colors.accent}>{dicePool}d6</span>
+          <span className="ml-2 text-muted-foreground/70">({poolLabel})</span>
+        </div>
+      </div>
+
+      {/* Roll Button */}
+      <button
+        type="button"
+        onClick={handleRoll}
+        disabled={dicePool <= 0 || isRolling}
+        className={`w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-md border border-border bg-muted/30 hover:bg-muted/50 text-foreground disabled:opacity-50 transition-colors font-mono text-sm`}
+      >
+        <Dice5 className={`w-4 h-4 ${isRolling ? "animate-spin" : ""}`} />
+        {isRolling ? "Rolling..." : rollResult ? "Roll Again" : `Roll ${dicePool}d6`}
+      </button>
+
+      {/* Results */}
+      {rollResult && (
+        <div className={`rounded-md border ${theme.colors.border} overflow-hidden`}>
+          {/* Hit Summary */}
+          <div
+            className={`px-3 py-2 flex items-center justify-between ${
+              rollResult.isCriticalGlitch
+                ? "bg-red-500/10"
+                : rollResult.isGlitch
+                  ? "bg-amber-500/10"
+                  : rollResult.hits > 0
+                    ? "bg-emerald-500/10"
+                    : "bg-muted/30"
+            }`}
+          >
+            <div className="flex items-center gap-2">
+              <span
+                className={`text-xl font-bold font-mono ${
+                  rollResult.hits > 0
+                    ? "text-emerald-600 dark:text-emerald-400"
+                    : "text-muted-foreground"
+                }`}
+              >
+                {rollResult.hits}
+              </span>
+              <span className="text-sm text-muted-foreground">
+                {rollResult.hits === 1 ? "hit" : "hits"}
+              </span>
+            </div>
+            {rollResult.isCriticalGlitch && (
+              <span className="text-xs font-mono font-bold text-red-500 animate-pulse">
+                Critical Glitch!
+              </span>
+            )}
+            {rollResult.isGlitch && !rollResult.isCriticalGlitch && (
+              <span className="text-xs font-mono font-bold text-amber-500">Glitch!</span>
+            )}
+          </div>
+
+          {/* Dice Faces */}
+          <div className="px-3 py-3 flex flex-wrap gap-1.5 justify-center">
+            {rollResult.dice.map((die, i) => (
+              <DieFace key={i} value={die.value} isHit={die.isHit} isOne={die.isOne} />
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// =============================================================================
+// MAIN COMPONENT
+// =============================================================================
+
 export function NetworkingAction({
   characterId,
   archetypes,
   characterNuyen,
+  characterAttributes,
+  characterSkills,
   onSuccess,
   theme,
 }: NetworkingActionProps) {
@@ -61,11 +194,30 @@ export function NetworkingAction({
   const [location, setLocation] = useState("");
   const [nuyenBudget, setNuyenBudget] = useState(0);
   const [diceRoll, setDiceRoll] = useState(0);
+  const [diceMode, setDiceMode] = useState<DiceMode>("roll");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<NetworkingResult | null>(null);
 
   const archetypeList = archetypes.length > 0 ? archetypes.map((a) => a.name) : DEFAULT_ARCHETYPES;
+
+  // Calculate dice pool from character stats
+  // Attributes use full lowercase names ("charisma") in character data; fallback to short code ("cha")
+  const charisma = characterAttributes?.charisma ?? characterAttributes?.cha ?? 0;
+  const etiquette = characterSkills?.etiquette ?? 0;
+  const negotiation = characterSkills?.negotiation ?? 0;
+  const bestSkill = Math.max(etiquette, negotiation);
+  const bestSkillName = etiquette >= negotiation ? "Etiquette" : "Negotiation";
+  const baseDicePool = charisma + bestSkill;
+  const hasStats = charisma > 0 || bestSkill > 0;
+
+  const contextLabel = hasStats
+    ? `Charisma ${charisma} + ${bestSkillName} ${bestSkill}`
+    : "Networking";
+
+  const handleDiceRoll = useCallback((hits: number) => {
+    setDiceRoll(hits);
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -279,23 +431,64 @@ export function NetworkingAction({
             </div>
           </div>
 
-          {/* Dice Roll */}
-          <TextField className="space-y-1">
-            <Label className="text-xs font-mono text-muted-foreground uppercase">
-              Dice Roll Result *
-            </Label>
-            <Input
-              type="number"
-              min={0}
-              value={diceRoll}
-              onChange={(e) => setDiceRoll(parseInt(e.target.value) || 0)}
-              className={`w-full px-3 py-2 rounded border ${t.colors.border} bg-background text-foreground`}
-              placeholder="Enter your hits"
-            />
-            <div className="text-[10px] text-muted-foreground">
-              Charisma + Etiquette (or Negotiation)
+          {/* Dice Roll Section */}
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <Label className="text-xs font-mono text-muted-foreground uppercase">
+                Dice Roll *
+              </Label>
+              {/* Mode Toggle */}
+              <div className="flex items-center gap-0.5 p-0.5 bg-muted/30 rounded">
+                <button
+                  type="button"
+                  onClick={() => setDiceMode("roll")}
+                  className={`flex items-center gap-1 px-2 py-1 rounded text-[10px] font-mono transition-colors ${
+                    diceMode === "roll"
+                      ? "bg-background text-foreground shadow-sm"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  <Dice5 className="w-3 h-3" />
+                  Roll
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setDiceMode("manual")}
+                  className={`flex items-center gap-1 px-2 py-1 rounded text-[10px] font-mono transition-colors ${
+                    diceMode === "manual"
+                      ? "bg-background text-foreground shadow-sm"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  <PenLine className="w-3 h-3" />
+                  Manual
+                </button>
+              </div>
             </div>
-          </TextField>
+
+            {diceMode === "roll" ? (
+              <InlineDiceRoller
+                dicePool={hasStats ? baseDicePool : 6}
+                poolLabel={contextLabel}
+                onHitsChange={handleDiceRoll}
+                theme={t}
+              />
+            ) : (
+              <div className="space-y-1">
+                <Input
+                  type="number"
+                  min={0}
+                  value={diceRoll}
+                  onChange={(e) => setDiceRoll(Math.max(0, parseInt(e.target.value) || 0))}
+                  className={`w-full px-3 py-2 rounded border ${t.colors.border} bg-background text-foreground`}
+                  placeholder="Enter your hits (5s and 6s)"
+                />
+                <div className="text-[10px] text-muted-foreground">
+                  Roll Charisma + Etiquette (or Negotiation) and enter the number of hits
+                </div>
+              </div>
+            )}
+          </div>
 
           {/* Submit */}
           <Button
