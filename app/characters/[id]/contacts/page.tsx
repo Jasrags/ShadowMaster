@@ -557,6 +557,8 @@ export default function ContactsPage({ params }: { params: Promise<{ id: string 
           services={favorServices}
           characterNuyen={character.nuyen}
           characterKarma={character.karmaCurrent}
+          characterAttributes={character.attributes}
+          characterSkills={character.skills}
           theme={theme}
         />
       )}
