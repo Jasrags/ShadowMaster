@@ -470,13 +470,19 @@ export function getAvailableServices(
   contact: SocialContact,
   allServices: FavorServiceDefinition[]
 ): FavorServiceDefinition[] {
+  // Normalize display name to kebab-case for comparison (e.g. "Street Doc" → "street-doc")
+  const contactArchetypeKebab = contact.archetype
+    .toLowerCase()
+    .replace(/[.\s]+/g, "-")
+    .replace(/[^a-z0-9-]/g, "");
+
   return allServices.filter((service) => {
     // Check archetype match
     if (service.archetypeIds && service.archetypeIds.length > 0) {
       if (!contact.archetypeId || !service.archetypeIds.includes(contact.archetypeId)) {
-        // Also check archetype name match (less strict)
+        // Fallback: match display name converted to kebab-case against archetype IDs
         const archetypeMatches = service.archetypeIds.some(
-          (id) => id.toLowerCase() === contact.archetype.toLowerCase()
+          (id) => id.toLowerCase() === contactArchetypeKebab
         );
         if (!archetypeMatches) {
           return false;

@@ -88,7 +88,6 @@ export async function POST(
     }
 
     // Get favor services from ruleset modules
-    // Note: This will be populated in Phase 6 (Ruleset Data)
     const favorServicesModule = mergeResult.ruleset.modules?.favorServices as
       | { services?: FavorServiceDefinition[] }
       | undefined;
