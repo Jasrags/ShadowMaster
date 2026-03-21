@@ -10,16 +10,6 @@
       "command": "node",
       "args": ["./node_modules/next-devtools-mcp/dist/index.js"]
     },
-    "filesystem": {
-      "type": "stdio",
-      "command": "node",
-      "args": ["./node_modules/@modelcontextprotocol/server-filesystem/dist/index.js", "."]
-    },
-    "git": {
-      "type": "stdio",
-      "command": "uvx",
-      "args": ["mcp-server-git", "--repository", "."]
-    },
     "memory": {
       "type": "stdio",
       "command": "node",
@@ -30,11 +20,6 @@
       "command": "node",
       "args": ["./node_modules/@modelcontextprotocol/server-sequential-thinking/dist/index.js"]
     },
-    "time": {
-      "type": "stdio",
-      "command": "uvx",
-      "args": ["mcp-server-time"]
-    },
     "spec-lint": {
       "type": "stdio",
       "command": "node",
@@ -44,14 +29,6 @@
       "type": "stdio",
       "command": "node",
       "args": ["./node_modules/@knip/mcp/src/cli.js"]
-    },
-    "github": {
-      "type": "stdio",
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-github"],
-      "env": {
-        "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_PERSONAL_ACCESS_TOKEN}"
-      }
     }
   }
 }

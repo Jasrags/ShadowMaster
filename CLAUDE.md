@@ -115,3 +115,67 @@ Use skills for detailed domain knowledge (loaded on demand, not every session):
 - `/sheet-ui-redesign` - Redesign sheet display components to match creation card aesthetic
 - `/plan` - Create implementation plans from GitHub issues
 - `/ship` - Ship current work (type-check, test, commit, push, create PR)
+
+## Forbidden Patterns
+
+These patterns are never acceptable — do not introduce them, do not approve them in reviews:
+
+- `any` — use `unknown` with a type guard, or define the correct type
+- `@ts-ignore` / `@ts-expect-error` — fix the type error; suppress only if third-party library issue, with a comment explaining why
+- `useEffect` for derived state — compute derived values inline or with `useMemo`
+- Raw HTML interactive elements (`<button>`, `<input>`, `<select>`) — use React Aria Components equivalents
+- Inline styles (`style={{}}`) — use Tailwind utility classes; if a value isn't in Tailwind's scale, add a comment justifying it
+- Default exports from non-page/layout files — named exports only in `lib/`, `components/`, `hooks/`
+- Direct DB calls from components — all data access goes through API routes or server actions
+
+## JSON Data Schemas
+
+### edition.json (top-level manifest)
+
+{
+"id": "string — kebab-case edition identifier",
+"name": "string — display name",
+"version": "string — edition version",
+"rulebooks": ["array of rulebook id strings"]
+}
+
+### core-rulebook.json (catalog entries)
+
+{
+"id": "string — kebab-case",
+"name": "string — display name",
+"page": "number",
+"section": "string — parent section id or null",
+"entries": ["optional array of child entry ids"]
+}
+
+## Environment Variables
+
+Required:
+
+- `NEXT_PUBLIC_APP_URL` — canonical app URL (defaults to `http://localhost:3000`)
+
+Email (required for email features):
+
+- `EMAIL_TRANSPORT` — transport type: `smtp`, `resend`, `file`, or `mock`
+- `EMAIL_FROM` — sender email address
+- `EMAIL_FROM_NAME` — sender display name
+- `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, `SMTP_USER`, `SMTP_PASS` — SMTP config (when `EMAIL_TRANSPORT=smtp`)
+- `RESEND_API_KEY` — Resend API key (when `EMAIL_TRANSPORT=resend`)
+- `ADMIN_NOTIFICATION_EMAIL` — admin notification recipient
+
+Optional:
+
+- `NEXT_PUBLIC_GIT_SHA` — git SHA displayed in UI (set by CI)
+- `E2E_BYPASS_SECRET` — bypasses signup restrictions in non-production E2E tests
+- `LOG_LEVEL` — logging level override (default: info)
+- `NODE_ENV` — defaults to `development`
+- `GITHUB_PERSONAL_ACCESS_TOKEN` — enables GitHub MCP server if re-enabled
+
+## Test Conventions
+
+- Test files live in `__tests__/` directories mirroring their source: `lib/rules/foo.ts` → `lib/rules/__tests__/foo.test.ts`
+- Component tests live adjacent to components: `components/creation/Foo.tsx` → `components/creation/__tests__/Foo.test.tsx`
+- Test naming: `describe('FunctionOrComponentName')` → `it('does X when Y')`
+- No test file should import from another test file
+- Prefer `userEvent` over `fireEvent` in component tests
