@@ -41,11 +41,16 @@ export async function GET(
     }
 
     // Get favor services from ruleset modules
-    // Note: This will be populated in Phase 6 (Ruleset Data)
     const favorServicesModule = mergeResult.ruleset.modules?.favorServices as
       | { services?: FavorServiceDefinition[] }
       | undefined;
     const allServices: FavorServiceDefinition[] = favorServicesModule?.services || [];
+
+    // Get contact archetypes from ruleset modules
+    const contactArchetypesModule = mergeResult.ruleset.modules?.contactArchetypes as
+      | { archetypes?: Array<{ id: string; name: string; description?: string }> }
+      | undefined;
+    const archetypes = contactArchetypesModule?.archetypes || [];
 
     // Parse query parameters for filtering
     const searchParams = request.nextUrl.searchParams;
@@ -100,6 +105,7 @@ export async function GET(
       editionCode,
       services,
       servicesByArchetype,
+      archetypes,
       count: services.length,
     });
   } catch (error) {
