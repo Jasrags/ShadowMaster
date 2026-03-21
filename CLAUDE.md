@@ -38,12 +38,12 @@ pnpm docker:dev       # Build and start Docker containers
 ## Key Directories
 
 ```
-/app                    # Next.js App Router pages + API routes (~146 route files)
-/lib                    # Business logic (types, storage ~21 modules, rules, auth, combat, security)
-/components/creation    # Character creation cards (~117 components in 19 subfolders)
+/app                    # Next.js App Router pages + API routes (~162 route files)
+/lib                    # Business logic (types, storage ~22 modules, rules, auth, combat, security)
+/components/creation    # Character creation cards (~142 components in 21 subfolders)
 /data/editions/{code}/  # Edition data (edition.json, core-rulebook.json, grunt-templates/)
 /docs/pdfs/             # Sourcebook PDFs for rule reference (Core Rulebook, Run Faster, Run & Gun, Errata)
-/__tests__              # ~353 test files (Vitest)
+/__tests__              # ~493 test files (Vitest)
 /e2e                    # E2E tests (Playwright)
 ```
 
