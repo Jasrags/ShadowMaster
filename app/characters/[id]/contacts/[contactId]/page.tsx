@@ -26,6 +26,7 @@ import { Section } from "../../components/Section";
 import { ContactFormModal } from "../components/ContactFormModal";
 import { CallFavorModal } from "../components/CallFavorModal";
 import { SpendChipsModal } from "../components/SpendChipsModal";
+import { ConfirmActionModal } from "../components/ConfirmActionModal";
 import {
   STATUS_STYLES,
   TRANSACTION_TYPE_LABELS,
@@ -89,6 +90,9 @@ export default function ContactDetailPage({
   const [showEditModal, setShowEditModal] = useState(false);
   const [showCallFavorModal, setShowCallFavorModal] = useState(false);
   const [showSpendChipsModal, setShowSpendChipsModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showBurnModal, setShowBurnModal] = useState(false);
+  const [showDeceasedModal, setShowDeceasedModal] = useState(false);
 
   const theme = THEMES[DEFAULT_THEME];
   const statusStyle = contact
@@ -280,10 +284,6 @@ export default function ContactDetailPage({
 
   // Handle delete contact
   const handleDelete = async () => {
-    if (!confirm("Are you sure you want to delete this contact? This cannot be undone.")) {
-      return;
-    }
-
     setActionLoading(true);
     try {
       const response = await fetch(`/api/characters/${characterId}/contacts/${contactId}`, {
@@ -359,7 +359,7 @@ export default function ContactDetailPage({
               Edit
             </Button>
             <Button
-              onPress={handleDelete}
+              onPress={() => setShowDeleteModal(true)}
               isDisabled={actionLoading}
               className="flex items-center gap-2 px-3 py-1.5 rounded border border-red-500/30 text-red-400 hover:bg-red-500/10 transition-colors"
             >
@@ -556,12 +556,7 @@ export default function ContactDetailPage({
 
             {contact.status === "active" && (
               <Button
-                onPress={() => {
-                  const reason = prompt("Why are you burning this contact?");
-                  if (reason !== null) {
-                    handleStateTransition("burn", reason);
-                  }
-                }}
+                onPress={() => setShowBurnModal(true)}
                 isDisabled={actionLoading}
                 className="flex items-center gap-2 px-4 py-2 rounded border border-red-500/30 text-red-400 hover:bg-red-500/10 transition-colors"
               >
@@ -592,12 +587,7 @@ export default function ContactDetailPage({
                   Mark Missing
                 </Button>
                 <Button
-                  onPress={() => {
-                    const reason = prompt("How did this contact die?");
-                    if (reason !== null) {
-                      handleStateTransition("mark-deceased", reason);
-                    }
-                  }}
+                  onPress={() => setShowDeceasedModal(true)}
                   isDisabled={actionLoading}
                   className="flex items-center gap-2 px-4 py-2 rounded border border-purple-500/30 text-purple-400 hover:bg-purple-500/10 transition-colors"
                 >
@@ -714,6 +704,57 @@ export default function ContactDetailPage({
         onClose={() => setShowSpendChipsModal(false)}
         onSubmit={handleSpendChips}
         contact={contact}
+        theme={theme}
+      />
+
+      {/* Delete Confirmation Modal */}
+      <ConfirmActionModal
+        isOpen={showDeleteModal}
+        onClose={() => setShowDeleteModal(false)}
+        onConfirm={handleDelete}
+        title="Delete Contact"
+        description={`Are you sure you want to delete "${contact.name}"? This cannot be undone.`}
+        confirmLabel="Delete Contact"
+        confirmingLabel="Deleting..."
+        variant="danger"
+        theme={theme}
+      />
+
+      {/* Burn Contact Modal */}
+      <ConfirmActionModal
+        isOpen={showBurnModal}
+        onClose={() => setShowBurnModal(false)}
+        onConfirm={async (reason) => {
+          await handleStateTransition("burn", reason);
+        }}
+        title="Burn Contact"
+        description={`Burning "${contact.name}" will permanently sever this relationship. The contact may become hostile.`}
+        confirmLabel="Burn Contact"
+        confirmingLabel="Burning..."
+        variant="danger"
+        reasonField={{
+          label: "Reason",
+          placeholder: "Why are you burning this contact?",
+        }}
+        theme={theme}
+      />
+
+      {/* Mark Deceased Modal */}
+      <ConfirmActionModal
+        isOpen={showDeceasedModal}
+        onClose={() => setShowDeceasedModal(false)}
+        onConfirm={async (reason) => {
+          await handleStateTransition("mark-deceased", reason);
+        }}
+        title="Mark Deceased"
+        description={`Mark "${contact.name}" as deceased. This contact will no longer be available.`}
+        confirmLabel="Mark Deceased"
+        confirmingLabel="Updating..."
+        variant="warning"
+        reasonField={{
+          label: "Cause of death",
+          placeholder: "How did this contact die?",
+        }}
         theme={theme}
       />
     </div>
