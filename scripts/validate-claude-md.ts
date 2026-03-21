@@ -103,7 +103,7 @@ results.push({
 // Check 3: Test file count (includes .test.ts and .test.tsx)
 const testFiles = parseInt(
   execSync(
-    `find ${ROOT} -type f \\( -name "*.test.ts" -o -name "*.test.tsx" \\) -not -path "*/node_modules/*" | wc -l`,
+    `find ${ROOT} -type f \\( -name "*.test.ts" -o -name "*.test.tsx" \\) -not -path "*/node_modules/*" -not -path "*/.claude/*" -not -path "*/.next/*" | wc -l`,
     { encoding: "utf-8" }
   ).trim(),
   10
