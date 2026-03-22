@@ -6454,9 +6454,18 @@
             "startingNuyen": "1d6 × 50",
             "description": "A prearranged, cash-only space to hide in when things go bad. Not a permanent residence — more like a cargo crate with food rations and a chemical toilet. Assets can be purchased but not services or outings. Only has a monthly cost when used.",
             "components": {
-              "comfortsAndNecessities": { "base": 1, "limit": 2 },
-              "security": { "base": 1, "limit": 4 },
-              "neighborhood": { "base": 1, "limit": 4 }
+              "comfortsAndNecessities": {
+                "base": 1,
+                "limit": 2
+              },
+              "security": {
+                "base": 1,
+                "limit": 4
+              },
+              "neighborhood": {
+                "base": 1,
+                "limit": 4
+              }
             },
             "points": 4,
             "builtInOptions": ["not-a-home"],
@@ -6470,9 +6479,18 @@
             "startingNuyen": "1d6 × 20",
             "description": "Living on the street with no fixed address. Increased levels in C&N, Security, and Neighborhood cost a flat 50 nuyen per level per month instead of the standard 10% formula.",
             "components": {
-              "comfortsAndNecessities": { "base": 0, "limit": 1 },
-              "security": { "base": 0, "limit": 1 },
-              "neighborhood": { "base": 0, "limit": 1 }
+              "comfortsAndNecessities": {
+                "base": 0,
+                "limit": 1
+              },
+              "security": {
+                "base": 0,
+                "limit": 1
+              },
+              "neighborhood": {
+                "base": 0,
+                "limit": 1
+              }
             },
             "points": 2,
             "costPerLevelFlat": 50,
@@ -6486,9 +6504,18 @@
             "startingNuyen": "2d6 × 20",
             "description": "A squat in an abandoned building or similar space.",
             "components": {
-              "comfortsAndNecessities": { "base": 1, "limit": 2 },
-              "security": { "base": 1, "limit": 2 },
-              "neighborhood": { "base": 1, "limit": 2 }
+              "comfortsAndNecessities": {
+                "base": 1,
+                "limit": 2
+              },
+              "security": {
+                "base": 1,
+                "limit": 2
+              },
+              "neighborhood": {
+                "base": 1,
+                "limit": 2
+              }
             },
             "points": 2,
             "page": 218,
@@ -6501,24 +6528,42 @@
             "startingNuyen": "3d6 × 60",
             "description": "A basic apartment or small house in a rough neighborhood.",
             "components": {
-              "comfortsAndNecessities": { "base": 2, "limit": 3 },
-              "security": { "base": 2, "limit": 3 },
-              "neighborhood": { "base": 2, "limit": 3 }
+              "comfortsAndNecessities": {
+                "base": 2,
+                "limit": 3
+              },
+              "security": {
+                "base": 2,
+                "limit": 3
+              },
+              "neighborhood": {
+                "base": 2,
+                "limit": 3
+              }
             },
             "points": 3,
             "page": 218,
             "source": "Run Faster"
           },
           {
-            "id": "medium",
-            "name": "Medium",
+            "id": "middle",
+            "name": "Middle",
             "monthlyCost": 5000,
             "startingNuyen": "4d6 × 100",
             "description": "A comfortable apartment or condo in a decent neighborhood.",
             "components": {
-              "comfortsAndNecessities": { "base": 3, "limit": 4 },
-              "security": { "base": 3, "limit": 4 },
-              "neighborhood": { "base": 4, "limit": 5 }
+              "comfortsAndNecessities": {
+                "base": 3,
+                "limit": 4
+              },
+              "security": {
+                "base": 3,
+                "limit": 4
+              },
+              "neighborhood": {
+                "base": 4,
+                "limit": 5
+              }
             },
             "points": 4,
             "page": 218,
@@ -6531,9 +6576,18 @@
             "startingNuyen": "4d6 × 500",
             "description": "An upscale home or luxury apartment.",
             "components": {
-              "comfortsAndNecessities": { "base": 4, "limit": 6 },
-              "security": { "base": 4, "limit": 6 },
-              "neighborhood": { "base": 5, "limit": 6 }
+              "comfortsAndNecessities": {
+                "base": 4,
+                "limit": 6
+              },
+              "security": {
+                "base": 4,
+                "limit": 6
+              },
+              "neighborhood": {
+                "base": 5,
+                "limit": 6
+              }
             },
             "points": 6,
             "page": 218,
@@ -6546,9 +6600,18 @@
             "startingNuyen": "6d6 × 1000",
             "description": "The finest accommodations money can buy.",
             "components": {
-              "comfortsAndNecessities": { "base": 5, "limit": 7 },
-              "security": { "base": 5, "limit": 8 },
-              "neighborhood": { "base": 5, "limit": 7 }
+              "comfortsAndNecessities": {
+                "base": 5,
+                "limit": 7
+              },
+              "security": {
+                "base": 5,
+                "limit": 8
+              },
+              "neighborhood": {
+                "base": 5,
+                "limit": 7
+              }
             },
             "points": 12,
             "page": 218,
@@ -6561,9 +6624,18 @@
             "startingNuyen": "2d6 × 100",
             "description": "The traveler keeps mobile and packs light. Every month the traveler stays someplace new. The player rolls 1D6 to determine the number of points allocated to the lifestyle that month. Only assets and services are available in the Entertainment category, added by the gamemaster.",
             "components": {
-              "comfortsAndNecessities": { "base": 2, "limit": 4 },
-              "security": { "base": 2, "limit": 4 },
-              "neighborhood": { "base": 2, "limit": 4 }
+              "comfortsAndNecessities": {
+                "base": 2,
+                "limit": 4
+              },
+              "security": {
+                "base": 2,
+                "limit": 4
+              },
+              "neighborhood": {
+                "base": 2,
+                "limit": 4
+              }
             },
             "points": "1d6+2",
             "page": 218,
@@ -6576,9 +6648,18 @@
             "startingNuyen": "4d6 × 200",
             "description": "A storefront, not a proper residence. The lifestyle includes a location where the character can manufacture, fence, or repair goods. Includes permits to sell specific legal items. The character should make a Charisma + Etiquette (Corporate) [Social] test at the start of each month; each net hit reduces the monthly cost by 1,000 for that month.",
             "components": {
-              "comfortsAndNecessities": { "base": 3, "limit": 4 },
-              "security": { "base": 3, "limit": 7 },
-              "neighborhood": { "base": 4, "limit": 6 }
+              "comfortsAndNecessities": {
+                "base": 3,
+                "limit": 4
+              },
+              "security": {
+                "base": 3,
+                "limit": 7
+              },
+              "neighborhood": {
+                "base": 4,
+                "limit": 6
+              }
             },
             "points": 4,
             "page": 218,
@@ -6630,7 +6711,7 @@
             "monthlyCost": 400,
             "minLifestyle": "high",
             "purchasableMultipleTimes": true,
-            "description": "Pollution-sensitive cleaning services use less harsh chemicals and natural materials. This reduces Fatigue damage from environmental allergies the C&I category by 1.",
+            "description": "Pollution-sensitive cleaning services use less harsh chemicals and natural materials. This reduces Fatigue damage from environmental allergies in the C&N category by 1.",
             "page": 221,
             "source": "Run Faster"
           },
@@ -6676,7 +6757,7 @@
             "type": "asset",
             "points": 1,
             "monthlyCost": 50,
-            "minLifestyle": "medium",
+            "minLifestyle": "middle",
             "purchasableMultipleTimes": true,
             "description": "A large covered area with enough space to park and maintain a single small vehicle (Body 4 or less). With a Shop, 1 box of damage can be repaired per week without additional cost.",
             "page": 221,
@@ -6688,7 +6769,7 @@
             "type": "asset",
             "points": 2,
             "monthlyCost": 100,
-            "minLifestyle": "medium",
+            "minLifestyle": "middle",
             "purchasableMultipleTimes": true,
             "description": "A large covered area with enough space to park and maintain a single large vehicle (Body 5 or greater). With a Shop, 1 box of damage can be repaired per week without additional cost.",
             "page": 221,
@@ -6748,7 +6829,7 @@
             "type": "asset",
             "points": 1,
             "monthlyCost": 50,
-            "minLifestyle": "medium",
+            "minLifestyle": "middle",
             "purchasableMultipleTimes": false,
             "description": "A subscription to a corporate-sponsored grid for entertainment, shopping, and media. Without a grid subscription, commlinks default to the public grid with only trid shows from two seasons ago.",
             "page": 222,
@@ -6760,7 +6841,7 @@
             "type": "asset",
             "points": 2,
             "monthlyCost": 300,
-            "minLifestyle": "medium",
+            "minLifestyle": "middle",
             "purchasableMultipleTimes": false,
             "description": "Weights, treadmill, and other fitness equipment. Reduces training time to improve physical stats by twenty percent.",
             "page": 222,
@@ -6808,7 +6889,7 @@
             "type": "outing",
             "points": 1,
             "monthlyCost": 100,
-            "minLifestyle": "medium",
+            "minLifestyle": "middle",
             "purchasableMultipleTimes": true,
             "description": "Membership privileges granting front-row seats, members-only specials, and limited suite or luxury box access at rock concerts and sport events.",
             "page": 223,
@@ -6844,7 +6925,7 @@
             "type": "outing",
             "points": 1,
             "monthlyCost": 100,
-            "minLifestyle": "medium",
+            "minLifestyle": "middle",
             "purchasableMultipleTimes": true,
             "description": "Annual or monthly pass to theme parks such as Virtual Disneyland and other upscale attractions.",
             "page": 223,
@@ -6880,7 +6961,7 @@
             "type": "service",
             "points": 1,
             "monthlyCost": 75,
-            "minLifestyle": "medium",
+            "minLifestyle": "middle",
             "purchasableMultipleTimes": false,
             "description": "A monthly pass to use the light rail or mag-lev train to travel between two relatively close sprawls. Includes border-crossing fees when relevant. Purchased for two city locations.",
             "page": 223,
@@ -6904,7 +6985,7 @@
             "type": "asset",
             "points": 1,
             "monthlyCost": 20,
-            "minLifestyle": "medium",
+            "minLifestyle": "middle",
             "purchasableMultipleTimes": false,
             "description": "A SOTA set of kitchen devices. Soy, krill, and mycoprotein are architecturally printed into something that looks and tastes close to the real thing. Reduces the potential environmental damage tied to Comforts & Necessities due to food allergies by 1.",
             "page": 223,
@@ -6928,7 +7009,7 @@
             "type": "asset",
             "points": 1,
             "monthlyCost": 100,
-            "minLifestyle": "medium",
+            "minLifestyle": "middle",
             "purchasableMultipleTimes": false,
             "description": "A swimming pool for relaxation and exercise. Bigger than a bathtub, clean, and deep enough to use.",
             "page": 224,
@@ -6952,7 +7033,7 @@
             "type": "asset",
             "points": 2,
             "monthlyCost": 2500,
-            "minLifestyle": "medium",
+            "minLifestyle": "middle",
             "minLifestyleAlsoRequires": "commercial",
             "purchasableMultipleTimes": false,
             "description": "Space dedicated to the character's gear-related work. Power, ventilation, shelving, etc. Combined with a Shop or Facility, gear/weapons associated with the workshop can be repaired at 1 box of damage per week without additional cost (2 boxes with a Facility).",
@@ -6977,7 +7058,7 @@
             "type": "asset",
             "points": 2,
             "monthlyCost": 100,
-            "minLifestyle": "medium",
+            "minLifestyle": "middle",
             "purchasableMultipleTimes": false,
             "description": "A room dedicated to the hobbies of the character. The zen den provides a +1 dice pool bonus on tests involving relevant Interest Knowledge Skills when at home. The bat cave provides a +1 dice pool bonus to tests involving relevant Academic Knowledge Skills when at home (with a Kit, up to three Kits).",
             "page": 224,
@@ -7145,49 +7226,65 @@
             "level": 0,
             "zone": "Z",
             "responseTime": "2d6 hours",
-            "description": "A lawless area deep in the heart of many barrens. Criminal organizations and gangs can sometimes feel uneasy here. Awakened critters and toxic spirits tend to roam wild."
+            "description": "A lawless area deep in the heart of many barrens. Criminal organizations and gangs can sometimes feel uneasy here. Awakened critters and toxic spirits tend to roam wild.",
+            "page": 220,
+            "source": "Run Faster"
           },
           {
             "level": 1,
             "zone": "E",
             "responseTime": "1d6 hours",
-            "description": "Low-rent/industrial districts mostly filled with SINless squatters and the homeless. Heavy or toxic industrial facilities are included in E Zones. Security providers consider SINless non-people."
+            "description": "Low-rent/industrial districts mostly filled with SINless squatters and the homeless. Heavy or toxic industrial facilities are included in E Zones. Security providers consider SINless non-people.",
+            "page": 220,
+            "source": "Run Faster"
           },
           {
             "level": 2,
             "zone": "D",
             "responseTime": "1d6 × 12 minutes",
-            "description": "Zones between industrial and residential districts where the exposure to pollution is a little better. Run-down business districts, abandoned warehouses, forgotten tenements, landfills, freeway junctions, old cemeteries, and large parking lots."
+            "description": "Zones between industrial and residential districts where the exposure to pollution is a little better. Run-down business districts, abandoned warehouses, forgotten tenements, landfills, freeway junctions, old cemeteries, and large parking lots.",
+            "page": 220,
+            "source": "Run Faster"
           },
           {
             "level": 3,
             "zone": "C",
             "responseTime": "1d6 × 10 minutes",
-            "description": "The district has seen better days. Low-rent residences, storage facilities, small bodegas, and other similar sites."
+            "description": "The district has seen better days. Low-rent residences, storage facilities, small bodegas, and other similar sites.",
+            "page": 220,
+            "source": "Run Faster"
           },
           {
             "level": 4,
             "zone": "B",
             "responseTime": "1d6 × 5 minutes",
-            "description": "Where the middle class lives, along with the commercial places they use and the occasional light industrial facility."
+            "description": "Where the middle class lives, along with the commercial places they use and the occasional light industrial facility.",
+            "page": 220,
+            "source": "Run Faster"
           },
           {
             "level": 5,
             "zone": "A",
             "responseTime": "2d6 + 3 minutes",
-            "description": "High-class residences and corporate buildings."
+            "description": "High-class residences and corporate buildings.",
+            "page": 220,
+            "source": "Run Faster"
           },
           {
             "level": 6,
             "zone": "AA",
             "responseTime": "1d6 + 4 minutes",
-            "description": "Luxury-class residences and posh commercial places. If you ask the price, you can't afford to live here."
+            "description": "Luxury-class residences and posh commercial places. If you ask the price, you can't afford to live here.",
+            "page": 220,
+            "source": "Run Faster"
           },
           {
             "level": 7,
             "zone": "AAA",
             "responseTime": "1d6 minutes",
-            "description": "Corporate headquarters. Skyraker condos. And the occasional private islands. Where the world's wealthiest pay to make sure they're kept safe."
+            "description": "Corporate headquarters. Skyraker condos. And the occasional private islands. Where the world's wealthiest pay to make sure they're kept safe.",
+            "page": 220,
+            "source": "Run Faster"
           }
         ]
       }
