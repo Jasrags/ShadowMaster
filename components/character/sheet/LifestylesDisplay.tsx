@@ -3,7 +3,7 @@
 import { useState, useCallback } from "react";
 import { Home, ChevronDown, ChevronRight, MapPin, User, AlertTriangle, Plus } from "lucide-react";
 import type { Character, Lifestyle, LifestyleSubscription } from "@/lib/types";
-import { LIFESTYLE_TYPES } from "@/components/creation/identities/constants";
+import { useLifestyles, type LifestyleData } from "@/lib/rules/RulesetContext";
 import { LifestyleModal } from "@/components/creation/identities/LifestyleModal";
 import type { NewLifestyleState } from "@/components/creation/identities/types";
 import { DisplayCard } from "./DisplayCard";
@@ -17,8 +17,7 @@ import { DisplayCard } from "./DisplayCard";
  * base cost, modifications, subscriptions, and custom expenses/income.
  */
 export function calculateLifestyleMonthlyCost(lifestyle: Lifestyle): number {
-  const lifestyleType = LIFESTYLE_TYPES.find((lt) => lt.id === lifestyle.type);
-  const baseCost = lifestyleType?.monthlyCost ?? lifestyle.monthlyCost;
+  const baseCost = lifestyle.monthlyCost;
 
   const modificationsCost = (lifestyle.modifications || []).reduce((sum, mod) => {
     if (mod.modifierType === "percentage") {
@@ -65,8 +64,8 @@ function getTierColor(type: string): string {
   }
 }
 
-function getTierName(type: string): string {
-  return LIFESTYLE_TYPES.find((lt) => lt.id === type)?.name || type;
+function getTierName(type: string, lifestyleCatalog: LifestyleData[]): string {
+  return lifestyleCatalog.find((lt) => lt.id === type)?.name || type;
 }
 
 // =============================================================================
@@ -83,6 +82,7 @@ interface LifestyleRowProps {
   onEdit: () => void;
   onRemove: () => void;
   onPayMonth: () => void;
+  lifestyleCatalog: LifestyleData[];
 }
 
 function LifestyleRow({
@@ -94,6 +94,7 @@ function LifestyleRow({
   onEdit,
   onRemove,
   onPayMonth,
+  lifestyleCatalog,
 }: LifestyleRowProps) {
   const monthlyCost = calculateLifestyleMonthlyCost(lifestyle);
   const [confirmRemove, setConfirmRemove] = useState(false);
@@ -116,7 +117,7 @@ function LifestyleRow({
         <span
           className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${getTierColor(lifestyle.type)}`}
         >
-          {getTierName(lifestyle.type)}
+          {getTierName(lifestyle.type, lifestyleCatalog)}
         </span>
 
         {/* Cost pill */}
@@ -303,6 +304,7 @@ export function LifestylesDisplay({
   onCharacterUpdate,
   editable = false,
 }: LifestylesDisplayProps) {
+  const lifestyleCatalog = useLifestyles();
   const [expandedRows, setExpandedRows] = useState<Set<number>>(new Set());
   const [modalOpen, setModalOpen] = useState(false);
   const [editIndex, setEditIndex] = useState<number | null>(null);
@@ -357,7 +359,7 @@ export function LifestylesDisplay({
 
   // Convert NewLifestyleState back to Lifestyle
   const formStateToLifestyle = (form: NewLifestyleState, existing?: Lifestyle): Lifestyle => {
-    const lifestyleType = LIFESTYLE_TYPES.find((lt) => lt.id === form.type);
+    const lifestyleType = lifestyleCatalog.find((lt) => lt.id === form.type);
     return {
       ...(existing || {}),
       type: form.type,
@@ -425,7 +427,7 @@ export function LifestylesDisplay({
           body: JSON.stringify({
             action: "spendNuyen",
             amount: cost,
-            reason: `Lifestyle payment: ${getTierName(lifestyle.type)}`,
+            reason: `Lifestyle payment: ${getTierName(lifestyle.type, lifestyleCatalog)}`,
           }),
         });
         const data = await res.json();
@@ -523,6 +525,7 @@ export function LifestylesDisplay({
                 }}
                 onRemove={() => handleRemove(index)}
                 onPayMonth={() => handlePayMonth(index)}
+                lifestyleCatalog={lifestyleCatalog}
               />
             ))}
           </div>

@@ -20,15 +20,9 @@ describe("calculateLifestyleMonthlyCost", () => {
     expect(calculateLifestyleMonthlyCost(ls)).toBe(5000);
   });
 
-  test("looks up base cost from LIFESTYLE_TYPES by type id", () => {
-    // monthlyCost on the object is ignored in favor of the catalog lookup
-    const ls = makeLifestyle({ type: "low", monthlyCost: 9999 });
+  test("uses monthlyCost from the lifestyle object", () => {
+    const ls = makeLifestyle({ type: "low", monthlyCost: 2000 });
     expect(calculateLifestyleMonthlyCost(ls)).toBe(2000);
-  });
-
-  test("falls back to monthlyCost field when type not found", () => {
-    const ls = makeLifestyle({ type: "custom-unknown", monthlyCost: 3000 });
-    expect(calculateLifestyleMonthlyCost(ls)).toBe(3000);
   });
 
   test("adds positive percentage modification", () => {

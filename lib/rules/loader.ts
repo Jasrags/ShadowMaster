@@ -361,6 +361,7 @@ import type {
   LifestyleSubscriptionCatalogItem,
   LifestyleSubscriptionsCatalogData,
 } from "./loader-types";
+import type { LifestyleModificationCatalogItem } from "./module-payloads";
 
 /**
  * Load lifestyles from a ruleset
@@ -386,6 +387,16 @@ export function extractLifestyleSubscriptions(
 ): LifestyleSubscriptionCatalogItem[] {
   const ruleModule = extractModule(ruleset, "lifestyle");
   return ruleModule?.subscriptions || [];
+}
+
+/**
+ * Load lifestyle modifications from a ruleset
+ */
+export function extractLifestyleModifications(
+  ruleset: LoadedRuleset
+): LifestyleModificationCatalogItem[] {
+  const ruleModule = extractModule(ruleset, "lifestyle");
+  return ruleModule?.modifications || [];
 }
 
 // =============================================================================

@@ -3,7 +3,8 @@
 import { X, FileText, Home, Edit2, CreditCard } from "lucide-react";
 import type { Identity, Lifestyle, LifestyleSubscription } from "@/lib/types";
 import { LifestyleSubscriptionSelector } from "../shared/LifestyleSubscriptionSelector";
-import { SINNER_QUALITY_LABELS, LIFESTYLE_TYPES } from "./constants";
+import { SINNER_QUALITY_LABELS } from "./constants";
+import type { LifestyleData } from "@/lib/rules/RulesetContext";
 
 interface IdentityCardProps {
   identity: Identity;
@@ -18,6 +19,7 @@ interface IdentityCardProps {
   onAddLifestyle: () => void;
   onEditLifestyle: (lifestyleId: string) => void;
   onRemoveLifestyle: (lifestyleId: string) => void;
+  lifestyleCatalog: LifestyleData[];
 }
 
 export function IdentityCard({
@@ -33,6 +35,7 @@ export function IdentityCard({
   onAddLifestyle,
   onEditLifestyle,
   onRemoveLifestyle,
+  lifestyleCatalog,
 }: IdentityCardProps) {
   // Get all lifestyles associated with this identity
   const associatedLifestyles = lifestyles.filter(
@@ -209,7 +212,7 @@ export function IdentityCard({
           {associatedLifestyles.length > 0 ? (
             <div className="space-y-1.5">
               {associatedLifestyles.map((lifestyle) => {
-                const lifestyleType = LIFESTYLE_TYPES.find((lt) => lt.id === lifestyle.type);
+                const lifestyleType = lifestyleCatalog.find((lt) => lt.id === lifestyle.type);
                 return (
                   <div
                     key={lifestyle.id}

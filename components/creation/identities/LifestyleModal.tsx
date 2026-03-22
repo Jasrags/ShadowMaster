@@ -1,12 +1,12 @@
 "use client";
 
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { X } from "lucide-react";
 import type { LifestyleModification, LifestyleSubscription } from "@/lib/types";
 import { LifestyleModificationSelector } from "../shared/LifestyleModificationSelector";
 import { LifestyleSubscriptionSelector } from "../shared/LifestyleSubscriptionSelector";
 import { Modal } from "./Modal";
-import { LIFESTYLE_TYPES } from "./constants";
+import { useLifestyles } from "@/lib/rules/RulesetContext";
 import type { LifestyleModalProps, NewLifestyleState } from "./types";
 
 export function LifestyleModal({
@@ -17,6 +17,7 @@ export function LifestyleModal({
   initialData,
   isEditMode,
 }: LifestyleModalProps) {
+  const lifestyleCatalog = useLifestyles();
   const defaultFormState: NewLifestyleState = {
     type: "",
     location: "",
@@ -40,12 +41,12 @@ export function LifestyleModal({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, initialData]);
 
-  // Use effect to reset form when modal opens
-  useMemo(() => {
+  // Reset form when modal opens
+  useEffect(() => {
     resetFormOnOpen();
   }, [resetFormOnOpen]);
 
-  const selectedLifestyle = LIFESTYLE_TYPES.find((l) => l.id === formState.type);
+  const selectedLifestyle = lifestyleCatalog.find((l) => l.id === formState.type);
 
   // Calculate total cost including modifications and subscriptions
   const baseCost = selectedLifestyle?.monthlyCost || 0;
@@ -112,14 +113,7 @@ export function LifestyleModal({
   };
 
   const handleClose = () => {
-    setFormState({
-      type: "",
-      location: "",
-      customExpenses: 0,
-      customIncome: 0,
-      notes: "",
-      modifications: [],
-    });
+    setFormState(defaultFormState);
     onClose();
   };
 
@@ -141,7 +135,7 @@ export function LifestyleModal({
             className="w-full rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-800"
           >
             <option value="">Select a lifestyle...</option>
-            {LIFESTYLE_TYPES.map((l) => (
+            {lifestyleCatalog.map((l) => (
               <option key={l.id} value={l.id}>
                 {l.name} ({l.monthlyCost === 0 ? "Free" : `${l.monthlyCost.toLocaleString()}/month`}
                 )

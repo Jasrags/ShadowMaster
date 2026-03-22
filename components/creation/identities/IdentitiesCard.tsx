@@ -26,17 +26,13 @@ import type {
 } from "@/lib/types";
 import { SinnerQuality as SinnerQualityEnum } from "@/lib/types/character";
 import { useCreationBudgets } from "@/lib/contexts";
+import { useLifestyles } from "@/lib/rules/RulesetContext";
 import { CreationCard, SummaryFooter } from "../shared";
 import { IdentityCard } from "./IdentityCard";
 import { IdentityModal } from "./IdentityModal";
 import { LicenseModal } from "./LicenseModal";
 import { LifestyleModal } from "./LifestyleModal";
-import {
-  SIN_COST_PER_RATING,
-  LICENSE_COST_PER_RATING,
-  SINNER_QUALITY_LABELS,
-  LIFESTYLE_TYPES,
-} from "./constants";
+import { SIN_COST_PER_RATING, LICENSE_COST_PER_RATING, SINNER_QUALITY_LABELS } from "./constants";
 import type { ModalType, NewIdentityState, NewLicenseState, NewLifestyleState } from "./types";
 
 interface IdentitiesCardProps {
@@ -46,6 +42,7 @@ interface IdentitiesCardProps {
 
 export function IdentitiesCard({ state, updateState }: IdentitiesCardProps) {
   const { budgets } = useCreationBudgets();
+  const lifestyleCatalog = useLifestyles();
 
   // Modal state
   const [activeModal, setActiveModal] = useState<ModalType>(null);
@@ -255,7 +252,7 @@ export function IdentitiesCard({ state, updateState }: IdentitiesCardProps) {
 
   const handleAddLifestyle = useCallback(
     (identityIndex: number, lifestyleData: NewLifestyleState) => {
-      const lifestyleType = LIFESTYLE_TYPES.find((l) => l.id === lifestyleData.type);
+      const lifestyleType = lifestyleCatalog.find((l) => l.id === lifestyleData.type);
       if (!lifestyleType) return;
 
       const identity = identities[identityIndex];
@@ -363,7 +360,7 @@ export function IdentitiesCard({ state, updateState }: IdentitiesCardProps) {
 
   const handleEditLifestyle = useCallback(
     (lifestyleId: string, lifestyleData: NewLifestyleState) => {
-      const lifestyleType = LIFESTYLE_TYPES.find((l) => l.id === lifestyleData.type);
+      const lifestyleType = lifestyleCatalog.find((l) => l.id === lifestyleData.type);
       if (!lifestyleType) return;
 
       const lifestyleIndex = lifestyles.findIndex((l) => l.id === lifestyleId);
@@ -490,6 +487,7 @@ export function IdentitiesCard({ state, updateState }: IdentitiesCardProps) {
                   onAddLifestyle={() => openAddLifestyleModal(index)}
                   onEditLifestyle={(lifestyleId) => openEditLifestyleModal(index, lifestyleId)}
                   onRemoveLifestyle={(lifestyleId) => handleRemoveLifestyleById(lifestyleId)}
+                  lifestyleCatalog={lifestyleCatalog}
                 />
               ))}
             </div>

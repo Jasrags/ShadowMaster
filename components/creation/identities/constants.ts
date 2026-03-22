@@ -24,12 +24,3 @@ export const COMMON_LICENSE_TYPES = [
   "Academic License",
   "Media License",
 ];
-
-export const LIFESTYLE_TYPES = [
-  { id: "street", name: "Street", monthlyCost: 0 },
-  { id: "squatter", name: "Squatter", monthlyCost: 500 },
-  { id: "low", name: "Low", monthlyCost: 2000 },
-  { id: "medium", name: "Medium", monthlyCost: 5000 },
-  { id: "high", name: "High", monthlyCost: 10000 },
-  { id: "luxury", name: "Luxury", monthlyCost: 100000 },
-];
