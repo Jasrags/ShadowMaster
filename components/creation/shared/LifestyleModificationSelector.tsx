@@ -3,94 +3,43 @@
 import { useState } from "react";
 import { Button, Dialog, DialogTrigger, Modal } from "react-aria-components";
 import type { LifestyleModification } from "@/lib/types";
+import {
+  useLifestyleModifications,
+  type LifestyleModificationCatalogItem,
+} from "@/lib/rules/RulesetContext";
 
 interface LifestyleModificationSelectorProps {
   onAdd: (modification: LifestyleModification) => void;
   existingModifications: LifestyleModification[];
 }
 
-// Default lifestyle modifications (will be replaced with ruleset data when available)
-const DEFAULT_MODIFICATIONS: Array<{
-  id: string;
-  name: string;
-  type: "positive" | "negative";
-  modifierType: "percentage" | "fixed";
-  modifier: number;
-  description: string;
-  effects?: string;
-}> = [
-  {
-    id: "special-work-area",
-    name: "Special Work Area",
-    type: "positive",
-    modifierType: "fixed",
-    modifier: 1000,
-    description: "Dedicated workspace for skill use",
-    effects: "+2 limit to relevant skill tests",
-  },
-  {
-    id: "extra-secure",
-    name: "Extra Secure",
-    type: "positive",
-    modifierType: "percentage",
-    modifier: 20,
-    description: "Enhanced security",
-    effects: "Improves security response tier",
-  },
-  {
-    id: "obscure-difficult-to-find",
-    name: "Obscure/Difficult to Find",
-    type: "positive",
-    modifierType: "percentage",
-    modifier: 10,
-    description: "Hard to locate",
-    effects: "-2 dice on intruders' Sneaking tests",
-  },
-  {
-    id: "cramped",
-    name: "Cramped",
-    type: "negative",
-    modifierType: "percentage",
-    modifier: 10,
-    description: "Limited space",
-    effects: "-2 to Logic-linked test limits",
-  },
-  {
-    id: "dangerous-area",
-    name: "Dangerous Area",
-    type: "negative",
-    modifierType: "percentage",
-    modifier: 20,
-    description: "High crime neighborhood",
-    effects: "Degrades security response tier",
-  },
-  {
-    id: "permanent-lifestyle",
-    name: "Permanent Lifestyle",
-    type: "positive",
-    modifierType: "fixed",
-    modifier: 0,
-    description: "Lifestyle purchased permanently at character creation",
-    effects: "One-time payment of 100 × monthly cost. No monthly payments required.",
-  },
-];
+/**
+ * Map catalog modifier type to character-level modifier type.
+ * Catalog uses "flat", character type uses "fixed".
+ */
+function toCharacterModifierType(
+  catalogType: LifestyleModificationCatalogItem["modifierType"]
+): LifestyleModification["modifierType"] {
+  return catalogType === "flat" ? "fixed" : "percentage";
+}
 
 export function LifestyleModificationSelector({
   onAdd,
   existingModifications,
 }: LifestyleModificationSelectorProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const catalogModifications = useLifestyleModifications();
 
-  const availableModifications = DEFAULT_MODIFICATIONS.filter(
+  const availableModifications = catalogModifications.filter(
     (mod) => !existingModifications.some((existing) => existing.catalogId === mod.id)
   );
 
-  const handleSelect = (mod: (typeof DEFAULT_MODIFICATIONS)[0]) => {
+  const handleSelect = (mod: LifestyleModificationCatalogItem) => {
     const modification: LifestyleModification = {
       catalogId: mod.id,
       name: mod.name,
       type: mod.type,
-      modifierType: mod.modifierType,
+      modifierType: toCharacterModifierType(mod.modifierType),
       modifier: mod.modifier,
       effects: mod.effects,
     };
@@ -154,8 +103,8 @@ export function LifestyleModificationSelector({
                                 <>
                                   {mod.type === "positive" ? "+" : "-"}
                                   {mod.modifierType === "percentage"
-                                    ? `${mod.modifier}%`
-                                    : `${mod.modifier.toLocaleString()}¥`}
+                                    ? `${Math.abs(mod.modifier)}%`
+                                    : `${Math.abs(mod.modifier).toLocaleString()}¥`}
                                 </>
                               )}
                             </span>

@@ -11,6 +11,18 @@ import {
   calculateLifestyleMonthlyCost,
 } from "@/components/character/sheet/LifestylesDisplay";
 
+// Mock RulesetContext hooks
+vi.mock("@/lib/rules/RulesetContext", () => ({
+  useLifestyles: () => [
+    { id: "street", name: "Street", monthlyCost: 0, startingNuyen: "1d6 × 20" },
+    { id: "squatter", name: "Squatter", monthlyCost: 500, startingNuyen: "2d6 × 20" },
+    { id: "low", name: "Low", monthlyCost: 2000, startingNuyen: "3d6 × 60" },
+    { id: "medium", name: "Medium", monthlyCost: 5000, startingNuyen: "4d6 × 100" },
+    { id: "high", name: "High", monthlyCost: 10000, startingNuyen: "4d6 × 500" },
+    { id: "luxury", name: "Luxury", monthlyCost: 100000, startingNuyen: "6d6 × 1000" },
+  ],
+}));
+
 // Mock the LifestyleModal since it depends on RulesetContext
 vi.mock("@/components/creation/identities/LifestyleModal", () => ({
   LifestyleModal: ({ isOpen }: { isOpen: boolean }) =>

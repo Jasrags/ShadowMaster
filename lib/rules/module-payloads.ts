@@ -100,6 +100,9 @@ export interface LifestyleModificationCatalogItem {
   modifier: number;
   modifierType: "percentage" | "flat";
   description?: string;
+  effects?: string;
+  page?: number;
+  source?: string;
 }
 
 /**

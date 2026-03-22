@@ -59,6 +59,7 @@ import type {
   InfectedCatalogData,
   GearCatalogData,
 } from "./loader-types";
+import type { LifestyleModificationCatalogItem } from "./module-payloads";
 export type { GearCatalogData } from "./loader-types";
 export type {
   QualityData,
@@ -94,6 +95,7 @@ export type {
   ToxinCatalogItemData,
   InfectedCatalogData,
 };
+export type { LifestyleModificationCatalogItem } from "./module-payloads";
 
 // =============================================================================
 // TYPES
@@ -619,6 +621,7 @@ export interface RulesetData {
   lifestyles: LifestyleData[];
   lifestyleModifiers: Record<string, number>;
   lifestyleSubscriptions: LifestyleSubscriptionCatalogItem[];
+  lifestyleModifications: LifestyleModificationCatalogItem[];
   gear: GearCatalogData | null;
   modifications: ModificationsCatalogData | null;
   spells: SpellsCatalogData | null;
@@ -685,6 +688,7 @@ const defaultData: RulesetData = {
   lifestyles: [],
   lifestyleModifiers: {},
   lifestyleSubscriptions: [],
+  lifestyleModifications: [],
   gear: null,
   modifications: null,
   spells: null,
@@ -778,6 +782,7 @@ export function RulesetProvider({ children }: RulesetProviderProps) {
             lifestyles: extractedData.lifestyles || [],
             lifestyleModifiers: extractedData.lifestyleModifiers || {},
             lifestyleSubscriptions: extractedData.lifestyleSubscriptions || [],
+            lifestyleModifications: extractedData.lifestyleModifications || [],
             gear: extractedData.gear || null,
             modifications: extractedData.modifications || null,
             spells: extractedData.spells || null,
@@ -1303,6 +1308,14 @@ export function useLifestyleModifiers(): Record<string, number> {
 export function useLifestyleSubscriptions(): LifestyleSubscriptionCatalogItem[] {
   const { data } = useRuleset();
   return data.lifestyleSubscriptions;
+}
+
+/**
+ * Hook to get lifestyle modifications catalog
+ */
+export function useLifestyleModifications(): LifestyleModificationCatalogItem[] {
+  const { data } = useRuleset();
+  return data.lifestyleModifications;
 }
 
 /**
