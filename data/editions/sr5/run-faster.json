@@ -6445,7 +6445,849 @@
     },
     "lifestyle": {
       "mergeStrategy": "merge",
-      "payload": {}
+      "payload": {
+        "lifestyles": [
+          {
+            "id": "bolt-hole",
+            "name": "Bolt Hole",
+            "monthlyCost": 1000,
+            "startingNuyen": "1d6 × 50",
+            "description": "A prearranged, cash-only space to hide in when things go bad. Not a permanent residence — more like a cargo crate with food rations and a chemical toilet. Assets can be purchased but not services or outings. Only has a monthly cost when used.",
+            "components": {
+              "comfortsAndNecessities": {
+                "base": 1,
+                "limit": 2
+              },
+              "security": {
+                "base": 1,
+                "limit": 4
+              },
+              "neighborhood": {
+                "base": 1,
+                "limit": 4
+              }
+            },
+            "points": 4,
+            "builtInOptions": ["not-a-home"],
+            "page": 216,
+            "source": "Run Faster"
+          },
+          {
+            "id": "street",
+            "name": "Street",
+            "monthlyCost": 0,
+            "startingNuyen": "1d6 × 20",
+            "description": "Living on the street with no fixed address. Increased levels in C&N, Security, and Neighborhood cost a flat 50 nuyen per level per month instead of the standard 10% formula.",
+            "components": {
+              "comfortsAndNecessities": {
+                "base": 0,
+                "limit": 1
+              },
+              "security": {
+                "base": 0,
+                "limit": 1
+              },
+              "neighborhood": {
+                "base": 0,
+                "limit": 1
+              }
+            },
+            "points": 2,
+            "costPerLevelFlat": 50,
+            "page": 217,
+            "source": "Run Faster"
+          },
+          {
+            "id": "squatter",
+            "name": "Squatter",
+            "monthlyCost": 500,
+            "startingNuyen": "2d6 × 20",
+            "description": "A squat in an abandoned building or similar space.",
+            "components": {
+              "comfortsAndNecessities": {
+                "base": 1,
+                "limit": 2
+              },
+              "security": {
+                "base": 1,
+                "limit": 2
+              },
+              "neighborhood": {
+                "base": 1,
+                "limit": 2
+              }
+            },
+            "points": 2,
+            "page": 218,
+            "source": "Run Faster"
+          },
+          {
+            "id": "low",
+            "name": "Low",
+            "monthlyCost": 2000,
+            "startingNuyen": "3d6 × 60",
+            "description": "A basic apartment or small house in a rough neighborhood.",
+            "components": {
+              "comfortsAndNecessities": {
+                "base": 2,
+                "limit": 3
+              },
+              "security": {
+                "base": 2,
+                "limit": 3
+              },
+              "neighborhood": {
+                "base": 2,
+                "limit": 3
+              }
+            },
+            "points": 3,
+            "page": 218,
+            "source": "Run Faster"
+          },
+          {
+            "id": "middle",
+            "name": "Middle",
+            "monthlyCost": 5000,
+            "startingNuyen": "4d6 × 100",
+            "description": "A comfortable apartment or condo in a decent neighborhood.",
+            "components": {
+              "comfortsAndNecessities": {
+                "base": 3,
+                "limit": 4
+              },
+              "security": {
+                "base": 3,
+                "limit": 4
+              },
+              "neighborhood": {
+                "base": 4,
+                "limit": 5
+              }
+            },
+            "points": 4,
+            "page": 218,
+            "source": "Run Faster"
+          },
+          {
+            "id": "high",
+            "name": "High",
+            "monthlyCost": 10000,
+            "startingNuyen": "4d6 × 500",
+            "description": "An upscale home or luxury apartment.",
+            "components": {
+              "comfortsAndNecessities": {
+                "base": 4,
+                "limit": 6
+              },
+              "security": {
+                "base": 4,
+                "limit": 6
+              },
+              "neighborhood": {
+                "base": 5,
+                "limit": 6
+              }
+            },
+            "points": 6,
+            "page": 218,
+            "source": "Run Faster"
+          },
+          {
+            "id": "luxury",
+            "name": "Luxury",
+            "monthlyCost": 100000,
+            "startingNuyen": "6d6 × 1000",
+            "description": "The finest accommodations money can buy.",
+            "components": {
+              "comfortsAndNecessities": {
+                "base": 5,
+                "limit": 7
+              },
+              "security": {
+                "base": 5,
+                "limit": 8
+              },
+              "neighborhood": {
+                "base": 5,
+                "limit": 7
+              }
+            },
+            "points": 12,
+            "page": 218,
+            "source": "Run Faster"
+          },
+          {
+            "id": "traveler",
+            "name": "Traveler",
+            "monthlyCost": 3000,
+            "startingNuyen": "2d6 × 100",
+            "description": "The traveler keeps mobile and packs light. Every month the traveler stays someplace new. The player rolls 1D6 to determine the number of points allocated to the lifestyle that month. Only assets and services are available in the Entertainment category, added by the gamemaster.",
+            "components": {
+              "comfortsAndNecessities": {
+                "base": 2,
+                "limit": 4
+              },
+              "security": {
+                "base": 2,
+                "limit": 4
+              },
+              "neighborhood": {
+                "base": 2,
+                "limit": 4
+              }
+            },
+            "points": "1d6+2",
+            "page": 218,
+            "source": "Run Faster"
+          },
+          {
+            "id": "commercial",
+            "name": "Commercial",
+            "monthlyCost": 8000,
+            "startingNuyen": "4d6 × 200",
+            "description": "A storefront, not a proper residence. The lifestyle includes a location where the character can manufacture, fence, or repair goods. Includes permits to sell specific legal items. The character should make a Charisma + Etiquette (Corporate) [Social] test at the start of each month; each net hit reduces the monthly cost by 1,000 for that month.",
+            "components": {
+              "comfortsAndNecessities": {
+                "base": 3,
+                "limit": 4
+              },
+              "security": {
+                "base": 3,
+                "limit": 7
+              },
+              "neighborhood": {
+                "base": 4,
+                "limit": 6
+              }
+            },
+            "points": 4,
+            "page": 218,
+            "source": "Run Faster"
+          }
+        ],
+        "entertainmentOptions": [
+          {
+            "id": "armory",
+            "name": "Armory",
+            "type": "asset",
+            "points": 2,
+            "monthlyCost": 1000,
+            "minLifestyle": "high",
+            "purchasableMultipleTimes": false,
+            "description": "A room dedicated to guns. Ammo and one stock firearm duplicating one that the character purchased at creation are on hand. With the purchase of a toolkit, 1 point of Accuracy or AP can be repaired per week without additional cost. A point of Reach can also be repaired in two weeks.",
+            "page": 220,
+            "source": "Run Faster"
+          },
+          {
+            "id": "cleaning-service-standard",
+            "name": "Cleaning Service (Standard)",
+            "type": "service",
+            "points": 1,
+            "monthlyCost": 100,
+            "minLifestyle": "high",
+            "purchasableMultipleTimes": true,
+            "description": "Cleaning services include tidying up the home and cleaning/mending clothes with some semblance of privacy guarantee.",
+            "page": 220,
+            "source": "Run Faster"
+          },
+          {
+            "id": "cleaning-service-mage-sensitive",
+            "name": "Cleaning Service (Mage Sensitive)",
+            "type": "service",
+            "points": 1,
+            "monthlyCost": 200,
+            "minLifestyle": "high",
+            "purchasableMultipleTimes": true,
+            "description": "Mage-sensitive cleaning services destroy biomaterials that may be left behind on clothing or in a car/premise. Any material link items found at the character's domicile or vehicle are contaminated and cannot be used for ritual purposes.",
+            "page": 221,
+            "source": "Run Faster"
+          },
+          {
+            "id": "cleaning-service-pollution-sensitive",
+            "name": "Cleaning Service (Pollution Sensitive)",
+            "type": "service",
+            "points": 1,
+            "monthlyCost": 400,
+            "minLifestyle": "high",
+            "purchasableMultipleTimes": true,
+            "description": "Pollution-sensitive cleaning services use less harsh chemicals and natural materials. This reduces Fatigue damage from environmental allergies in the C&N category by 1.",
+            "page": 221,
+            "source": "Run Faster"
+          },
+          {
+            "id": "discreet-cleaning-service",
+            "name": "Discreet Cleaning Service",
+            "type": "service",
+            "points": 4,
+            "monthlyCost": 10000,
+            "minLifestyle": "none",
+            "purchasableMultipleTimes": false,
+            "description": "An organization that can go to a premise and patch bullet holes, wash out blood stains, and cleanse the astral in under twenty-four hours. At the listed cost, they will handle only one body disposal a month. This service is tied to the character, so it does not end when they change lifestyles.",
+            "page": 221,
+            "source": "Run Faster"
+          },
+          {
+            "id": "discreet-deliveryman",
+            "name": "Discreet Deliveryman",
+            "type": "service",
+            "points": 3,
+            "monthlyCost": 100,
+            "minLifestyle": "none",
+            "purchasableMultipleTimes": false,
+            "description": "A guy who can pick up and deliver any legal item (within reason) without being noticed. Has a dice pool of 14 for Sneaking Tests and an Edge Rating of 4. The deliveryman can handle takeout food service and legal items with Availability 8 or less.",
+            "page": 221,
+            "source": "Run Faster"
+          },
+          {
+            "id": "candyman",
+            "name": "Candyman",
+            "type": "service",
+            "points": 3,
+            "monthlyCost": 1000,
+            "minLifestyle": "none",
+            "purchasableMultipleTimes": false,
+            "description": "A discreet deliveryman who can handle items up to Availability of 16, as well as restricted and illegal items. The purchase of the item must be accomplished through normal means. Time to deliver is based on original price of the item.",
+            "page": 221,
+            "source": "Run Faster"
+          },
+          {
+            "id": "garage-car-small",
+            "name": "Garage (Car, Body 4 or less)",
+            "type": "asset",
+            "points": 1,
+            "monthlyCost": 50,
+            "minLifestyle": "middle",
+            "purchasableMultipleTimes": true,
+            "description": "A large covered area with enough space to park and maintain a single small vehicle (Body 4 or less). With a Shop, 1 box of damage can be repaired per week without additional cost.",
+            "page": 221,
+            "source": "Run Faster"
+          },
+          {
+            "id": "garage-car-large",
+            "name": "Garage (Car, Body 5 or greater)",
+            "type": "asset",
+            "points": 2,
+            "monthlyCost": 100,
+            "minLifestyle": "middle",
+            "purchasableMultipleTimes": true,
+            "description": "A large covered area with enough space to park and maintain a single large vehicle (Body 5 or greater). With a Shop, 1 box of damage can be repaired per week without additional cost.",
+            "page": 221,
+            "source": "Run Faster"
+          },
+          {
+            "id": "garage-boat",
+            "name": "Garage (Boat)",
+            "type": "asset",
+            "points": 3,
+            "monthlyCost": 5000,
+            "minLifestyle": "high",
+            "purchasableMultipleTimes": true,
+            "description": "Includes space on a dock and access to launch the craft. Smaller personal watercraft can be treated the same as cars for the purposes of storage and repair in lieu of owning a dock.",
+            "page": 221,
+            "source": "Run Faster"
+          },
+          {
+            "id": "garage-airplane",
+            "name": "Garage (Airplane)",
+            "type": "asset",
+            "points": 4,
+            "monthlyCost": 20000,
+            "minLifestyle": "luxury",
+            "purchasableMultipleTimes": true,
+            "description": "Hangar space for a single airplane. With a Facility, 2 boxes of damage can be repaired per week without additional cost.",
+            "page": 221,
+            "source": "Run Faster"
+          },
+          {
+            "id": "garage-helicopter",
+            "name": "Garage (Helicopter)",
+            "type": "asset",
+            "points": 4,
+            "monthlyCost": 10000,
+            "minLifestyle": "luxury",
+            "purchasableMultipleTimes": true,
+            "description": "Includes access to a helicopter pad to launch the vehicle. With a Facility, 2 boxes of damage can be repaired per week without additional cost.",
+            "page": 221,
+            "source": "Run Faster"
+          },
+          {
+            "id": "greenhouse",
+            "name": "Greenhouse",
+            "type": "asset",
+            "points": 2,
+            "monthlyCost": 500,
+            "minLifestyle": "high",
+            "purchasableMultipleTimes": false,
+            "description": "A small plot of land or a couple of pots to grow carrots, tomatoes, herbs, wheatgrass, etc. Reduce the environmental damage due to food allergies by 1.",
+            "page": 221,
+            "source": "Run Faster"
+          },
+          {
+            "id": "grid-subscription",
+            "name": "Grid Subscription",
+            "type": "asset",
+            "points": 1,
+            "monthlyCost": 50,
+            "minLifestyle": "middle",
+            "purchasableMultipleTimes": false,
+            "description": "A subscription to a corporate-sponsored grid for entertainment, shopping, and media. Without a grid subscription, commlinks default to the public grid with only trid shows from two seasons ago.",
+            "page": 222,
+            "source": "Run Faster"
+          },
+          {
+            "id": "gym",
+            "name": "Gym",
+            "type": "asset",
+            "points": 2,
+            "monthlyCost": 300,
+            "minLifestyle": "middle",
+            "purchasableMultipleTimes": false,
+            "description": "Weights, treadmill, and other fitness equipment. Reduces training time to improve physical stats by twenty percent.",
+            "page": 222,
+            "source": "Run Faster"
+          },
+          {
+            "id": "indoor-arboretum",
+            "name": "Indoor Arboretum",
+            "type": "asset",
+            "points": 2,
+            "monthlyCost": 500,
+            "minLifestyle": "high",
+            "purchasableMultipleTimes": false,
+            "description": "A room dedicated to living vegetation. A bright spot in the astral plane for the Awakened, and a room free of pollutants for the mundane. Reduces C&N environmental damage due to pollution allergies by 1.",
+            "page": 222,
+            "source": "Run Faster"
+          },
+          {
+            "id": "local-bar-patron",
+            "name": "Local Bar Patron",
+            "type": "outing",
+            "points": 1,
+            "monthlyCost": 25,
+            "minLifestyle": "low",
+            "purchasableMultipleTimes": true,
+            "description": "A bar or similar habitual location that the character frequents. The lifestyle covers food and drinks from this spot. One specific location is chosen when this entertainment option is selected, and the feature can be purchased more than once to add different locations.",
+            "page": 222,
+            "source": "Run Faster"
+          },
+          {
+            "id": "panic-room",
+            "name": "Panic Room",
+            "type": "asset",
+            "points": 2,
+            "monthlyCost": 1000,
+            "minLifestyle": "high",
+            "purchasableMultipleTimes": false,
+            "description": "A reinforced three-meter by three-meter room constructed with structural material (p. 197, SR5) with a Rating 5 locking mechanism.",
+            "page": 222,
+            "source": "Run Faster"
+          },
+          {
+            "id": "patron-of-the-arts-rock-concerts",
+            "name": "Patron of the Arts (Rock Concerts / Sport Events)",
+            "type": "outing",
+            "points": 1,
+            "monthlyCost": 100,
+            "minLifestyle": "middle",
+            "purchasableMultipleTimes": true,
+            "description": "Membership privileges granting front-row seats, members-only specials, and limited suite or luxury box access at rock concerts and sport events.",
+            "page": 223,
+            "source": "Run Faster"
+          },
+          {
+            "id": "patron-of-the-arts-private-club",
+            "name": "Patron of the Arts (Private Club Memberships)",
+            "type": "outing",
+            "points": 1,
+            "monthlyCost": 200,
+            "minLifestyle": "high",
+            "purchasableMultipleTimes": true,
+            "description": "Private club membership such as Dante's Inferno (membership #77). Includes preferred member treatment and exclusive access.",
+            "page": 223,
+            "source": "Run Faster"
+          },
+          {
+            "id": "patron-of-the-arts-public-entertainment",
+            "name": "Patron of the Arts (Public Entertainment)",
+            "type": "outing",
+            "points": 1,
+            "monthlyCost": 75,
+            "minLifestyle": "low",
+            "purchasableMultipleTimes": true,
+            "description": "Regular attendance at public entertainment venues such as the zoo, museums, and similar attractions.",
+            "page": 223,
+            "source": "Run Faster"
+          },
+          {
+            "id": "patron-of-the-arts-theme-parks",
+            "name": "Patron of the Arts (Theme Parks)",
+            "type": "outing",
+            "points": 1,
+            "monthlyCost": 100,
+            "minLifestyle": "middle",
+            "purchasableMultipleTimes": true,
+            "description": "Annual or monthly pass to theme parks such as Virtual Disneyland and other upscale attractions.",
+            "page": 223,
+            "source": "Run Faster"
+          },
+          {
+            "id": "private-room",
+            "name": "Private Room",
+            "type": "asset",
+            "points": 1,
+            "monthlyCost": 20,
+            "minLifestyle": "squatter",
+            "purchasableMultipleTimes": false,
+            "description": "A simple empty two-meter-by-two-meter space built out of the view of passersby. Provides concealability (-4 dice pool penalty for Perception Tests to notice a person in the room from the outside) and full cover.",
+            "page": 223,
+            "source": "Run Faster"
+          },
+          {
+            "id": "public-transportation",
+            "name": "Public Transportation",
+            "type": "service",
+            "points": 1,
+            "monthlyCost": 50,
+            "minLifestyle": "low",
+            "purchasableMultipleTimes": false,
+            "description": "A monthly pass to access public transportation in your region including bus, trolley, subway, ferry, or any combination. Purchased once per city.",
+            "page": 223,
+            "source": "Run Faster"
+          },
+          {
+            "id": "railway-pass",
+            "name": "Railway Pass",
+            "type": "service",
+            "points": 1,
+            "monthlyCost": 75,
+            "minLifestyle": "middle",
+            "purchasableMultipleTimes": false,
+            "description": "A monthly pass to use the light rail or mag-lev train to travel between two relatively close sprawls. Includes border-crossing fees when relevant. Purchased for two city locations.",
+            "page": 223,
+            "source": "Run Faster"
+          },
+          {
+            "id": "shooting-range",
+            "name": "Shooting Range",
+            "type": "asset",
+            "points": 2,
+            "monthlyCost": 500,
+            "minLifestyle": "high",
+            "purchasableMultipleTimes": false,
+            "description": "A place to shoot guns without bothering the neighbors. Reduces training time with a firearm skill by ten percent.",
+            "page": 223,
+            "source": "Run Faster"
+          },
+          {
+            "id": "soy-processing-unit",
+            "name": "Soy Processing Unit",
+            "type": "asset",
+            "points": 1,
+            "monthlyCost": 20,
+            "minLifestyle": "middle",
+            "purchasableMultipleTimes": false,
+            "description": "A SOTA set of kitchen devices. Soy, krill, and mycoprotein are architecturally printed into something that looks and tastes close to the real thing. Reduces the potential environmental damage tied to Comforts & Necessities due to food allergies by 1.",
+            "page": 223,
+            "source": "Run Faster"
+          },
+          {
+            "id": "sports-court",
+            "name": "Sports Court",
+            "type": "asset",
+            "points": 2,
+            "monthlyCost": 300,
+            "minLifestyle": "high",
+            "purchasableMultipleTimes": false,
+            "description": "A tennis court, basketball court, driving range, bowling alley, or similar physical activity space. Reduces training time with an athletics skill by ten percent.",
+            "page": 224,
+            "source": "Run Faster"
+          },
+          {
+            "id": "swimming-pool",
+            "name": "Swimming Pool",
+            "type": "asset",
+            "points": 1,
+            "monthlyCost": 100,
+            "minLifestyle": "middle",
+            "purchasableMultipleTimes": false,
+            "description": "A swimming pool for relaxation and exercise. Bigger than a bathtub, clean, and deep enough to use.",
+            "page": 224,
+            "source": "Run Faster"
+          },
+          {
+            "id": "walk-in-freezer",
+            "name": "Walk-in Freezer",
+            "type": "asset",
+            "points": 1,
+            "monthlyCost": 1000,
+            "minLifestyle": "commercial",
+            "purchasableMultipleTimes": false,
+            "description": "A chilled room mainly used for food storage, but can also store things that need to stay cold while six-foot holes are dug as more permanent resting places.",
+            "page": 224,
+            "source": "Run Faster"
+          },
+          {
+            "id": "workshop-facility",
+            "name": "Workshop/Facility",
+            "type": "asset",
+            "points": 2,
+            "monthlyCost": 2500,
+            "minLifestyle": "middle",
+            "minLifestyleAlsoRequires": "commercial",
+            "purchasableMultipleTimes": false,
+            "description": "Space dedicated to the character's gear-related work. Power, ventilation, shelving, etc. Combined with a Shop or Facility, gear/weapons associated with the workshop can be repaired at 1 box of damage per week without additional cost (2 boxes with a Facility).",
+            "page": 224,
+            "source": "Run Faster"
+          },
+          {
+            "id": "yard",
+            "name": "Yard",
+            "type": "asset",
+            "points": 2,
+            "monthlyCost": 50,
+            "minLifestyle": "low",
+            "purchasableMultipleTimes": true,
+            "description": "A piece of outdoor ground roughly fifty to two hundred square meters. Could be a backyard, empty lot, or abandoned parking lot. Large enough to park a car, put up a small kiddy pool, or install a ritual circle. Can be purchased more than once to increase the size of the yard.",
+            "page": 224,
+            "source": "Run Faster"
+          },
+          {
+            "id": "zen-den-bat-cave",
+            "name": "Zen Den/Bat Cave",
+            "type": "asset",
+            "points": 2,
+            "monthlyCost": 100,
+            "minLifestyle": "middle",
+            "purchasableMultipleTimes": false,
+            "description": "A room dedicated to the hobbies of the character. The zen den provides a +1 dice pool bonus on tests involving relevant Interest Knowledge Skills when at home. The bat cave provides a +1 dice pool bonus to tests involving relevant Academic Knowledge Skills when at home (with a Kit, up to three Kits).",
+            "page": 224,
+            "source": "Run Faster"
+          },
+          {
+            "id": "merchandise-goods",
+            "name": "Merchandise: Goods (Specific Item)",
+            "type": "service",
+            "points": 1,
+            "monthlyCost": 10000,
+            "minLifestyle": "commercial",
+            "purchasableMultipleTimes": true,
+            "description": "This location will provide some sort of legal goods for sale. The item to be sold must be selected when this option is purchased. Base Availability is 3 for gear and low quality for miscellaneous items. More points can be spent to increase quality/availability (max 4 points for luxury-quality). Each point also adds 2 to the Availability of the item that can be sold on the premises.",
+            "page": 222,
+            "source": "Run Faster"
+          },
+          {
+            "id": "merchandise-pawn-shop",
+            "name": "Merchandise: Pawn Shop/Thrift Store",
+            "type": "service",
+            "points": 2,
+            "monthlyCost": 10000,
+            "minLifestyle": "commercial",
+            "purchasableMultipleTimes": false,
+            "description": "Any used legal goods can be fenced at this location. Items can be sold within a week provided that the player sells the item at fifteen percent of the normal purchase price.",
+            "page": 222,
+            "source": "Run Faster"
+          },
+          {
+            "id": "merchandise-used-goods",
+            "name": "Merchandise: Used Goods (Specific Item)",
+            "type": "service",
+            "points": 2,
+            "monthlyCost": 10000,
+            "minLifestyle": "commercial",
+            "purchasableMultipleTimes": true,
+            "description": "This location can be used to fence one specific item, which must be selected when this option is purchased. Reduces threshold to find a buyer by half. You can immediately sell items at twenty-five percent of the purchase price.",
+            "page": 222,
+            "source": "Run Faster"
+          }
+        ],
+        "modifications": [
+          {
+            "id": "angry-drunk-reputation",
+            "name": "Angry Drunk Reputation",
+            "type": "negative",
+            "modifierType": "flat",
+            "modifier": 0,
+            "pointsGranted": 1,
+            "description": "You have a bad reputation for causing or being in fights. Many bars have put your picture in their system or banned you completely. The character cannot have any Bar Patron or Patron of the Arts (Private Club) entertainment options attached to any lifestyle. This option may cause issues when meeting Mr. Johnson.",
+            "effects": "No Bar Patron or Private Club entertainment options. +1 point to base lifestyle.",
+            "page": 224,
+            "source": "Run Faster"
+          },
+          {
+            "id": "corporate-owned",
+            "name": "Corporate Owned",
+            "type": "positive",
+            "modifierType": "flat",
+            "modifier": 0,
+            "pointsCost": 3,
+            "description": "This domicile is within the jurisdiction of a corporation, such as a wageslave housing complex or arcology. Increase both the Comforts & Necessities value and limit by 1. The Security level and limit are also increased by 1. Requires a corporate or limited corporate SIN (p. 84, SR5). Reduces available points by 3; if the base lifestyle doesn't have 3 points, it can't be corporate owned.",
+            "effects": "+1 C&N (value and limit), +1 Security (value and limit). Requires corporate SIN.",
+            "page": 224,
+            "source": "Run Faster"
+          },
+          {
+            "id": "hotel-california",
+            "name": "Hotel California",
+            "type": "negative",
+            "modifierType": "flat",
+            "modifier": 0,
+            "pointsGranted": 1,
+            "description": "There's a limited window when someone can enter or leave the premises. The rest of the time, the character is stuck and can only use the resources the place has. The time period of lockdown is agreed upon between the gamemaster and player.",
+            "effects": "Limited entry/exit windows. +1 point to base lifestyle.",
+            "page": 226,
+            "source": "Run Faster"
+          },
+          {
+            "id": "maid-is-out",
+            "name": "Maid Is Out",
+            "type": "negative",
+            "modifierType": "flat",
+            "modifier": 0,
+            "pointsGranted": 1,
+            "description": "This location has not been cleaned recently. Or ever. Layers of trash and mold cover most surfaces. Reduce the limit of Comforts & Necessities by 1. The Cleaning Service option cannot be purchased for this location. Increase the DV of environmental fatigue by 1 for environmental allergies.",
+            "effects": "-1 C&N limit, no Cleaning Service. +1 environmental fatigue DV. +1 point to base lifestyle.",
+            "page": 226,
+            "source": "Run Faster"
+          },
+          {
+            "id": "not-a-home",
+            "name": "Not A Home",
+            "type": "negative",
+            "modifierType": "flat",
+            "modifier": 0,
+            "pointsGranted": 1,
+            "description": "This location was not designed for habitation. There's no plumbing and possibly no privacy, lacking standard features such as interior walls. This can be as simple as a cargo container or rented space at a strip mall. Reduce the limit of Comforts & Necessities by 1.",
+            "effects": "-1 C&N limit. +1 point to base lifestyle.",
+            "page": 226,
+            "source": "Run Faster"
+          },
+          {
+            "id": "one-good-thing",
+            "name": "One Good Thing About This Place",
+            "type": "positive",
+            "modifierType": "flat",
+            "modifier": 0,
+            "description": "No matter where the character ends up, they always have one entertainment choice guaranteed while they're there. The player chooses one entertainment asset worth either one or two points. This choice is always available at the domicile as long as the monthly cost is paid. Only available for the Traveler lifestyle.",
+            "effects": "One entertainment asset always available. Traveler lifestyle only.",
+            "page": 226,
+            "source": "Run Faster"
+          },
+          {
+            "id": "safehouse",
+            "name": "Safehouse",
+            "type": "positive",
+            "modifierType": "flat",
+            "modifier": 500,
+            "description": "This premise is designated as a safehouse. The character has no control over what Entertainment options are factored into the place, meaning they cannot purchase Entertainment assets for a safehouse, though other assets can be added. Add 4 to the dice pool of anyone trying to track the subject while they reside there. The gamemaster decides the house rules (curfew, weapons allowed, clothing restrictions, etc.).",
+            "effects": "+4 dice pool to tracking tests. No Entertainment assets. +500¥/month.",
+            "page": 226,
+            "source": "Run Faster"
+          },
+          {
+            "id": "safety-third",
+            "name": "Safety Third",
+            "type": "negative",
+            "modifierType": "flat",
+            "modifier": 0,
+            "pointsGranted": 1,
+            "description": "While there is space for a workshop or facility, it's not the best of places to work in (no ventilation, wet floor, critters). Reduce the number of 1s needed for a glitch by one. Characters must have a Shop or Facility along with a Garage or Workshop Asset. Applies to a single asset (Garage or Workshop). Can be taken more than once per asset.",
+            "effects": "-1 glitch threshold in workshops. +1 point to base lifestyle.",
+            "page": 226,
+            "source": "Run Faster"
+          },
+          {
+            "id": "thrifty",
+            "name": "Thrifty",
+            "type": "negative",
+            "modifierType": "flat",
+            "modifier": -1000,
+            "pointsCost": 2,
+            "description": "So what if the shower is lukewarm and the walls are paper thin? You got a great deal on this place. Reduce the points available by 2 and the monthly cost by 1,000 nuyen. Only available for the Traveler lifestyle.",
+            "effects": "-2 points, -1,000¥/month. Traveler lifestyle only.",
+            "page": 226,
+            "source": "Run Faster"
+          },
+          {
+            "id": "w-zone",
+            "name": "W Zone",
+            "type": "negative",
+            "modifierType": "flat",
+            "modifier": 0,
+            "pointsGranted": 1,
+            "description": "W stands for wilderness. This location is way outside any urban area, so the grid is spotty, power is not publicly provided, and unless you have a car, the nearest public transportation is two hours away. Reduce the Neighborhood level by 1 and increase the security response by 1d6 hours.",
+            "effects": "-1 Neighborhood, +1d6 hours security response. +1 point to base lifestyle.",
+            "page": 226,
+            "source": "Run Faster"
+          }
+        ],
+        "neighborhoodZones": [
+          {
+            "level": 0,
+            "zone": "Z",
+            "responseTime": "2d6 hours",
+            "description": "A lawless area deep in the heart of many barrens. Criminal organizations and gangs can sometimes feel uneasy here. Awakened critters and toxic spirits tend to roam wild.",
+            "page": 220,
+            "source": "Run Faster"
+          },
+          {
+            "level": 1,
+            "zone": "E",
+            "responseTime": "1d6 hours",
+            "description": "Low-rent/industrial districts mostly filled with SINless squatters and the homeless. Heavy or toxic industrial facilities are included in E Zones. Security providers consider SINless non-people.",
+            "page": 220,
+            "source": "Run Faster"
+          },
+          {
+            "level": 2,
+            "zone": "D",
+            "responseTime": "1d6 × 12 minutes",
+            "description": "Zones between industrial and residential districts where the exposure to pollution is a little better. Run-down business districts, abandoned warehouses, forgotten tenements, landfills, freeway junctions, old cemeteries, and large parking lots.",
+            "page": 220,
+            "source": "Run Faster"
+          },
+          {
+            "level": 3,
+            "zone": "C",
+            "responseTime": "1d6 × 10 minutes",
+            "description": "The district has seen better days. Low-rent residences, storage facilities, small bodegas, and other similar sites.",
+            "page": 220,
+            "source": "Run Faster"
+          },
+          {
+            "level": 4,
+            "zone": "B",
+            "responseTime": "1d6 × 5 minutes",
+            "description": "Where the middle class lives, along with the commercial places they use and the occasional light industrial facility.",
+            "page": 220,
+            "source": "Run Faster"
+          },
+          {
+            "level": 5,
+            "zone": "A",
+            "responseTime": "2d6 + 3 minutes",
+            "description": "High-class residences and corporate buildings.",
+            "page": 220,
+            "source": "Run Faster"
+          },
+          {
+            "level": 6,
+            "zone": "AA",
+            "responseTime": "1d6 + 4 minutes",
+            "description": "Luxury-class residences and posh commercial places. If you ask the price, you can't afford to live here.",
+            "page": 220,
+            "source": "Run Faster"
+          },
+          {
+            "level": 7,
+            "zone": "AAA",
+            "responseTime": "1d6 minutes",
+            "description": "Corporate headquarters. Skyraker condos. And the occasional private islands. Where the world's wealthiest pay to make sure they're kept safe.",
+            "page": 220,
+            "source": "Run Faster"
+          }
+        ]
+      }
     },
     "contactArchetypes": {
       "mergeStrategy": "append",
