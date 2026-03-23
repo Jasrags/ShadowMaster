@@ -8571,7 +8571,4036 @@
     },
     "equipmentPacks": {
       "mergeStrategy": "replace",
-      "payload": {}
+      "payload": {
+        "packs": [
+          {
+            "id": "intro-runner-pack",
+            "name": "Intro Runner Pack",
+            "category": "core",
+            "nuyenCost": 4000,
+            "karmaCost": 2,
+            "maxAvailability": 0,
+            "contents": [
+              {
+                "itemId": "fake-sin",
+                "itemName": "Fake SIN",
+                "quantity": 1,
+                "rating": 1
+              },
+              {
+                "itemId": "mapsoft",
+                "itemName": "Mapsoft (campaign city)",
+                "quantity": 1
+              },
+              {
+                "itemId": "meta-link",
+                "itemName": "Meta Link",
+                "quantity": 1
+              },
+              {
+                "itemId": "standard-credstick",
+                "itemName": "Standard Credstick",
+                "quantity": 1
+              },
+              {
+                "itemId": "colt-america-l36",
+                "itemName": "Colt America L36",
+                "quantity": 1
+              },
+              {
+                "itemId": "spare-clip",
+                "itemName": "Spare Clip",
+                "quantity": 2
+              },
+              {
+                "itemId": "restraints-plastic",
+                "itemName": "Plastic Restraints",
+                "quantity": 20
+              },
+              {
+                "itemId": "regular-rounds",
+                "itemName": "Regular Ammo (Light Pistol)",
+                "quantity": 100
+              },
+              {
+                "itemId": "flashlight",
+                "itemName": "Flashlight",
+                "quantity": 1
+              },
+              {
+                "itemId": "knife",
+                "itemName": "Knife",
+                "quantity": 1
+              },
+              {
+                "itemId": "backpack",
+                "itemName": "Backpack",
+                "quantity": 1
+              },
+              {
+                "itemId": "armor-vest",
+                "itemName": "Armor Vest",
+                "quantity": 1
+              },
+              {
+                "itemId": "respirator",
+                "itemName": "Respirator",
+                "quantity": 1,
+                "rating": 1
+              },
+              {
+                "itemId": "glasses",
+                "itemName": "Glasses",
+                "quantity": 1,
+                "rating": 1,
+                "modifications": ["image-link"]
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "basic-runner-pack",
+            "name": "Basic Runner Pack",
+            "category": "core",
+            "nuyenCost": 10000,
+            "karmaCost": 5,
+            "maxAvailability": 0,
+            "contents": [
+              {
+                "itemId": "fake-sin",
+                "itemName": "Fake SIN",
+                "quantity": 1,
+                "rating": 3
+              },
+              {
+                "itemId": "ear-buds",
+                "itemName": "Earbuds",
+                "quantity": 1,
+                "rating": 1,
+                "modifications": ["sound-link"]
+              },
+              {
+                "itemId": "renraku-sensei",
+                "itemName": "Renraku Sensei",
+                "quantity": 1
+              },
+              {
+                "itemId": "restraints-metal",
+                "itemName": "Metal Restraints",
+                "quantity": 1
+              },
+              {
+                "itemId": "knife",
+                "itemName": "Knife",
+                "quantity": 1
+              },
+              {
+                "itemId": "restraints-plastic",
+                "itemName": "Plastic Restraints",
+                "quantity": 10
+              },
+              {
+                "itemId": "armor-vest",
+                "itemName": "Armor Vest",
+                "quantity": 1
+              },
+              {
+                "itemId": "backpack",
+                "itemName": "Backpack",
+                "quantity": 1
+              },
+              {
+                "itemId": "micro-transceiver",
+                "itemName": "Micro-Transceiver",
+                "quantity": 1
+              },
+              {
+                "itemId": "flashlight",
+                "itemName": "Flashlight",
+                "quantity": 1
+              },
+              {
+                "itemId": "mapsoft",
+                "itemName": "Mapsoft (campaign city)",
+                "quantity": 1
+              },
+              {
+                "itemId": "respirator",
+                "itemName": "Respirator",
+                "quantity": 1,
+                "rating": 1
+              },
+              {
+                "itemId": "silver-credstick",
+                "itemName": "Silver Credstick",
+                "quantity": 1
+              },
+              {
+                "itemId": "survival-kit",
+                "itemName": "Survival Kit",
+                "quantity": 1
+              },
+              {
+                "itemId": "glasses",
+                "itemName": "Glasses",
+                "quantity": 1,
+                "rating": 1,
+                "modifications": ["image-link"]
+              },
+              {
+                "itemId": "medkit",
+                "itemName": "Medkit",
+                "quantity": 1,
+                "rating": 1
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "advanced-runner-pack",
+            "name": "Advanced Runner Pack",
+            "category": "core",
+            "nuyenCost": 20000,
+            "karmaCost": 10,
+            "maxAvailability": 12,
+            "availabilityType": "F",
+            "contents": [
+              {
+                "itemId": "fake-sin",
+                "itemName": "Fake SIN",
+                "quantity": 1,
+                "rating": 4
+              },
+              {
+                "itemId": "restraints-metal",
+                "itemName": "Metal Restraints",
+                "quantity": 1
+              },
+              {
+                "itemId": "erika-elite",
+                "itemName": "Erika Elite",
+                "quantity": 1
+              },
+              {
+                "itemId": "sim-module",
+                "itemName": "Sim Module",
+                "quantity": 1
+              },
+              {
+                "itemId": "subvocal-mic",
+                "itemName": "Subvocal Mic",
+                "quantity": 1
+              },
+              {
+                "itemId": "backpack",
+                "itemName": "Backpack",
+                "quantity": 1
+              },
+              {
+                "itemId": "knife",
+                "itemName": "Knife",
+                "quantity": 1
+              },
+              {
+                "itemId": "flashlight",
+                "itemName": "Flashlight",
+                "quantity": 1
+              },
+              {
+                "itemId": "armor-vest",
+                "itemName": "Armor Vest",
+                "quantity": 1
+              },
+              {
+                "itemId": "flashlight",
+                "itemName": "Flashlight (low-light)",
+                "quantity": 1,
+                "modifications": ["low-light-vision"]
+              },
+              {
+                "itemId": "micro-transceiver",
+                "itemName": "Micro-Transceiver",
+                "quantity": 1
+              },
+              {
+                "itemId": "climbing-gear",
+                "itemName": "Climbing Gear",
+                "quantity": 1
+              },
+              {
+                "itemId": "tag-eraser",
+                "itemName": "Tag Eraser",
+                "quantity": 1
+              },
+              {
+                "itemId": "diving-gear",
+                "itemName": "Diving Gear",
+                "quantity": 1
+              },
+              {
+                "itemId": "mapsoft",
+                "itemName": "Mapsoft (campaign city)",
+                "quantity": 1
+              },
+              {
+                "itemId": "gas-mask",
+                "itemName": "Gas Mask",
+                "quantity": 1
+              },
+              {
+                "itemId": "gold-credstick",
+                "itemName": "Gold Credstick",
+                "quantity": 1
+              },
+              {
+                "itemId": "respirator",
+                "itemName": "Respirator",
+                "quantity": 1,
+                "rating": 4
+              },
+              {
+                "itemId": "contacts",
+                "itemName": "Contacts",
+                "quantity": 1,
+                "rating": 3,
+                "modifications": ["image-link", "low-light-vision", "flare-compensation"]
+              },
+              {
+                "itemId": "survival-kit",
+                "itemName": "Survival Kit",
+                "quantity": 1
+              },
+              {
+                "itemId": "ear-buds",
+                "itemName": "Earbuds",
+                "quantity": 1,
+                "rating": 3,
+                "modifications": ["sound-link", "select-sound-filter"]
+              },
+              {
+                "itemId": "standard-rope",
+                "itemName": "Standard Rope",
+                "quantity": 50
+              },
+              {
+                "itemId": "camera",
+                "itemName": "Camera",
+                "quantity": 1,
+                "rating": 1,
+                "modifications": ["vision-magnification"]
+              },
+              {
+                "itemId": "medkit",
+                "itemName": "Medkit",
+                "quantity": 1,
+                "rating": 3
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "classic-samurai-pack",
+            "name": "Classic Samurai Pack",
+            "category": "weapon",
+            "nuyenCost": 2000,
+            "karmaCost": 1,
+            "maxAvailability": 9,
+            "availabilityType": "R",
+            "contents": [
+              {
+                "itemId": "katana",
+                "itemName": "Katana",
+                "quantity": 1
+              },
+              {
+                "itemId": "club",
+                "itemName": "Bokken (Club)",
+                "quantity": 1
+              },
+              {
+                "itemId": "sword",
+                "itemName": "Wakizashi (Sword)",
+                "quantity": 1
+              },
+              {
+                "itemId": "datasoft",
+                "itemName": "Datasoft (Samurai Literature)",
+                "quantity": 1
+              },
+              {
+                "itemId": "combat-knife",
+                "itemName": "Tanto (Combat Knife)",
+                "quantity": 1
+              },
+              {
+                "itemId": "clothing",
+                "itemName": "Kimono",
+                "quantity": 1
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "up-close-and-personal-pack",
+            "name": "Up Close & Personal Pack",
+            "category": "weapon",
+            "nuyenCost": 6000,
+            "karmaCost": 3,
+            "maxAvailability": 12,
+            "availabilityType": "R",
+            "contents": [
+              {
+                "itemId": "combat-axe",
+                "itemName": "Combat Axe",
+                "quantity": 1
+              },
+              {
+                "itemId": "club",
+                "itemName": "Club",
+                "quantity": 1
+              },
+              {
+                "itemId": "katana",
+                "itemName": "Katana",
+                "quantity": 1
+              },
+              {
+                "itemId": "extendable-baton",
+                "itemName": "Extendable Baton",
+                "quantity": 1
+              },
+              {
+                "itemId": "knife",
+                "itemName": "Knife",
+                "quantity": 2
+              },
+              {
+                "itemId": "telescoping-staff",
+                "itemName": "Telescoping Staff",
+                "quantity": 1
+              },
+              {
+                "itemId": "combat-knife",
+                "itemName": "Combat Knife",
+                "quantity": 1
+              },
+              {
+                "itemId": "knucks",
+                "itemName": "Knucks",
+                "quantity": 1
+              },
+              {
+                "itemId": "throwing-knife",
+                "itemName": "Throwing Knife",
+                "quantity": 4
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "blademaster-pack",
+            "name": "Blademaster Pack",
+            "category": "weapon",
+            "nuyenCost": 2000,
+            "karmaCost": 1,
+            "maxAvailability": 5,
+            "availabilityType": "R",
+            "contents": [
+              {
+                "itemId": "knife",
+                "itemName": "Knife",
+                "quantity": 2
+              },
+              {
+                "itemId": "club",
+                "itemName": "Club",
+                "quantity": 1
+              },
+              {
+                "itemId": "combat-knife",
+                "itemName": "Combat Knife",
+                "quantity": 2
+              },
+              {
+                "itemId": "extendable-baton",
+                "itemName": "Extendable Baton",
+                "quantity": 1
+              },
+              {
+                "itemId": "survival-knife",
+                "itemName": "Survival Knife",
+                "quantity": 2
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "monowhip-pack",
+            "name": "Monowhip Pack",
+            "category": "weapon",
+            "nuyenCost": 20000,
+            "karmaCost": 10,
+            "maxAvailability": 12,
+            "availabilityType": "F",
+            "contents": [
+              {
+                "itemId": "monofilament-whip",
+                "itemName": "Monofilament Whip",
+                "quantity": 1
+              },
+              {
+                "itemId": "doc-wagon-basic",
+                "itemName": "DocWagon Basic Contract",
+                "quantity": 1
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "basic-bowman-pack",
+            "name": "Basic Bowman Pack",
+            "category": "weapon",
+            "nuyenCost": 2000,
+            "karmaCost": 1,
+            "maxAvailability": 8,
+            "availabilityType": "R",
+            "contents": [
+              {
+                "itemId": "bow",
+                "itemName": "Bow",
+                "quantity": 1,
+                "rating": 4
+              },
+              {
+                "itemId": "narcoject",
+                "itemName": "Narcoject",
+                "quantity": 10
+              },
+              {
+                "itemId": "arrow",
+                "itemName": "Arrow",
+                "quantity": 50,
+                "rating": 4
+              },
+              {
+                "itemId": "survival-knife",
+                "itemName": "Survival Knife",
+                "quantity": 1
+              },
+              {
+                "itemId": "injection-arrow",
+                "itemName": "Injection Arrow",
+                "quantity": 10,
+                "rating": 4
+              },
+              {
+                "itemId": "survival-kit",
+                "itemName": "Survival Kit",
+                "quantity": 1
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "advanced-bowman-pack",
+            "name": "Advanced Bowman Pack",
+            "category": "weapon",
+            "nuyenCost": 2000,
+            "karmaCost": 1,
+            "maxAvailability": 12,
+            "availabilityType": "R",
+            "contents": [
+              {
+                "itemId": "bow",
+                "itemName": "Bow",
+                "quantity": 1,
+                "rating": 6
+              },
+              {
+                "itemId": "club",
+                "itemName": "Club",
+                "quantity": 1
+              },
+              {
+                "itemId": "arrow",
+                "itemName": "Arrow",
+                "quantity": 50,
+                "rating": 6
+              },
+              {
+                "itemId": "knife",
+                "itemName": "Knife",
+                "quantity": 2
+              },
+              {
+                "itemId": "injection-arrow",
+                "itemName": "Injection Arrow",
+                "quantity": 5,
+                "rating": 6
+              },
+              {
+                "itemId": "survival-kit",
+                "itemName": "Survival Kit",
+                "quantity": 1
+              },
+              {
+                "itemId": "narcoject",
+                "itemName": "Narcoject",
+                "quantity": 5
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "ares-pistol-pack",
+            "name": "Ares Pistol Pack",
+            "category": "weapon",
+            "nuyenCost": 2000,
+            "karmaCost": 1,
+            "maxAvailability": 5,
+            "availabilityType": "R",
+            "contents": [
+              {
+                "itemId": "ares-predator-v",
+                "itemName": "Ares Predator V",
+                "quantity": 1
+              },
+              {
+                "itemId": "quick-draw-holster",
+                "itemName": "Quick-Draw Holster",
+                "quantity": 1
+              },
+              {
+                "itemId": "spare-clip",
+                "itemName": "Spare Clip",
+                "quantity": 4
+              },
+              {
+                "itemId": "regular-rounds",
+                "itemName": "Regular Ammo (Heavy Pistol)",
+                "quantity": 300
+              },
+              {
+                "itemId": "ares-light-fire-70",
+                "itemName": "Ares Light Fire 70",
+                "quantity": 1
+              },
+              {
+                "itemId": "concealable-holster",
+                "itemName": "Concealable Holster",
+                "quantity": 1
+              },
+              {
+                "itemId": "spare-clip",
+                "itemName": "Spare Clip",
+                "quantity": 2
+              },
+              {
+                "itemId": "regular-rounds",
+                "itemName": "Regular Ammo (Light Pistol)",
+                "quantity": 60
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "big-boom-pistol-pack",
+            "name": "Big Boom Pistol Pack",
+            "category": "weapon",
+            "nuyenCost": 2000,
+            "karmaCost": 1,
+            "maxAvailability": 5,
+            "availabilityType": "R",
+            "contents": [
+              {
+                "itemId": "remington-roomsweeper",
+                "itemName": "Remington Roomsweeper",
+                "quantity": 1
+              },
+              {
+                "itemId": "quick-draw-holster",
+                "itemName": "Quick-Draw Holster",
+                "quantity": 1
+              },
+              {
+                "itemId": "regular-rounds",
+                "itemName": "Regular Ammo (Heavy Pistol)",
+                "quantity": 40
+              },
+              {
+                "itemId": "ruger-super-warhawk",
+                "itemName": "Ruger Super Warhawk",
+                "quantity": 1
+              },
+              {
+                "itemId": "quick-draw-holster",
+                "itemName": "Quick-Draw Holster",
+                "quantity": 1
+              },
+              {
+                "itemId": "speed-loader",
+                "itemName": "Speed Loader",
+                "quantity": 4
+              },
+              {
+                "itemId": "regular-rounds",
+                "itemName": "Regular Ammo (Heavy Pistol, Cased)",
+                "quantity": 150
+              },
+              {
+                "itemId": "flechette-rounds",
+                "itemName": "Flechette Ammo (Heavy Pistol)",
+                "quantity": 80
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "browning-and-beretta-pistol-pack",
+            "name": "Browning and Beretta Pistol Pack",
+            "category": "weapon",
+            "nuyenCost": 2000,
+            "karmaCost": 1,
+            "maxAvailability": 7,
+            "availabilityType": "R",
+            "contents": [
+              {
+                "itemId": "browning-ultra-power",
+                "itemName": "Browning Ultra-Power",
+                "quantity": 1
+              },
+              {
+                "itemId": "quick-draw-holster",
+                "itemName": "Quick-Draw Holster",
+                "quantity": 1
+              },
+              {
+                "itemId": "spare-clip",
+                "itemName": "Spare Clip",
+                "quantity": 3
+              },
+              {
+                "itemId": "beretta-201t",
+                "itemName": "Beretta 201T",
+                "quantity": 1
+              },
+              {
+                "itemId": "concealable-holster",
+                "itemName": "Concealable Holster",
+                "quantity": 1
+              },
+              {
+                "itemId": "spare-clip",
+                "itemName": "Spare Clip",
+                "quantity": 2
+              },
+              {
+                "itemId": "regular-rounds",
+                "itemName": "Regular Ammo (Heavy Pistol)",
+                "quantity": 140
+              },
+              {
+                "itemId": "regular-rounds",
+                "itemName": "Regular Ammo (Light Pistol)",
+                "quantity": 210
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "colt-pistol-pack",
+            "name": "Colt Pistol Pack",
+            "category": "weapon",
+            "nuyenCost": 2000,
+            "karmaCost": 1,
+            "maxAvailability": 7,
+            "availabilityType": "R",
+            "contents": [
+              {
+                "itemId": "colt-government-2066",
+                "itemName": "Colt Government 2066",
+                "quantity": 1
+              },
+              {
+                "itemId": "quick-draw-holster",
+                "itemName": "Quick-Draw Holster",
+                "quantity": 1
+              },
+              {
+                "itemId": "laser-sight",
+                "itemName": "Laser Sight",
+                "quantity": 1
+              },
+              {
+                "itemId": "spare-clip",
+                "itemName": "Spare Clip",
+                "quantity": 3
+              },
+              {
+                "itemId": "colt-america-l36",
+                "itemName": "Colt America L36",
+                "quantity": 1
+              },
+              {
+                "itemId": "concealable-holster",
+                "itemName": "Concealable Holster",
+                "quantity": 1
+              },
+              {
+                "itemId": "spare-clip",
+                "itemName": "Spare Clip",
+                "quantity": 2
+              },
+              {
+                "itemId": "regular-rounds",
+                "itemName": "Regular Ammo (Heavy Pistol)",
+                "quantity": 280
+              },
+              {
+                "itemId": "regular-rounds",
+                "itemName": "Regular Ammo (Light Pistol)",
+                "quantity": 110
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "subtle-pistol-pack",
+            "name": "Subtle Pistol Pack",
+            "category": "weapon",
+            "nuyenCost": 2000,
+            "karmaCost": 1,
+            "maxAvailability": 8,
+            "availabilityType": "F",
+            "contents": [
+              {
+                "itemId": "ares-viper-slivergun",
+                "itemName": "Ares Viper Slivergun",
+                "quantity": 1
+              },
+              {
+                "itemId": "concealable-holster",
+                "itemName": "Concealable Holster",
+                "quantity": 1
+              },
+              {
+                "itemId": "spare-clip",
+                "itemName": "Spare Clip",
+                "quantity": 1
+              },
+              {
+                "itemId": "walther-palm-pistol",
+                "itemName": "Walther Palm Pistol",
+                "quantity": 1
+              },
+              {
+                "itemId": "concealable-holster",
+                "itemName": "Concealable Holster",
+                "quantity": 1
+              },
+              {
+                "itemId": "flechette-rounds",
+                "itemName": "Flechette Ammo (Heavy Pistol)",
+                "quantity": 170
+              },
+              {
+                "itemId": "regular-rounds",
+                "itemName": "Regular Ammo (Hold-Out Pistol)",
+                "quantity": 10
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "light-security-pack",
+            "name": "Light Security Pack",
+            "category": "weapon",
+            "nuyenCost": 2000,
+            "karmaCost": 1,
+            "maxAvailability": 8,
+            "availabilityType": "R",
+            "contents": [
+              {
+                "itemId": "hk-227",
+                "itemName": "HK-227",
+                "quantity": 1
+              },
+              {
+                "itemId": "spare-clip",
+                "itemName": "Spare Clip",
+                "quantity": 4
+              },
+              {
+                "itemId": "fichetti-security-600",
+                "itemName": "Fichetti Security 600",
+                "quantity": 1
+              },
+              {
+                "itemId": "quick-draw-holster",
+                "itemName": "Quick-Draw Holster",
+                "quantity": 1
+              },
+              {
+                "itemId": "spare-clip",
+                "itemName": "Spare Clip",
+                "quantity": 2
+              },
+              {
+                "itemId": "regular-rounds",
+                "itemName": "Regular Ammo (SMG)",
+                "quantity": 280
+              },
+              {
+                "itemId": "regular-rounds",
+                "itemName": "Regular Ammo (Light Pistol)",
+                "quantity": 90
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "japanacorp-light-security-pack",
+            "name": "Japanacorp Light Security Pack",
+            "category": "weapon",
+            "nuyenCost": 2000,
+            "karmaCost": 1,
+            "maxAvailability": 7,
+            "availabilityType": "R",
+            "contents": [
+              {
+                "itemId": "sck-model-100",
+                "itemName": "SCK Model 100",
+                "quantity": 1
+              },
+              {
+                "itemId": "spare-clip",
+                "itemName": "Spare Clip",
+                "quantity": 3
+              },
+              {
+                "itemId": "gel-rounds",
+                "itemName": "Gel Ammo (SMG)",
+                "quantity": 60
+              },
+              {
+                "itemId": "beretta-201t",
+                "itemName": "Beretta 201T",
+                "quantity": 1
+              },
+              {
+                "itemId": "spare-clip",
+                "itemName": "Spare Clip",
+                "quantity": 1
+              },
+              {
+                "itemId": "regular-rounds",
+                "itemName": "Regular Ammo (Light Pistol)",
+                "quantity": 70
+              },
+              {
+                "itemId": "regular-rounds",
+                "itemName": "Regular Ammo (SMG)",
+                "quantity": 300
+              },
+              {
+                "itemId": "restraints-plastic",
+                "itemName": "Plastic Restraints",
+                "quantity": 10
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "smartgun-pack",
+            "name": "Smartgun Pack",
+            "category": "weapon",
+            "nuyenCost": 2000,
+            "karmaCost": 1,
+            "maxAvailability": 6,
+            "availabilityType": "R",
+            "contents": [
+              {
+                "itemId": "ingram-smartgun-x",
+                "itemName": "Ingram Smartgun X",
+                "quantity": 1
+              },
+              {
+                "itemId": "spare-clip",
+                "itemName": "Spare Clip",
+                "quantity": 2
+              },
+              {
+                "itemId": "ares-predator-v",
+                "itemName": "Ares Predator V",
+                "quantity": 1
+              },
+              {
+                "itemId": "spare-clip",
+                "itemName": "Spare Clip",
+                "quantity": 1
+              },
+              {
+                "itemId": "regular-rounds",
+                "itemName": "Regular Ammo (SMG)",
+                "quantity": 200
+              },
+              {
+                "itemId": "regular-rounds",
+                "itemName": "Regular Ammo (Heavy Pistol)",
+                "quantity": 30
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "street-slugger-pack",
+            "name": "Street Slugger Pack",
+            "category": "weapon",
+            "nuyenCost": 2000,
+            "karmaCost": 1,
+            "maxAvailability": 4,
+            "availabilityType": "R",
+            "contents": [
+              {
+                "itemId": "defiance-t-250",
+                "itemName": "Defiance T-250",
+                "quantity": 1
+              },
+              {
+                "itemId": "flechette-rounds",
+                "itemName": "Flechette Ammo (Shotgun)",
+                "quantity": 100
+              },
+              {
+                "itemId": "colt-america-l36",
+                "itemName": "Colt America L36",
+                "quantity": 1
+              },
+              {
+                "itemId": "spare-clip",
+                "itemName": "Spare Clip",
+                "quantity": 2
+              },
+              {
+                "itemId": "regular-rounds",
+                "itemName": "Regular Ammo (Shotgun)",
+                "quantity": 40
+              },
+              {
+                "itemId": "streetline-special",
+                "itemName": "Streetline Special",
+                "quantity": 1
+              },
+              {
+                "itemId": "regular-rounds",
+                "itemName": "Regular Ammo (Light Pistol)",
+                "quantity": 100
+              },
+              {
+                "itemId": "knife",
+                "itemName": "Knife",
+                "quantity": 1
+              },
+              {
+                "itemId": "regular-rounds",
+                "itemName": "Regular Ammo (Hold-Out Pistol)",
+                "quantity": 30
+              },
+              {
+                "itemId": "knucks",
+                "itemName": "Knucks",
+                "quantity": 1
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "heavy-security-pack",
+            "name": "Heavy Security Pack",
+            "category": "weapon",
+            "nuyenCost": 2000,
+            "karmaCost": 1,
+            "maxAvailability": 8,
+            "availabilityType": "R",
+            "contents": [
+              {
+                "itemId": "fn-har",
+                "itemName": "FN HAR",
+                "quantity": 1
+              },
+              {
+                "itemId": "shock-pad",
+                "itemName": "Shock Pad",
+                "quantity": 1
+              },
+              {
+                "itemId": "spare-clip",
+                "itemName": "Spare Clip",
+                "quantity": 6
+              },
+              {
+                "itemId": "regular-rounds",
+                "itemName": "Regular Ammo (Assault Rifle)",
+                "quantity": 210
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "cheap-soldier-pack",
+            "name": "Cheap Soldier Pack",
+            "category": "weapon",
+            "nuyenCost": 2000,
+            "karmaCost": 1,
+            "maxAvailability": 4,
+            "availabilityType": "R",
+            "contents": [
+              {
+                "itemId": "colt-m23",
+                "itemName": "Colt M23",
+                "quantity": 1
+              },
+              {
+                "itemId": "spare-clip",
+                "itemName": "Spare Clip",
+                "quantity": 4
+              },
+              {
+                "itemId": "disposable-syringe",
+                "itemName": "Disposable Inhaler",
+                "quantity": 3
+              },
+              {
+                "itemId": "sword",
+                "itemName": "Machete (Sword)",
+                "quantity": 1
+              },
+              {
+                "itemId": "kamikaze",
+                "itemName": "Kamikaze",
+                "quantity": 3
+              },
+              {
+                "itemId": "regular-rounds",
+                "itemName": "Regular Ammo (Assault Rifle)",
+                "quantity": 300
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "ares-alpha-gunner-pack",
+            "name": "Ares Alpha Gunner Pack",
+            "category": "weapon",
+            "nuyenCost": 8000,
+            "karmaCost": 4,
+            "maxAvailability": 12,
+            "availabilityType": "F",
+            "contents": [
+              {
+                "itemId": "ares-alpha",
+                "itemName": "Ares Alpha",
+                "quantity": 1
+              },
+              {
+                "itemId": "shock-pad",
+                "itemName": "Shock Pad",
+                "quantity": 1
+              },
+              {
+                "itemId": "airburst-link",
+                "itemName": "Airburst Link",
+                "quantity": 1
+              },
+              {
+                "itemId": "spare-clip",
+                "itemName": "Spare Clip",
+                "quantity": 8
+              },
+              {
+                "itemId": "explosive-rounds",
+                "itemName": "Explosive Ammo (Assault Rifle)",
+                "quantity": 120
+              },
+              {
+                "itemId": "regular-rounds",
+                "itemName": "Regular Ammo (Assault Rifle)",
+                "quantity": 500
+              },
+              {
+                "itemId": "fragmentation-grenade",
+                "itemName": "Fragmentation Micro-Grenade",
+                "quantity": 12
+              },
+              {
+                "itemId": "apds-rounds",
+                "itemName": "APDS Ammo (Assault Rifle)",
+                "quantity": 40
+              },
+              {
+                "itemId": "high-explosive-grenade",
+                "itemName": "High-Explosive Micro-Grenade",
+                "quantity": 12
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "sniper-pack",
+            "name": "Sniper Pack",
+            "category": "weapon",
+            "nuyenCost": 22000,
+            "karmaCost": 11,
+            "maxAvailability": 12,
+            "availabilityType": "F",
+            "contents": [
+              {
+                "itemId": "ares-desert-strike",
+                "itemName": "Ares Desert Strike",
+                "quantity": 1
+              },
+              {
+                "itemId": "imaging-scope",
+                "itemName": "Imaging Scope",
+                "quantity": 1,
+                "modifications": ["low-light-vision", "smartlink"]
+              },
+              {
+                "itemId": "explosive-rounds",
+                "itemName": "Explosive Ammo (Sniper Rifle)",
+                "quantity": 100
+              },
+              {
+                "itemId": "apds-rounds",
+                "itemName": "APDS Ammo (Sniper Rifle)",
+                "quantity": 100
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "sportsman-pack",
+            "name": "Sportsman Pack",
+            "category": "weapon",
+            "nuyenCost": 4000,
+            "karmaCost": 2,
+            "maxAvailability": 4,
+            "availabilityType": "R",
+            "contents": [
+              {
+                "itemId": "remington-950",
+                "itemName": "Remington 950",
+                "quantity": 1
+              },
+              {
+                "itemId": "imaging-scope",
+                "itemName": "Imaging Scope",
+                "quantity": 1,
+                "modifications": ["low-light-vision"]
+              },
+              {
+                "itemId": "flashlight",
+                "itemName": "Flashlight",
+                "quantity": 1
+              },
+              {
+                "itemId": "bow",
+                "itemName": "Bow",
+                "quantity": 1,
+                "rating": 4
+              },
+              {
+                "itemId": "clothing",
+                "itemName": "Orange Vest",
+                "quantity": 1
+              },
+              {
+                "itemId": "survival-knife",
+                "itemName": "Survival Knife",
+                "quantity": 1
+              },
+              {
+                "itemId": "arrow",
+                "itemName": "Arrow",
+                "quantity": 20,
+                "rating": 4
+              },
+              {
+                "itemId": "knife",
+                "itemName": "Knife",
+                "quantity": 1
+              },
+              {
+                "itemId": "regular-rounds",
+                "itemName": "Regular Ammo (Sniper Rifle)",
+                "quantity": 250
+              },
+              {
+                "itemId": "survival-kit",
+                "itemName": "Survival Kit",
+                "quantity": 1
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "tranq-darter-pack",
+            "name": "Tranq Darter Pack",
+            "category": "weapon",
+            "nuyenCost": 2000,
+            "karmaCost": 1,
+            "maxAvailability": 8,
+            "availabilityType": "R",
+            "contents": [
+              {
+                "itemId": "parashield-dart-pistol",
+                "itemName": "Parashield Dart Rifle",
+                "quantity": 1
+              },
+              {
+                "itemId": "injection-rounds",
+                "itemName": "Injection Darts",
+                "quantity": 10
+              },
+              {
+                "itemId": "disposable-syringe",
+                "itemName": "Re-usable Syringe",
+                "quantity": 1
+              },
+              {
+                "itemId": "narcoject",
+                "itemName": "Narcoject",
+                "quantity": 14
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "squad-assault-weapon-pack",
+            "name": "Squad Assault Weapon Pack",
+            "category": "weapon",
+            "nuyenCost": 6000,
+            "karmaCost": 3,
+            "maxAvailability": 12,
+            "availabilityType": "F",
+            "contents": [
+              {
+                "itemId": "ingram-valiant",
+                "itemName": "Ingram Valiant",
+                "quantity": 1
+              },
+              {
+                "itemId": "bipod",
+                "itemName": "Bipod",
+                "quantity": 1
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "medium-machine-gunner-pack",
+            "name": "Medium Machine Gunner Pack",
+            "category": "weapon",
+            "nuyenCost": 8000,
+            "karmaCost": 4,
+            "maxAvailability": 12,
+            "availabilityType": "F",
+            "contents": [
+              {
+                "itemId": "stoner-ares-m202",
+                "itemName": "Stoner-Ares M202",
+                "quantity": 1
+              },
+              {
+                "itemId": "regular-rounds",
+                "itemName": "Regular Ammo",
+                "quantity": 50
+              },
+              {
+                "itemId": "tripod",
+                "itemName": "Tripod",
+                "quantity": 1
+              },
+              {
+                "itemId": "regular-rounds",
+                "itemName": "Regular Ammo (Machine Gun Belt)",
+                "quantity": 200
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "rocketeer-pack",
+            "name": "Rocketeer Pack",
+            "category": "weapon",
+            "nuyenCost": 16000,
+            "karmaCost": 8,
+            "maxAvailability": 10,
+            "availabilityType": "F",
+            "contents": [
+              {
+                "itemId": "aztechnology-striker",
+                "itemName": "Aztechnology Striker",
+                "quantity": 5
+              },
+              {
+                "itemId": "fragmentation-rocket",
+                "itemName": "Fragmentation Rocket",
+                "quantity": 5
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "machine-gun-ammo-belt-pack",
+            "name": "Machine Gun Ammo Belt Pack",
+            "category": "weapon",
+            "nuyenCost": 2000,
+            "karmaCost": 1,
+            "maxAvailability": 2,
+            "availabilityType": "R",
+            "contents": [
+              {
+                "itemId": "regular-rounds",
+                "itemName": "Regular Ammo (Belt)",
+                "quantity": 1000
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "ammo-crate-1",
+            "name": "Ammo Crate #1",
+            "category": "weapon",
+            "nuyenCost": 2000,
+            "karmaCost": 1,
+            "maxAvailability": 2,
+            "availabilityType": "R",
+            "contents": [
+              {
+                "itemId": "regular-rounds",
+                "itemName": "Regular Ammo",
+                "quantity": 1000
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "ammo-crate-2",
+            "name": "Ammo Crate #2",
+            "category": "weapon",
+            "nuyenCost": 2000,
+            "karmaCost": 1,
+            "maxAvailability": 12,
+            "availabilityType": "F",
+            "contents": [
+              {
+                "itemId": "apds-rounds",
+                "itemName": "APDS Ammo",
+                "quantity": 100
+              },
+              {
+                "itemId": "explosive-rounds",
+                "itemName": "Explosive Ammo",
+                "quantity": 100
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "ammo-crate-3",
+            "name": "Ammo Crate #3",
+            "category": "weapon",
+            "nuyenCost": 2000,
+            "karmaCost": 1,
+            "maxAvailability": 6,
+            "availabilityType": "R",
+            "contents": [
+              {
+                "itemId": "gel-rounds",
+                "itemName": "Gel Ammo",
+                "quantity": 160
+              },
+              {
+                "itemId": "stick-n-shock",
+                "itemName": "Stick-n-Shock",
+                "quantity": 200
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "ammo-crate-4",
+            "name": "Ammo Crate #4",
+            "category": "weapon",
+            "nuyenCost": 2000,
+            "karmaCost": 1,
+            "maxAvailability": 12,
+            "availabilityType": "F",
+            "contents": [
+              {
+                "itemId": "assault-cannon-rounds",
+                "itemName": "Assault Cannon Ammo",
+                "quantity": 250
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "ammo-crate-5",
+            "name": "Ammo Crate #5",
+            "category": "weapon",
+            "nuyenCost": 2000,
+            "karmaCost": 1,
+            "maxAvailability": 8,
+            "availabilityType": "R",
+            "contents": [
+              {
+                "itemId": "narcoject",
+                "itemName": "Narcoject",
+                "quantity": 40
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "box-of-grenades-1",
+            "name": "Box of Grenades #1",
+            "category": "weapon",
+            "nuyenCost": 2000,
+            "karmaCost": 1,
+            "maxAvailability": 11,
+            "availabilityType": "F",
+            "contents": [
+              {
+                "itemId": "fragmentation-grenade",
+                "itemName": "Fragmentation Grenade",
+                "quantity": 10
+              },
+              {
+                "itemId": "high-explosive-grenade",
+                "itemName": "High-Explosive Grenade",
+                "quantity": 10
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "box-of-grenades-2",
+            "name": "Box of Grenades #2",
+            "category": "weapon",
+            "nuyenCost": 2000,
+            "karmaCost": 1,
+            "maxAvailability": 6,
+            "availabilityType": "R",
+            "contents": [
+              {
+                "itemId": "flash-bang-grenade",
+                "itemName": "Flash-Bang Grenade",
+                "quantity": 5
+              },
+              {
+                "itemId": "gas-grenade-cs-tear",
+                "itemName": "Nausea Gas Grenade",
+                "quantity": 5
+              },
+              {
+                "itemId": "smoke-grenade",
+                "itemName": "Smoke Grenade",
+                "quantity": 10
+              },
+              {
+                "itemId": "gas-grenade-cs-tear",
+                "itemName": "Pepper Punch Grenade",
+                "quantity": 7
+              },
+              {
+                "itemId": "gas-grenade-cs-tear",
+                "itemName": "Tear Gas Grenade",
+                "quantity": 5
+              },
+              {
+                "itemId": "thermal-smoke-grenade",
+                "itemName": "Thermal Smoke Grenade",
+                "quantity": 5
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "city-slicker-pack",
+            "name": "City Slicker Pack",
+            "category": "armor",
+            "nuyenCost": 2000,
+            "karmaCost": 1,
+            "maxAvailability": 0,
+            "contents": [
+              {
+                "itemId": "lined-coat",
+                "itemName": "Lined Coat",
+                "quantity": 1,
+                "modifications": ["chemical-protection"]
+              },
+              {
+                "itemId": "respirator",
+                "itemName": "Respirator",
+                "quantity": 1,
+                "rating": 3
+              },
+              {
+                "itemId": "armor-clothing",
+                "itemName": "Armor Clothing",
+                "quantity": 1
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "go-anywhere-jacket-pack",
+            "name": "Go Anywhere Jacket Pack",
+            "category": "armor",
+            "nuyenCost": 4000,
+            "karmaCost": 2,
+            "maxAvailability": 6,
+            "contents": [
+              {
+                "itemId": "armor-jacket",
+                "itemName": "Armor Jacket",
+                "quantity": 1,
+                "modifications": ["chemical-protection", "fire-resistance", "insulation"]
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "neon-nights-pack",
+            "name": "Neon Nights Pack",
+            "category": "armor",
+            "nuyenCost": 2000,
+            "karmaCost": 1,
+            "maxAvailability": 10,
+            "contents": [
+              {
+                "itemId": "urban-explorer-jumpsuit",
+                "itemName": "Urban Explorer Jumpsuit",
+                "quantity": 1,
+                "modifications": ["electrochromic-modification", "nonconductivity", "shock-frills"]
+              },
+              {
+                "itemId": "urban-explorer-jumpsuit-helmet",
+                "itemName": "Urban Explorer Jumpsuit Helmet",
+                "quantity": 1
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "nightbird-pack",
+            "name": "Nightbird Pack",
+            "category": "armor",
+            "nuyenCost": 4000,
+            "karmaCost": 2,
+            "maxAvailability": 12,
+            "availabilityType": "R",
+            "contents": [
+              {
+                "itemId": "chameleon-suit",
+                "itemName": "Chameleon Suit",
+                "quantity": 1,
+                "modifications": ["thermal-damping"]
+              },
+              {
+                "itemId": "flashlight",
+                "itemName": "Flashlight",
+                "quantity": 1
+              },
+              {
+                "itemId": "gecko-tape-gloves",
+                "itemName": "Gecko Tape Gloves",
+                "quantity": 1
+              },
+              {
+                "itemId": "flashlight",
+                "itemName": "Flashlight (low-light)",
+                "quantity": 1,
+                "modifications": ["low-light-vision"]
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "stylish-suit-pack",
+            "name": "Stylish Suit Pack",
+            "category": "armor",
+            "nuyenCost": 2000,
+            "karmaCost": 1,
+            "maxAvailability": 10,
+            "contents": [
+              {
+                "itemId": "actioneer-business-clothes",
+                "itemName": "Actioneer Business Clothes",
+                "quantity": 1,
+                "modifications": ["electrochromic-modification"]
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "tactical-helmet-pack",
+            "name": "Tactical Helmet Pack",
+            "category": "armor",
+            "nuyenCost": 6000,
+            "karmaCost": 3,
+            "maxAvailability": 11,
+            "availabilityType": "R",
+            "contents": [
+              {
+                "itemId": "helmet",
+                "itemName": "Helmet",
+                "quantity": 1,
+                "modifications": [
+                  "image-link",
+                  "flare-compensation",
+                  "low-light-vision",
+                  "smartlink"
+                ]
+              },
+              {
+                "itemId": "flashlight",
+                "itemName": "Flashlight",
+                "quantity": 1
+              },
+              {
+                "itemId": "micro-transceiver",
+                "itemName": "Micro-Transceiver",
+                "quantity": 1
+              },
+              {
+                "itemId": "hermes-ikon",
+                "itemName": "Hermes Ikon",
+                "quantity": 1
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "tusker-toughskin-pack",
+            "name": "Tusker Toughskin Pack",
+            "category": "armor",
+            "nuyenCost": 2000,
+            "karmaCost": 1,
+            "maxAvailability": 6,
+            "contents": [
+              {
+                "itemId": "armor-jacket",
+                "itemName": "Armor Jacket",
+                "quantity": 1,
+                "modifications": ["nonconductivity"]
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "tanker-pack",
+            "name": "Tanker Pack",
+            "category": "armor",
+            "nuyenCost": 4000,
+            "karmaCost": 2,
+            "maxAvailability": 10,
+            "availabilityType": "R",
+            "contents": [
+              {
+                "itemId": "helmet",
+                "itemName": "Helmet",
+                "quantity": 1,
+                "modifications": ["flare-compensation", "chemical-protection"]
+              },
+              {
+                "itemId": "nitro",
+                "itemName": "Nitro",
+                "quantity": 2
+              },
+              {
+                "itemId": "riot-shield",
+                "itemName": "Riot Shield",
+                "quantity": 1,
+                "modifications": ["fire-resistance"]
+              },
+              {
+                "itemId": "club",
+                "itemName": "Club",
+                "quantity": 1
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "budget-jack-pack",
+            "name": "Budget 'Jack Pack",
+            "category": "cyber",
+            "nuyenCost": 40000,
+            "karmaCost": 20,
+            "maxAvailability": 4,
+            "essenceCost": 0.2,
+            "contents": [
+              {
+                "itemId": "skilljack",
+                "itemName": "Skilljack",
+                "quantity": 1,
+                "rating": 2
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "standard-jack-pack",
+            "name": "Standard 'Jack Pack",
+            "category": "cyber",
+            "nuyenCost": 80000,
+            "karmaCost": 40,
+            "maxAvailability": 8,
+            "essenceCost": 0.4,
+            "contents": [
+              {
+                "itemId": "skilljack",
+                "itemName": "Skilljack",
+                "quantity": 1,
+                "rating": 4
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "advanced-jack-pack",
+            "name": "Advanced 'Jack Pack",
+            "category": "cyber",
+            "nuyenCost": 120000,
+            "karmaCost": 60,
+            "maxAvailability": 12,
+            "essenceCost": 0.6,
+            "contents": [
+              {
+                "itemId": "skilljack",
+                "itemName": "Skilljack",
+                "quantity": 1,
+                "rating": 6
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "basic-wires-pack",
+            "name": "Basic Wires Pack",
+            "category": "cyber",
+            "nuyenCost": 40000,
+            "karmaCost": 20,
+            "maxAvailability": 8,
+            "essenceCost": 0.2,
+            "prerequisites": ["skilljack"],
+            "contents": [
+              {
+                "itemId": "skillwires",
+                "itemName": "Skillwires",
+                "quantity": 1,
+                "rating": 2
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "advanced-wires-pack",
+            "name": "Advanced Wires Pack",
+            "category": "cyber",
+            "nuyenCost": 60000,
+            "karmaCost": 30,
+            "maxAvailability": 12,
+            "essenceCost": 0.3,
+            "prerequisites": ["skilljack"],
+            "contents": [
+              {
+                "itemId": "skillwires",
+                "itemName": "Skillwires",
+                "quantity": 1,
+                "rating": 3
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "tourist-pack",
+            "name": "Tourist Pack",
+            "category": "cyber",
+            "nuyenCost": 2000,
+            "karmaCost": 1,
+            "maxAvailability": 2,
+            "prerequisites": ["skilljack"],
+            "contents": [
+              {
+                "itemId": "linguasoft",
+                "itemName": "Linguasoft",
+                "quantity": 1,
+                "rating": 2
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "world-traveler-pack",
+            "name": "World Traveler Pack",
+            "category": "cyber",
+            "nuyenCost": 4000,
+            "karmaCost": 2,
+            "maxAvailability": 2,
+            "prerequisites": ["skilljack"],
+            "contents": [
+              {
+                "itemId": "linguasoft",
+                "itemName": "Linguasoft",
+                "quantity": 1,
+                "rating": 4
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "ambassador-pack",
+            "name": "Ambassador Pack",
+            "category": "cyber",
+            "nuyenCost": 6000,
+            "karmaCost": 3,
+            "maxAvailability": 2,
+            "prerequisites": ["skilljack"],
+            "contents": [
+              {
+                "itemId": "linguasoft",
+                "itemName": "Linguasoft",
+                "quantity": 1,
+                "rating": 6
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "diploma-on-a-chip-pack",
+            "name": "Diploma-on-a-Chip Pack",
+            "category": "cyber",
+            "nuyenCost": 4000,
+            "karmaCost": 2,
+            "maxAvailability": 4,
+            "prerequisites": ["skilljack"],
+            "contents": [
+              {
+                "itemId": "knowsoft",
+                "itemName": "Knowsoft",
+                "quantity": 1,
+                "rating": 2
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "degree-on-a-chip-pack",
+            "name": "Degree-on-a-Chip Pack",
+            "category": "cyber",
+            "nuyenCost": 8000,
+            "karmaCost": 4,
+            "maxAvailability": 4,
+            "prerequisites": ["skilljack"],
+            "contents": [
+              {
+                "itemId": "knowsoft",
+                "itemName": "Knowsoft",
+                "quantity": 1,
+                "rating": 4
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "doctorate-on-a-chip-pack",
+            "name": "Doctorate-on-a-Chip Pack",
+            "category": "cyber",
+            "nuyenCost": 12000,
+            "karmaCost": 6,
+            "maxAvailability": 4,
+            "prerequisites": ["skilljack"],
+            "contents": [
+              {
+                "itemId": "knowsoft",
+                "itemName": "Knowsoft",
+                "quantity": 1,
+                "rating": 6
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "vacation-on-a-ship-pack",
+            "name": "Vacation-on-a-Ship Pack",
+            "category": "cyber",
+            "nuyenCost": 10000,
+            "karmaCost": 5,
+            "maxAvailability": 8,
+            "prerequisites": ["skilljack", "skillwires"],
+            "contents": [
+              {
+                "itemId": "activesoft",
+                "itemName": "Activesoft",
+                "quantity": 1,
+                "rating": 2
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "competence-on-a-chip-pack",
+            "name": "Competence-on-a-Chip Pack",
+            "category": "cyber",
+            "nuyenCost": 30000,
+            "karmaCost": 15,
+            "maxAvailability": 8,
+            "prerequisites": ["skilljack", "skillwires"],
+            "contents": [
+              {
+                "itemId": "activesoft",
+                "itemName": "Activesoft",
+                "quantity": 2,
+                "rating": 3
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "datacourier-pack",
+            "name": "Datacourier Pack",
+            "category": "cyber",
+            "nuyenCost": 6000,
+            "karmaCost": 3,
+            "maxAvailability": 12,
+            "essenceCost": 0.1,
+            "contents": [
+              {
+                "itemId": "data-lock",
+                "itemName": "Data Lock",
+                "quantity": 1,
+                "rating": 6
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "sim-sational-pack",
+            "name": "Sim-Sational Pack",
+            "category": "cyber",
+            "nuyenCost": 12000,
+            "karmaCost": 6,
+            "maxAvailability": 12,
+            "availabilityType": "R",
+            "essenceCost": 0.7,
+            "contents": [
+              {
+                "itemId": "datajack",
+                "itemName": "Datajack",
+                "quantity": 1
+              },
+              {
+                "itemId": "taste-booster",
+                "itemName": "Taste Booster",
+                "quantity": 1,
+                "rating": 1
+              },
+              {
+                "itemId": "olfactory-booster",
+                "itemName": "Olfactory Booster",
+                "quantity": 1,
+                "rating": 1
+              },
+              {
+                "itemId": "simrig",
+                "itemName": "Simrig",
+                "quantity": 1
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "basic-combat-eyes-pack",
+            "name": "Basic Combat Eyes Pack",
+            "category": "cyber",
+            "nuyenCost": 8000,
+            "karmaCost": 4,
+            "maxAvailability": 8,
+            "availabilityType": "R",
+            "essenceCost": 0.2,
+            "contents": [
+              {
+                "itemId": "cybereyes",
+                "itemName": "Cybereyes",
+                "quantity": 1,
+                "rating": 1,
+                "modifications": ["image-link", "camera", "smartlink"]
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "advanced-combat-eyes-pack",
+            "name": "Advanced Combat Eyes Pack",
+            "category": "cyber",
+            "nuyenCost": 14000,
+            "karmaCost": 7,
+            "maxAvailability": 8,
+            "availabilityType": "R",
+            "essenceCost": 0.3,
+            "contents": [
+              {
+                "itemId": "cybereyes",
+                "itemName": "Cybereyes",
+                "quantity": 1,
+                "rating": 2,
+                "modifications": [
+                  "image-link",
+                  "camera",
+                  "flare-compensation",
+                  "low-light-vision",
+                  "smartlink",
+                  "thermographic-vision"
+                ]
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "eagle-eyes-pack",
+            "name": "Eagle Eyes Pack",
+            "category": "cyber",
+            "nuyenCost": 14000,
+            "karmaCost": 7,
+            "maxAvailability": 6,
+            "essenceCost": 0.2,
+            "contents": [
+              {
+                "itemId": "cybereyes",
+                "itemName": "Cybereyes",
+                "quantity": 1,
+                "rating": 1,
+                "modifications": [
+                  "image-link",
+                  "camera",
+                  "vision-enhancement",
+                  "vision-magnification"
+                ]
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "rabbit-ears-pack",
+            "name": "Rabbit Ears Pack",
+            "category": "cyber",
+            "nuyenCost": 18000,
+            "karmaCost": 9,
+            "maxAvailability": 6,
+            "essenceCost": 0.2,
+            "contents": [
+              {
+                "itemId": "cyberears",
+                "itemName": "Cyberears",
+                "quantity": 1,
+                "rating": 1,
+                "modifications": ["sound-link", "audio-enhancement", "select-sound-filter"]
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "bulletproof-jeff-pack",
+            "name": "Bulletproof Jeff Pack",
+            "category": "cyber",
+            "nuyenCost": 24000,
+            "karmaCost": 12,
+            "maxAvailability": 12,
+            "availabilityType": "R",
+            "essenceCost": 2.0,
+            "contents": [
+              {
+                "itemId": "bone-lacing-aluminum",
+                "itemName": "Bone Lacing (Aluminum)",
+                "quantity": 1
+              },
+              {
+                "itemId": "dermal-plating",
+                "itemName": "Dermal Plating",
+                "quantity": 1,
+                "rating": 2
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "basic-razorboi-pack",
+            "name": "Basic Razorboi Pack",
+            "category": "cyber",
+            "nuyenCost": 4000,
+            "karmaCost": 2,
+            "maxAvailability": 8,
+            "availabilityType": "F",
+            "essenceCost": 0.4,
+            "contents": [
+              {
+                "itemId": "hand-razors",
+                "itemName": "Hand Razors (Retractable)",
+                "quantity": 2
+              },
+              {
+                "itemId": "tool-kit",
+                "itemName": "Cybernetics Kit",
+                "quantity": 1
+              },
+              {
+                "itemId": "katana",
+                "itemName": "Katana",
+                "quantity": 1
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "advanced-razorboi-pack",
+            "name": "Advanced Razorboi Pack",
+            "category": "cyber",
+            "nuyenCost": 12000,
+            "karmaCost": 6,
+            "maxAvailability": 12,
+            "availabilityType": "F",
+            "essenceCost": 0.6,
+            "contents": [
+              {
+                "itemId": "spur",
+                "itemName": "Spur (Retractable)",
+                "quantity": 2
+              },
+              {
+                "itemId": "tool-kit",
+                "itemName": "Cybernetics Kit",
+                "quantity": 1
+              },
+              {
+                "itemId": "katana",
+                "itemName": "Katana",
+                "quantity": 1
+              },
+              {
+                "itemId": "medkit",
+                "itemName": "Medkit",
+                "quantity": 1,
+                "rating": 2
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "basic-speedboost-pack",
+            "name": "Basic Speedboost Pack",
+            "category": "cyber",
+            "nuyenCost": 40000,
+            "karmaCost": 20,
+            "maxAvailability": 8,
+            "availabilityType": "R",
+            "essenceCost": 2.1,
+            "contents": [
+              {
+                "itemId": "datajack",
+                "itemName": "Datajack",
+                "quantity": 1
+              },
+              {
+                "itemId": "wired-reflexes",
+                "itemName": "Wired Reflexes",
+                "quantity": 1,
+                "rating": 1
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "advanced-speedboost-pack",
+            "name": "Advanced Speedboost Pack",
+            "category": "cyber",
+            "nuyenCost": 150000,
+            "karmaCost": 75,
+            "maxAvailability": 12,
+            "availabilityType": "R",
+            "essenceCost": 3.1,
+            "contents": [
+              {
+                "itemId": "datajack",
+                "itemName": "Datajack",
+                "quantity": 1
+              },
+              {
+                "itemId": "wired-reflexes",
+                "itemName": "Wired Reflexes",
+                "quantity": 1,
+                "rating": 2
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "basic-vatjob-pack",
+            "name": "Basic Vatjob Pack",
+            "category": "cyber",
+            "nuyenCost": 28000,
+            "karmaCost": 14,
+            "maxAvailability": 5,
+            "availabilityType": "R",
+            "essenceCost": 1.5,
+            "contents": [
+              {
+                "itemId": "dermal-plating",
+                "itemName": "Dermal Plating",
+                "quantity": 1,
+                "rating": 1
+              },
+              {
+                "itemId": "muscle-replacement",
+                "itemName": "Muscle Replacement",
+                "quantity": 1,
+                "rating": 1
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "advanced-vatjob-pack",
+            "name": "Advanced Vatjob Pack",
+            "category": "cyber",
+            "nuyenCost": 56000,
+            "karmaCost": 28,
+            "maxAvailability": 10,
+            "availabilityType": "R",
+            "essenceCost": 3.0,
+            "contents": [
+              {
+                "itemId": "dermal-plating",
+                "itemName": "Dermal Plating",
+                "quantity": 1,
+                "rating": 2
+              },
+              {
+                "itemId": "muscle-replacement",
+                "itemName": "Muscle Replacement",
+                "quantity": 1,
+                "rating": 2
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "basic-rigger-pack",
+            "name": "Basic Rigger Pack",
+            "category": "cyber",
+            "nuyenCost": 56000,
+            "karmaCost": 28,
+            "maxAvailability": 5,
+            "availabilityType": "R",
+            "essenceCost": 1.3,
+            "contents": [
+              {
+                "itemId": "control-rig",
+                "itemName": "Control Rig",
+                "quantity": 1,
+                "rating": 1
+              },
+              {
+                "itemId": "reaction-enhancers",
+                "itemName": "Reaction Enhancers",
+                "quantity": 1,
+                "rating": 1
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "advanced-rigger-pack",
+            "name": "Advanced Rigger Pack",
+            "category": "cyber",
+            "nuyenCost": 124000,
+            "karmaCost": 62,
+            "maxAvailability": 10,
+            "availabilityType": "R",
+            "essenceCost": 2.7,
+            "contents": [
+              {
+                "itemId": "datajack",
+                "itemName": "Datajack",
+                "quantity": 1
+              },
+              {
+                "itemId": "reaction-enhancers",
+                "itemName": "Reaction Enhancers",
+                "quantity": 1,
+                "rating": 2
+              },
+              {
+                "itemId": "control-rig",
+                "itemName": "Control Rig",
+                "quantity": 1,
+                "rating": 2
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "street-samurai-classic-pack",
+            "name": "Street Samurai Classic Pack",
+            "category": "cyber",
+            "nuyenCost": 204000,
+            "karmaCost": 102,
+            "maxAvailability": 12,
+            "availabilityType": "F",
+            "essenceCost": 5.5,
+            "contents": [],
+            "source": "run-faster",
+            "page": 228,
+            "includedPacks": [
+              "advanced-combat-eyes-pack",
+              "basic-vatjob-pack",
+              "advanced-speedboost-pack",
+              "advanced-razorboi-pack"
+            ]
+          },
+          {
+            "id": "bioware-beef-pack",
+            "name": "Bioware Beef Pack",
+            "category": "cyber",
+            "nuyenCost": 62000,
+            "karmaCost": 31,
+            "maxAvailability": 10,
+            "availabilityType": "R",
+            "essenceCost": 0.4,
+            "contents": [
+              {
+                "itemId": "muscle-augmentation",
+                "itemName": "Muscle Augmentation",
+                "quantity": 1,
+                "rating": 2
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "bioware-lean-pack",
+            "name": "Bioware Lean Pack",
+            "category": "cyber",
+            "nuyenCost": 64000,
+            "karmaCost": 32,
+            "maxAvailability": 10,
+            "availabilityType": "R",
+            "essenceCost": 0.4,
+            "contents": [
+              {
+                "itemId": "muscle-toner",
+                "itemName": "Muscle Toner",
+                "quantity": 1,
+                "rating": 2
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "bioware-cat-pack",
+            "name": "Bioware Cat Pack",
+            "category": "cyber",
+            "nuyenCost": 28000,
+            "karmaCost": 14,
+            "maxAvailability": 12,
+            "essenceCost": 0.4,
+            "contents": [
+              {
+                "itemId": "cat-eyes",
+                "itemName": "Cat's Eyes",
+                "quantity": 1
+              },
+              {
+                "itemId": "enhanced-articulation",
+                "itemName": "Enhanced Articulation",
+                "quantity": 1
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "bio-computer-pack",
+            "name": "Bio-Computer Pack",
+            "category": "cyber",
+            "nuyenCost": 82000,
+            "karmaCost": 41,
+            "maxAvailability": 12,
+            "essenceCost": 0.7,
+            "contents": [
+              {
+                "itemId": "datajack",
+                "itemName": "Datajack",
+                "quantity": 1
+              },
+              {
+                "itemId": "mnemonic-enhancer",
+                "itemName": "Mnemonic Enhancer",
+                "quantity": 1,
+                "rating": 2
+              },
+              {
+                "itemId": "cerebral-booster",
+                "itemName": "Cerebral Booster",
+                "quantity": 1,
+                "rating": 2
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "bioware-company-man-pack",
+            "name": "Bioware Company Man Pack",
+            "category": "cyber",
+            "nuyenCost": 100000,
+            "karmaCost": 50,
+            "maxAvailability": 6,
+            "availabilityType": "R",
+            "essenceCost": 0.8,
+            "contents": [
+              {
+                "itemId": "bone-density-augmentation",
+                "itemName": "Bone Density Augmentation",
+                "quantity": 1,
+                "rating": 1
+              },
+              {
+                "itemId": "synaptic-booster",
+                "itemName": "Synaptic Booster",
+                "quantity": 1,
+                "rating": 1
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "bug-out-bag",
+            "name": "Bug-Out Bag",
+            "category": "lifestyle",
+            "nuyenCost": 4000,
+            "karmaCost": 2,
+            "maxAvailability": 4,
+            "availabilityType": "F",
+            "contents": [
+              {
+                "itemId": "fake-sin",
+                "itemName": "Fake SIN",
+                "quantity": 1,
+                "rating": 1
+              },
+              {
+                "itemId": "restraints-metal",
+                "itemName": "Metal Restraints",
+                "quantity": 1
+              },
+              {
+                "itemId": "sony-emperor",
+                "itemName": "Sony Emperor",
+                "quantity": 1
+              },
+              {
+                "itemId": "datachip",
+                "itemName": "Datachip",
+                "quantity": 10
+              },
+              {
+                "itemId": "armor-clothing",
+                "itemName": "Armor Clothing",
+                "quantity": 1
+              },
+              {
+                "itemId": "security-tags",
+                "itemName": "Security Tags",
+                "quantity": 10
+              },
+              {
+                "itemId": "duffel-bag",
+                "itemName": "Duffel Bag",
+                "quantity": 1
+              },
+              {
+                "itemId": "long-haul",
+                "itemName": "Long Haul",
+                "quantity": 2
+              },
+              {
+                "itemId": "streetline-special",
+                "itemName": "Streetline Special",
+                "quantity": 1
+              },
+              {
+                "itemId": "regular-rounds",
+                "itemName": "Regular Ammo",
+                "quantity": 30
+              },
+              {
+                "itemId": "spare-clip",
+                "itemName": "Spare Clip",
+                "quantity": 1
+              },
+              {
+                "itemId": "standard-credstick",
+                "itemName": "Standard Credstick",
+                "quantity": 1
+              },
+              {
+                "itemId": "knife",
+                "itemName": "Knife",
+                "quantity": 1
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "street-rat-pack",
+            "name": "Street Rat Pack",
+            "category": "lifestyle",
+            "nuyenCost": 2000,
+            "karmaCost": 1,
+            "maxAvailability": 0,
+            "contents": [
+              {
+                "itemId": "squatter-lifestyle",
+                "itemName": "Squatter Lifestyle",
+                "quantity": 4
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "lowlife-pack",
+            "name": "Lowlife Pack",
+            "category": "lifestyle",
+            "nuyenCost": 2000,
+            "karmaCost": 1,
+            "maxAvailability": 0,
+            "contents": [
+              {
+                "itemId": "low-lifestyle",
+                "itemName": "Low Lifestyle",
+                "quantity": 1
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "success-in-the-shadows-pack",
+            "name": "Success in the Shadows Pack",
+            "category": "lifestyle",
+            "nuyenCost": 10000,
+            "karmaCost": 5,
+            "maxAvailability": 0,
+            "contents": [
+              {
+                "itemId": "middle-lifestyle",
+                "itemName": "Middle Lifestyle",
+                "quantity": 2
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "high-life-pack",
+            "name": "High Life Pack",
+            "category": "lifestyle",
+            "nuyenCost": 20000,
+            "karmaCost": 10,
+            "maxAvailability": 0,
+            "contents": [
+              {
+                "itemId": "high-lifestyle",
+                "itemName": "High Lifestyle",
+                "quantity": 2
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "cocktail-kid-pack",
+            "name": "Cocktail Kid Pack",
+            "category": "color",
+            "nuyenCost": 2000,
+            "karmaCost": 1,
+            "maxAvailability": 4,
+            "availabilityType": "R",
+            "contents": [
+              {
+                "itemId": "disposable-syringe",
+                "itemName": "Disposable Syringe",
+                "quantity": 10
+              },
+              {
+                "itemId": "kamikaze",
+                "itemName": "Kamikaze",
+                "quantity": 5
+              },
+              {
+                "itemId": "disposable-syringe",
+                "itemName": "Disposable Inhaler",
+                "quantity": 10
+              },
+              {
+                "itemId": "zen",
+                "itemName": "Zen",
+                "quantity": 20
+              },
+              {
+                "itemId": "jazz",
+                "itemName": "Jazz",
+                "quantity": 10
+              },
+              {
+                "itemId": "novacoke",
+                "itemName": "Novacoke",
+                "quantity": 20
+              },
+              {
+                "itemId": "long-haul",
+                "itemName": "Long Haul",
+                "quantity": 5
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "eavesdropper-pack",
+            "name": "Eavesdropper Pack",
+            "category": "color",
+            "nuyenCost": 2000,
+            "karmaCost": 1,
+            "maxAvailability": 6,
+            "availabilityType": "R",
+            "contents": [
+              {
+                "itemId": "data-tap",
+                "itemName": "Data Tap",
+                "quantity": 5
+              },
+              {
+                "itemId": "micro-camera",
+                "itemName": "Micro-Camera",
+                "quantity": 5,
+                "rating": 1
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "surveillance-pack",
+            "name": "Surveillance Pack",
+            "category": "color",
+            "nuyenCost": 2000,
+            "karmaCost": 1,
+            "maxAvailability": 6,
+            "availabilityType": "R",
+            "contents": [
+              {
+                "itemId": "binoculars-optical",
+                "itemName": "Binoculars (Optical)",
+                "quantity": 1
+              },
+              {
+                "itemId": "periscope",
+                "itemName": "periscope",
+                "quantity": 1
+              },
+              {
+                "itemId": "binoculars",
+                "itemName": "Binoculars",
+                "quantity": 1,
+                "rating": 1,
+                "modifications": ["low-light-vision"]
+              },
+              {
+                "itemId": "directional-mic",
+                "itemName": "Directional Mic",
+                "quantity": 1,
+                "rating": 1,
+                "modifications": ["select-sound-filter"]
+              },
+              {
+                "itemId": "camera",
+                "itemName": "Camera",
+                "quantity": 1,
+                "rating": 1,
+                "modifications": ["vision-magnification"]
+              },
+              {
+                "itemId": "laser-microphone",
+                "itemName": "Laser Mic",
+                "quantity": 1,
+                "rating": 1,
+                "modifications": ["audio-enhancement"]
+              },
+              {
+                "itemId": "micro-camera",
+                "itemName": "Micro-Camera",
+                "quantity": 1,
+                "rating": 1
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "breaking-and-entering-pack",
+            "name": "Breaking and Entering Pack",
+            "category": "color",
+            "nuyenCost": 6000,
+            "karmaCost": 3,
+            "maxAvailability": 12,
+            "availabilityType": "F",
+            "contents": [
+              {
+                "itemId": "autopicker",
+                "itemName": "Autopicker",
+                "quantity": 1,
+                "rating": 4
+              },
+              {
+                "itemId": "sequencer",
+                "itemName": "Sequencer",
+                "quantity": 1,
+                "rating": 4
+              },
+              {
+                "itemId": "keycard-copier",
+                "itemName": "Keycard Copier",
+                "quantity": 1,
+                "rating": 5
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "jammer-pack",
+            "name": "Jammer Pack",
+            "category": "color",
+            "nuyenCost": 2000,
+            "karmaCost": 1,
+            "maxAvailability": 12,
+            "availabilityType": "F",
+            "contents": [
+              {
+                "itemId": "area-jammer",
+                "itemName": "Area Jammer",
+                "quantity": 1,
+                "rating": 4
+              },
+              {
+                "itemId": "tag-eraser",
+                "itemName": "Tag Eraser",
+                "quantity": 1
+              },
+              {
+                "itemId": "bug-scanner",
+                "itemName": "Bug Scanner",
+                "quantity": 1,
+                "rating": 5
+              },
+              {
+                "itemId": "white-noise-generator",
+                "itemName": "White Noise Generator",
+                "quantity": 1,
+                "rating": 5
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "gunbunny-pack",
+            "name": "Gunbunny Pack",
+            "category": "color",
+            "nuyenCost": 2000,
+            "karmaCost": 1,
+            "maxAvailability": 6,
+            "availabilityType": "R",
+            "contents": [
+              {
+                "itemId": "tool-kit",
+                "itemName": "Armorer Kit",
+                "quantity": 1
+              },
+              {
+                "itemId": "imaging-scope",
+                "itemName": "Imaging Scope",
+                "quantity": 1,
+                "modifications": ["low-light-vision"]
+              },
+              {
+                "itemId": "laser-sight",
+                "itemName": "Laser Sight",
+                "quantity": 2
+              },
+              {
+                "itemId": "shock-pad",
+                "itemName": "Shock Pad",
+                "quantity": 1
+              },
+              {
+                "itemId": "smartgun-external",
+                "itemName": "Smartgun System (External)",
+                "quantity": 2
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "drone-mechanic-pack",
+            "name": "Drone Mechanic Pack",
+            "category": "color",
+            "nuyenCost": 2000,
+            "karmaCost": 1,
+            "maxAvailability": 0,
+            "contents": [
+              {
+                "itemId": "tool-kit",
+                "itemName": "Aeronautics Mechanic Kit",
+                "quantity": 1
+              },
+              {
+                "itemId": "tool-kit",
+                "itemName": "Electronic Warfare Kit",
+                "quantity": 1
+              },
+              {
+                "itemId": "tool-kit",
+                "itemName": "Automotive Mechanic Kit",
+                "quantity": 1
+              },
+              {
+                "itemId": "tool-kit",
+                "itemName": "Nautical Mechanic Kit",
+                "quantity": 1
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "mechanic-shop-pack",
+            "name": "Mechanic Shop Pack",
+            "category": "color",
+            "nuyenCost": 6000,
+            "karmaCost": 3,
+            "maxAvailability": 8,
+            "contents": [
+              {
+                "itemId": "tool-kit",
+                "itemName": "Automotive Mechanic Kit",
+                "quantity": 1
+              },
+              {
+                "itemId": "flashlight",
+                "itemName": "Flashlight",
+                "quantity": 1
+              },
+              {
+                "itemId": "tool-shop",
+                "itemName": "Automotive Mechanic Shop",
+                "quantity": 1
+              },
+              {
+                "itemId": "tool-kit",
+                "itemName": "Duct Tape",
+                "quantity": 1
+              },
+              {
+                "itemId": "shopsoft",
+                "itemName": "Shopsoft (Car Parts)",
+                "quantity": 1
+              },
+              {
+                "itemId": "chemsuit",
+                "itemName": "Chemsuit",
+                "quantity": 1,
+                "rating": 1
+              },
+              {
+                "itemId": "knowsoft",
+                "itemName": "Knowsoft (Car Makes and Models)",
+                "quantity": 1
+              },
+              {
+                "itemId": "respirator",
+                "itemName": "Respirator",
+                "quantity": 1,
+                "rating": 1
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "medic-pack",
+            "name": "Medic Pack",
+            "category": "color",
+            "nuyenCost": 2000,
+            "karmaCost": 1,
+            "maxAvailability": 6,
+            "contents": [
+              {
+                "itemId": "medkit",
+                "itemName": "Medkit",
+                "quantity": 1,
+                "rating": 6
+              },
+              {
+                "itemId": "medkit-supplies",
+                "itemName": "Medkit Supplies",
+                "quantity": 2
+              },
+              {
+                "itemId": "biomonitor",
+                "itemName": "Biomonitor",
+                "quantity": 1
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "medical-patches-pack",
+            "name": "Medical Patches Pack",
+            "category": "color",
+            "nuyenCost": 2000,
+            "karmaCost": 1,
+            "maxAvailability": 10,
+            "contents": [
+              {
+                "itemId": "antidote-patch",
+                "itemName": "Antidote Patch",
+                "quantity": 5,
+                "rating": 4
+              },
+              {
+                "itemId": "tranq-patch",
+                "itemName": "Tranq Patch",
+                "quantity": 4,
+                "rating": 5
+              },
+              {
+                "itemId": "stim-patch",
+                "itemName": "Stim Patch",
+                "quantity": 1,
+                "rating": 4
+              },
+              {
+                "itemId": "trauma-patch",
+                "itemName": "Trauma Patch",
+                "quantity": 1
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "mountaineering-pack",
+            "name": "Mountaineering Pack",
+            "category": "color",
+            "nuyenCost": 2000,
+            "karmaCost": 1,
+            "maxAvailability": 4,
+            "contents": [
+              {
+                "itemId": "climbing-gear",
+                "itemName": "Climbing Gear",
+                "quantity": 1
+              },
+              {
+                "itemId": "survival-kit",
+                "itemName": "Survival Kit",
+                "quantity": 1
+              },
+              {
+                "itemId": "flashlight",
+                "itemName": "Flashlight",
+                "quantity": 1
+              },
+              {
+                "itemId": "grapple-gun",
+                "itemName": "Grapple Gun",
+                "quantity": 1
+              },
+              {
+                "itemId": "microwire",
+                "itemName": "Microwire",
+                "quantity": 400
+              },
+              {
+                "itemId": "magnesium-torch",
+                "itemName": "Magnesium Torch",
+                "quantity": 5
+              },
+              {
+                "itemId": "standard-rope",
+                "itemName": "Standard Rope",
+                "quantity": 100
+              },
+              {
+                "itemId": "micro-flare-launcher",
+                "itemName": "Micro Flare Launcher",
+                "quantity": 1
+              },
+              {
+                "itemId": "micro-flares",
+                "itemName": "Micro Flares",
+                "quantity": 3
+              },
+              {
+                "itemId": "medkit",
+                "itemName": "Medkit",
+                "quantity": 1,
+                "rating": 2
+              },
+              {
+                "itemId": "rappelling-gloves",
+                "itemName": "Rappelling Gloves",
+                "quantity": 1
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "demolitionist-pack",
+            "name": "Demolitionist Pack",
+            "category": "color",
+            "nuyenCost": 2000,
+            "karmaCost": 1,
+            "maxAvailability": 8,
+            "availabilityType": "R",
+            "contents": [
+              {
+                "itemId": "tool-kit",
+                "itemName": "Demolitions Kit",
+                "quantity": 1
+              },
+              {
+                "itemId": "detonator-cap",
+                "itemName": "Detonator Cap",
+                "quantity": 8
+              },
+              {
+                "itemId": "commercial-explosives",
+                "itemName": "Commercial Explosives",
+                "quantity": 12
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "infiltration-pack",
+            "name": "Infiltration Pack",
+            "category": "color",
+            "nuyenCost": 2000,
+            "karmaCost": 1,
+            "maxAvailability": 11,
+            "availabilityType": "R",
+            "contents": [
+              {
+                "itemId": "tool-kit",
+                "itemName": "Disguise Kit",
+                "quantity": 1
+              },
+              {
+                "itemId": "stealth-tags",
+                "itemName": "Stealth Tags",
+                "quantity": 10
+              },
+              {
+                "itemId": "lockpick-set",
+                "itemName": "Lockpick Set",
+                "quantity": 1
+              },
+              {
+                "itemId": "restraints-plastic",
+                "itemName": "Plastic Restraints",
+                "quantity": 10
+              },
+              {
+                "itemId": "contacts",
+                "itemName": "Contacts",
+                "quantity": 1,
+                "rating": 2,
+                "modifications": ["image-link", "low-light-vision"]
+              },
+              {
+                "itemId": "subvocal-mic",
+                "itemName": "Subvocal Mic",
+                "quantity": 1
+              },
+              {
+                "itemId": "flashlight",
+                "itemName": "Flashlight",
+                "quantity": 1
+              },
+              {
+                "itemId": "micro-transceiver",
+                "itemName": "Micro-Transceiver",
+                "quantity": 1
+              },
+              {
+                "itemId": "flashlight",
+                "itemName": "Flashlight (low-light)",
+                "quantity": 1,
+                "modifications": ["low-light-vision"]
+              },
+              {
+                "itemId": "camera",
+                "itemName": "Camera",
+                "quantity": 1,
+                "rating": 1
+              },
+              {
+                "itemId": "datachip",
+                "itemName": "Datachip",
+                "quantity": 20
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "bunny-hopper-pack",
+            "name": "Bunny Hopper Pack",
+            "category": "vehicle",
+            "nuyenCost": 10000,
+            "karmaCost": 5,
+            "maxAvailability": 0,
+            "contents": [
+              {
+                "itemId": "chrysler-nissan-jackrabbit",
+                "itemName": "Chrysler-Nissan Jackrabbit",
+                "quantity": 1
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "racing-bike-pack",
+            "name": "Racing Bike Pack",
+            "category": "vehicle",
+            "nuyenCost": 10000,
+            "karmaCost": 5,
+            "maxAvailability": 0,
+            "contents": [
+              {
+                "itemId": "suzuki-mirage",
+                "itemName": "Suzuki Mirage",
+                "quantity": 1
+              },
+              {
+                "itemId": "mapsoft",
+                "itemName": "Mapsoft (city streets)",
+                "quantity": 1
+              },
+              {
+                "itemId": "armor-clothing",
+                "itemName": "Armor Clothing",
+                "quantity": 1
+              },
+              {
+                "itemId": "shopsoft",
+                "itemName": "Shopsoft (Motorcycles)",
+                "quantity": 1
+              },
+              {
+                "itemId": "helmet",
+                "itemName": "Helmet",
+                "quantity": 2,
+                "modifications": ["image-link", "sound-link"]
+              },
+              {
+                "itemId": "tool-kit",
+                "itemName": "Automotive Mechanic Kit",
+                "quantity": 1
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "combat-biker-pack",
+            "name": "Combat Biker Pack",
+            "category": "vehicle",
+            "nuyenCost": 12000,
+            "karmaCost": 6,
+            "maxAvailability": 0,
+            "contents": [
+              {
+                "itemId": "harley-davidson-scorpion",
+                "itemName": "Harley-Davidson Scorpion",
+                "quantity": 1
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "all-american-pack",
+            "name": "All-American Pack",
+            "category": "vehicle",
+            "nuyenCost": 16000,
+            "karmaCost": 8,
+            "maxAvailability": 0,
+            "contents": [
+              {
+                "itemId": "ford-americar",
+                "itemName": "Ford Americar",
+                "quantity": 1
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "team-van-pack",
+            "name": "Team Van Pack",
+            "category": "vehicle",
+            "nuyenCost": 36000,
+            "karmaCost": 18,
+            "maxAvailability": 0,
+            "contents": [
+              {
+                "itemId": "gmc-bulldog-step-van",
+                "itemName": "GMC Bulldog",
+                "quantity": 1
+              },
+              {
+                "itemId": "rigger-interface",
+                "itemName": "Rigger Interface",
+                "quantity": 1
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "off-road-pack",
+            "name": "Off Road Pack",
+            "category": "vehicle",
+            "nuyenCost": 40000,
+            "karmaCost": 20,
+            "maxAvailability": 0,
+            "contents": [
+              {
+                "itemId": "toyota-gopher",
+                "itemName": "Toyota Gopher",
+                "quantity": 1
+              },
+              {
+                "itemId": "yamaha-growler",
+                "itemName": "Yamaha Growler",
+                "quantity": 1
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "non-combat-rigger-pack",
+            "name": "Non-Combat Rigger Pack",
+            "category": "vehicle",
+            "nuyenCost": 2000,
+            "karmaCost": 1,
+            "maxAvailability": 4,
+            "contents": [
+              {
+                "itemId": "rigger-interface",
+                "itemName": "Rigger Interface",
+                "quantity": 2
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "combat-rigger-pack",
+            "name": "Combat Rigger Pack",
+            "category": "vehicle",
+            "nuyenCost": 4000,
+            "karmaCost": 2,
+            "maxAvailability": 8,
+            "availabilityType": "F",
+            "contents": [
+              {
+                "itemId": "rigger-interface",
+                "itemName": "Rigger Interface",
+                "quantity": 1
+              },
+              {
+                "itemId": "standard-weapon-mount",
+                "itemName": "Standard Weapon Mount",
+                "quantity": 1
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "intro-to-hacking-pack",
+            "name": "Intro to Hacking Pack",
+            "category": "decker",
+            "nuyenCost": 58000,
+            "karmaCost": 29,
+            "maxAvailability": 3,
+            "availabilityType": "R",
+            "contents": [
+              {
+                "itemId": "microdeck-summit",
+                "itemName": "Microdeck Summit",
+                "quantity": 1
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "basic-decker-pack",
+            "name": "Basic Decker Pack",
+            "category": "decker",
+            "nuyenCost": 124000,
+            "karmaCost": 62,
+            "maxAvailability": 6,
+            "availabilityType": "R",
+            "contents": [
+              {
+                "itemId": "hermes-chariot",
+                "itemName": "Hermes Chariot",
+                "quantity": 1
+              },
+              {
+                "itemId": "tool-kit",
+                "itemName": "Software Kit",
+                "quantity": 1
+              },
+              {
+                "itemId": "tool-kit",
+                "itemName": "Hardware Kit",
+                "quantity": 1
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "advanced-decker-pack",
+            "name": "Advanced Decker Pack",
+            "category": "decker",
+            "nuyenCost": 346000,
+            "karmaCost": 173,
+            "maxAvailability": 12,
+            "availabilityType": "R",
+            "contents": [
+              {
+                "itemId": "sony-ciy-720",
+                "itemName": "Sony CIY-720",
+                "quantity": 1
+              },
+              {
+                "itemId": "tool-kit",
+                "itemName": "Software Kit",
+                "quantity": 1
+              },
+              {
+                "itemId": "tool-kit",
+                "itemName": "Hardware Kit",
+                "quantity": 1
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "basic-cyberdeck-programs-pack",
+            "name": "Basic Cyberdeck Programs Pack",
+            "category": "decker",
+            "nuyenCost": 2000,
+            "karmaCost": 1,
+            "maxAvailability": 0,
+            "contents": [
+              {
+                "itemId": "sony-ciy-720",
+                "itemName": "Sony CIY-720",
+                "quantity": 1
+              },
+              {
+                "itemId": "tool-kit",
+                "itemName": "Software Kit",
+                "quantity": 1
+              },
+              {
+                "itemId": "tool-kit",
+                "itemName": "Hardware Kit",
+                "quantity": 1
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "advanced-cyberdeck-programs-pack",
+            "name": "Advanced Cyberdeck Programs Pack",
+            "category": "decker",
+            "nuyenCost": 2000,
+            "karmaCost": 1,
+            "maxAvailability": 6,
+            "availabilityType": "R",
+            "contents": [
+              {
+                "itemId": "armor",
+                "itemName": "Armor (Program)",
+                "quantity": 1
+              },
+              {
+                "itemId": "biofeedback",
+                "itemName": "Biofeedback",
+                "quantity": 1
+              },
+              {
+                "itemId": "blackout",
+                "itemName": "Blackout",
+                "quantity": 1
+              },
+              {
+                "itemId": "guard",
+                "itemName": "Guard",
+                "quantity": 1
+              },
+              {
+                "itemId": "hammer",
+                "itemName": "Hammer",
+                "quantity": 1
+              },
+              {
+                "itemId": "mugger",
+                "itemName": "Mugger",
+                "quantity": 1
+              },
+              {
+                "itemId": "shell",
+                "itemName": "Shell",
+                "quantity": 1
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "rigger-support-pack",
+            "name": "Rigger Support Pack",
+            "category": "decker",
+            "nuyenCost": 4000,
+            "karmaCost": 2,
+            "maxAvailability": 9,
+            "availabilityType": "R",
+            "contents": [
+              {
+                "itemId": "encryption",
+                "itemName": "Encryption",
+                "quantity": 1
+              },
+              {
+                "itemId": "signal-scrub",
+                "itemName": "Signal Scrub",
+                "quantity": 1
+              },
+              {
+                "itemId": "toolbox",
+                "itemName": "Toolbox",
+                "quantity": 1
+              },
+              {
+                "itemId": "stealth-tags",
+                "itemName": "Stealth Tags",
+                "quantity": 10
+              },
+              {
+                "itemId": "sneak",
+                "itemName": "Sneak",
+                "quantity": 1
+              },
+              {
+                "itemId": "tool-kit",
+                "itemName": "Electronic Warfare Kit",
+                "quantity": 1
+              },
+              {
+                "itemId": "pilot-program",
+                "itemName": "Pilot Program",
+                "quantity": 1,
+                "rating": 3
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "basic-drone-commander-pack",
+            "name": "Basic Drone Commander Pack",
+            "category": "drone",
+            "nuyenCost": 16000,
+            "karmaCost": 8,
+            "maxAvailability": 6,
+            "availabilityType": "R",
+            "contents": [
+              {
+                "itemId": "essy-motors-dronemaster",
+                "itemName": "Essy Motors DroneMaster",
+                "quantity": 1
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "advanced-drone-commander-pack",
+            "name": "Advanced Drone Commander Pack",
+            "category": "drone",
+            "nuyenCost": 66000,
+            "karmaCost": 33,
+            "maxAvailability": 10,
+            "availabilityType": "R",
+            "contents": [
+              {
+                "itemId": "vulcan-liegelord",
+                "itemName": "Vulcan LiegeLord",
+                "quantity": 1
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "dog-brain-pack",
+            "name": "Dog Brain Pack",
+            "category": "drone",
+            "nuyenCost": 6000,
+            "karmaCost": 3,
+            "maxAvailability": 6,
+            "contents": [
+              {
+                "itemId": "autosoft",
+                "itemName": "Autosoft",
+                "quantity": 4,
+                "rating": 3
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "basic-spy-drone-pack",
+            "name": "Basic Spy Drone Pack",
+            "category": "drone",
+            "nuyenCost": 2000,
+            "karmaCost": 1,
+            "maxAvailability": 8,
+            "contents": [
+              {
+                "itemId": "shiawase-kanmushi",
+                "itemName": "Shiawase Kanmushi",
+                "quantity": 1,
+                "modifications": ["low-light-vision", "select-sound-filter"]
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "advanced-spy-drone-pack",
+            "name": "Advanced Spy Drone Pack",
+            "category": "drone",
+            "nuyenCost": 22000,
+            "karmaCost": 11,
+            "maxAvailability": 10,
+            "contents": [
+              {
+                "itemId": "lockheed-optic-x2",
+                "itemName": "Lockheed Optic-X2",
+                "quantity": 1,
+                "modifications": [
+                  "vision-enhancement",
+                  "vision-magnification",
+                  "select-sound-filter"
+                ]
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "air-combat-drone-pack",
+            "name": "Air Combat Drone Pack",
+            "category": "drone",
+            "nuyenCost": 8000,
+            "karmaCost": 4,
+            "maxAvailability": 8,
+            "availabilityType": "F",
+            "contents": [
+              {
+                "itemId": "mct-nissan-roto-drone",
+                "itemName": "MCT-Nissan Rotodrone",
+                "quantity": 1,
+                "modifications": ["low-light-vision"]
+              },
+              {
+                "itemId": "standard-weapon-mount",
+                "itemName": "Standard Weapon Mount",
+                "quantity": 1
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "advanced-air-combat-drone-pack",
+            "name": "Advanced Air Combat Drone Pack",
+            "category": "drone",
+            "nuyenCost": 18000,
+            "karmaCost": 9,
+            "maxAvailability": 8,
+            "availabilityType": "F",
+            "contents": [
+              {
+                "itemId": "cyberspace-designs-dalmatian",
+                "itemName": "Cyberspace Designs Dalmatian",
+                "quantity": 1,
+                "modifications": ["low-light-vision", "smartlink", "thermographic-vision"]
+              },
+              {
+                "itemId": "standard-weapon-mount",
+                "itemName": "Standard Weapon Mount",
+                "quantity": 2
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "basic-combat-drone-pack",
+            "name": "Basic Combat Drone Pack",
+            "category": "drone",
+            "nuyenCost": 6000,
+            "karmaCost": 3,
+            "maxAvailability": 5,
+            "availabilityType": "R",
+            "contents": [
+              {
+                "itemId": "gm-nissan-doberman",
+                "itemName": "GM-Nissan Doberman",
+                "quantity": 1
+              },
+              {
+                "itemId": "colt-cobra-tz-120",
+                "itemName": "Colt Cobra TZ-120",
+                "quantity": 1
+              },
+              {
+                "itemId": "regular-rounds",
+                "itemName": "Regular Ammo",
+                "quantity": 170
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "advanced-combat-drone-pack",
+            "name": "Advanced Combat Drone Pack",
+            "category": "drone",
+            "nuyenCost": 28000,
+            "karmaCost": 14,
+            "maxAvailability": 10,
+            "availabilityType": "R",
+            "contents": [
+              {
+                "itemId": "ares-steel-lynx",
+                "itemName": "Steel Lynx",
+                "quantity": 1,
+                "modifications": ["low-light-vision", "smartlink", "thermographic-vision"]
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "basic-magician-pack",
+            "name": "Basic Magician Pack",
+            "category": "magic",
+            "nuyenCost": 2000,
+            "karmaCost": 1,
+            "maxAvailability": 8,
+            "contents": [
+              {
+                "itemId": "magical-lodge-materials",
+                "itemName": "Magical Lodge Materials",
+                "quantity": 1,
+                "rating": 4
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "advanced-magician-pack",
+            "name": "Advanced Magician Pack",
+            "category": "magic",
+            "nuyenCost": 4000,
+            "karmaCost": 2,
+            "maxAvailability": 12,
+            "contents": [
+              {
+                "itemId": "magical-lodge-materials",
+                "itemName": "Magical Lodge Materials",
+                "quantity": 1,
+                "rating": 6
+              },
+              {
+                "itemId": "magical-lodge-materials",
+                "itemName": "Reagents",
+                "quantity": 50
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "magic-wand-pack",
+            "name": "Magic Wand Pack",
+            "category": "magic",
+            "nuyenCost": 36000,
+            "karmaCost": 18,
+            "maxAvailability": 8,
+            "availabilityType": "R",
+            "contents": [
+              {
+                "itemId": "power-focus",
+                "itemName": "Power Focus",
+                "quantity": 1,
+                "rating": 2
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "magic-staff-pack",
+            "name": "Magic Staff Pack",
+            "category": "magic",
+            "nuyenCost": 54000,
+            "karmaCost": 27,
+            "maxAvailability": 12,
+            "availabilityType": "R",
+            "contents": [
+              {
+                "itemId": "power-focus",
+                "itemName": "Power Focus",
+                "quantity": 1,
+                "rating": 3
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "basic-medicine-bag-pack",
+            "name": "Basic Medicine Bag Pack",
+            "category": "magic",
+            "nuyenCost": 8000,
+            "karmaCost": 4,
+            "maxAvailability": 6,
+            "availabilityType": "R",
+            "contents": [
+              {
+                "itemId": "spell-focus",
+                "itemName": "Spell Focus: Spellcasting (Health)",
+                "quantity": 1,
+                "rating": 2
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "advanced-medicine-bag-pack",
+            "name": "Advanced Medicine Bag Pack",
+            "category": "magic",
+            "nuyenCost": 16000,
+            "karmaCost": 8,
+            "maxAvailability": 12,
+            "availabilityType": "R",
+            "contents": [
+              {
+                "itemId": "spell-focus",
+                "itemName": "Spell Focus: Spellcasting (Health)",
+                "quantity": 1,
+                "rating": 4
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "basic-spirit-stick-pack",
+            "name": "Basic Spirit Stick Pack",
+            "category": "magic",
+            "nuyenCost": 8000,
+            "karmaCost": 4,
+            "maxAvailability": 6,
+            "availabilityType": "R",
+            "contents": [
+              {
+                "itemId": "spirit-focus",
+                "itemName": "Spirit Focus: Summoning (Beast)",
+                "quantity": 1,
+                "rating": 2
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "advanced-spirit-stick-pack",
+            "name": "Advanced Spirit Stick Pack",
+            "category": "magic",
+            "nuyenCost": 16000,
+            "karmaCost": 8,
+            "maxAvailability": 12,
+            "availabilityType": "R",
+            "contents": [
+              {
+                "itemId": "spirit-focus",
+                "itemName": "Spirit Focus: Summoning (Beast)",
+                "quantity": 1,
+                "rating": 4
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          },
+          {
+            "id": "magic-spear-pack",
+            "name": "Magic Spear Pack",
+            "category": "magic",
+            "nuyenCost": 14000,
+            "karmaCost": 7,
+            "maxAvailability": 8,
+            "availabilityType": "R",
+            "contents": [
+              {
+                "itemId": "weapon-focus",
+                "itemName": "Weapon Focus",
+                "quantity": 1,
+                "rating": 2
+              }
+            ],
+            "source": "run-faster",
+            "page": 228
+          }
+        ]
+      }
     },
     "metagenics": {
       "mergeStrategy": "replace",

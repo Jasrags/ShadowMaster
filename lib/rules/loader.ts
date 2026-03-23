@@ -1005,3 +1005,17 @@ export function extractAllActions(ruleset: LoadedRuleset): ActionDefinition[] {
     ...catalog.vehicle,
   ];
 }
+
+// =============================================================================
+// EQUIPMENT PACKS LOADER
+// =============================================================================
+
+import type { EquipmentPackCatalogItem } from "./loader-types";
+
+/**
+ * Load equipment packs catalog from a ruleset
+ */
+export function extractEquipmentPacks(ruleset: LoadedRuleset): EquipmentPackCatalogItem[] {
+  const ruleModule = extractModule(ruleset, "equipmentPacks");
+  return ruleModule?.packs || [];
+}

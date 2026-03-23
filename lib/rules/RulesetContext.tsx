@@ -62,7 +62,7 @@ import type {
   EntertainmentOptionCatalogItem,
   NeighborhoodZoneData,
 } from "./loader-types";
-import type { LifestyleModificationCatalogItem } from "./module-payloads";
+import type { LifestyleModificationCatalogItem, EquipmentPackCatalogItem } from "./module-payloads";
 export type { GearCatalogData } from "./loader-types";
 export type {
   QualityData,
@@ -647,6 +647,7 @@ export interface RulesetData {
   foci: FocusCatalogItemData[];
   spirits: SpiritsCatalogData | null;
   actions: ActionsCatalogData | null;
+  equipmentPacks: EquipmentPackCatalogItem[];
   lifeModules: LifeModulesCatalog | null;
   infectedCatalog: InfectedCatalogData | null;
 }
@@ -716,6 +717,7 @@ const defaultData: RulesetData = {
   foci: [],
   spirits: null,
   actions: null,
+  equipmentPacks: [],
   lifeModules: null,
   infectedCatalog: null,
 };
@@ -812,6 +814,7 @@ export function RulesetProvider({ children }: RulesetProviderProps) {
             foci: extractedData.foci || [],
             spirits: extractedData.spirits || null,
             actions: extractedData.actions || null,
+            equipmentPacks: extractedData.equipmentPacks || [],
             lifeModules: extractedData.lifeModules || null,
             infectedCatalog: extractedData.infectedCatalog || null,
           }
@@ -2422,6 +2425,14 @@ export function useActionsByDomain(
     if (!data.actions) return [];
     return data.actions[domain] || [];
   }, [data.actions, domain]);
+}
+
+/**
+ * Hook to get equipment packs catalog
+ */
+export function useEquipmentPacks(): EquipmentPackCatalogItem[] {
+  const { data } = useRuleset();
+  return data.equipmentPacks;
 }
 
 /**

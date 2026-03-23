@@ -145,6 +145,81 @@ export interface ProgramsModulePayload extends ProgramsCatalogData {
 }
 
 // =============================================================================
+// EQUIPMENT PACKS MODULE PAYLOAD
+// =============================================================================
+
+/**
+ * Category of an equipment pack
+ */
+export type EquipmentPackCategory =
+  | "core"
+  | "weapon"
+  | "armor"
+  | "cyber"
+  | "lifestyle"
+  | "color"
+  | "vehicle"
+  | "decker"
+  | "drone"
+  | "magic";
+
+/**
+ * A single item within an equipment pack, referencing a catalog entry
+ */
+export interface EquipmentPackItem {
+  /** Reference to the catalog item ID (gear, weapon, armor, cyberware, etc.) */
+  itemId: string;
+  /** Display name for the item */
+  itemName: string;
+  /** Number of this item in the pack */
+  quantity: number;
+  /** Rating for items that have ratings */
+  rating?: number;
+  /** Modification IDs to install on this item */
+  modifications?: string[];
+}
+
+/**
+ * A pre-built equipment pack from the Run Faster sourcebook (pp. 228-251).
+ * Packs have fixed nuyen costs divisible by 2,000 and can be purchased
+ * with Karma at a 1:2,000 ratio.
+ */
+export interface EquipmentPackCatalogItem {
+  id: string;
+  name: string;
+  category: EquipmentPackCategory;
+  /** Total nuyen cost (always divisible by 2,000) */
+  nuyenCost: number;
+  /** Karma equivalent (always nuyenCost / 2000) */
+  karmaCost: number;
+  /** Highest availability rating among pack contents */
+  maxAvailability: number;
+  /** Legality of the most restricted item in the pack */
+  availabilityType?: "R" | "F";
+  /** Total essence cost for cyber/bioware packs */
+  essenceCost?: number;
+  /** Prerequisites (e.g., "Requires a Skilljack") */
+  prerequisites?: string[];
+  /** Items included in this pack */
+  contents: EquipmentPackItem[];
+  /** IDs of sub-packs included in composite packs */
+  includedPacks?: string[];
+  /** Source book identifier */
+  source: string;
+  /** Page number in source book */
+  page: number;
+}
+
+/**
+ * Equipment packs module payload.
+ *
+ * Accessed by: extractEquipmentPacks
+ */
+export interface EquipmentPacksModulePayload {
+  packs: EquipmentPackCatalogItem[];
+}
+
+// =============================================================================
 // RULE MODULE PAYLOAD MAP
 // =============================================================================
 
@@ -196,7 +271,7 @@ export interface RuleModulePayloadMap {
   socialModifiers: Record<string, unknown>;
   categoryModificationDefaults: Record<string, unknown>;
   gameplayLevels: Record<string, unknown>;
-  equipmentPacks: Record<string, unknown>;
+  equipmentPacks: EquipmentPacksModulePayload;
   metagenics: Record<string, unknown>;
   shapeshifters: Record<string, unknown>;
   johnsonProfiles: Record<string, unknown>;
