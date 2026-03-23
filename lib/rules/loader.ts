@@ -202,17 +202,25 @@ export function extractModule<T = never, K extends RuleModuleType = RuleModuleTy
       const existing = merged[key];
 
       if (Array.isArray(existing) && Array.isArray(value)) {
-        // Merge arrays: deduplicate by `id` if items have one, otherwise append
-        const seenIds = new Set<string>();
-        for (const item of existing) {
+        // Merge arrays: items with matching `id` are deep-merged, others appended
+        const idIndex = new Map<string, number>();
+        for (let i = 0; i < existing.length; i++) {
+          const item = existing[i];
           if (item && typeof item === "object" && "id" in item) {
-            seenIds.add((item as { id: string }).id);
+            idIndex.set((item as { id: string }).id, i);
           }
         }
         for (const item of value) {
           if (item && typeof item === "object" && "id" in item) {
-            if (!seenIds.has((item as { id: string }).id)) {
-              seenIds.add((item as { id: string }).id);
+            const existingIdx = idIndex.get((item as { id: string }).id);
+            if (existingIdx !== undefined) {
+              // Deep-merge: overlay new fields onto existing item
+              existing[existingIdx] = {
+                ...(existing[existingIdx] as Record<string, unknown>),
+                ...(structuredClone(item) as Record<string, unknown>),
+              };
+            } else {
+              idIndex.set((item as { id: string }).id, existing.length);
               existing.push(item);
             }
           } else {
