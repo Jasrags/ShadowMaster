@@ -13,16 +13,6 @@ interface LifestyleModificationSelectorProps {
   existingModifications: LifestyleModification[];
 }
 
-/**
- * Map catalog modifier type to character-level modifier type.
- * Catalog uses "flat", character type uses "fixed".
- */
-function toCharacterModifierType(
-  catalogType: LifestyleModificationCatalogItem["modifierType"]
-): LifestyleModification["modifierType"] {
-  return catalogType === "flat" ? "fixed" : "percentage";
-}
-
 export function LifestyleModificationSelector({
   onAdd,
   existingModifications,
@@ -39,7 +29,7 @@ export function LifestyleModificationSelector({
       catalogId: mod.id,
       name: mod.name,
       type: mod.type,
-      modifierType: toCharacterModifierType(mod.modifierType),
+      modifierType: mod.modifierType,
       modifier: mod.modifier,
       effects: mod.effects,
     };

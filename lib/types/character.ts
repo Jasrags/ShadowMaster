@@ -690,8 +690,8 @@ export interface LifestyleModification {
   catalogId?: string; // Reference to ruleset modification ID
   name: string;
   type: "positive" | "negative";
-  modifierType: "percentage" | "fixed";
-  modifier: number; // Percentage (e.g., 20 for +20%) or fixed cost (e.g., 1000 for +1,000¥)
+  modifierType: "percentage" | "flat";
+  modifier: number; // Percentage (e.g., 20 for +20%) or flat cost (e.g., 1000 for +1,000¥)
   effects?: string; // Optional game effects description
   notes?: string;
 }
@@ -710,11 +710,31 @@ export interface LifestyleSubscription {
 }
 
 /**
+ * Selected entertainment option on a character's lifestyle
+ */
+export interface LifestyleEntertainmentOption {
+  catalogId: string;
+  name: string;
+  quantity: number;
+}
+
+/**
+ * Selected component levels for an expanded lifestyle (Run Faster system).
+ * Each value represents the current level, which must be between
+ * the tier's base and limit.
+ */
+export interface LifestyleComponentSelections {
+  comfortsAndNecessities: number;
+  security: number;
+  neighborhood: number;
+}
+
+/**
  * Lifestyle represents a character's living conditions
  */
 export interface Lifestyle {
   id?: ID;
-  type: string; // Lifestyle type ID (e.g., "street", "squatter", "low", "medium", "high", "luxury")
+  type: string; // Lifestyle type ID (e.g., "street", "squatter", "low", "middle", "high", "luxury")
   monthlyCost: number;
   prepaidMonths?: number;
   location?: string;
@@ -724,6 +744,12 @@ export interface Lifestyle {
   customIncome?: number; // Custom monthly income
   notes?: string;
   associatedIdentityId?: ID; // Identity this lifestyle is associated with (for sheet-driven creation)
+  /** Selected component levels (Run Faster expanded system) */
+  components?: LifestyleComponentSelections;
+  /** Selected entertainment options */
+  entertainmentOptions?: LifestyleEntertainmentOption[];
+  /** Total lifestyle points spent on components and entertainment */
+  pointsSpent?: number;
 }
 
 /**

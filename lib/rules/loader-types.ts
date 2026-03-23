@@ -293,6 +293,24 @@ export interface MagicPathData {
 // =============================================================================
 
 /**
+ * Component category levels for a lifestyle (base value and max limit).
+ */
+export interface LifestyleComponentLevel {
+  base: number;
+  limit: number;
+}
+
+/**
+ * Component-based lifestyle categories from Run Faster (pp. 216-218).
+ * Each lifestyle tier has base levels and limits for three categories.
+ */
+export interface LifestyleComponents {
+  comfortsAndNecessities: LifestyleComponentLevel;
+  security: LifestyleComponentLevel;
+  neighborhood: LifestyleComponentLevel;
+}
+
+/**
  * Lifestyle data structure
  */
 export interface LifestyleData {
@@ -300,6 +318,53 @@ export interface LifestyleData {
   name: string;
   monthlyCost: number;
   startingNuyen: string;
+  description?: string;
+  /** Component categories with base/limit (Run Faster expanded system) */
+  components?: LifestyleComponents;
+  /**
+   * Points available for customization. Numeric values are used for
+   * point-budget validation. String values (dice formulas like "1d6+2",
+   * e.g. Traveler lifestyle) skip point-budget validation since the
+   * budget is determined at runtime by a dice roll.
+   */
+  points?: number | string;
+  /** Flat cost per raised level instead of 10% formula (Street lifestyle: 50¥) */
+  costPerLevelFlat?: number;
+  /** Built-in lifestyle options applied automatically (e.g., ["not-a-home"] for Bolt Hole) */
+  builtInOptions?: string[];
+  page?: number;
+  source?: string;
+}
+
+/**
+ * Entertainment option catalog item from Run Faster (pp. 219-224).
+ */
+export interface EntertainmentOptionCatalogItem {
+  id: string;
+  name: string;
+  type: "asset" | "service" | "outing";
+  points: number;
+  monthlyCost: number;
+  /** Minimum lifestyle tier required, or "none" if no minimum */
+  minLifestyle: string;
+  purchasableMultipleTimes: boolean;
+  description?: string;
+  /** Secondary lifestyle requirement (e.g., Workshop requires Commercial) */
+  minLifestyleAlsoRequires?: string;
+  page?: number;
+  source?: string;
+}
+
+/**
+ * Neighborhood zone classification from Run Faster (p. 220).
+ */
+export interface NeighborhoodZoneData {
+  level: number;
+  zone: string;
+  responseTime: string;
+  description?: string;
+  page?: number;
+  source?: string;
 }
 
 /**

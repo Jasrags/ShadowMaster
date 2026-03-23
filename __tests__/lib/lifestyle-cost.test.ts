@@ -62,7 +62,7 @@ describe("calculateLifestyleMonthlyCost", () => {
           name: "Special Work Area",
           type: "positive",
           modifier: 1000,
-          modifierType: "fixed",
+          modifierType: "flat",
         },
       ],
     });

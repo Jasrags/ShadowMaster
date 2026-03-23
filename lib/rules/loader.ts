@@ -360,6 +360,8 @@ import type {
   LifestyleData,
   LifestyleSubscriptionCatalogItem,
   LifestyleSubscriptionsCatalogData,
+  EntertainmentOptionCatalogItem,
+  NeighborhoodZoneData,
 } from "./loader-types";
 import type { LifestyleModificationCatalogItem } from "./module-payloads";
 
@@ -397,6 +399,24 @@ export function extractLifestyleModifications(
 ): LifestyleModificationCatalogItem[] {
   const ruleModule = extractModule(ruleset, "lifestyle");
   return ruleModule?.modifications || [];
+}
+
+/**
+ * Load entertainment options from a ruleset
+ */
+export function extractEntertainmentOptions(
+  ruleset: LoadedRuleset
+): EntertainmentOptionCatalogItem[] {
+  const ruleModule = extractModule(ruleset, "lifestyle");
+  return ruleModule?.entertainmentOptions || [];
+}
+
+/**
+ * Load neighborhood zone classifications from a ruleset
+ */
+export function extractNeighborhoodZones(ruleset: LoadedRuleset): NeighborhoodZoneData[] {
+  const ruleModule = extractModule(ruleset, "lifestyle");
+  return ruleModule?.neighborhoodZones || [];
 }
 
 // =============================================================================

@@ -34,6 +34,8 @@ import type {
   RitualKeywordData,
   LifestyleData,
   LifestyleSubscriptionCatalogItem,
+  EntertainmentOptionCatalogItem,
+  NeighborhoodZoneData,
   GearCatalogData,
   ModificationsCatalogData,
   CyberwareCatalogData,
@@ -77,16 +79,20 @@ export interface MagicModulePayload {
 
 /**
  * Lifestyle module payload — contains lifestyle types, metatype cost
- * modifiers, subscriptions, and modifications.
+ * modifiers, subscriptions, modifications, entertainment options, and
+ * neighborhood zone classifications.
  *
  * Accessed by: extractLifestyles, extractLifestyleModifiers,
- * extractLifestyleSubscriptions
+ * extractLifestyleSubscriptions, extractLifestyleModifications,
+ * extractEntertainmentOptions, extractNeighborhoodZones
  */
 export interface LifestyleModulePayload {
   lifestyles?: LifestyleData[];
   metatypeModifiers?: Record<string, number>;
   subscriptions?: LifestyleSubscriptionCatalogItem[];
   modifications?: LifestyleModificationCatalogItem[];
+  entertainmentOptions?: EntertainmentOptionCatalogItem[];
+  neighborhoodZones?: NeighborhoodZoneData[];
 }
 
 /**
@@ -101,6 +107,10 @@ export interface LifestyleModificationCatalogItem {
   modifierType: "percentage" | "flat";
   description?: string;
   effects?: string;
+  /** Points granted by taking this negative option */
+  pointsGranted?: number;
+  /** Points consumed by taking this positive option */
+  pointsCost?: number;
   page?: number;
   source?: string;
 }
