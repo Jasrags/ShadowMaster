@@ -1,5 +1,9 @@
 import { describe, test, expect } from "vitest";
-import { calculateComponentLevelCost, calculateExpandedLifestyleCost } from "../cost";
+import {
+  calculateComponentLevelCost,
+  calculateExpandedLifestyleCost,
+  calculateLifestyleTotalCost,
+} from "../cost";
 import type { LifestyleData } from "../../loader-types";
 import type { LifestyleComponentSelections } from "../../../types/character";
 
@@ -236,5 +240,124 @@ describe("calculateExpandedLifestyleCost", () => {
         customIncome: 999999,
       })
     ).toBe(0);
+  });
+});
+
+// =============================================================================
+// calculateLifestyleTotalCost
+// =============================================================================
+
+describe("calculateLifestyleTotalCost", () => {
+  test("simple lifestyle uses base cost + modifications + subscriptions", () => {
+    const cost = calculateLifestyleTotalCost({
+      lifestyle: {
+        type: "middle",
+        monthlyCost: 5000,
+        modifications: [
+          { name: "Garage", type: "positive", modifier: 20, modifierType: "percentage" },
+        ],
+        subscriptions: [{ name: "DocWagon", monthlyCost: 5000 }],
+      },
+    });
+    // 5000 + 1000 (20%) + 5000 (sub) = 11000
+    expect(cost).toBe(11000);
+  });
+
+  test("simple lifestyle includes custom expenses and income", () => {
+    const cost = calculateLifestyleTotalCost({
+      lifestyle: {
+        type: "low",
+        monthlyCost: 2000,
+        customExpenses: 500,
+        customIncome: 200,
+      },
+    });
+    // 2000 + 500 - 200 = 2300
+    expect(cost).toBe(2300);
+  });
+
+  test("expanded lifestyle uses catalog data for component costs", () => {
+    const catalog = [makeMediumLifestyle()];
+    const cost = calculateLifestyleTotalCost({
+      lifestyle: {
+        type: "middle",
+        monthlyCost: 5000,
+        components: {
+          comfortsAndNecessities: 4, // +1 from base 3
+          security: 3,
+          neighborhood: 4,
+        },
+      },
+      lifestyleCatalog: catalog,
+    });
+    // 5000 + 500 (1 raised level × 10%) = 5500
+    expect(cost).toBe(5500);
+  });
+
+  test("applies metatype modifier", () => {
+    const cost = calculateLifestyleTotalCost({
+      lifestyle: {
+        type: "middle",
+        monthlyCost: 5000,
+      },
+      metatypeModifier: 2, // troll
+    });
+    // 5000 × 2 = 10000
+    expect(cost).toBe(10000);
+  });
+
+  test("metatype modifier applies to expanded cost", () => {
+    const catalog = [makeMediumLifestyle()];
+    const cost = calculateLifestyleTotalCost({
+      lifestyle: {
+        type: "middle",
+        monthlyCost: 5000,
+        components: {
+          comfortsAndNecessities: 4,
+          security: 3,
+          neighborhood: 4,
+        },
+      },
+      lifestyleCatalog: catalog,
+      metatypeModifier: 1.2, // dwarf
+    });
+    // (5000 + 500) × 1.2 = 6600
+    expect(cost).toBe(6600);
+  });
+
+  test("defaults metatype modifier to 1 when not provided", () => {
+    const cost = calculateLifestyleTotalCost({
+      lifestyle: { type: "low", monthlyCost: 2000 },
+    });
+    expect(cost).toBe(2000);
+  });
+
+  test("floors at zero before metatype modifier", () => {
+    const cost = calculateLifestyleTotalCost({
+      lifestyle: {
+        type: "low",
+        monthlyCost: 2000,
+        customIncome: 999999,
+      },
+      metatypeModifier: 2,
+    });
+    expect(cost).toBe(0);
+  });
+
+  test("falls back to simple calculation when no catalog provided", () => {
+    const cost = calculateLifestyleTotalCost({
+      lifestyle: {
+        type: "middle",
+        monthlyCost: 5000,
+        components: {
+          comfortsAndNecessities: 4,
+          security: 3,
+          neighborhood: 4,
+        },
+      },
+      // No lifestyleCatalog — can't look up base levels
+    });
+    // Falls back to simple: just base cost
+    expect(cost).toBe(5000);
   });
 });

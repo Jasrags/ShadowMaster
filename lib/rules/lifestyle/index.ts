@@ -11,7 +11,11 @@
  * - Security threshold calculation
  */
 
-export { calculateExpandedLifestyleCost, calculateComponentLevelCost } from "./cost";
+export {
+  calculateExpandedLifestyleCost,
+  calculateComponentLevelCost,
+  calculateLifestyleTotalCost,
+} from "./cost";
 
 export {
   validatePointBudget,

@@ -345,15 +345,38 @@ function calculateNuyenSpent(selections: Record<string, unknown>): number {
   const rccsSpent = rccs.reduce((sum, r) => sum + (r.cost || 0), 0);
   const autosoftsSpent = autosofts.reduce((sum, a) => sum + (a.cost || 0), 0);
 
-  // Calculate lifestyle spending (derived from selections)
-  const lifestyles = (selections.lifestyles || []) as Array<{
+  // Calculate lifestyle spending (expanded cost + metatype modifier)
+  const lifestylesList = (selections.lifestyles || []) as Array<{
     monthlyCost: number;
     prepaidMonths?: number;
+    type?: string;
+    modifications?: Array<{
+      type: "positive" | "negative";
+      modifier: number;
+      modifierType: "percentage" | "flat";
+    }>;
+    subscriptions?: Array<{ monthlyCost: number }>;
+    components?: { comfortsAndNecessities: number; security: number; neighborhood: number };
+    entertainmentOptions?: Array<{ catalogId: string; name: string; quantity: number }>;
+    customExpenses?: number;
+    customIncome?: number;
   }>;
-  const lifestyleSpent = lifestyles.reduce(
-    (sum, ls) => sum + ls.monthlyCost * (ls.prepaidMonths || 1),
-    0
-  );
+  const lifestyleSpent = lifestylesList.reduce((sum, ls) => {
+    // Use simple inline calculation (no catalog available in this context)
+    const baseCost = ls.monthlyCost;
+    const modsCost = (ls.modifications || []).reduce((mSum, mod) => {
+      if (mod.modifierType === "percentage") {
+        return mSum + ((baseCost * mod.modifier) / 100) * (mod.type === "positive" ? 1 : -1);
+      }
+      return mSum + mod.modifier * (mod.type === "positive" ? 1 : -1);
+    }, 0);
+    const subsCost = (ls.subscriptions || []).reduce((sSum, sub) => sSum + sub.monthlyCost, 0);
+    const totalMonthly = Math.max(
+      0,
+      baseCost + modsCost + subsCost + (ls.customExpenses || 0) - (ls.customIncome || 0)
+    );
+    return sum + totalMonthly * (ls.prepaidMonths || 1);
+  }, 0);
 
   // Calculate matrix gear spending (commlinks, cyberdecks, software)
   const commlinksSpent = commlinks.reduce((sum, c) => sum + (c.cost || 0), 0);

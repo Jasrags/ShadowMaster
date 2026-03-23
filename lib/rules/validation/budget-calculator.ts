@@ -14,7 +14,8 @@ import {
   getQualityBudgetModifiers,
   FRIENDS_IN_HIGH_PLACES_CONTACT_MULTIPLIER,
 } from "@/lib/rules/qualities/budget-modifiers";
-import type { Contact, CreationSelections } from "@/lib/types";
+import { calculateLifestyleTotalCost } from "@/lib/rules/lifestyle/cost";
+import type { Contact, CreationSelections, Lifestyle } from "@/lib/types";
 
 // =============================================================================
 // NUYEN CALCULATION
@@ -59,7 +60,10 @@ const LICENSE_COST_PER_RATING = 200;
  * @param selections - Character creation selections
  * @returns Breakdown of nuyen spending by category plus total
  */
-export function calculateNuyenSpent(selections: CreationSelections): NuyenBreakdown {
+export function calculateNuyenSpent(
+  selections: CreationSelections,
+  metatypeModifiers?: Record<string, number>
+): NuyenBreakdown {
   // Type definitions for selection arrays (matching CreationBudgetContext.tsx)
   const gear = (selections.gear || []) as Array<{
     cost: number;
@@ -94,10 +98,7 @@ export function calculateNuyenSpent(selections: CreationSelections): NuyenBreakd
   const commlinks = (selections.commlinks || []) as Array<{ cost: number }>;
   const cyberdecks = (selections.cyberdecks || []) as Array<{ cost: number }>;
   const software = (selections.software || []) as Array<{ cost: number }>;
-  const lifestyles = (selections.lifestyles || []) as Array<{
-    monthlyCost: number;
-    prepaidMonths?: number;
-  }>;
+  const lifestyles = (selections.lifestyles || []) as Lifestyle[];
   const identities = (selections.identities || []) as Array<{
     sin: { type: string; rating: number };
     licenses?: Array<{ type: string; rating: number }>;
@@ -150,11 +151,16 @@ export function calculateNuyenSpent(selections: CreationSelections): NuyenBreakd
   const rccsSpent = rccs.reduce((sum, r) => sum + (r.cost || 0), 0);
   const autosoftsSpent = autosofts.reduce((sum, a) => sum + (a.cost || 0), 0);
 
-  // Calculate lifestyle spending
-  const lifestyleSpent = lifestyles.reduce(
-    (sum, ls) => sum + ls.monthlyCost * (ls.prepaidMonths || 1),
-    0
-  );
+  // Calculate lifestyle spending (expanded cost + metatype modifier)
+  const metatype = (selections.metatype || "") as string;
+  const metatypeMod = metatypeModifiers?.[metatype] ?? 1;
+  const lifestyleSpent = lifestyles.reduce((sum, ls) => {
+    const monthlyCost = calculateLifestyleTotalCost({
+      lifestyle: ls,
+      metatypeModifier: metatypeMod,
+    });
+    return sum + monthlyCost * (ls.prepaidMonths || 1);
+  }, 0);
 
   // Calculate matrix gear spending
   const commlinksSpent = commlinks.reduce((sum, c) => sum + (c.cost || 0), 0);

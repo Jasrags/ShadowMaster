@@ -53,6 +53,13 @@ import {
   type FreeSkillConfig,
 } from "../skills/free-skills";
 import { getMaxConnection, getMaxLoyalty, calculateContactPoints } from "../contacts";
+import {
+  validateComponentLevels,
+  validatePointBudget,
+  validateEntertainmentRequirements,
+} from "../lifestyle/validation";
+import type { LifestyleData, EntertainmentOptionCatalogItem } from "../loader-types";
+import type { LifestyleModificationCatalogItem } from "../module-payloads";
 import { getQualityId } from "@/lib/types/creation-selections";
 import type { PriorityTableData } from "../loader-types";
 import {
@@ -452,6 +459,96 @@ const identityValidator: ValidatorDefinition = {
           }
         }
       });
+    }
+
+    return issues;
+  },
+};
+
+/**
+ * Validate expanded lifestyle component levels, point budgets, and entertainment requirements
+ */
+const lifestyleComponentValidator: ValidatorDefinition = {
+  id: "lifestyle-components",
+  name: "Lifestyle Components",
+  description: "Validates expanded lifestyle component levels and point budgets",
+  modes: ["finalization"],
+  priority: 3,
+  validate: (context) => {
+    const issues: ValidationIssue[] = [];
+    const { character, ruleset } = context;
+    const lifestyles = character.lifestyles || [];
+
+    // Extract catalog data from ruleset
+    const lifestyleModule = getModule(ruleset, "lifestyle");
+    const lifestyleCatalog = (lifestyleModule?.lifestyles || []) as LifestyleData[];
+    const entertainmentCatalog = (lifestyleModule?.entertainmentOptions ||
+      []) as EntertainmentOptionCatalogItem[];
+    const modificationsCatalog = (lifestyleModule?.modifications ||
+      []) as LifestyleModificationCatalogItem[];
+
+    for (let i = 0; i < lifestyles.length; i++) {
+      const lifestyle = lifestyles[i];
+      const lifestyleData = lifestyleCatalog.find((l) => l.id === lifestyle.type);
+
+      if (!lifestyleData || !lifestyle.components) continue;
+
+      // Validate component levels within bounds
+      const componentResult = validateComponentLevels(lifestyleData, lifestyle.components);
+      if (!componentResult.valid) {
+        for (const error of componentResult.errors) {
+          issues.push({
+            code: "LIFESTYLE_COMPONENT_OUT_OF_RANGE",
+            message: error,
+            field: `lifestyles[${i}].components`,
+            severity: "error",
+            suggestion: "Adjust component levels to be within the allowed range",
+          });
+        }
+      }
+
+      // Validate point budget
+      const selectedMods = modificationsCatalog.filter((mc) =>
+        (lifestyle.modifications || []).some((m) => m.catalogId === mc.id)
+      );
+      const pointResult = validatePointBudget({
+        lifestyleData,
+        components: lifestyle.components,
+        entertainmentOptions: lifestyle.entertainmentOptions,
+        entertainmentCatalog,
+        modifications: selectedMods,
+      });
+      if (!pointResult.valid) {
+        for (const error of pointResult.errors) {
+          issues.push({
+            code: "LIFESTYLE_POINTS_EXCEEDED",
+            message: error,
+            field: `lifestyles[${i}].pointsSpent`,
+            severity: "error",
+            suggestion: "Reduce component levels or entertainment options to stay within budget",
+          });
+        }
+      }
+
+      // Validate entertainment requirements
+      if (lifestyle.entertainmentOptions && lifestyle.entertainmentOptions.length > 0) {
+        const entResult = validateEntertainmentRequirements({
+          lifestyleId: lifestyle.type,
+          entertainmentOptions: lifestyle.entertainmentOptions,
+          entertainmentCatalog,
+        });
+        if (!entResult.valid) {
+          for (const error of entResult.errors) {
+            issues.push({
+              code: "LIFESTYLE_ENTERTAINMENT_INVALID",
+              message: error,
+              field: `lifestyles[${i}].entertainmentOptions`,
+              severity: "error",
+              suggestion: "Remove entertainment options that don't meet requirements",
+            });
+          }
+        }
+      }
     }
 
     return issues;
@@ -2403,6 +2500,7 @@ const validators: ValidatorDefinition[] = [
   duplicateCharacterNameValidator,
   attributeValidator,
   identityValidator,
+  lifestyleComponentValidator,
   magicValidator,
   qualityValidator,
   augmentationValidator,

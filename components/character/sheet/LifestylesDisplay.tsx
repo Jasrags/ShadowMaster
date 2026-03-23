@@ -4,7 +4,7 @@ import { useState, useCallback } from "react";
 import { Home, ChevronDown, ChevronRight, MapPin, User, AlertTriangle, Plus } from "lucide-react";
 import type { Character, Lifestyle, LifestyleSubscription } from "@/lib/types";
 import { useLifestyles, type LifestyleData } from "@/lib/rules/RulesetContext";
-import { calculateExpandedLifestyleCost } from "@/lib/rules/lifestyle/cost";
+import { calculateLifestyleTotalCost } from "@/lib/rules/lifestyle/cost";
 import { LifestyleModal } from "@/components/creation/identities/LifestyleModal";
 import type { NewLifestyleState } from "@/components/creation/identities/types";
 import { DisplayCard } from "./DisplayCard";
@@ -14,53 +14,15 @@ import { DisplayCard } from "./DisplayCard";
 // =============================================================================
 
 /**
- * Calculate the total monthly cost for a single lifestyle including
- * base cost, modifications, subscriptions, and custom expenses/income.
- * Supports both simple and expanded (Run Faster) lifestyles.
+ * Calculate the total monthly cost for a single lifestyle.
+ * Delegates to the shared calculateLifestyleTotalCost utility.
+ * Exported for backward compatibility with existing tests.
  */
 export function calculateLifestyleMonthlyCost(
   lifestyle: Lifestyle,
   lifestyleCatalog?: LifestyleData[]
 ): number {
-  // If we have catalog data and expanded components, use the expanded calculator
-  if (lifestyleCatalog && lifestyle.components) {
-    const lifestyleData = lifestyleCatalog.find((l) => l.id === lifestyle.type);
-    if (lifestyleData) {
-      return calculateExpandedLifestyleCost({
-        lifestyleData,
-        components: lifestyle.components,
-        entertainmentOptions: lifestyle.entertainmentOptions,
-        entertainmentCatalog: [], // Costs already baked into entertainmentOptions at save
-        modifications: lifestyle.modifications,
-        customExpenses: lifestyle.customExpenses,
-        customIncome: lifestyle.customIncome,
-      });
-    }
-  }
-
-  // Simple cost calculation (backward compatible)
-  const baseCost = lifestyle.monthlyCost;
-
-  const modificationsCost = (lifestyle.modifications || []).reduce((sum, mod) => {
-    if (mod.modifierType === "percentage") {
-      return sum + ((baseCost * mod.modifier) / 100) * (mod.type === "positive" ? 1 : -1);
-    }
-    return sum + mod.modifier * (mod.type === "positive" ? 1 : -1);
-  }, 0);
-
-  const subscriptionsCost = (lifestyle.subscriptions || []).reduce(
-    (sum, sub) => sum + sub.monthlyCost,
-    0
-  );
-
-  return Math.max(
-    0,
-    baseCost +
-      modificationsCost +
-      subscriptionsCost +
-      (lifestyle.customExpenses || 0) -
-      (lifestyle.customIncome || 0)
-  );
+  return calculateLifestyleTotalCost({ lifestyle, lifestyleCatalog });
 }
 
 // =============================================================================
