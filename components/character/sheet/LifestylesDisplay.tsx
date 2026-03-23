@@ -4,6 +4,7 @@ import { useState, useCallback } from "react";
 import { Home, ChevronDown, ChevronRight, MapPin, User, AlertTriangle, Plus } from "lucide-react";
 import type { Character, Lifestyle, LifestyleSubscription } from "@/lib/types";
 import { useLifestyles, type LifestyleData } from "@/lib/rules/RulesetContext";
+import { calculateExpandedLifestyleCost } from "@/lib/rules/lifestyle/cost";
 import { LifestyleModal } from "@/components/creation/identities/LifestyleModal";
 import type { NewLifestyleState } from "@/components/creation/identities/types";
 import { DisplayCard } from "./DisplayCard";
@@ -15,8 +16,29 @@ import { DisplayCard } from "./DisplayCard";
 /**
  * Calculate the total monthly cost for a single lifestyle including
  * base cost, modifications, subscriptions, and custom expenses/income.
+ * Supports both simple and expanded (Run Faster) lifestyles.
  */
-export function calculateLifestyleMonthlyCost(lifestyle: Lifestyle): number {
+export function calculateLifestyleMonthlyCost(
+  lifestyle: Lifestyle,
+  lifestyleCatalog?: LifestyleData[]
+): number {
+  // If we have catalog data and expanded components, use the expanded calculator
+  if (lifestyleCatalog && lifestyle.components) {
+    const lifestyleData = lifestyleCatalog.find((l) => l.id === lifestyle.type);
+    if (lifestyleData) {
+      return calculateExpandedLifestyleCost({
+        lifestyleData,
+        components: lifestyle.components,
+        entertainmentOptions: lifestyle.entertainmentOptions,
+        entertainmentCatalog: [], // Costs already baked into entertainmentOptions at save
+        modifications: lifestyle.modifications,
+        customExpenses: lifestyle.customExpenses,
+        customIncome: lifestyle.customIncome,
+      });
+    }
+  }
+
+  // Simple cost calculation (backward compatible)
   const baseCost = lifestyle.monthlyCost;
 
   const modificationsCost = (lifestyle.modifications || []).reduce((sum, mod) => {
@@ -59,6 +81,12 @@ function getTierColor(type: string): string {
       return "bg-purple-100 text-purple-700 dark:bg-purple-900/50 dark:text-purple-300";
     case "luxury":
       return "bg-amber-100 text-amber-700 dark:bg-amber-900/50 dark:text-amber-300";
+    case "bolt-hole":
+      return "bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300";
+    case "traveler":
+      return "bg-indigo-100 text-indigo-700 dark:bg-indigo-900/50 dark:text-indigo-300";
+    case "commercial":
+      return "bg-teal-100 text-teal-700 dark:bg-teal-900/50 dark:text-teal-300";
     default:
       return "bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300";
   }
@@ -67,6 +95,16 @@ function getTierColor(type: string): string {
 function getTierName(type: string, lifestyleCatalog: LifestyleData[]): string {
   return lifestyleCatalog.find((lt) => lt.id === type)?.name || type;
 }
+
+// =============================================================================
+// COMPONENT LABELS
+// =============================================================================
+
+const COMPONENT_LABELS: Record<string, string> = {
+  comfortsAndNecessities: "C&N",
+  security: "Security",
+  neighborhood: "Neighborhood",
+};
 
 // =============================================================================
 // LIFESTYLE ROW
@@ -96,8 +134,10 @@ function LifestyleRow({
   onPayMonth,
   lifestyleCatalog,
 }: LifestyleRowProps) {
-  const monthlyCost = calculateLifestyleMonthlyCost(lifestyle);
+  const monthlyCost = calculateLifestyleMonthlyCost(lifestyle, lifestyleCatalog);
   const [confirmRemove, setConfirmRemove] = useState(false);
+  const hasComponents = !!lifestyle.components;
+  const hasEntertainment = (lifestyle.entertainmentOptions || []).length > 0;
 
   return (
     <div className="border-b border-zinc-100 last:border-b-0 dark:border-zinc-800">
@@ -152,6 +192,60 @@ function LifestyleRow({
       {/* Expanded content */}
       {isExpanded && (
         <div className="ml-5 space-y-3 border-l-2 border-zinc-200 pb-3 pl-3 dark:border-zinc-700">
+          {/* Component Levels */}
+          {hasComponents && lifestyle.components && (
+            <div>
+              <div className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+                Components
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {(
+                  Object.entries(lifestyle.components) as [
+                    keyof typeof lifestyle.components,
+                    number,
+                  ][]
+                ).map(([key, level]) => (
+                  <span
+                    key={key}
+                    className="rounded border border-zinc-200 bg-zinc-50 px-2 py-0.5 text-xs dark:border-zinc-700 dark:bg-zinc-800"
+                  >
+                    <span className="font-medium text-zinc-700 dark:text-zinc-300">
+                      {COMPONENT_LABELS[key] || key}
+                    </span>
+                    <span className="ml-1 text-zinc-500 dark:text-zinc-400">{level}</span>
+                  </span>
+                ))}
+              </div>
+              {/* Point allocation summary */}
+              {lifestyle.pointsSpent !== undefined && (
+                <div className="mt-1 text-[10px] text-zinc-500 dark:text-zinc-400">
+                  {lifestyle.pointsSpent} points allocated
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Entertainment Options */}
+          {hasEntertainment && (
+            <div>
+              <div className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+                Entertainment
+              </div>
+              <div className="space-y-1">
+                {(lifestyle.entertainmentOptions || []).map((opt) => (
+                  <div key={opt.catalogId} className="flex items-center gap-2 text-xs">
+                    <span className="text-zinc-700 dark:text-zinc-300">{opt.name}</span>
+                    {opt.quantity > 1 && (
+                      <span className="rounded bg-zinc-200 px-1 py-0.5 text-[10px] font-medium text-zinc-600 dark:bg-zinc-700 dark:text-zinc-400">
+                        ×{opt.quantity}
+                      </span>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* Modifications */}
           {(lifestyle.modifications || []).length > 0 && (
             <div>
@@ -328,7 +422,7 @@ export function LifestylesDisplay({
   }
 
   const totalMonthlyCost = lifestyles.reduce(
-    (sum, ls) => sum + calculateLifestyleMonthlyCost(ls),
+    (sum, ls) => sum + calculateLifestyleMonthlyCost(ls, lifestyleCatalog),
     0
   );
   const isLowFunds = character.nuyen < totalMonthlyCost;
@@ -355,6 +449,8 @@ export function LifestylesDisplay({
     modifications: ls.modifications || [],
     subscriptions: ls.subscriptions || [],
     prepaidMonths: ls.prepaidMonths || 0,
+    components: ls.components,
+    entertainmentOptions: ls.entertainmentOptions,
   });
 
   // Convert NewLifestyleState back to Lifestyle
@@ -371,6 +467,9 @@ export function LifestylesDisplay({
       modifications: form.modifications.length > 0 ? form.modifications : undefined,
       subscriptions: (form.subscriptions || []).length > 0 ? form.subscriptions : undefined,
       prepaidMonths: (form.prepaidMonths ?? 0) > 0 ? form.prepaidMonths : undefined,
+      components: form.components,
+      entertainmentOptions:
+        (form.entertainmentOptions || []).length > 0 ? form.entertainmentOptions : undefined,
     };
   };
 
@@ -408,7 +507,6 @@ export function LifestylesDisplay({
     const prepaid = lifestyle.prepaidMonths ?? 0;
 
     if (prepaid > 0) {
-      // Decrement prepaid months locally
       onCharacterUpdate({
         ...character,
         lifestyles: lifestyles.map((ls, i) =>
@@ -416,8 +514,7 @@ export function LifestylesDisplay({
         ),
       });
     } else {
-      // Deduct nuyen via gameplay API
-      const cost = calculateLifestyleMonthlyCost(lifestyle);
+      const cost = calculateLifestyleMonthlyCost(lifestyle, lifestyleCatalog);
       if (character.nuyen < cost) return;
 
       try {

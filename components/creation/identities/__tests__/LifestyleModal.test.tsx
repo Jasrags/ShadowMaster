@@ -22,6 +22,8 @@ vi.mock("@/lib/rules/RulesetContext", () => ({
     { id: "high", name: "High", monthlyCost: 10000, startingNuyen: "4d6 × 500" },
     { id: "luxury", name: "Luxury", monthlyCost: 100000, startingNuyen: "6d6 × 1000" },
   ],
+  useEntertainmentOptions: () => [],
+  useLifestyleModifications: () => [],
 }));
 
 // Mock the Modal wrapper
@@ -61,6 +63,13 @@ vi.mock("../../shared/LifestyleModificationSelector", () => ({
     >
       + Add Modification
     </button>
+  ),
+}));
+
+// Mock EntertainmentOptionSelector
+vi.mock("../../shared/EntertainmentOptionSelector", () => ({
+  EntertainmentOptionSelector: () => (
+    <button data-testid="add-entertainment-btn">+ Add Entertainment</button>
   ),
 }));
 
