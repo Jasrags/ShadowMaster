@@ -1,4 +1,10 @@
-import type { LifestyleModification, LifestyleSubscription, SinnerQuality } from "@/lib/types";
+import type {
+  LifestyleModification,
+  LifestyleSubscription,
+  LifestyleComponentSelections,
+  LifestyleEntertainmentOption,
+  SinnerQuality,
+} from "@/lib/types";
 
 export type ModalType =
   | "identity"
@@ -30,6 +36,8 @@ export interface NewLifestyleState {
   modifications: LifestyleModification[];
   subscriptions?: LifestyleSubscription[];
   prepaidMonths?: number;
+  components?: LifestyleComponentSelections;
+  entertainmentOptions?: LifestyleEntertainmentOption[];
 }
 
 export interface IdentityModalProps {

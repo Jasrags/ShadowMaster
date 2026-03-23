@@ -21,6 +21,7 @@ vi.mock("@/lib/rules/RulesetContext", () => ({
     { id: "high", name: "High", monthlyCost: 10000, startingNuyen: "4d6 × 500" },
     { id: "luxury", name: "Luxury", monthlyCost: 100000, startingNuyen: "6d6 × 1000" },
   ],
+  useEntertainmentOptions: () => [],
 }));
 
 // Mock the LifestyleModal since it depends on RulesetContext

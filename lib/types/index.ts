@@ -148,6 +148,8 @@ export type {
   Lifestyle,
   LifestyleModification,
   LifestyleSubscription,
+  LifestyleComponentSelections,
+  LifestyleEntertainmentOption,
   SIN,
   License,
   Identity,

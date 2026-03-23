@@ -27,3 +27,4 @@ export { BulkQuantitySelector } from "./BulkQuantitySelector";
 export type { BulkQuantitySelectorProps } from "./BulkQuantitySelector";
 export { LifestyleModificationSelector } from "./LifestyleModificationSelector";
 export { LifestyleSubscriptionSelector } from "./LifestyleSubscriptionSelector";
+export { EntertainmentOptionSelector } from "./EntertainmentOptionSelector";

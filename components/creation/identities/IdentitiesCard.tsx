@@ -268,6 +268,11 @@ export function IdentitiesCard({ state, updateState }: IdentitiesCardProps) {
         notes: lifestyleData.notes || undefined,
         modifications:
           lifestyleData.modifications.length > 0 ? lifestyleData.modifications : undefined,
+        components: lifestyleData.components,
+        entertainmentOptions:
+          (lifestyleData.entertainmentOptions || []).length > 0
+            ? lifestyleData.entertainmentOptions
+            : undefined,
         // Associate with the identity
         associatedIdentityId: identity.id,
       };
@@ -377,6 +382,11 @@ export function IdentitiesCard({ state, updateState }: IdentitiesCardProps) {
         notes: lifestyleData.notes || undefined,
         modifications:
           lifestyleData.modifications.length > 0 ? lifestyleData.modifications : undefined,
+        components: lifestyleData.components,
+        entertainmentOptions:
+          (lifestyleData.entertainmentOptions || []).length > 0
+            ? lifestyleData.entertainmentOptions
+            : undefined,
       };
 
       const updatedLifestyles = [...lifestyles];
@@ -608,6 +618,8 @@ export function IdentitiesCard({ state, updateState }: IdentitiesCardProps) {
                 customIncome: currentLifestyle.customIncome || 0,
                 notes: currentLifestyle.notes || "",
                 modifications: currentLifestyle.modifications || [],
+                components: currentLifestyle.components,
+                entertainmentOptions: currentLifestyle.entertainmentOptions,
               }}
             />
           )}
