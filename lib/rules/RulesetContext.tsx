@@ -51,6 +51,7 @@ import type {
   CyberwareModificationCatalogItemData,
   GearModificationCatalogItemData,
   LifestyleSubscriptionCatalogItem,
+  LifestyleData,
   ActionsCatalogData,
   DataSoftwareCatalogData,
   DataSoftwareCatalogItemData,
@@ -58,6 +59,8 @@ import type {
   ToxinCatalogItemData,
   InfectedCatalogData,
   GearCatalogData,
+  EntertainmentOptionCatalogItem,
+  NeighborhoodZoneData,
 } from "./loader-types";
 import type { LifestyleModificationCatalogItem } from "./module-payloads";
 export type { GearCatalogData } from "./loader-types";
@@ -172,13 +175,14 @@ export interface MagicPathData {
   hasResonance?: boolean;
 }
 
-export interface LifestyleData {
-  id: string;
-  name: string;
-  monthlyCost: number;
-  startingNuyen: string;
-  description?: string;
-}
+// LifestyleData re-exported from loader-types.ts (single source of truth)
+export type {
+  LifestyleData,
+  LifestyleComponents,
+  LifestyleComponentLevel,
+  EntertainmentOptionCatalogItem,
+  NeighborhoodZoneData,
+} from "./loader-types";
 
 export interface GearItemData {
   id: string;
@@ -622,6 +626,8 @@ export interface RulesetData {
   lifestyleModifiers: Record<string, number>;
   lifestyleSubscriptions: LifestyleSubscriptionCatalogItem[];
   lifestyleModifications: LifestyleModificationCatalogItem[];
+  entertainmentOptions: EntertainmentOptionCatalogItem[];
+  neighborhoodZones: NeighborhoodZoneData[];
   gear: GearCatalogData | null;
   modifications: ModificationsCatalogData | null;
   spells: SpellsCatalogData | null;
@@ -689,6 +695,8 @@ const defaultData: RulesetData = {
   lifestyleModifiers: {},
   lifestyleSubscriptions: [],
   lifestyleModifications: [],
+  entertainmentOptions: [],
+  neighborhoodZones: [],
   gear: null,
   modifications: null,
   spells: null,
@@ -783,6 +791,8 @@ export function RulesetProvider({ children }: RulesetProviderProps) {
             lifestyleModifiers: extractedData.lifestyleModifiers || {},
             lifestyleSubscriptions: extractedData.lifestyleSubscriptions || [],
             lifestyleModifications: extractedData.lifestyleModifications || [],
+            entertainmentOptions: extractedData.entertainmentOptions || [],
+            neighborhoodZones: extractedData.neighborhoodZones || [],
             gear: extractedData.gear || null,
             modifications: extractedData.modifications || null,
             spells: extractedData.spells || null,
@@ -1316,6 +1326,22 @@ export function useLifestyleSubscriptions(): LifestyleSubscriptionCatalogItem[] 
 export function useLifestyleModifications(): LifestyleModificationCatalogItem[] {
   const { data } = useRuleset();
   return data.lifestyleModifications;
+}
+
+/**
+ * Hook to get entertainment options catalog
+ */
+export function useEntertainmentOptions(): EntertainmentOptionCatalogItem[] {
+  const { data } = useRuleset();
+  return data.entertainmentOptions;
+}
+
+/**
+ * Hook to get neighborhood zone classifications
+ */
+export function useNeighborhoodZones(): NeighborhoodZoneData[] {
+  const { data } = useRuleset();
+  return data.neighborhoodZones;
 }
 
 /**
