@@ -33,9 +33,11 @@ function ScorePill({
   color: "emerald" | "red" | "amber";
 }) {
   const colors = {
-    emerald: "bg-emerald-500/10 border-emerald-500/30 text-emerald-400",
-    red: "bg-red-500/10 border-red-500/30 text-red-400",
-    amber: "bg-amber-500/10 border-amber-500/30 text-amber-400",
+    emerald:
+      "bg-emerald-50 border-emerald-300 text-emerald-700 dark:bg-emerald-500/10 dark:border-emerald-500/30 dark:text-emerald-400",
+    red: "bg-red-50 border-red-300 text-red-700 dark:bg-red-500/10 dark:border-red-500/30 dark:text-red-400",
+    amber:
+      "bg-amber-50 border-amber-300 text-amber-700 dark:bg-amber-500/10 dark:border-amber-500/30 dark:text-amber-400",
   };
 
   return (
@@ -60,17 +62,21 @@ function TriggerItem({
   isBusy: boolean;
 }) {
   return (
-    <div className="flex items-center justify-between gap-2 rounded-md border border-zinc-700/50 bg-zinc-800/30 px-3 py-2">
+    <div className="flex items-center justify-between gap-2 rounded-md border border-zinc-200 bg-zinc-50 px-3 py-2 dark:border-zinc-700/50 dark:bg-zinc-800/30">
       <div className="flex-1 min-w-0">
-        <div className="text-sm text-zinc-200 truncate">{trigger.name}</div>
-        <div className="text-xs text-zinc-500 truncate">{trigger.description}</div>
+        <div className="text-sm text-zinc-800 truncate dark:text-zinc-200">{trigger.name}</div>
+        <div className="text-xs text-zinc-500 truncate dark:text-zinc-500">
+          {trigger.description}
+        </div>
       </div>
       <div className="flex items-center gap-2 shrink-0">
-        <span className="text-xs font-mono text-red-400">+{trigger.notorietyChange}</span>
+        <span className="text-xs font-mono text-red-600 dark:text-red-400">
+          +{trigger.notorietyChange}
+        </span>
         <AriaButton
           onPress={() => onApply(trigger)}
           isDisabled={isBusy}
-          className="flex items-center gap-1 rounded border border-red-500/30 bg-red-500/10 px-2 py-1 text-xs text-red-400 hover:bg-red-500/20 transition-colors disabled:opacity-50"
+          className="flex items-center gap-1 rounded border border-red-300 bg-red-50 px-2 py-1 text-xs text-red-600 hover:bg-red-100 transition-colors disabled:opacity-50 dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-400 dark:hover:bg-red-500/20"
         >
           <Plus className="h-3 w-3" />
           Apply
@@ -105,27 +111,29 @@ function LogEntry({
     <div
       className={`flex items-center justify-between gap-2 rounded-md border px-3 py-2 ${
         isReversed
-          ? "border-zinc-700/30 bg-zinc-800/10 opacity-50"
-          : "border-zinc-700/50 bg-zinc-800/30"
+          ? "border-zinc-200/50 bg-zinc-100/50 opacity-50 dark:border-zinc-700/30 dark:bg-zinc-800/10"
+          : "border-zinc-200 bg-zinc-50 dark:border-zinc-700/50 dark:bg-zinc-800/30"
       }`}
     >
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
           <span
-            className={`text-sm ${isReversed ? "line-through text-zinc-500" : "text-zinc-200"}`}
+            className={`text-sm ${isReversed ? "line-through text-zinc-400 dark:text-zinc-500" : "text-zinc-800 dark:text-zinc-200"}`}
           >
             {record.triggerName}
           </span>
-          <span className={`text-xs font-mono ${isReversed ? "text-zinc-600" : "text-red-400"}`}>
+          <span
+            className={`text-xs font-mono ${isReversed ? "text-zinc-400 dark:text-zinc-600" : "text-red-600 dark:text-red-400"}`}
+          >
             +{record.notorietyChange}
           </span>
           {isReversed && (
-            <span className="text-xs font-mono text-emerald-500 border border-emerald-500/30 bg-emerald-500/10 rounded px-1">
+            <span className="text-xs font-mono text-emerald-600 border border-emerald-300 bg-emerald-50 rounded px-1 dark:text-emerald-500 dark:border-emerald-500/30 dark:bg-emerald-500/10">
               reversed
             </span>
           )}
         </div>
-        <div className="text-xs text-zinc-500">
+        <div className="text-xs text-zinc-500 dark:text-zinc-500">
           {formattedDate}
           {record.sessionNote && <> &mdash; {record.sessionNote}</>}
         </div>
@@ -134,7 +142,7 @@ function LogEntry({
         <AriaButton
           onPress={() => onReverse(record.id)}
           isDisabled={isBusy}
-          className="flex items-center gap-1 rounded border border-zinc-600/30 bg-zinc-700/20 px-2 py-1 text-xs text-zinc-400 hover:bg-zinc-700/40 hover:text-zinc-300 transition-colors disabled:opacity-50"
+          className="flex items-center gap-1 rounded border border-zinc-300 bg-zinc-100 px-2 py-1 text-xs text-zinc-600 hover:bg-zinc-200 hover:text-zinc-700 transition-colors disabled:opacity-50 dark:border-zinc-600/30 dark:bg-zinc-700/20 dark:text-zinc-400 dark:hover:bg-zinc-700/40 dark:hover:text-zinc-300"
         >
           <Undo2 className="h-3 w-3" />
           Undo
@@ -261,7 +269,7 @@ export function ReputationDisplay({ character, onUpdate }: ReputationDisplayProp
 
         {/* Error banner */}
         {error && (
-          <div className="rounded border border-red-500/30 bg-red-500/10 px-3 py-2 text-xs text-red-400">
+          <div className="rounded border border-red-300 bg-red-50 px-3 py-2 text-xs text-red-600 dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-400">
             {error}
           </div>
         )}
@@ -271,7 +279,7 @@ export function ReputationDisplay({ character, onUpdate }: ReputationDisplayProp
           <div>
             <AriaButton
               onPress={() => setShowTriggers(!showTriggers)}
-              className="flex items-center gap-1 text-xs text-zinc-400 hover:text-zinc-300 transition-colors"
+              className="flex items-center gap-1 text-xs text-zinc-500 hover:text-zinc-700 transition-colors dark:text-zinc-400 dark:hover:text-zinc-300"
             >
               {showTriggers ? (
                 <ChevronDown className="h-3 w-3" />
