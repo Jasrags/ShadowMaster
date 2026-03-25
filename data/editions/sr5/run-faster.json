@@ -16832,7 +16832,388 @@
     },
     "johnsonProfiles": {
       "mergeStrategy": "replace",
-      "payload": {}
+      "payload": {
+        "factions": [
+          {
+            "id": "ares-macrotechnology",
+            "name": "Ares Macrotechnology",
+            "category": "megacorporate",
+            "description": "The premier arms manufacturer and military contractor of the Sixth World. Ares Johnsons tend to be ex-military types who run tight operations. They pay well but expect professional behavior and clean results.",
+            "typicalJobs": [
+              "wetwork",
+              "extraction",
+              "sabotage",
+              "asset recovery",
+              "security testing"
+            ],
+            "source": "run-faster",
+            "page": 198
+          },
+          {
+            "id": "aztechnology",
+            "name": "Aztechnology",
+            "category": "megacorporate",
+            "description": "The most secretive of the Big Ten, with deep ties to blood magic and Aztlan. Aztechnology Johnsons are smooth operators who reveal as little as possible. Betrayal rates are notably high.",
+            "typicalJobs": [
+              "artifact recovery",
+              "ritual disruption",
+              "corporate espionage",
+              "wetwork",
+              "smuggling"
+            ],
+            "source": "run-faster",
+            "page": 199
+          },
+          {
+            "id": "evo",
+            "name": "Evo Corporation",
+            "category": "megacorporate",
+            "description": "The most metahuman-friendly megacorp, with a focus on biotech, nanotech, and space. Evo Johnsons are often non-human metatypes and tend toward progressive attitudes.",
+            "typicalJobs": [
+              "biotech acquisition",
+              "data theft",
+              "extraction",
+              "research protection",
+              "space-related ops"
+            ],
+            "source": "run-faster",
+            "page": 200
+          },
+          {
+            "id": "horizon",
+            "name": "Horizon Group",
+            "category": "megacorporate",
+            "description": "The media and public relations giant that runs on consensus and social manipulation. Horizon Johnsons are charismatic and charming but may be running deeper agendas behind a friendly facade.",
+            "typicalJobs": [
+              "information control",
+              "media manipulation",
+              "talent extraction",
+              "social engineering",
+              "data retrieval"
+            ],
+            "source": "run-faster",
+            "page": 200
+          },
+          {
+            "id": "mitsuhama-computer-technologies",
+            "name": "Mitsuhama Computer Technologies",
+            "category": "megacorporate",
+            "description": "A computing and robotics powerhouse with yakuza roots. MCT Johnsons are formal, expect respect for hierarchy, and zero-tolerance for failure. Their security is among the tightest in the corporate world.",
+            "typicalJobs": [
+              "matrix operations",
+              "robotics theft",
+              "magical research",
+              "wetwork",
+              "corporate espionage"
+            ],
+            "source": "run-faster",
+            "page": 201
+          },
+          {
+            "id": "neonet",
+            "name": "NeoNET",
+            "category": "megacorporate",
+            "description": "A major Matrix infrastructure provider struggling with internal instability. NeoNET Johnsons may be working competing internal agendas, making them unpredictable employers.",
+            "typicalJobs": ["matrix ops", "data theft", "asset recovery", "sabotage", "extraction"],
+            "source": "run-faster",
+            "page": 202
+          },
+          {
+            "id": "renraku-computer-systems",
+            "name": "Renraku Computer Systems",
+            "category": "megacorporate",
+            "description": "A computing megacorp still recovering from the Arcology shutdown. Renraku Johnsons are exacting, detail-oriented, and expect precise execution of objectives.",
+            "typicalJobs": [
+              "matrix operations",
+              "data acquisition",
+              "extraction",
+              "counter-intelligence",
+              "security testing"
+            ],
+            "source": "run-faster",
+            "page": 202
+          },
+          {
+            "id": "saeder-krupp",
+            "name": "Saeder-Krupp Heavy Industries",
+            "category": "megacorporate",
+            "description": "The largest megacorp, personally owned by the great dragon Lofwyr. Saeder-Krupp Johnsons are efficient and businesslike, with operations that are typically well-planned and well-funded.",
+            "typicalJobs": [
+              "industrial espionage",
+              "extraction",
+              "asset denial",
+              "sabotage",
+              "investigation"
+            ],
+            "source": "run-faster",
+            "page": 203
+          },
+          {
+            "id": "shiawase",
+            "name": "Shiawase Corporation",
+            "category": "megacorporate",
+            "description": "The oldest megacorp, a family-run Japanese conglomerate focused on energy, biotech, and environmental engineering. Shiawase Johnsons are traditionalist and value loyalty and discretion.",
+            "typicalJobs": [
+              "environmental ops",
+              "energy sector sabotage",
+              "biotech theft",
+              "extraction",
+              "corporate espionage"
+            ],
+            "source": "run-faster",
+            "page": 203
+          },
+          {
+            "id": "wuxing",
+            "name": "Wuxing Incorporated",
+            "category": "megacorporate",
+            "description": "A Chinese megacorp focused on shipping, finance, and magical goods. Wuxing Johnsons tend to employ feng shui and geomantic considerations and favor magical operatives.",
+            "typicalJobs": [
+              "magical acquisition",
+              "shipping disruption",
+              "financial operations",
+              "astral ops",
+              "smuggling"
+            ],
+            "source": "run-faster",
+            "page": 204
+          },
+          {
+            "id": "mafia",
+            "name": "The Mafia",
+            "category": "syndicate",
+            "description": "Old-world organized crime families adapted to the Sixth World. Mafia Johnsons value loyalty, respect, and keeping business professional. They pay fairly but expect omerta.",
+            "typicalJobs": [
+              "enforcement",
+              "intimidation",
+              "smuggling",
+              "territory defense",
+              "debt collection"
+            ],
+            "source": "run-faster",
+            "page": 205
+          },
+          {
+            "id": "yakuza",
+            "name": "The Yakuza",
+            "category": "syndicate",
+            "description": "Japanese organized crime with a rigid code of honor. Yakuza Johnsons expect formality and respect. Failure is not tolerated, but honorable conduct is rewarded.",
+            "typicalJobs": [
+              "enforcement",
+              "territory ops",
+              "smuggling",
+              "protection rackets",
+              "corporate infiltration"
+            ],
+            "source": "run-faster",
+            "page": 206
+          },
+          {
+            "id": "triads",
+            "name": "The Triads",
+            "category": "syndicate",
+            "description": "Chinese organized crime syndicates with deep roots in smuggling and magical operations. Triad Johnsons are pragmatic and business-focused, with extensive magical resources.",
+            "typicalJobs": [
+              "smuggling",
+              "magical operations",
+              "territory control",
+              "BTL distribution",
+              "enforcement"
+            ],
+            "source": "run-faster",
+            "page": 206
+          },
+          {
+            "id": "vory",
+            "name": "The Vory v Zakone",
+            "category": "syndicate",
+            "description": "Russian organized crime known for extreme violence and no formal code of honor. Vory Johnsons are unpredictable and dangerous employers who may betray runners on a whim.",
+            "typicalJobs": ["wetwork", "intimidation", "smuggling", "matrix crime", "arms dealing"],
+            "source": "run-faster",
+            "page": 207
+          },
+          {
+            "id": "humanis",
+            "name": "Humanis Policlub",
+            "category": "extremist",
+            "description": "The largest anti-metahuman hate group in the Sixth World. Humanis Johnsons are ideologically driven and target metahuman communities, organizations, and businesses.",
+            "typicalJobs": [
+              "intimidation",
+              "sabotage",
+              "propaganda",
+              "anti-metahuman ops",
+              "arson"
+            ],
+            "source": "run-faster",
+            "page": 208
+          },
+          {
+            "id": "mothers-of-metahumans",
+            "name": "Mothers of Metahumans",
+            "category": "extremist",
+            "description": "A pro-metahuman activist organization that sometimes crosses the line into eco-terrorism and direct action. Their Johnsons are passionate and mission-driven.",
+            "typicalJobs": [
+              "data exposure",
+              "sabotage",
+              "liberation ops",
+              "propaganda",
+              "investigation"
+            ],
+            "source": "run-faster",
+            "page": 208
+          },
+          {
+            "id": "alamos-twenty-thousand",
+            "name": "Alamos 20,000",
+            "category": "extremist",
+            "description": "A violent anti-metahuman terrorist organization that targets metahumans and their allies. Alamos Johnsons are dangerous fanatics willing to sacrifice runners for their cause.",
+            "typicalJobs": ["terrorism", "wetwork", "sabotage", "bombing", "anti-metahuman ops"],
+            "source": "run-faster",
+            "page": 209
+          },
+          {
+            "id": "amateur-johnsons",
+            "name": "Amateur Johnsons",
+            "category": "amateur",
+            "description": "Private citizens, small business owners, or others who have never hired shadowrunners before. Amateur Johnsons are unpredictable: they may underpay, over-explain, panic, or accidentally compromise operational security.",
+            "typicalJobs": [
+              "personal vendettas",
+              "missing persons",
+              "theft recovery",
+              "protection",
+              "investigation"
+            ],
+            "source": "run-faster",
+            "page": 210
+          }
+        ],
+        "notorietyTriggers": [
+          {
+            "id": "manipulation-magic-during-meet",
+            "name": "Using Manipulation Magic During the Meet",
+            "description": "Casting manipulation spells (such as Influence or Control Thoughts) on a Mr. Johnson during a meet. If detected, this is considered an extreme breach of professional etiquette.",
+            "notorietyChange": 1,
+            "phase": "the-meet",
+            "source": "run-faster",
+            "page": 196
+          },
+          {
+            "id": "appearing-heavily-armed",
+            "name": "Appearing Heavily Armed at the Meet",
+            "description": "Showing up to a meet visibly carrying heavy weapons, military armor, or other obviously threatening gear inappropriate for the venue. This makes the Johnson nervous and marks the team as amateurs.",
+            "notorietyChange": 1,
+            "phase": "the-meet",
+            "source": "run-faster",
+            "page": 196
+          },
+          {
+            "id": "hacking-johnsons-commlink",
+            "name": "Hacking the Johnson's Commlink",
+            "description": "Attempting to hack into a Mr. Johnson's commlink during or around the meet. Even if successful, this damages the team's professional reputation when word gets around.",
+            "notorietyChange": 1,
+            "phase": "the-meet",
+            "source": "run-faster",
+            "page": 196
+          },
+          {
+            "id": "killing-a-paying-johnson",
+            "name": "Killing a Paying Johnson",
+            "description": "Murdering a Mr. Johnson who has not betrayed the team. This is the ultimate breach of shadowrunner professionalism and sends a chilling message through the shadow community.",
+            "notorietyChange": 3,
+            "source": "run-faster",
+            "page": 197
+          }
+        ],
+        "runPhases": [
+          {
+            "id": "the-meet",
+            "name": "The Meet",
+            "description": "The initial contact between Mr. Johnson and the shadowrunner team. This is where the job is described, terms are negotiated, and first impressions are formed. The meet typically occurs in a neutral, public location chosen by the Johnson or the team's fixer.",
+            "keyConsiderations": [
+              "Choose a location that is neutral ground for both parties",
+              "Runners should perform basic counter-surveillance",
+              "Negotiation tests determine final payment and conditions",
+              "The Johnson may withhold critical information to test the team",
+              "Professional behavior at the meet affects future job offers"
+            ],
+            "source": "run-faster",
+            "page": 196
+          },
+          {
+            "id": "the-run",
+            "name": "The Run",
+            "description": "The active execution phase where the shadowrunner team carries out the job. This encompasses all planning, legwork, and operational phases from accepting the job to completing the objective.",
+            "keyConsiderations": [
+              "Legwork phase is critical for gathering intelligence",
+              "Plans should account for contingencies and escape routes",
+              "Collateral damage and civilian casualties increase notoriety",
+              "Leaving evidence linking the job to the Johnson is unprofessional",
+              "Deviating from the agreed-upon objectives can void payment"
+            ],
+            "source": "run-faster",
+            "page": 197
+          },
+          {
+            "id": "the-handoff",
+            "name": "The Handoff",
+            "description": "The final phase where the team delivers results and receives payment. The handoff location and method are typically arranged during the meet. This is often the most dangerous phase, as betrayals most commonly occur at this point.",
+            "keyConsiderations": [
+              "Always arrange a secure handoff location with escape routes",
+              "Verify payment before handing over goods or data",
+              "Be prepared for double-crosses, especially from unknown Johnsons",
+              "A fixer can serve as a trusted intermediary for the exchange",
+              "Successful handoffs build reputation for future work"
+            ],
+            "source": "run-faster",
+            "page": 197
+          }
+        ],
+        "betrayalTypes": [
+          {
+            "id": "non-payment",
+            "name": "Non-Payment",
+            "description": "The Johnson refuses to pay the agreed-upon fee after the job is completed. This can range from partial payment to complete refusal, sometimes accompanied by threats or excuses.",
+            "severity": "moderate",
+            "warningSignals": [
+              "Johnson is evasive about payment details during the meet",
+              "Payment terms are unusually complex or conditional",
+              "Johnson represents an unknown or unverifiable organization",
+              "Fixer has no prior history with this Johnson"
+            ],
+            "source": "run-faster",
+            "page": 210
+          },
+          {
+            "id": "liquidation",
+            "name": "Liquidation",
+            "description": "The Johnson arranges for the team to be eliminated after completing the job to tie up loose ends. This is the most feared form of betrayal and is typically employed when the job involves extremely sensitive information.",
+            "severity": "lethal",
+            "warningSignals": [
+              "Job involves extremely sensitive corporate or government secrets",
+              "Johnson insists on a specific handoff location they control",
+              "Unusually high pay for a seemingly straightforward job",
+              "Johnson shows no interest in establishing ongoing relationship"
+            ],
+            "source": "run-faster",
+            "page": 211
+          },
+          {
+            "id": "suicide-run",
+            "name": "Suicide Run",
+            "description": "The job itself is designed to be fatal. The Johnson sends the team against impossible odds with no intention of them surviving, let alone completing the objective. The team is expendable and the real goal may be entirely different from the stated mission.",
+            "severity": "lethal",
+            "warningSignals": [
+              "Intelligence provided is suspiciously sparse or outdated",
+              "Target security is far beyond what was described",
+              "Johnson is unconcerned about team composition or capabilities",
+              "No extraction plan is discussed or offered",
+              "Pay is astronomical for the stated difficulty level"
+            ],
+            "source": "run-faster",
+            "page": 211
+          }
+        ]
+      }
     }
   }
 }

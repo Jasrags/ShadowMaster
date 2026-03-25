@@ -1019,3 +1019,63 @@ export function extractEquipmentPacks(ruleset: LoadedRuleset): EquipmentPackCata
   const ruleModule = extractModule(ruleset, "equipmentPacks");
   return ruleModule?.packs || [];
 }
+
+// =============================================================================
+// JOHNSON PROFILES LOADER
+// =============================================================================
+
+import type {
+  JohnsonFactionData,
+  NotorietyTriggerData,
+  RunPhaseData,
+  BetrayalTypeData,
+  JohnsonProfilesModulePayload,
+} from "./loader-types";
+
+/**
+ * Load full Johnson profiles module from a ruleset
+ */
+export function extractJohnsonProfiles(
+  ruleset: LoadedRuleset
+): JohnsonProfilesModulePayload | null {
+  const ruleModule = extractModule(ruleset, "johnsonProfiles");
+  if (!ruleModule) return null;
+  return {
+    factions: ruleModule.factions || [],
+    notorietyTriggers: ruleModule.notorietyTriggers || [],
+    runPhases: ruleModule.runPhases || [],
+    betrayalTypes: ruleModule.betrayalTypes || [],
+  };
+}
+
+/**
+ * Load Johnson faction profiles from a ruleset
+ */
+export function extractJohnsonFactions(ruleset: LoadedRuleset): JohnsonFactionData[] {
+  const ruleModule = extractModule(ruleset, "johnsonProfiles");
+  return ruleModule?.factions || [];
+}
+
+/**
+ * Load notoriety triggers from a ruleset
+ */
+export function extractNotorietyTriggers(ruleset: LoadedRuleset): NotorietyTriggerData[] {
+  const ruleModule = extractModule(ruleset, "johnsonProfiles");
+  return ruleModule?.notorietyTriggers || [];
+}
+
+/**
+ * Load run lifecycle phases from a ruleset
+ */
+export function extractRunPhases(ruleset: LoadedRuleset): RunPhaseData[] {
+  const ruleModule = extractModule(ruleset, "johnsonProfiles");
+  return ruleModule?.runPhases || [];
+}
+
+/**
+ * Load betrayal types from a ruleset
+ */
+export function extractBetrayalTypes(ruleset: LoadedRuleset): BetrayalTypeData[] {
+  const ruleModule = extractModule(ruleset, "johnsonProfiles");
+  return ruleModule?.betrayalTypes || [];
+}

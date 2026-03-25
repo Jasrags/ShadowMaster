@@ -31,6 +31,7 @@ const CATEGORY_LABELS: Record<string, string> = {
   contactTemplates: "Contact Templates",
   favorServices: "Favor Services",
   actions: "Actions",
+  johnsonProfiles: "Johnson Profiles",
 };
 
 const PAGE_SIZE = 50;

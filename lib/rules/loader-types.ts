@@ -1703,4 +1703,11 @@ export type {
   EquipmentPackItem,
   EquipmentPackCatalogItem,
   EquipmentPacksModulePayload,
+  JohnsonFactionCategory,
+  JohnsonFactionData,
+  NotorietyTriggerData,
+  RunPhaseData,
+  BetrayalSeverity,
+  BetrayalTypeData,
+  JohnsonProfilesModulePayload,
 } from "./module-payloads";

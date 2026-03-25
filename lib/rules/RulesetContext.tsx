@@ -62,7 +62,11 @@ import type {
   EntertainmentOptionCatalogItem,
   NeighborhoodZoneData,
 } from "./loader-types";
-import type { LifestyleModificationCatalogItem, EquipmentPackCatalogItem } from "./module-payloads";
+import type {
+  LifestyleModificationCatalogItem,
+  EquipmentPackCatalogItem,
+  JohnsonProfilesModulePayload,
+} from "./module-payloads";
 export type { GearCatalogData } from "./loader-types";
 export type {
   QualityData,
@@ -648,6 +652,7 @@ export interface RulesetData {
   spirits: SpiritsCatalogData | null;
   actions: ActionsCatalogData | null;
   equipmentPacks: EquipmentPackCatalogItem[];
+  johnsonProfiles: JohnsonProfilesModulePayload | null;
   lifeModules: LifeModulesCatalog | null;
   infectedCatalog: InfectedCatalogData | null;
 }
@@ -718,6 +723,7 @@ const defaultData: RulesetData = {
   spirits: null,
   actions: null,
   equipmentPacks: [],
+  johnsonProfiles: null,
   lifeModules: null,
   infectedCatalog: null,
 };
@@ -815,6 +821,7 @@ export function RulesetProvider({ children }: RulesetProviderProps) {
             spirits: extractedData.spirits || null,
             actions: extractedData.actions || null,
             equipmentPacks: extractedData.equipmentPacks || [],
+            johnsonProfiles: extractedData.johnsonProfiles || null,
             lifeModules: extractedData.lifeModules || null,
             infectedCatalog: extractedData.infectedCatalog || null,
           }
@@ -2433,6 +2440,14 @@ export function useActionsByDomain(
 export function useEquipmentPacks(): EquipmentPackCatalogItem[] {
   const { data } = useRuleset();
   return data.equipmentPacks;
+}
+
+/**
+ * Hook to get Johnson profiles (factions, notoriety triggers, run phases, betrayal types)
+ */
+export function useJohnsonProfiles(): JohnsonProfilesModulePayload | null {
+  const { data } = useRuleset();
+  return data.johnsonProfiles;
 }
 
 /**

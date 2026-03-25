@@ -268,6 +268,18 @@ const moduleExtractors: Record<string, ModuleExtractor> = {
     }
     return items;
   },
+
+  johnsonProfiles: (payload, sourceBook) => [
+    ...extractNamedArray(payload.factions, "johnsonProfiles", "Factions", sourceBook),
+    ...extractNamedArray(
+      payload.notorietyTriggers,
+      "johnsonProfiles",
+      "Notoriety Triggers",
+      sourceBook
+    ),
+    ...extractNamedArray(payload.runPhases, "johnsonProfiles", "Run Phases", sourceBook),
+    ...extractNamedArray(payload.betrayalTypes, "johnsonProfiles", "Betrayal Types", sourceBook),
+  ],
 };
 
 // Modules that are config-only, not browsable
