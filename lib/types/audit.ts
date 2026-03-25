@@ -60,6 +60,9 @@ export type AuditAction =
   // Active modifier actions
   | "modifier_applied"
   | "modifier_removed"
+  // Reputation actions
+  | "notoriety_trigger_applied"
+  | "notoriety_trigger_reversed"
   // Sync/Migration actions
   | "drift_detected"
   | "migration_started"

@@ -134,6 +134,25 @@ export interface TrainingPeriod {
 }
 
 /**
+ * Record of a notoriety trigger applied to a character.
+ * Immutable - records are never modified, only new ones are created.
+ * Reversal creates a compensating record rather than deleting the original.
+ */
+export interface NotorietyTriggerRecord {
+  id: ID;
+  triggerId: string;
+  triggerName: string;
+  notorietyChange: number;
+  appliedAt: ISODateString;
+  appliedBy: ID;
+  /** Set when this trigger application is reversed */
+  reversedAt?: ISODateString;
+  reversedBy?: ID;
+  /** Optional session or run context note */
+  sessionNote?: string;
+}
+
+/**
  * A complete Shadowrun character
  */
 export interface Character {
@@ -527,6 +546,8 @@ export interface Character {
     streetCred: number;
     notoriety: number;
     publicAwareness: number;
+    /** Audit trail of applied notoriety triggers */
+    notorietyLog?: NotorietyTriggerRecord[];
   };
 
   // -------------------------------------------------------------------------

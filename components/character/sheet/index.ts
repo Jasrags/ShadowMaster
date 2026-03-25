@@ -24,6 +24,7 @@ export { IdentitiesDisplay } from "./IdentitiesDisplay";
 export { LifestylesDisplay } from "./LifestylesDisplay";
 export { KnowledgeLanguagesDisplay } from "./KnowledgeLanguagesDisplay";
 export { QualitiesDisplay } from "./QualitiesDisplay";
+export { ReputationDisplay } from "./ReputationDisplay";
 export { SkillsDisplay } from "./SkillsDisplay";
 export { SpellsDisplay } from "./SpellsDisplay";
 export { VehiclesDisplay } from "./VehiclesDisplay";

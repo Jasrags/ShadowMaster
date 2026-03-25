@@ -187,6 +187,7 @@ export type {
   TrainingStatus,
   AdvancementRecord,
   TrainingPeriod,
+  NotorietyTriggerRecord,
 } from "./character";
 
 // Quality types (additional types not re-exported from edition)
