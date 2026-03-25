@@ -220,6 +220,85 @@ export interface EquipmentPacksModulePayload {
 }
 
 // =============================================================================
+// JOHNSON PROFILES MODULE PAYLOAD
+// =============================================================================
+
+/**
+ * Faction category for Mr. Johnson employers (Run Faster pp. 196-211)
+ */
+export type JohnsonFactionCategory = "megacorporate" | "syndicate" | "extremist" | "amateur";
+
+/**
+ * Severity of a Johnson betrayal scenario
+ */
+export type BetrayalSeverity = "moderate" | "severe" | "lethal";
+
+/**
+ * A Johnson faction profile describing a typical employer organization
+ */
+export interface JohnsonFactionData {
+  id: string;
+  name: string;
+  category: JohnsonFactionCategory;
+  description: string;
+  typicalJobs?: string[];
+  source: string;
+  page: number;
+}
+
+/**
+ * An action that triggers notoriety gain during runs
+ */
+export interface NotorietyTriggerData {
+  id: string;
+  name: string;
+  description: string;
+  notorietyChange: number;
+  phase?: string;
+  source: string;
+  page: number;
+}
+
+/**
+ * A phase in the run lifecycle (Meet, Run, Handoff)
+ */
+export interface RunPhaseData {
+  id: string;
+  name: string;
+  description: string;
+  keyConsiderations?: string[];
+  source: string;
+  page: number;
+}
+
+/**
+ * A type of Johnson betrayal scenario
+ */
+export interface BetrayalTypeData {
+  id: string;
+  name: string;
+  description: string;
+  severity: BetrayalSeverity;
+  warningSignals?: string[];
+  source: string;
+  page: number;
+}
+
+/**
+ * Johnson profiles module payload — Mr. Johnson faction profiles,
+ * notoriety triggers, run lifecycle phases, and betrayal types.
+ *
+ * Accessed by: extractJohnsonProfiles, extractJohnsonFactions,
+ * extractNotorietyTriggers, extractRunPhases, extractBetrayalTypes
+ */
+export interface JohnsonProfilesModulePayload {
+  factions: JohnsonFactionData[];
+  notorietyTriggers: NotorietyTriggerData[];
+  runPhases: RunPhaseData[];
+  betrayalTypes: BetrayalTypeData[];
+}
+
+// =============================================================================
 // RULE MODULE PAYLOAD MAP
 // =============================================================================
 
@@ -274,5 +353,5 @@ export interface RuleModulePayloadMap {
   equipmentPacks: EquipmentPacksModulePayload;
   metagenics: Record<string, unknown>;
   shapeshifters: Record<string, unknown>;
-  johnsonProfiles: Record<string, unknown>;
+  johnsonProfiles: JohnsonProfilesModulePayload;
 }
