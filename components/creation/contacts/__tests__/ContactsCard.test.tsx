@@ -130,6 +130,7 @@ vi.mock("../ContactKarmaConfirmModal", () => ({
 // Mock @/lib/rules hooks
 vi.mock("@/lib/rules", () => ({
   useContactTemplates: () => [],
+  useJohnsonProfiles: () => null,
   useMetatypes: () => [
     {
       id: "human",

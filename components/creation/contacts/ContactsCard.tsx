@@ -18,7 +18,12 @@ import { InfoTooltip } from "@/components/ui";
 import type { Contact } from "@/lib/types";
 import { useCreationBudgets } from "@/lib/contexts";
 import { FRIENDS_IN_HIGH_PLACES_CONTACT_MULTIPLIER } from "@/lib/rules/qualities/budget-modifiers";
-import { useContactTemplates, useMetatypes, useGameplayLevelModifiers } from "@/lib/rules";
+import {
+  useContactTemplates,
+  useMetatypes,
+  useGameplayLevelModifiers,
+  useJohnsonProfiles,
+} from "@/lib/rules";
 import { CreationCard, SummaryFooter } from "../shared";
 import { MIN_KARMA_PER_CONTACT, MAX_KARMA_PER_CONTACT } from "./constants";
 import { ContactModal } from "./ContactModal";
@@ -29,6 +34,8 @@ export function ContactsCard({ state, updateState }: ContactsCardProps) {
   const { budgets } = useCreationBudgets();
   const metatypes = useMetatypes();
   const contactTemplates = useContactTemplates();
+  const johnsonProfiles = useJohnsonProfiles();
+  const johnsonFactions = johnsonProfiles?.factions ?? [];
   const gameplayModifiers = useGameplayLevelModifiers(state.gameplayLevel);
 
   // Modal state
@@ -474,6 +481,7 @@ export function ContactsCard({ state, updateState }: ContactsCardProps) {
         templates={contactTemplates}
         maxCost={MAX_KARMA_PER_CONTACT}
         availableKarma={availableKarmaForModal}
+        johnsonFactions={johnsonFactions}
       />
 
       {/* Karma Confirmation Modal */}

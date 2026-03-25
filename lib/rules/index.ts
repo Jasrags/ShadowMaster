@@ -30,6 +30,7 @@ export {
   useSpriteTypes,
   useSpritePowers,
   useContactTemplates,
+  useJohnsonProfiles,
   useAdeptPowers,
   useFoci,
   useSpirits,

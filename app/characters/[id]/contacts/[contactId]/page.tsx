@@ -21,9 +21,11 @@ import type {
   FavorServiceDefinition,
   UpdateContactRequest,
 } from "@/lib/types";
+import type { JohnsonFactionData } from "@/lib/rules/loader-types";
 import { THEMES, DEFAULT_THEME } from "@/lib/themes";
 import { Section } from "../../components/Section";
 import { ContactFormModal } from "../components/ContactFormModal";
+import { FactionInfoCard } from "@/components/ui/FactionInfoCard";
 import { CallFavorModal } from "../components/CallFavorModal";
 import { SpendChipsModal } from "../components/SpendChipsModal";
 import { ConfirmActionModal } from "../components/ConfirmActionModal";
@@ -84,6 +86,7 @@ export default function ContactDetailPage({
   const [contact, setContact] = useState<SocialContact | null>(null);
   const [transactions, setTransactions] = useState<FavorTransaction[]>([]);
   const [favorServices, setFavorServices] = useState<FavorServiceDefinition[]>([]);
+  const [johnsonFactions, setJohnsonFactions] = useState<JohnsonFactionData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [actionLoading, setActionLoading] = useState(false);
@@ -98,6 +101,9 @@ export default function ContactDetailPage({
   const statusStyle = contact
     ? STATUS_STYLES[contact.status] || STATUS_STYLES.inactive
     : STATUS_STYLES.inactive;
+  const resolvedFaction = contact?.factionId
+    ? (johnsonFactions.find((f) => f.id === contact.factionId) ?? null)
+    : null;
 
   // Fetch data
   useEffect(() => {
@@ -120,15 +126,20 @@ export default function ContactDetailPage({
         setContact(contactData.contact);
         setTransactions(ledgerData.transactions || contactData.transactions || []);
 
-        // Fetch favor services
+        // Fetch favor services and Johnson factions
         if (charData.character?.editionCode) {
           try {
-            const favorCostsRes = await fetch(
-              `/api/editions/${charData.character.editionCode}/favor-costs`
-            );
+            const [favorCostsRes, rulesetRes] = await Promise.all([
+              fetch(`/api/editions/${charData.character.editionCode}/favor-costs`),
+              fetch(`/api/rulesets/${charData.character.editionCode}`),
+            ]);
             const favorCostsData = await favorCostsRes.json();
             if (favorCostsData.success) {
               setFavorServices(favorCostsData.services || []);
+            }
+            const rulesetData = await rulesetRes.json();
+            if (rulesetData.success) {
+              setJohnsonFactions(rulesetData.extractedData?.johnsonProfiles?.factions || []);
             }
           } catch {
             // May not exist yet
@@ -419,6 +430,9 @@ export default function ContactDetailPage({
                 )}
               </div>
 
+              {/* Johnson Faction */}
+              {resolvedFaction && <FactionInfoCard faction={resolvedFaction} />}
+
               {/* Meta info */}
               <div className="flex flex-wrap gap-4 text-sm">
                 {contact.location && (
@@ -683,6 +697,7 @@ export default function ContactDetailPage({
           handleUpdateContact as (data: import("@/lib/types").CreateContactRequest) => Promise<void>
         }
         contact={contact}
+        johnsonFactions={johnsonFactions}
         theme={theme}
       />
 

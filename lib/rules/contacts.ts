@@ -19,6 +19,7 @@ import type {
   CreateContactRequest,
   SocialCapital,
 } from "../types/contacts";
+import type { JohnsonFactionData } from "./loader-types";
 import { validateOrganizationContact, getOrganizationDefinition } from "./group-contacts";
 
 // =============================================================================
@@ -172,6 +173,51 @@ export function validateContact(
     errors,
     warnings,
   };
+}
+
+// =============================================================================
+// FACTION VALIDATION
+// =============================================================================
+
+/**
+ * Validate that a factionId references a valid Johnson faction from the loaded ruleset.
+ *
+ * @param factionId - Faction ID to validate
+ * @param availableFactions - Johnson factions from the loaded ruleset
+ * @returns Validation result with the resolved faction data
+ */
+export function validateFactionId(
+  factionId: string | undefined,
+  availableFactions: JohnsonFactionData[]
+): { valid: boolean; faction?: JohnsonFactionData; error?: string } {
+  if (!factionId) {
+    return { valid: true };
+  }
+
+  const faction = availableFactions.find((f) => f.id === factionId);
+  if (!faction) {
+    return {
+      valid: false,
+      error: `Unknown Johnson faction: "${factionId}"`,
+    };
+  }
+
+  return { valid: true, faction };
+}
+
+/**
+ * Resolve a factionId to its full JohnsonFactionData.
+ *
+ * @param factionId - Faction ID to resolve
+ * @param availableFactions - Johnson factions from the loaded ruleset
+ * @returns The matching faction data, or undefined if not found
+ */
+export function resolveFaction(
+  factionId: string | undefined,
+  availableFactions: JohnsonFactionData[]
+): JohnsonFactionData | undefined {
+  if (!factionId) return undefined;
+  return availableFactions.find((f) => f.id === factionId);
 }
 
 /**

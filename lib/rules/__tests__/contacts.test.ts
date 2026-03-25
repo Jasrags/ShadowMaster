@@ -12,10 +12,13 @@ import { describe, it, expect } from "vitest";
 import {
   validateContact,
   validateContactAgainstCampaign,
+  validateFactionId,
+  resolveFaction,
   isLoyaltyImprovementAllowed,
   getMaxConnection,
   getMaxLoyalty,
 } from "../contacts";
+import type { JohnsonFactionData } from "../loader-types";
 import type { SocialContact, SocialCapital, CreateContactRequest } from "@/lib/types/contacts";
 
 // =============================================================================
@@ -203,5 +206,84 @@ describe("validateContactAgainstCampaign", () => {
     );
     expect(result.valid).toBe(false);
     expect(result.errors[0]).toMatch(/exceeds campaign limit/);
+  });
+});
+
+// =============================================================================
+// FACTION VALIDATION
+// =============================================================================
+
+const MOCK_FACTIONS: JohnsonFactionData[] = [
+  {
+    id: "ares-macrotechnology",
+    name: "Ares Macrotechnology",
+    category: "megacorporate",
+    description: "Military-industrial megacorporation",
+    typicalJobs: ["Wetwork", "Extraction", "Sabotage"],
+    source: "Run Faster",
+    page: 197,
+  },
+  {
+    id: "yakuza",
+    name: "Yakuza",
+    category: "syndicate",
+    description: "Japanese organized crime syndicate",
+    typicalJobs: ["Smuggling", "Protection"],
+    source: "Run Faster",
+    page: 202,
+  },
+];
+
+describe("validateFactionId", () => {
+  it("should accept undefined factionId (no faction selected)", () => {
+    const result = validateFactionId(undefined, MOCK_FACTIONS);
+    expect(result.valid).toBe(true);
+    expect(result.faction).toBeUndefined();
+  });
+
+  it("should accept a valid factionId", () => {
+    const result = validateFactionId("ares-macrotechnology", MOCK_FACTIONS);
+    expect(result.valid).toBe(true);
+    expect(result.faction).toBeDefined();
+    expect(result.faction!.name).toBe("Ares Macrotechnology");
+  });
+
+  it("should reject an unknown factionId", () => {
+    const result = validateFactionId("unknown-corp", MOCK_FACTIONS);
+    expect(result.valid).toBe(false);
+    expect(result.error).toMatch(/Unknown Johnson faction/);
+  });
+
+  it("should accept valid faction from different categories", () => {
+    const result = validateFactionId("yakuza", MOCK_FACTIONS);
+    expect(result.valid).toBe(true);
+    expect(result.faction!.category).toBe("syndicate");
+  });
+
+  it("should accept undefined factionId with empty factions list", () => {
+    const result = validateFactionId(undefined, []);
+    expect(result.valid).toBe(true);
+  });
+
+  it("should reject factionId when factions list is empty", () => {
+    const result = validateFactionId("ares-macrotechnology", []);
+    expect(result.valid).toBe(false);
+  });
+});
+
+describe("resolveFaction", () => {
+  it("should return undefined for undefined factionId", () => {
+    expect(resolveFaction(undefined, MOCK_FACTIONS)).toBeUndefined();
+  });
+
+  it("should resolve a valid factionId to its data", () => {
+    const faction = resolveFaction("ares-macrotechnology", MOCK_FACTIONS);
+    expect(faction).toBeDefined();
+    expect(faction!.id).toBe("ares-macrotechnology");
+    expect(faction!.typicalJobs).toContain("Wetwork");
+  });
+
+  it("should return undefined for unknown factionId", () => {
+    expect(resolveFaction("unknown-corp", MOCK_FACTIONS)).toBeUndefined();
   });
 });

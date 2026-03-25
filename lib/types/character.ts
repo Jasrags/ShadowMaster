@@ -1241,6 +1241,8 @@ export interface Contact {
   notes?: string;
   /** When set, marks this contact as granted free by a quality (e.g., Made Man, Sensei) */
   sourceQualityId?: string;
+  /** Johnson faction profile ID (Run Faster pp. 196-211) */
+  factionId?: string;
 }
 
 // =============================================================================
