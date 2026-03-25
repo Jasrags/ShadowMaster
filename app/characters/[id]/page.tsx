@@ -59,6 +59,7 @@ import {
   MatrixSummaryDisplay,
   ProgramManagerDisplay,
   QualitiesDisplay,
+  ReputationDisplay,
   SkillsDisplay,
   SpellsDisplay,
   VehiclesDisplay,
@@ -651,6 +652,8 @@ function CharacterSheet({
             />
 
             <ContactsDisplay character={character} />
+
+            <ReputationDisplay character={character} onUpdate={setCharacter} />
 
             <IdentitiesDisplay character={character} />
           </div>
