@@ -3,6 +3,7 @@
 import React from "react";
 import { Link } from "react-aria-components";
 import type { SocialContact } from "@/lib/types";
+import type { JohnsonFactionData } from "@/lib/rules/loader-types";
 import type { Theme } from "@/lib/themes";
 import { THEMES, DEFAULT_THEME } from "@/lib/themes";
 import { STATUS_STYLES, getFavorBalanceStyle } from "./contact-constants";
@@ -11,6 +12,7 @@ interface ContactCardProps {
   contact: SocialContact;
   characterId: string;
   theme?: Theme;
+  johnsonFactions?: JohnsonFactionData[];
   onCallFavor?: () => void;
   onConfirmEdge?: () => void;
 }
@@ -19,12 +21,16 @@ export function ContactCard({
   contact,
   characterId,
   theme,
+  johnsonFactions = [],
   onCallFavor,
   onConfirmEdge,
 }: ContactCardProps) {
   const t = theme || THEMES[DEFAULT_THEME];
   const statusStyle = STATUS_STYLES[contact.status] || STATUS_STYLES.inactive;
   const favorStyle = getFavorBalanceStyle(contact.favorBalance);
+  const faction = contact.factionId
+    ? johnsonFactions.find((f) => f.id === contact.factionId)
+    : undefined;
 
   return (
     <div
@@ -76,6 +82,14 @@ export function ContactCard({
                 title="+1 Loyalty for tests, −1 chip to improve, −1 Loyalty for job performance"
               >
                 Family
+              </span>
+            )}
+            {faction && (
+              <span
+                className="text-[10px] px-1.5 py-0.5 rounded border bg-amber-500/10 text-amber-400 border-amber-500/30"
+                title={faction.description}
+              >
+                {faction.name}
               </span>
             )}
             {contact.group === "organization" && (

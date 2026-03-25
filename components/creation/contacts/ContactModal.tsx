@@ -10,6 +10,7 @@ import {
   MIN_KARMA_PER_CONTACT,
 } from "./constants";
 import type { ContactModalProps } from "./types";
+import { FactionInfoCard } from "@/components/ui/FactionInfoCard";
 
 export function ContactModal({
   isOpen,
@@ -19,6 +20,7 @@ export function ContactModal({
   isEditing,
   templates,
   availableKarma,
+  johnsonFactions = [],
 }: ContactModalProps) {
   const [selectedTemplateId, setSelectedTemplateId] = useState<string | null>(null);
   const [contact, setContact] = useState<Partial<Contact>>(
@@ -28,6 +30,7 @@ export function ContactModal({
       connection: 1,
       loyalty: 1,
       notes: "",
+      factionId: undefined,
     }
   );
 
@@ -51,6 +54,7 @@ export function ContactModal({
           connection: 1,
           loyalty: 1,
           notes: "",
+          factionId: undefined,
         });
         setSelectedTemplateId(null);
       }
@@ -58,6 +62,11 @@ export function ContactModal({
   }, [isOpen, initialContact]);
 
   const contactCost = (contact.connection || 1) + (contact.loyalty || 1);
+
+  const isMrJohnson = contact.type?.toLowerCase() === "mr. johnson";
+  const selectedFaction = contact.factionId
+    ? (johnsonFactions.find((f) => f.id === contact.factionId) ?? null)
+    : null;
 
   const isValid = useMemo(() => {
     if (!contact.name?.trim()) return false;
@@ -86,6 +95,7 @@ export function ContactModal({
       connection: template.suggestedConnection,
       loyalty: template.suggestedLoyalty || 2,
       notes: template.description,
+      factionId: undefined,
     });
   }, []);
 
@@ -97,6 +107,7 @@ export function ContactModal({
       loyalty: contact.loyalty || 1,
       type: contact.type?.trim() || undefined,
       notes: contact.notes?.trim() || undefined,
+      factionId: contact.factionId,
     });
   }, [isValid, contact, onSave]);
 
@@ -246,12 +257,52 @@ export function ContactModal({
                 <input
                   type="text"
                   value={contact.type || ""}
-                  onChange={(e) => setContact({ ...contact, type: e.target.value })}
+                  onChange={(e) => {
+                    const newType = e.target.value;
+                    setContact({
+                      ...contact,
+                      type: newType,
+                      // Clear factionId when switching away from Mr. Johnson
+                      factionId:
+                        newType.toLowerCase() === "mr. johnson" ? contact.factionId : undefined,
+                    });
+                  }}
                   className="w-full rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
                   placeholder="e.g., Fixer, Street Doc"
                 />
               </div>
             </div>
+
+            {/* Johnson Faction Selector */}
+            {isMrJohnson && johnsonFactions.length > 0 && (
+              <div>
+                <label className="mb-1 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                  Faction Profile
+                </label>
+                <select
+                  value={contact.factionId || ""}
+                  onChange={(e) =>
+                    setContact({
+                      ...contact,
+                      factionId: e.target.value || undefined,
+                    })
+                  }
+                  className="w-full rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
+                >
+                  <option value="">No faction (generic Johnson)</option>
+                  {johnsonFactions.map((faction) => (
+                    <option key={faction.id} value={faction.id}>
+                      {faction.name} ({faction.category})
+                    </option>
+                  ))}
+                </select>
+                {selectedFaction && (
+                  <div className="mt-2">
+                    <FactionInfoCard faction={selectedFaction} />
+                  </div>
+                )}
+              </div>
+            )}
 
             {/* Connection and Loyalty */}
             <div className="grid gap-4 sm:grid-cols-2">

@@ -1,4 +1,5 @@
 import type { CreationState, Contact, ContactTemplateData } from "@/lib/types";
+import type { JohnsonFactionData } from "@/lib/rules/loader-types";
 
 export interface ContactsCardProps {
   state: CreationState;
@@ -14,4 +15,5 @@ export interface ContactModalProps {
   templates: ContactTemplateData[];
   maxCost: number;
   availableKarma: number;
+  johnsonFactions?: JohnsonFactionData[];
 }

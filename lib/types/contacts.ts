@@ -147,6 +147,9 @@ export interface SocialContact {
   /** Reference to organization/faction ID */
   organizationId?: ID;
 
+  /** Johnson faction profile ID (Run Faster pp. 196-211) */
+  factionId?: string;
+
   // ---------------------------------------------------------------------------
   // State
   // ---------------------------------------------------------------------------
@@ -780,6 +783,8 @@ export interface CreateContactRequest {
   visibility?: Partial<ContactVisibility>;
   /** Initial favor balance (default: 0) */
   favorBalance?: number;
+  /** Johnson faction profile ID (Run Faster pp. 196-211) */
+  factionId?: string;
 }
 
 /**
@@ -809,6 +814,8 @@ export interface UpdateContactRequest {
   loyaltyImprovementBlocked?: boolean;
   pendingKarmaConfirmation?: boolean;
   acquisitionMethod?: SocialContact["acquisitionMethod"];
+  /** Johnson faction profile ID (Run Faster pp. 196-211) */
+  factionId?: string;
 }
 
 /**

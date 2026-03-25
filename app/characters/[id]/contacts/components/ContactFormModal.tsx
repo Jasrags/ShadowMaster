@@ -14,12 +14,14 @@ import {
 } from "react-aria-components";
 import { X } from "lucide-react";
 import type { SocialContact, CreateContactRequest, ContactArchetype } from "@/lib/types";
+import type { JohnsonFactionData } from "@/lib/rules/loader-types";
 import type { Theme } from "@/lib/themes";
 import { THEMES, DEFAULT_THEME } from "@/lib/themes";
 import {
   getOrganizationDefinitions,
   type OrganizationDefinition,
 } from "@/lib/rules/group-contacts";
+import { FactionInfoCard } from "@/components/ui/FactionInfoCard";
 
 interface ContactFormModalProps {
   isOpen: boolean;
@@ -30,6 +32,7 @@ interface ContactFormModalProps {
   archetypes?: ContactArchetype[];
   maxContactPoints?: number;
   usedContactPoints?: number;
+  johnsonFactions?: JohnsonFactionData[];
   theme?: Theme;
 }
 
@@ -60,6 +63,7 @@ export function ContactFormModal({
   archetypes,
   maxContactPoints = 0,
   usedContactPoints = 0,
+  johnsonFactions = [],
   theme,
 }: ContactFormModalProps) {
   const t = theme || THEMES[DEFAULT_THEME];
@@ -100,6 +104,7 @@ export function ContactFormModal({
           location: source.location || "",
           metatype: source.metatype || "",
           notes: source.notes || "",
+          factionId: source.factionId,
         });
       } else {
         setFormData({
@@ -112,6 +117,7 @@ export function ContactFormModal({
           location: "",
           metatype: "",
           notes: "",
+          factionId: undefined,
         });
       }
       setSpecializationInput("");
@@ -129,6 +135,10 @@ export function ContactFormModal({
   const isOverBudget = maxContactPoints > 0 && newUsedPoints > maxContactPoints;
 
   const archetypeList = archetypes?.map((a) => a.name) || DEFAULT_ARCHETYPES;
+
+  const selectedFaction = formData.factionId
+    ? (johnsonFactions.find((f) => f.id === formData.factionId) ?? null)
+    : null;
 
   const handleAddSpecialization = () => {
     if (
@@ -262,7 +272,15 @@ export function ContactFormModal({
                   </Label>
                   <select
                     value={formData.archetype}
-                    onChange={(e) => setFormData({ ...formData, archetype: e.target.value })}
+                    onChange={(e) => {
+                      const newArchetype = e.target.value;
+                      setFormData({
+                        ...formData,
+                        archetype: newArchetype,
+                        // Clear factionId when switching away from Mr. Johnson
+                        factionId: newArchetype === "Mr. Johnson" ? formData.factionId : undefined,
+                      });
+                    }}
                     className={`w-full px-3 py-2 rounded border ${t.colors.border} bg-background text-foreground`}
                   >
                     <option value="">Select archetype...</option>
@@ -273,6 +291,34 @@ export function ContactFormModal({
                     ))}
                   </select>
                 </div>
+
+                {/* Johnson Faction Selector */}
+                {formData.archetype === "Mr. Johnson" && johnsonFactions.length > 0 && (
+                  <div className="space-y-2">
+                    <Label className="text-xs font-mono text-muted-foreground uppercase">
+                      Faction Profile
+                    </Label>
+                    <select
+                      value={formData.factionId || ""}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          factionId: e.target.value || undefined,
+                        })
+                      }
+                      className={`w-full px-3 py-2 rounded border ${t.colors.border} bg-background text-foreground`}
+                    >
+                      <option value="">No faction (generic Johnson)</option>
+                      {johnsonFactions.map((faction) => (
+                        <option key={faction.id} value={faction.id}>
+                          {faction.name} ({faction.category})
+                        </option>
+                      ))}
+                    </select>
+
+                    {selectedFaction && <FactionInfoCard faction={selectedFaction} />}
+                  </div>
+                )}
 
                 {/* Organization Toggle */}
                 <div className="space-y-2">

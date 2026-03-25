@@ -11,6 +11,7 @@ import type {
   FavorLedger,
   FavorServiceDefinition,
 } from "@/lib/types";
+import type { JohnsonFactionData } from "@/lib/rules/loader-types";
 import { THEMES, DEFAULT_THEME, type Theme, type ThemeId } from "@/lib/themes";
 import { Section } from "../components/Section";
 import { ContactCard } from "./components/ContactCard";
@@ -59,6 +60,7 @@ export default function ContactsPage({ params }: { params: Promise<{ id: string 
   const [favorLedger, setFavorLedger] = useState<FavorLedger | null>(null);
   const [archetypes, setArchetypes] = useState<ContactArchetype[]>([]);
   const [favorServices, setFavorServices] = useState<FavorServiceDefinition[]>([]);
+  const [johnsonFactions, setJohnsonFactions] = useState<JohnsonFactionData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -110,16 +112,21 @@ export default function ContactsPage({ params }: { params: Promise<{ id: string 
         // Fetch edition-specific data if we have edition code
         if (charData.character?.editionCode) {
           try {
-            const favorCostsRes = await fetch(
-              `/api/editions/${charData.character.editionCode}/favor-costs`
-            );
+            const [favorCostsRes, rulesetRes] = await Promise.all([
+              fetch(`/api/editions/${charData.character.editionCode}/favor-costs`),
+              fetch(`/api/rulesets/${charData.character.editionCode}`),
+            ]);
             const favorCostsData = await favorCostsRes.json();
             if (favorCostsData.success) {
               setFavorServices(favorCostsData.services || []);
               setArchetypes(favorCostsData.archetypes || []);
             }
+            const rulesetData = await rulesetRes.json();
+            if (rulesetData.success) {
+              setJohnsonFactions(rulesetData.extractedData?.johnsonProfiles?.factions || []);
+            }
           } catch {
-            // Favor costs may not exist yet
+            // Edition data may not exist yet
           }
         }
       } catch (err) {
@@ -491,6 +498,7 @@ export default function ContactsPage({ params }: { params: Promise<{ id: string 
                     key={contact.id}
                     contact={contact}
                     characterId={characterId}
+                    johnsonFactions={johnsonFactions}
                     theme={theme}
                     onCallFavor={() => {
                       setSelectedContact(contact);
@@ -541,6 +549,7 @@ export default function ContactsPage({ params }: { params: Promise<{ id: string 
         archetypes={archetypes}
         maxContactPoints={socialCapital?.maxContactPoints || 0}
         usedContactPoints={socialCapital?.usedContactPoints || 0}
+        johnsonFactions={johnsonFactions}
         theme={theme}
       />
 
