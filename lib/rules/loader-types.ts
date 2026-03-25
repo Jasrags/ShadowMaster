@@ -1699,4 +1699,8 @@ export type {
   SkillsModulePayload,
   ProgramsModulePayload,
   RuleModulePayloadMap,
+  EquipmentPackCategory,
+  EquipmentPackItem,
+  EquipmentPackCatalogItem,
+  EquipmentPacksModulePayload,
 } from "./module-payloads";
