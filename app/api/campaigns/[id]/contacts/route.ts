@@ -72,12 +72,18 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
         .flat()
         .filter((char) => char.campaignId === campaignId);
 
-      // Build name map and collect character contacts
+      // Build name map and collect character contacts (parallelized)
       for (const char of campaignCharacters) {
         characterNames[char.id] = char.name;
-        const charContacts = await getCharacterContacts(char.ownerId, char.id);
-        contacts = [...contacts, ...charContacts];
       }
+      const charContactArrays = await Promise.all(
+        campaignCharacters.map((char) => getCharacterContacts(char.ownerId, char.id))
+      );
+      // Only include contacts scoped to this campaign (exclude contacts from other campaigns)
+      const scopedCharContacts = charContactArrays
+        .flat()
+        .filter((c) => !c.campaignId || c.campaignId === campaignId);
+      contacts = [...contacts, ...scopedCharContacts];
     }
 
     // Filter by visibility (non-GMs only see player-visible contacts)

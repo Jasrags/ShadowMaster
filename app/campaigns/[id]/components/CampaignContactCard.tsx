@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "react-aria-components";
 import { Info, Eye, EyeOff, ChevronDown, ChevronUp, X } from "lucide-react";
 import type { SocialContact } from "@/lib/types";
@@ -244,6 +244,11 @@ function LoyaltyOverrideRow({
   onRemoveOverride,
 }: LoyaltyOverrideRowProps) {
   const [localValue, setLocalValue] = useState<number>(override ?? defaultLoyalty);
+
+  // Sync local value when the prop changes (e.g. after a refetch)
+  useEffect(() => {
+    setLocalValue(override ?? defaultLoyalty);
+  }, [override, defaultLoyalty]);
 
   const handleBlur = () => {
     const clamped = Math.max(1, Math.min(6, localValue));

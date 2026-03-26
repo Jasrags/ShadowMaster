@@ -130,6 +130,8 @@ export default function CampaignContactsTab({ campaign }: CampaignContactsTabPro
       const data = await res.json();
       if (data.success) {
         handleContactUpdated(data.contact);
+      } else {
+        setError(data.error || "Failed to update visibility");
       }
     } catch {
       setError("Failed to update visibility");
@@ -156,6 +158,8 @@ export default function CampaignContactsTab({ campaign }: CampaignContactsTabPro
       const data = await res.json();
       if (data.success) {
         handleContactUpdated(data.contact);
+      } else {
+        setError(data.error || "Failed to update loyalty override");
       }
     } catch {
       setError("Failed to update loyalty override");
@@ -175,6 +179,8 @@ export default function CampaignContactsTab({ campaign }: CampaignContactsTabPro
       const data = await res.json();
       if (data.success) {
         handleContactUpdated(data.contact);
+      } else {
+        setError(data.error || "Failed to remove loyalty override");
       }
     } catch {
       setError("Failed to remove loyalty override");

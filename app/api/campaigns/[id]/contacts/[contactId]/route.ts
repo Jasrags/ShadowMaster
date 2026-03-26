@@ -88,6 +88,21 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
       );
     }
 
+    // Validate imageUrl if provided
+    if (body.imageUrl !== undefined && body.imageUrl !== "") {
+      try {
+        const u = new URL(body.imageUrl);
+        if (u.protocol !== "https:") {
+          return NextResponse.json(
+            { success: false, error: "imageUrl must use HTTPS" },
+            { status: 400 }
+          );
+        }
+      } catch {
+        return NextResponse.json({ success: false, error: "Invalid imageUrl" }, { status: 400 });
+      }
+    }
+
     // Validate status enum
     if (body.status !== undefined && !(VALID_STATUSES as readonly string[]).includes(body.status)) {
       return NextResponse.json({ success: false, error: "Invalid status value" }, { status: 400 });
@@ -100,6 +115,13 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
 
     // Validate loyalty overrides
     if (body.loyaltyOverrides !== undefined) {
+      const MAX_OVERRIDES = 200;
+      if (Object.keys(body.loyaltyOverrides).length > MAX_OVERRIDES) {
+        return NextResponse.json(
+          { success: false, error: "Too many loyalty overrides" },
+          { status: 400 }
+        );
+      }
       for (const [charId, value] of Object.entries(body.loyaltyOverrides)) {
         if (typeof charId !== "string" || charId.length === 0) {
           return NextResponse.json(
