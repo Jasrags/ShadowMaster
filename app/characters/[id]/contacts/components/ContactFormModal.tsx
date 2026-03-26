@@ -12,7 +12,7 @@ import {
   TextField,
   TextArea,
 } from "react-aria-components";
-import { X } from "lucide-react";
+import { X, Eye, EyeOff } from "lucide-react";
 import type { SocialContact, CreateContactRequest, ContactArchetype } from "@/lib/types";
 import type { JohnsonFactionData } from "@/lib/rules/loader-types";
 import type { Theme } from "@/lib/themes";
@@ -34,6 +34,8 @@ interface ContactFormModalProps {
   usedContactPoints?: number;
   johnsonFactions?: JohnsonFactionData[];
   theme?: Theme;
+  /** "character" (default) = player contact with karma budget; "campaign" = GM contact with visibility toggle */
+  mode?: "character" | "campaign";
 }
 
 const DEFAULT_ARCHETYPES = [
@@ -65,9 +67,11 @@ export function ContactFormModal({
   usedContactPoints = 0,
   johnsonFactions = [],
   theme,
+  mode = "character",
 }: ContactFormModalProps) {
   const t = theme || THEMES[DEFAULT_THEME];
   const isEditing = !!contact;
+  const isCampaignMode = mode === "campaign";
 
   const [formData, setFormData] = useState<CreateContactRequest>({
     name: "",
@@ -86,6 +90,7 @@ export function ContactFormModal({
   const [specializationInput, setSpecializationInput] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [playerVisible, setPlayerVisible] = useState(false);
 
   const orgDefinitions = getOrganizationDefinitions();
 
@@ -124,6 +129,7 @@ export function ContactFormModal({
       setError(null);
       setIsOrganizationContact(source?.group === "organization" || false);
       setSelectedOrg(null);
+      setPlayerVisible(false);
     }
   }, [isOpen, contact, prefillContact]);
 
@@ -174,14 +180,28 @@ export function ContactFormModal({
       return;
     }
 
-    if (isOverBudget) {
+    if (!isCampaignMode && isOverBudget) {
       setError("Not enough contact points available");
       return;
     }
 
     setIsSubmitting(true);
     try {
-      await onSubmit(formData);
+      const submitData: CreateContactRequest = {
+        ...formData,
+        ...(isCampaignMode
+          ? {
+              visibility: {
+                playerVisible,
+                showConnection: playerVisible,
+                showLoyalty: playerVisible,
+                showFavorBalance: false,
+                showSpecializations: playerVisible,
+              },
+            }
+          : {}),
+      };
+      await onSubmit(submitData);
       onClose();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to save contact");
@@ -214,7 +234,11 @@ export function ContactFormModal({
               {/* Header */}
               <div className={`flex items-center justify-between p-4 border-b ${t.colors.border}`}>
                 <Heading slot="title" className={`text-lg font-bold ${t.colors.heading}`}>
-                  {isEditing ? "Edit Contact" : "Add New Contact"}
+                  {isEditing
+                    ? "Edit Contact"
+                    : isCampaignMode
+                      ? "Create Campaign Contact"
+                      : "Add New Contact"}
                 </Heading>
                 <Button
                   onPress={close}
@@ -226,8 +250,8 @@ export function ContactFormModal({
 
               {/* Body */}
               <div className="p-6 max-h-[70vh] overflow-y-auto space-y-4">
-                {/* Budget indicator */}
-                {maxContactPoints > 0 && (
+                {/* Budget indicator (character mode only) */}
+                {!isCampaignMode && maxContactPoints > 0 && (
                   <div
                     className={`p-3 rounded border ${
                       isOverBudget
@@ -292,33 +316,34 @@ export function ContactFormModal({
                   </select>
                 </div>
 
-                {/* Johnson Faction Selector */}
-                {formData.archetype === "Mr. Johnson" && johnsonFactions.length > 0 && (
-                  <div className="space-y-2">
-                    <Label className="text-xs font-mono text-muted-foreground uppercase">
-                      Faction Profile
-                    </Label>
-                    <select
-                      value={formData.factionId || ""}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          factionId: e.target.value || undefined,
-                        })
-                      }
-                      className={`w-full px-3 py-2 rounded border ${t.colors.border} bg-background text-foreground`}
-                    >
-                      <option value="">No faction (generic Johnson)</option>
-                      {johnsonFactions.map((faction) => (
-                        <option key={faction.id} value={faction.id}>
-                          {faction.name} ({faction.category})
-                        </option>
-                      ))}
-                    </select>
+                {/* Johnson Faction Selector — always visible in campaign mode, archetype-gated in character mode */}
+                {(isCampaignMode || formData.archetype === "Mr. Johnson") &&
+                  johnsonFactions.length > 0 && (
+                    <div className="space-y-2">
+                      <Label className="text-xs font-mono text-muted-foreground uppercase">
+                        Faction Profile
+                      </Label>
+                      <select
+                        value={formData.factionId || ""}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            factionId: e.target.value || undefined,
+                          })
+                        }
+                        className={`w-full px-3 py-2 rounded border ${t.colors.border} bg-background text-foreground`}
+                      >
+                        <option value="">No faction (generic Johnson)</option>
+                        {johnsonFactions.map((faction) => (
+                          <option key={faction.id} value={faction.id}>
+                            {faction.name} ({faction.category})
+                          </option>
+                        ))}
+                      </select>
 
-                    {selectedFaction && <FactionInfoCard faction={selectedFaction} />}
-                  </div>
-                )}
+                      {selectedFaction && <FactionInfoCard faction={selectedFaction} />}
+                    </div>
+                  )}
 
                 {/* Organization Toggle */}
                 <div className="space-y-2">
@@ -526,6 +551,31 @@ export function ContactFormModal({
                   />
                 </TextField>
 
+                {/* Visibility Toggle (campaign mode only) */}
+                {isCampaignMode && (
+                  <div className="flex items-center gap-3">
+                    <Button
+                      type="button"
+                      onPress={() => setPlayerVisible(!playerVisible)}
+                      className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium outline-none ${
+                        playerVisible
+                          ? "bg-green-500/10 text-green-400 hover:bg-green-500/20"
+                          : "bg-muted text-muted-foreground hover:bg-muted/80"
+                      }`}
+                    >
+                      {playerVisible ? (
+                        <Eye className="h-3.5 w-3.5" />
+                      ) : (
+                        <EyeOff className="h-3.5 w-3.5" />
+                      )}
+                      {playerVisible ? "Campaign-wide" : "GM Only"}
+                    </Button>
+                    <span className="text-xs text-muted-foreground">
+                      {playerVisible ? "Players can see this contact" : "Only visible to the GM"}
+                    </span>
+                  </div>
+                )}
+
                 {/* Notes */}
                 <TextField className="space-y-1">
                   <Label className="text-xs font-mono text-muted-foreground uppercase">Notes</Label>
@@ -551,10 +601,16 @@ export function ContactFormModal({
                 </Button>
                 <Button
                   type="submit"
-                  isDisabled={isSubmitting || isOverBudget}
+                  isDisabled={isSubmitting || (!isCampaignMode && isOverBudget)}
                   className={`px-4 py-2 rounded ${t.colors.accentBg} text-white disabled:opacity-50`}
                 >
-                  {isSubmitting ? "Saving..." : isEditing ? "Save Changes" : "Add Contact"}
+                  {isSubmitting
+                    ? "Saving..."
+                    : isEditing
+                      ? "Save Changes"
+                      : isCampaignMode
+                        ? "Create Contact"
+                        : "Add Contact"}
                 </Button>
               </div>
             </form>

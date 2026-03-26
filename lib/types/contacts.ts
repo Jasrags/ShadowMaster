@@ -266,6 +266,13 @@ export interface SocialContact {
   /** GM-only betrayal planning state (hidden from players) */
   betrayalPlanning?: BetrayalPlanningState;
 
+  /**
+   * Per-character loyalty overrides for campaign contacts.
+   * Keyed by characterId. Characters without an override use the base `loyalty` value.
+   * Only applies when `group === "campaign"`.
+   */
+  loyaltyOverrides?: Record<string, number>;
+
   /** Extensible metadata */
   metadata?: Metadata;
 }
@@ -854,6 +861,8 @@ export interface UpdateContactRequest {
   acquisitionMethod?: SocialContact["acquisitionMethod"];
   /** Johnson faction profile ID (Run Faster pp. 196-211) */
   factionId?: string;
+  /** Per-character loyalty overrides (campaign contacts only) */
+  loyaltyOverrides?: Record<string, number>;
 }
 
 /**

@@ -10,9 +10,22 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
 import { authorizeGM, authorizeMember } from "@/lib/auth/campaign";
-import { getCampaignContacts, createCampaignContact } from "@/lib/storage/contacts";
+import {
+  getCampaignContacts,
+  createCampaignContact,
+  getCharacterContacts,
+} from "@/lib/storage/contacts";
+import { getUserCharacters } from "@/lib/storage/characters";
 import { validateContact } from "@/lib/rules/contacts";
 import type { CreateContactRequest, ContactStatus, SocialContact } from "@/lib/types";
+
+const VALID_STATUSES: readonly ContactStatus[] = [
+  "active",
+  "burned",
+  "inactive",
+  "missing",
+  "deceased",
+];
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
@@ -36,10 +49,42 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     const searchParams = request.nextUrl.searchParams;
     const archetype = searchParams.get("archetype");
     const location = searchParams.get("location");
-    const status = searchParams.get("status") as ContactStatus | null;
+    const statusParam = searchParams.get("status");
+    const status: ContactStatus | null =
+      statusParam && (VALID_STATUSES as readonly string[]).includes(statusParam)
+        ? (statusParam as ContactStatus)
+        : null;
+    const include = searchParams.get("include"); // "all" = merged view with character contacts
 
     // Get campaign contacts
     let contacts = await getCampaignContacts(campaignId);
+
+    // Build character name map for owner labels (GM merged view)
+    const characterNames: Record<string, string> = {};
+
+    // If GM requests merged view, include character contacts from all campaign members
+    if (isGm && include === "all") {
+      const allMemberIds = [campaign.gmId, ...campaign.playerIds];
+      const characterArrays = await Promise.all(
+        allMemberIds.map((memberId) => getUserCharacters(memberId))
+      );
+      const campaignCharacters = characterArrays
+        .flat()
+        .filter((char) => char.campaignId === campaignId);
+
+      // Build name map and collect character contacts (parallelized)
+      for (const char of campaignCharacters) {
+        characterNames[char.id] = char.name;
+      }
+      const charContactArrays = await Promise.all(
+        campaignCharacters.map((char) => getCharacterContacts(char.ownerId, char.id))
+      );
+      // Only include contacts scoped to this campaign (exclude contacts from other campaigns)
+      const scopedCharContacts = charContactArrays
+        .flat()
+        .filter((c) => !c.campaignId || c.campaignId === campaignId);
+      contacts = [...contacts, ...scopedCharContacts];
+    }
 
     // Filter by visibility (non-GMs only see player-visible contacts)
     if (!isGm) {
@@ -83,6 +128,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       contacts: displayContacts,
       count: displayContacts.length,
       isGm,
+      characterNames: isGm ? characterNames : undefined,
     });
   } catch (error) {
     console.error("Failed to get campaign contacts:", error);
