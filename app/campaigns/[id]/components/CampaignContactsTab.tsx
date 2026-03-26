@@ -67,13 +67,9 @@ export default function CampaignContactsTab({ campaign }: CampaignContactsTabPro
     setContacts((prev) => prev.map((c) => (c.id === updatedContact.id ? updatedContact : c)));
   }, []);
 
-  // Filter to only Johnson contacts (those with factionId or archetype "Mr. Johnson")
-  const johnsonContacts = contacts.filter(
-    (c) => c.factionId || c.archetype.toLowerCase().includes("johnson")
-  );
-  const otherContacts = contacts.filter(
-    (c) => !c.factionId && !c.archetype.toLowerCase().includes("johnson")
-  );
+  // Johnson contacts are those with a faction tag (Run Faster pp. 196-211)
+  const johnsonContacts = contacts.filter((c) => !!c.factionId);
+  const otherContacts = contacts.filter((c) => !c.factionId);
 
   if (loading) {
     return (
@@ -142,6 +138,8 @@ export default function CampaignContactsTab({ campaign }: CampaignContactsTabPro
                 {/* Contact Header */}
                 <button
                   onClick={() => setExpandedContactId(isExpanded ? null : contact.id)}
+                  aria-expanded={isExpanded}
+                  aria-label={`${isExpanded ? "Collapse" : "Expand"} betrayal assessment for ${contact.name}`}
                   className="flex w-full items-center justify-between px-4 py-3 text-left"
                 >
                   <div className="flex items-center gap-3">

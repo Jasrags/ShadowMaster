@@ -166,6 +166,8 @@ export function BetrayalAssessmentPanel({
       {/* Header */}
       <button
         onClick={() => setExpanded((prev) => !prev)}
+        aria-expanded={expanded}
+        aria-label={`${expanded ? "Collapse" : "Expand"} betrayal assessment for ${contact.name}`}
         className="flex w-full items-center justify-between px-4 py-3 text-left"
       >
         <div className="flex items-center gap-2">
@@ -185,8 +187,6 @@ export function BetrayalAssessmentPanel({
           <ChevronDown className="h-4 w-4 text-zinc-500" />
         )}
       </button>
-
-      {!expanded && null}
 
       {expanded && (
         <div className="space-y-4 border-t border-zinc-700 px-4 py-4">
@@ -340,6 +340,7 @@ export function BetrayalAssessmentPanel({
                 <select
                   value={selectedTypeId}
                   onChange={(e) => setSelectedTypeId(e.target.value)}
+                  aria-label="Select betrayal type"
                   className="flex-1 rounded border border-zinc-600 bg-zinc-900 px-3 py-2 text-xs text-zinc-200 focus:border-red-500 focus:outline-none focus:ring-1 focus:ring-red-500"
                 >
                   <option value="">Select betrayal type...</option>
