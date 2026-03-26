@@ -2,14 +2,15 @@
 
 import { useEffect, useState, useCallback, useMemo } from "react";
 import { Button } from "react-aria-components";
-import { Loader2, Info, Users, AlertTriangle, Plus, Eye, EyeOff, Search, X } from "lucide-react";
-import type { Campaign, SocialContact } from "@/lib/types";
+import { Loader2, Info, Users, AlertTriangle, Plus, Search, X } from "lucide-react";
+import type { Campaign, SocialContact, CreateContactRequest } from "@/lib/types";
 import type {
   BetrayalTypeData,
   JohnsonFactionData,
   JohnsonProfilesModulePayload,
 } from "@/lib/rules/module-payloads";
 import { CampaignContactCard } from "./CampaignContactCard";
+import { ContactFormModal } from "@/app/characters/[id]/contacts/components/ContactFormModal";
 
 interface CampaignContactsTabProps {
   campaign: Campaign;
@@ -34,18 +35,8 @@ export default function CampaignContactsTab({ campaign }: CampaignContactsTabPro
   // Expanded contact for betrayal panel
   const [expandedContactId, setExpandedContactId] = useState<string | null>(null);
 
-  // Creation form
-  const [showNewForm, setShowNewForm] = useState(false);
-  const [creating, setCreating] = useState(false);
-  const [formData, setFormData] = useState({
-    name: "",
-    archetype: "",
-    connection: 3,
-    loyalty: 3,
-    description: "",
-    factionId: "",
-    playerVisible: false,
-  });
+  // Creation modal
+  const [showCreateModal, setShowCreateModal] = useState(false);
 
   // Filters
   const [ownerFilter, setOwnerFilter] = useState<OwnerFilter>("all");
@@ -99,57 +90,20 @@ export default function CampaignContactsTab({ campaign }: CampaignContactsTabPro
   }, []);
 
   // ---------------------------------------------------------------------------
-  // Contact Creation
+  // Contact Creation (via modal)
   // ---------------------------------------------------------------------------
 
-  const resetForm = () => {
-    setFormData({
-      name: "",
-      archetype: "",
-      connection: 3,
-      loyalty: 3,
-      description: "",
-      factionId: "",
-      playerVisible: false,
+  const handleCreateContact = async (data: CreateContactRequest) => {
+    const res = await fetch(`/api/campaigns/${campaign.id}/contacts`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
     });
-  };
-
-  const handleCreateContact = async () => {
-    if (!formData.name.trim() || !formData.archetype.trim()) return;
-    setCreating(true);
-    setError(null);
-    try {
-      const res = await fetch(`/api/campaigns/${campaign.id}/contacts`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: formData.name.trim(),
-          archetype: formData.archetype.trim(),
-          connection: formData.connection,
-          loyalty: formData.loyalty,
-          description: formData.description.trim() || undefined,
-          factionId: formData.factionId || undefined,
-          visibility: {
-            playerVisible: formData.playerVisible,
-            showConnection: formData.playerVisible,
-            showLoyalty: formData.playerVisible,
-            showFavorBalance: false,
-            showSpecializations: formData.playerVisible,
-          },
-        }),
-      });
-      const data = await res.json();
-      if (data.success) {
-        setContacts((prev) => [...prev, data.contact]);
-        resetForm();
-        setShowNewForm(false);
-      } else {
-        setError(data.error || "Failed to create contact");
-      }
-    } catch {
-      setError("Failed to create contact");
-    } finally {
-      setCreating(false);
+    const result = await res.json();
+    if (result.success) {
+      setContacts((prev) => [...prev, result.contact]);
+    } else {
+      throw new Error(result.error || "Failed to create contact");
     }
   };
 
@@ -298,15 +252,13 @@ export default function CampaignContactsTab({ campaign }: CampaignContactsTabPro
               Enable Run Faster for betrayal types
             </span>
           )}
-          {!showNewForm && (
-            <Button
-              onPress={() => setShowNewForm(true)}
-              className="inline-flex items-center gap-1.5 rounded-md bg-indigo-600 px-3 py-1.5 text-xs font-medium text-white outline-none hover:bg-indigo-700 pressed:bg-indigo-800"
-            >
-              <Plus className="h-3.5 w-3.5" />
-              New Contact
-            </Button>
-          )}
+          <Button
+            onPress={() => setShowCreateModal(true)}
+            className="inline-flex items-center gap-1.5 rounded-md bg-indigo-600 px-3 py-1.5 text-xs font-medium text-white outline-none hover:bg-indigo-700 pressed:bg-indigo-800"
+          >
+            <Plus className="h-3.5 w-3.5" />
+            New Contact
+          </Button>
         </div>
       </div>
 
@@ -322,150 +274,14 @@ export default function CampaignContactsTab({ campaign }: CampaignContactsTabPro
         </div>
       )}
 
-      {/* Creation Form */}
-      {showNewForm && (
-        <div className="rounded-lg border border-zinc-200 bg-white p-4 dark:border-zinc-700 dark:bg-zinc-900">
-          <h4 className="mb-3 text-sm font-medium text-zinc-900 dark:text-zinc-50">
-            Create Campaign Contact
-          </h4>
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-            <div>
-              <label className="mb-1 block text-xs font-medium text-zinc-500 dark:text-zinc-400">
-                Name *
-              </label>
-              <input
-                type="text"
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                placeholder="e.g. Mr. Johnson"
-                className="w-full rounded-md border border-zinc-300 bg-white px-3 py-1.5 text-sm text-zinc-900 placeholder:text-zinc-400 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100 dark:placeholder:text-zinc-500"
-              />
-            </div>
-            <div>
-              <label className="mb-1 block text-xs font-medium text-zinc-500 dark:text-zinc-400">
-                Archetype *
-              </label>
-              <input
-                type="text"
-                value={formData.archetype}
-                onChange={(e) => setFormData({ ...formData, archetype: e.target.value })}
-                placeholder="e.g. Mr. Johnson, Fixer, Street Doc"
-                className="w-full rounded-md border border-zinc-300 bg-white px-3 py-1.5 text-sm text-zinc-900 placeholder:text-zinc-400 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100 dark:placeholder:text-zinc-500"
-              />
-            </div>
-            <div>
-              <label className="mb-1 block text-xs font-medium text-zinc-500 dark:text-zinc-400">
-                Connection (1-12)
-              </label>
-              <input
-                type="number"
-                min={1}
-                max={12}
-                value={formData.connection}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    connection: Math.max(1, Math.min(12, Number(e.target.value))),
-                  })
-                }
-                className="w-full rounded-md border border-zinc-300 bg-white px-3 py-1.5 text-sm text-zinc-900 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100"
-              />
-            </div>
-            <div>
-              <label className="mb-1 block text-xs font-medium text-zinc-500 dark:text-zinc-400">
-                Loyalty (1-6)
-              </label>
-              <input
-                type="number"
-                min={1}
-                max={6}
-                value={formData.loyalty}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    loyalty: Math.max(1, Math.min(6, Number(e.target.value))),
-                  })
-                }
-                className="w-full rounded-md border border-zinc-300 bg-white px-3 py-1.5 text-sm text-zinc-900 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100"
-              />
-            </div>
-            {factions.length > 0 && (
-              <div className="sm:col-span-2">
-                <label className="mb-1 block text-xs font-medium text-zinc-500 dark:text-zinc-400">
-                  Johnson Faction (optional)
-                </label>
-                <select
-                  value={formData.factionId}
-                  onChange={(e) => setFormData({ ...formData, factionId: e.target.value })}
-                  className="w-full rounded-md border border-zinc-300 bg-white px-3 py-1.5 text-sm text-zinc-900 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100"
-                >
-                  <option value="">None</option>
-                  {factions.map((f) => (
-                    <option key={f.id} value={f.id}>
-                      {f.name} ({f.category})
-                    </option>
-                  ))}
-                </select>
-              </div>
-            )}
-            <div className="sm:col-span-2">
-              <label className="mb-1 block text-xs font-medium text-zinc-500 dark:text-zinc-400">
-                Description (optional)
-              </label>
-              <textarea
-                value={formData.description}
-                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                rows={2}
-                placeholder="Brief description of the contact..."
-                className="w-full rounded-md border border-zinc-300 bg-white px-3 py-1.5 text-sm text-zinc-900 placeholder:text-zinc-400 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100 dark:placeholder:text-zinc-500"
-              />
-            </div>
-            <div className="flex items-center gap-2 sm:col-span-2">
-              <Button
-                onPress={() => setFormData({ ...formData, playerVisible: !formData.playerVisible })}
-                className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium outline-none ${
-                  formData.playerVisible
-                    ? "bg-green-500/10 text-green-400 hover:bg-green-500/20"
-                    : "bg-zinc-500/10 text-zinc-400 hover:bg-zinc-500/20"
-                }`}
-              >
-                {formData.playerVisible ? (
-                  <Eye className="h-3.5 w-3.5" />
-                ) : (
-                  <EyeOff className="h-3.5 w-3.5" />
-                )}
-                {formData.playerVisible ? "Campaign-wide" : "GM Only"}
-              </Button>
-              <span className="text-xs text-zinc-500 dark:text-zinc-400">
-                {formData.playerVisible ? "Players can see this contact" : "Only visible to the GM"}
-              </span>
-            </div>
-          </div>
-          <div className="mt-4 flex gap-2">
-            <Button
-              onPress={handleCreateContact}
-              isDisabled={creating || !formData.name.trim() || !formData.archetype.trim()}
-              className="inline-flex items-center gap-1.5 rounded-md bg-indigo-600 px-4 py-1.5 text-xs font-medium text-white outline-none hover:bg-indigo-700 pressed:bg-indigo-800 disabled:opacity-50"
-            >
-              {creating ? (
-                <Loader2 className="h-3.5 w-3.5 animate-spin" />
-              ) : (
-                <Plus className="h-3.5 w-3.5" />
-              )}
-              Create
-            </Button>
-            <Button
-              onPress={() => {
-                setShowNewForm(false);
-                resetForm();
-              }}
-              className="rounded-md px-4 py-1.5 text-xs font-medium text-zinc-500 outline-none hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200"
-            >
-              Cancel
-            </Button>
-          </div>
-        </div>
-      )}
+      {/* Contact Creation Modal (reuses character contact form in campaign mode) */}
+      <ContactFormModal
+        isOpen={showCreateModal}
+        onClose={() => setShowCreateModal(false)}
+        onSubmit={handleCreateContact}
+        johnsonFactions={factions}
+        mode="campaign"
+      />
 
       {/* Filter Bar */}
       <div className="flex flex-wrap items-center gap-3">
@@ -522,7 +338,7 @@ export default function CampaignContactsTab({ campaign }: CampaignContactsTabPro
       </div>
 
       {/* Empty State */}
-      {contacts.length === 0 && !showNewForm && (
+      {contacts.length === 0 && (
         <div className="rounded-lg border border-dashed border-zinc-300 py-12 text-center dark:border-zinc-700">
           <Users className="mx-auto h-12 w-12 text-zinc-400 opacity-50" />
           <h3 className="mt-2 text-sm font-semibold text-zinc-900 dark:text-zinc-50">
@@ -533,7 +349,7 @@ export default function CampaignContactsTab({ campaign }: CampaignContactsTabPro
             scenarios.
           </p>
           <Button
-            onPress={() => setShowNewForm(true)}
+            onPress={() => setShowCreateModal(true)}
             className="mt-4 inline-flex items-center gap-1.5 rounded-md bg-indigo-600 px-3 py-1.5 text-xs font-medium text-white outline-none hover:bg-indigo-700 pressed:bg-indigo-800"
           >
             <Plus className="h-3.5 w-3.5" />
