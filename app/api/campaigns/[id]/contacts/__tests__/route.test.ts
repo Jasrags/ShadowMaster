@@ -19,7 +19,10 @@ vi.mock("@/lib/auth/campaign", () => ({
   authorizeMember: vi.fn(),
 }));
 vi.mock("@/lib/storage/contacts");
+vi.mock("@/lib/storage/characters");
 vi.mock("@/lib/rules/contacts");
+
+import * as characterStorage from "@/lib/storage/characters";
 
 function createMockRequest(url: string, body?: unknown, method = "GET"): NextRequest {
   const headers = new Headers();
@@ -45,6 +48,7 @@ function createMockContact(overrides?: Partial<SocialContact>): SocialContact {
     loyalty: 2,
     favorBalance: 0,
     status: "active",
+    group: "campaign",
     visibility: {
       playerVisible: true,
       showConnection: true,
@@ -297,6 +301,72 @@ describe("GET /api/campaigns/[id]/contacts", () => {
     const response = await GET(request, { params: Promise.resolve({ id: "test-campaign-id" }) });
     expect(response.status).toBe(500);
     consoleErrorSpy.mockRestore();
+  });
+
+  it("should return merged view with character contacts when include=all", async () => {
+    const campaignContact = createMockContact({ id: "camp-1", name: "Campaign Contact" });
+    const charContact = createMockContact({
+      id: "char-1",
+      name: "Character Contact",
+      characterId: "char-id-1",
+    });
+    const mockCampaign = createMockCampaign({ gmId: "test-gm-id", playerIds: ["player-1"] });
+
+    vi.mocked(sessionModule.getSession).mockResolvedValue("test-gm-id");
+    vi.mocked(campaignAuthModule.authorizeMember).mockResolvedValue({
+      authorized: true,
+      campaign: mockCampaign,
+      role: "gm",
+      status: 200,
+    });
+    vi.mocked(contactStorage.getCampaignContacts).mockResolvedValue([campaignContact]);
+    vi.mocked(characterStorage.getUserCharacters).mockImplementation(async (userId) => {
+      if (userId === "test-gm-id") return [];
+      return [
+        {
+          id: "char-id-1",
+          ownerId: "player-1",
+          name: "Street Sam",
+          campaignId: "test-campaign-id",
+          contacts: [],
+        } as unknown as import("@/lib/types").Character,
+      ];
+    });
+    vi.mocked(contactStorage.getCharacterContacts).mockResolvedValue([charContact]);
+
+    const request = createMockRequest(
+      "http://localhost:3000/api/campaigns/test-campaign-id/contacts?include=all"
+    );
+    const response = await GET(request, { params: Promise.resolve({ id: "test-campaign-id" }) });
+    const data = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(data.contacts).toHaveLength(2);
+    expect(data.characterNames).toEqual({ "char-id-1": "Street Sam" });
+  });
+
+  it("should not include character contacts without include=all", async () => {
+    const campaignContact = createMockContact({ id: "camp-1" });
+    const mockCampaign = createMockCampaign();
+
+    vi.mocked(sessionModule.getSession).mockResolvedValue("test-gm-id");
+    vi.mocked(campaignAuthModule.authorizeMember).mockResolvedValue({
+      authorized: true,
+      campaign: mockCampaign,
+      role: "gm",
+      status: 200,
+    });
+    vi.mocked(contactStorage.getCampaignContacts).mockResolvedValue([campaignContact]);
+
+    const request = createMockRequest(
+      "http://localhost:3000/api/campaigns/test-campaign-id/contacts"
+    );
+    const response = await GET(request, { params: Promise.resolve({ id: "test-campaign-id" }) });
+    const data = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(data.contacts).toHaveLength(1);
+    expect(characterStorage.getUserCharacters).not.toHaveBeenCalled();
   });
 });
 
