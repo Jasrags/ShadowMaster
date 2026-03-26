@@ -25,26 +25,35 @@ const PHASE_ICONS: Record<string, typeof Target> = {
 
 const PHASE_COLORS: Record<string, { active: string; completed: string; pending: string }> = {
   "the-meet": {
-    active: "border-amber-500 bg-amber-500/10 text-amber-400",
-    completed: "border-green-600 bg-green-600/20 text-green-400",
-    pending: "border-zinc-600 bg-zinc-800 text-zinc-500",
+    active: "border-amber-500 bg-amber-50 text-amber-700 dark:bg-amber-500/10 dark:text-amber-400",
+    completed:
+      "border-green-500 bg-green-50 text-green-700 dark:border-green-600 dark:bg-green-600/20 dark:text-green-400",
+    pending:
+      "border-zinc-300 bg-zinc-100 text-zinc-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-500",
   },
   "the-run": {
-    active: "border-red-500 bg-red-500/10 text-red-400",
-    completed: "border-green-600 bg-green-600/20 text-green-400",
-    pending: "border-zinc-600 bg-zinc-800 text-zinc-500",
+    active: "border-red-500 bg-red-50 text-red-700 dark:bg-red-500/10 dark:text-red-400",
+    completed:
+      "border-green-500 bg-green-50 text-green-700 dark:border-green-600 dark:bg-green-600/20 dark:text-green-400",
+    pending:
+      "border-zinc-300 bg-zinc-100 text-zinc-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-500",
   },
   "the-handoff": {
-    active: "border-indigo-500 bg-indigo-500/10 text-indigo-400",
-    completed: "border-green-600 bg-green-600/20 text-green-400",
-    pending: "border-zinc-600 bg-zinc-800 text-zinc-500",
+    active:
+      "border-indigo-500 bg-indigo-50 text-indigo-700 dark:bg-indigo-500/10 dark:text-indigo-400",
+    completed:
+      "border-green-500 bg-green-50 text-green-700 dark:border-green-600 dark:bg-green-600/20 dark:text-green-400",
+    pending:
+      "border-zinc-300 bg-zinc-100 text-zinc-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-500",
   },
 };
 
 const DEFAULT_PHASE_COLORS = {
-  active: "border-zinc-400 bg-zinc-400/10 text-zinc-300",
-  completed: "border-green-600 bg-green-600/20 text-green-400",
-  pending: "border-zinc-600 bg-zinc-800 text-zinc-500",
+  active: "border-zinc-400 bg-zinc-100 text-zinc-600 dark:bg-zinc-400/10 dark:text-zinc-300",
+  completed:
+    "border-green-500 bg-green-50 text-green-700 dark:border-green-600 dark:bg-green-600/20 dark:text-green-400",
+  pending:
+    "border-zinc-300 bg-zinc-100 text-zinc-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-500",
 };
 
 function getPhaseStatus(

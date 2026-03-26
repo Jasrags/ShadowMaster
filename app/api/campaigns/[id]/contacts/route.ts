@@ -71,6 +71,8 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
           favorBalance: c.visibility.showFavorBalance ? c.favorBalance : undefined,
           // Never show GM notes to players
           gmNotes: undefined,
+          // Never show betrayal planning to players
+          betrayalPlanning: undefined,
         };
         return visibleContact;
       });

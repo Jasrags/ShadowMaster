@@ -571,6 +571,9 @@ export type {
   ContactArchetype,
   ContactServiceType,
   ContactPreferredPayment,
+  // Betrayal planning types
+  BetrayalPlanningState,
+  BetrayalRiskLevel,
   // Favor ledger types
   FavorTransactionType,
   FavorRiskLevel,

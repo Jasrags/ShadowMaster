@@ -7,6 +7,7 @@ export type CampaignTabId =
   | "roster"
   | "grunt-teams"
   | "run-tracker"
+  | "contacts"
   | "locations"
   | "posts"
   | "calendar"
@@ -38,6 +39,7 @@ export default function CampaignTabs({
     ...(isGM ? [{ id: "roster" as const, label: "Roster", public: false }] : []),
     ...(isGM ? [{ id: "grunt-teams" as const, label: "Grunt Teams", public: false }] : []),
     ...(isGM ? [{ id: "run-tracker" as const, label: "Run Tracker", public: false }] : []),
+    ...(isGM ? [{ id: "contacts" as const, label: "Contacts", public: false }] : []),
     ...(isGM
       ? [
           {
@@ -53,8 +55,8 @@ export default function CampaignTabs({
   const tabs = allTabs.filter((tab) => tab.public || isMember);
 
   return (
-    <div className="border-b border-zinc-200 dark:border-zinc-800">
-      <nav className="-mb-px flex space-x-8" aria-label="Campaign tabs">
+    <div className="border-b border-zinc-200 dark:border-zinc-800 overflow-x-auto">
+      <nav className="-mb-px flex space-x-4 sm:space-x-6" aria-label="Campaign tabs">
         {tabs.map((tab) => (
           <button
             key={tab.id}

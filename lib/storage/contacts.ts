@@ -26,6 +26,7 @@ import type {
   CreateContactRequest,
   UpdateContactRequest,
   ContactVisibility,
+  BetrayalPlanningState,
 } from "../types/contacts";
 import { ensureDirectory, readJsonFile, writeJsonFile, deleteFile, readAllJsonFiles } from "./base";
 import { getCharacter, updateCharacter } from "./characters";
@@ -637,6 +638,36 @@ export async function updateCampaignContact(
     id: contact.id, // Prevent ID change
     campaignId: contact.campaignId, // Prevent campaign change
     visibility: mergedVisibility,
+    updatedAt: new Date().toISOString(),
+  };
+
+  const filePath = getCampaignContactPath(campaignId, contactId);
+  await writeJsonFile(filePath, updatedContact);
+
+  return updatedContact;
+}
+
+/**
+ * Set or clear betrayal planning state on a campaign contact (GM-only)
+ *
+ * @param campaignId - Campaign ID
+ * @param contactId - Contact ID
+ * @param planning - Betrayal planning state, or null to clear
+ * @returns Updated contact
+ */
+export async function updateCampaignContactBetrayalPlanning(
+  campaignId: ID,
+  contactId: ID,
+  planning: BetrayalPlanningState | null
+): Promise<SocialContact> {
+  const contact = await getCampaignContact(campaignId, contactId);
+  if (!contact) {
+    throw new Error(`Campaign contact ${contactId} not found`);
+  }
+
+  const updatedContact: SocialContact = {
+    ...contact,
+    betrayalPlanning: planning ?? undefined,
     updatedAt: new Date().toISOString(),
   };
 

@@ -16846,6 +16846,8 @@
               "asset recovery",
               "security testing"
             ],
+            "betrayalRisk": "moderate",
+            "betrayalNotes": "Know they have good rep; will use betrayal fully if situation requires it",
             "source": "run-faster",
             "page": 198
           },
@@ -16861,6 +16863,8 @@
               "wetwork",
               "smuggling"
             ],
+            "betrayalRisk": "high",
+            "betrayalNotes": "Overall corporate plan to dominate/destroy the world colors all dealings",
             "source": "run-faster",
             "page": 199
           },
@@ -16876,6 +16880,8 @@
               "research protection",
               "space-related ops"
             ],
+            "betrayalRisk": "moderate",
+            "betrayalNotes": "Top security at every meet regardless of job size",
             "source": "run-faster",
             "page": 200
           },
@@ -16891,6 +16897,8 @@
               "social engineering",
               "data retrieval"
             ],
+            "betrayalRisk": "moderate",
+            "betrayalNotes": "Dawkins Group association — can destroy anyone with minimal effort",
             "source": "run-faster",
             "page": 200
           },
@@ -16906,6 +16914,8 @@
               "wetwork",
               "corporate espionage"
             ],
+            "betrayalRisk": "very-high",
+            "betrayalNotes": "May send kill squad if you fail and accepted money",
             "source": "run-faster",
             "page": 201
           },
@@ -16915,6 +16925,8 @@
             "category": "megacorporate",
             "description": "A major Matrix infrastructure provider struggling with internal instability. NeoNET Johnsons may be working competing internal agendas, making them unpredictable employers.",
             "typicalJobs": ["matrix ops", "data theft", "asset recovery", "sabotage", "extraction"],
+            "betrayalRisk": "very-low",
+            "betrayalNotes": "Building reliable teams is their priority",
             "source": "run-faster",
             "page": 202
           },
@@ -16930,6 +16942,8 @@
               "counter-intelligence",
               "security testing"
             ],
+            "betrayalRisk": "moderate",
+            "betrayalNotes": "Internal politics mean Johnson's enemies become your enemies",
             "source": "run-faster",
             "page": 202
           },
@@ -16945,6 +16959,8 @@
               "sabotage",
               "investigation"
             ],
+            "betrayalRisk": "uncertain",
+            "betrayalNotes": "S-K Johnsons are left alone a lot and quickly learn not to question missions",
             "source": "run-faster",
             "page": 203
           },
@@ -16960,6 +16976,8 @@
               "extraction",
               "corporate espionage"
             ],
+            "betrayalRisk": "low",
+            "betrayalNotes": "Low if honor is maintained",
             "source": "run-faster",
             "page": 203
           },
@@ -16975,6 +16993,8 @@
               "astral ops",
               "smuggling"
             ],
+            "betrayalRisk": "moderate",
+            "betrayalNotes": "Magical member is always watching",
             "source": "run-faster",
             "page": 204
           },
@@ -16990,6 +17010,8 @@
               "territory defense",
               "debt collection"
             ],
+            "betrayalRisk": "low",
+            "betrayalNotes": "Low risk of non-payment; high risk of violence if you show disrespect",
             "source": "run-faster",
             "page": 205
           },
@@ -17005,6 +17027,8 @@
               "protection rackets",
               "corporate infiltration"
             ],
+            "betrayalRisk": "high",
+            "betrayalNotes": "Biggest hypocrites in the shadows — break all rules they insist you follow",
             "source": "run-faster",
             "page": 206
           },
@@ -17020,6 +17044,8 @@
               "BTL distribution",
               "enforcement"
             ],
+            "betrayalRisk": "high",
+            "betrayalNotes": "Payback will come using magic — find a warded place and plan to stay there",
             "source": "run-faster",
             "page": 206
           },
@@ -17029,6 +17055,8 @@
             "category": "syndicate",
             "description": "Russian organized crime known for extreme violence and no formal code of honor. Vory Johnsons are unpredictable and dangerous employers who may betray runners on a whim.",
             "typicalJobs": ["wetwork", "intimidation", "smuggling", "matrix crime", "arms dealing"],
+            "betrayalRisk": "moderate",
+            "betrayalNotes": "Good people to work for if you aren't looking to make friends; violence is their only problem-solving method",
             "source": "run-faster",
             "page": 207
           },
@@ -17044,6 +17072,8 @@
               "anti-metahuman ops",
               "arson"
             ],
+            "betrayalRisk": "moderate",
+            "betrayalNotes": "Will promise anything and lie about everything; highest post-run kill risk among extremists",
             "source": "run-faster",
             "page": 208
           },
@@ -17059,6 +17089,8 @@
               "propaganda",
               "investigation"
             ],
+            "betrayalRisk": "low",
+            "betrayalNotes": "Mission-driven and passionate; less likely to betray but plans may be idealistic",
             "source": "run-faster",
             "page": 208
           },
@@ -17068,6 +17100,8 @@
             "category": "extremist",
             "description": "A violent anti-metahuman terrorist organization that targets metahumans and their allies. Alamos Johnsons are dangerous fanatics willing to sacrifice runners for their cause.",
             "typicalJobs": ["terrorism", "wetwork", "sabotage", "bombing", "anti-metahuman ops"],
+            "betrayalRisk": "very-high",
+            "betrayalNotes": "Dangerous fanatics willing to sacrifice runners; highest post-run kill risk",
             "source": "run-faster",
             "page": 209
           },
@@ -17083,6 +17117,8 @@
               "protection",
               "investigation"
             ],
+            "betrayalRisk": "low",
+            "betrayalNotes": "Low intentional betrayal risk; high accidental risk from incompetence and bad intel",
             "source": "run-faster",
             "page": 210
           }

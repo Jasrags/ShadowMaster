@@ -28,6 +28,7 @@ import CampaignAdvancementsTab from "./components/CampaignAdvancementsTab";
 import CampaignCharacterApprovalsTab from "./components/CampaignCharacterApprovalsTab";
 import CampaignGruntTeamsTab from "./components/CampaignGruntTeamsTab";
 import CampaignRunTrackerTab from "./components/CampaignRunTrackerTab";
+import CampaignContactsTab from "./components/CampaignContactsTab";
 
 interface CampaignDetailProps {
   params: Promise<{ id: string }>;
@@ -349,6 +350,9 @@ export default function CampaignDetailPage({ params }: CampaignDetailProps) {
         )}
         {activeTab === "run-tracker" && userRole === "gm" && campaign && (
           <CampaignRunTrackerTab campaign={campaign} />
+        )}
+        {activeTab === "contacts" && userRole === "gm" && campaign && (
+          <CampaignContactsTab campaign={campaign} />
         )}
         {activeTab === "approvals" && userRole === "gm" && (
           <div className="space-y-8">
