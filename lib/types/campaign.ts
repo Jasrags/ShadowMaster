@@ -158,6 +158,9 @@ export interface Campaign {
   /** Campaign calendar events */
   events?: CampaignEvent[];
 
+  /** Run tracker sessions (GM-managed run lifecycle tracking) */
+  runTrackerSessions?: RunTrackerSession[];
+
   createdAt: ISODateString;
   updatedAt: ISODateString;
 
@@ -250,6 +253,33 @@ export interface CampaignSession {
   midSessionAwards?: MidSessionAward[];
   /** Edge refresh events triggered by the GM */
   edgeRefreshes?: EdgeRefreshEvent[];
+  createdAt: ISODateString;
+  updatedAt: ISODateString;
+}
+
+/**
+ * A phase transition record in the run tracker
+ */
+export interface RunPhaseTransition {
+  /** Phase ID that was entered (e.g. "the-meet", "the-run", "the-handoff") */
+  phaseId: string;
+  /** When the phase was entered */
+  enteredAt: ISODateString;
+}
+
+/**
+ * A run tracker session that tracks which run phase the team is currently in
+ */
+export interface RunTrackerSession {
+  id: ID;
+  /** Display label (e.g. "Run #3 — Wetwork for Aztechnology") */
+  label: string;
+  /** Currently active phase ID */
+  activePhaseId: string;
+  /** Ordered log of phase transitions */
+  phaseTransitions: RunPhaseTransition[];
+  /** Run tracker status */
+  status: "active" | "completed";
   createdAt: ISODateString;
   updatedAt: ISODateString;
 }

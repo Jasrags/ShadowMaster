@@ -410,6 +410,8 @@ export type {
   CampaignMembership,
   CampaignNote,
   CampaignSession,
+  RunTrackerSession,
+  RunPhaseTransition,
   CreateCampaignRequest,
   UpdateCampaignRequest,
   CampaignResponse,
