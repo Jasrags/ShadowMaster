@@ -185,6 +185,60 @@ describe("GET /api/campaigns/[id]/contacts", () => {
     expect(data.isGm).toBe(false);
   });
 
+  it("should strip betrayalPlanning from contacts for non-GM players", async () => {
+    const contacts = [
+      createMockContact({
+        betrayalPlanning: {
+          betrayalTypeId: "liquidation",
+          revealedSignals: ["Job involves extremely sensitive secrets"],
+          markedAt: new Date().toISOString(),
+        },
+      }),
+    ];
+    const mockCampaign = createMockCampaign();
+    vi.mocked(sessionModule.getSession).mockResolvedValue("player-1");
+    vi.mocked(campaignAuthModule.authorizeMember).mockResolvedValue({
+      authorized: true,
+      campaign: mockCampaign,
+      role: "player",
+      status: 200,
+    });
+    vi.mocked(contactStorage.getCampaignContacts).mockResolvedValue(contacts);
+    const request = createMockRequest(
+      "http://localhost:3000/api/campaigns/test-campaign-id/contacts"
+    );
+    const response = await GET(request, { params: Promise.resolve({ id: "test-campaign-id" }) });
+    const data = await response.json();
+    expect(response.status).toBe(200);
+    expect(data.contacts[0].betrayalPlanning).toBeUndefined();
+    expect(data.contacts[0].gmNotes).toBeUndefined();
+  });
+
+  it("should preserve betrayalPlanning for GM", async () => {
+    const planning = {
+      betrayalTypeId: "liquidation",
+      revealedSignals: ["Job involves extremely sensitive secrets"],
+      markedAt: new Date().toISOString(),
+    };
+    const contacts = [createMockContact({ betrayalPlanning: planning })];
+    const mockCampaign = createMockCampaign();
+    vi.mocked(sessionModule.getSession).mockResolvedValue("test-gm-id");
+    vi.mocked(campaignAuthModule.authorizeMember).mockResolvedValue({
+      authorized: true,
+      campaign: mockCampaign,
+      role: "gm",
+      status: 200,
+    });
+    vi.mocked(contactStorage.getCampaignContacts).mockResolvedValue(contacts);
+    const request = createMockRequest(
+      "http://localhost:3000/api/campaigns/test-campaign-id/contacts"
+    );
+    const response = await GET(request, { params: Promise.resolve({ id: "test-campaign-id" }) });
+    const data = await response.json();
+    expect(response.status).toBe(200);
+    expect(data.contacts[0].betrayalPlanning).toEqual(planning);
+  });
+
   it("should filter by archetype", async () => {
     const contacts = [createMockContact({ archetype: "fixer" })];
     const mockCampaign = createMockCampaign();

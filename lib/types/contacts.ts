@@ -10,6 +10,37 @@
 import type { ID, ISODateString, Metadata } from "./core";
 import type { EditionCode } from "./edition";
 import type { RelationshipQuality, ChipCostAdjustment } from "../rules/relationship-qualities";
+import type { BetrayalSeverity } from "../rules/module-payloads";
+
+// =============================================================================
+// BETRAYAL PLANNING TYPES (GM-only)
+// =============================================================================
+
+/**
+ * GM-only betrayal planning state for a Johnson contact.
+ * Hidden from players via ContactVisibility filtering.
+ */
+export interface BetrayalPlanningState {
+  /** Which betrayal type the Johnson is planning */
+  betrayalTypeId: string;
+  /** Warning signals the GM has chosen to reveal to players */
+  revealedSignals: string[];
+  /** GM notes about the betrayal scenario */
+  gmNotes?: string;
+  /** When the GM marked this contact as planning betrayal */
+  markedAt: ISODateString;
+}
+
+/**
+ * Faction-level betrayal risk assessment hint
+ */
+export type BetrayalRiskLevel =
+  | "very-low"
+  | "low"
+  | "moderate"
+  | "high"
+  | "very-high"
+  | "uncertain";
 
 // =============================================================================
 // CONTACT CORE TYPES
@@ -227,6 +258,13 @@ export interface SocialContact {
 
   createdAt: ISODateString;
   updatedAt?: ISODateString;
+
+  // ---------------------------------------------------------------------------
+  // Betrayal Planning (GM-only, Run Faster pp. 210-211)
+  // ---------------------------------------------------------------------------
+
+  /** GM-only betrayal planning state (hidden from players) */
+  betrayalPlanning?: BetrayalPlanningState;
 
   /** Extensible metadata */
   metadata?: Metadata;

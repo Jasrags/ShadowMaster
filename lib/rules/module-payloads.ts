@@ -242,6 +242,10 @@ export interface JohnsonFactionData {
   category: JohnsonFactionCategory;
   description: string;
   typicalJobs?: string[];
+  /** Betrayal risk level for this faction (Run Faster pp. 202-211) */
+  betrayalRisk?: import("../types/contacts").BetrayalRiskLevel;
+  /** GM-facing notes about betrayal tendencies */
+  betrayalNotes?: string;
   source: string;
   page: number;
 }
