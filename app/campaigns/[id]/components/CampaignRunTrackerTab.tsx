@@ -58,8 +58,8 @@ export default function CampaignRunTrackerTab({ campaign }: CampaignRunTrackerTa
     try {
       const res = await fetch(`/api/rulesets/${campaign.editionCode}`);
       const data = await res.json();
-      if (data.success && data.ruleset) {
-        const jp = data.ruleset.johnsonProfiles as JohnsonProfilesModulePayload | null;
+      if (data.success && data.extractedData) {
+        const jp = data.extractedData.johnsonProfiles as JohnsonProfilesModulePayload | null;
         if (jp) {
           setPhases(jp.runPhases || []);
           setNotorietyTriggers(jp.notorietyTriggers || []);
