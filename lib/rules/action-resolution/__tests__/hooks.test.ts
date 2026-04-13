@@ -51,6 +51,8 @@ vi.mock("../dice-engine", () => ({
     isGlitch: false,
     isCriticalGlitch: false,
     limitApplied: false,
+    limitExceeded: false,
+    limitEnforcement: "on" as const,
     poolSize: 3,
   })),
   executeReroll: vi.fn(() => ({
@@ -65,6 +67,8 @@ vi.mock("../dice-engine", () => ({
     isGlitch: false,
     isCriticalGlitch: false,
     limitApplied: false,
+    limitExceeded: false,
+    limitEnforcement: "on" as const,
     poolSize: 3,
   })),
 }));

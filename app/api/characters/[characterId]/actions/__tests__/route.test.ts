@@ -695,6 +695,8 @@ describe("POST /api/characters/[characterId]/actions", () => {
         isGlitch: false,
         isCriticalGlitch: false,
         limitApplied: false,
+        limitExceeded: false,
+        limitEnforcement: "on" as const,
         poolSize: 8,
       };
 
@@ -743,6 +745,8 @@ describe("POST /api/characters/[characterId]/actions", () => {
         isGlitch: false,
         isCriticalGlitch: false,
         limitApplied: false,
+        limitExceeded: false,
+        limitEnforcement: "on" as const,
         poolSize: 5,
       };
 
@@ -788,6 +792,8 @@ describe("POST /api/characters/[characterId]/actions", () => {
         isGlitch: false,
         isCriticalGlitch: false,
         limitApplied: false,
+        limitExceeded: false,
+        limitEnforcement: "on" as const,
         poolSize: 8,
       };
 
@@ -870,6 +876,8 @@ describe("POST /api/characters/[characterId]/actions", () => {
         isGlitch: false,
         isCriticalGlitch: false,
         limitApplied: false,
+        limitExceeded: false,
+        limitEnforcement: "on" as const,
         poolSize: 11,
       };
       const updatedCharacter = createMockCharacter({
@@ -961,6 +969,8 @@ describe("POST /api/characters/[characterId]/actions", () => {
         isGlitch: false,
         isCriticalGlitch: false,
         limitApplied: false,
+        limitExceeded: false,
+        limitEnforcement: "on" as const,
         poolSize: 8,
       };
 

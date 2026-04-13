@@ -12,6 +12,7 @@ import type {
   EdgeActionType,
   EditionDiceRules,
 } from "@/lib/types";
+import type { LimitEnforcement } from "@/lib/types/house-rules";
 import {
   DEFAULT_DICE_RULES,
   executeRoll,
@@ -191,7 +192,8 @@ export function executePushTheLimit(
 export function executeSecondChance(
   character: Character,
   originalResult: ActionResult,
-  rules: EditionDiceRules = DEFAULT_DICE_RULES
+  rules: EditionDiceRules = DEFAULT_DICE_RULES,
+  limitEnforcement: LimitEnforcement = "on"
 ): EdgeActionResult {
   const edgeConfig = rules.edgeActions?.["second-chance"];
   const edgeCost = edgeConfig?.cost ?? 1;
@@ -217,7 +219,12 @@ export function executeSecondChance(
   }
 
   // Perform reroll
-  const rollResult = executeReroll(originalResult.dice, rules, originalResult.pool.limit);
+  const rollResult = executeReroll(
+    originalResult.dice,
+    rules,
+    originalResult.pool.limit,
+    limitEnforcement
+  );
 
   return {
     success: true,

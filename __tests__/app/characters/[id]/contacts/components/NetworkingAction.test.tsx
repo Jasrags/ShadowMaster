@@ -84,6 +84,8 @@ vi.mock("@/lib/rules/action-resolution/dice-engine", () => ({
     isGlitch: false,
     isCriticalGlitch: false,
     limitApplied: false,
+    limitExceeded: false,
+    limitEnforcement: "on" as const,
     poolSize: 4,
   }),
 }));

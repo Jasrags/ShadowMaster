@@ -534,6 +534,8 @@ describe("POST /api/combat/[sessionId]/actions", () => {
       isGlitch: false,
       isCriticalGlitch: false,
       limitApplied: false,
+      limitExceeded: false,
+      limitEnforcement: "on" as const,
       poolSize: 8,
     });
   });

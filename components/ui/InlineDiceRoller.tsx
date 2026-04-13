@@ -3,6 +3,7 @@
 import React, { useState, useCallback, useEffect, useRef } from "react";
 import { Dice5 } from "lucide-react";
 import { executeRoll, type RollExecutionResult } from "@/lib/rules/action-resolution/dice-engine";
+import type { LimitEnforcement } from "@/lib/types/house-rules";
 
 // =============================================================================
 // DIE FACE (theme-aware)
@@ -48,6 +49,10 @@ export interface InlineDiceRollerProps {
   accentColor?: string;
   /** Border color class for results container */
   borderColor?: string;
+  /** Limit to apply to hits */
+  limit?: number;
+  /** Limit enforcement mode from campaign house rules */
+  limitEnforcement?: LimitEnforcement;
 }
 
 export function InlineDiceRoller({
@@ -56,6 +61,8 @@ export function InlineDiceRoller({
   onHitsChange,
   accentColor = "text-emerald-400",
   borderColor = "border-border",
+  limit,
+  limitEnforcement,
 }: InlineDiceRollerProps) {
   const [rollResult, setRollResult] = useState<RollExecutionResult | null>(null);
   const [isRolling, setIsRolling] = useState(false);
@@ -78,12 +85,15 @@ export function InlineDiceRoller({
     setIsRolling(true);
     // Brief delay for visual feedback
     timerRef.current = setTimeout(() => {
-      const result = executeRoll(dicePool);
+      const result = executeRoll(dicePool, undefined, {
+        limit,
+        limitEnforcement,
+      });
       setRollResult(result);
       onHitsChange(result.hits);
       setIsRolling(false);
     }, 150);
-  }, [dicePool, onHitsChange]);
+  }, [dicePool, onHitsChange, limit, limitEnforcement]);
 
   return (
     <div className="space-y-3">
@@ -135,6 +145,14 @@ export function InlineDiceRoller({
               <span className="text-sm text-muted-foreground">
                 {rollResult.hits === 1 ? "hit" : "hits"}
               </span>
+              {rollResult.limitApplied && (
+                <span className="text-xs text-amber-500 font-mono">
+                  (capped from {rollResult.rawHits})
+                </span>
+              )}
+              {rollResult.limitExceeded && rollResult.limitEnforcement === "advisory" && (
+                <span className="text-xs text-amber-500 font-mono">(exceeds limit {limit})</span>
+              )}
             </div>
             {rollResult.isCriticalGlitch && (
               <span className="text-xs font-mono font-bold text-red-500 animate-pulse">

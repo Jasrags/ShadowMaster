@@ -6,6 +6,7 @@
  */
 
 import type { DiceResult, EditionDiceRules } from "@/lib/types";
+import type { LimitEnforcement } from "@/lib/types/house-rules";
 
 // =============================================================================
 // DEFAULT RULES (SR5)
@@ -171,20 +172,49 @@ export function calculateHits(dice: DiceResult[], hitThreshold: number = 5): num
 }
 
 /**
- * Count hits with a limit applied
+ * Count hits with a limit applied, respecting the limit enforcement mode.
+ *
+ * - "on" (default): hits are capped at the limit (RAW behavior)
+ * - "off": limit is ignored entirely
+ * - "advisory": limit is tracked but hits are NOT capped
  */
 export function calculateHitsWithLimit(
   dice: DiceResult[],
   hitThreshold: number = 5,
-  limit?: number
-): { hits: number; rawHits: number; limitApplied: boolean } {
+  limit?: number,
+  limitEnforcement: LimitEnforcement = "on"
+): { hits: number; rawHits: number; limitApplied: boolean; limitExceeded: boolean } {
   const rawHits = calculateHits(dice, hitThreshold);
 
-  if (limit !== undefined && limit > 0 && rawHits > limit) {
+  // "off" mode: ignore the limit entirely
+  if (limitEnforcement === "off") {
+    return {
+      hits: rawHits,
+      rawHits,
+      limitApplied: false,
+      limitExceeded: false,
+    };
+  }
+
+  const wouldExceed = limit !== undefined && limit > 0 && rawHits > limit;
+
+  // "advisory" mode: track whether limit would be exceeded but don't cap
+  if (limitEnforcement === "advisory") {
+    return {
+      hits: rawHits,
+      rawHits,
+      limitApplied: false,
+      limitExceeded: wouldExceed,
+    };
+  }
+
+  // "on" mode (RAW): cap hits at the limit
+  if (wouldExceed) {
     return {
       hits: limit,
       rawHits,
       limitApplied: true,
+      limitExceeded: true,
     };
   }
 
@@ -192,6 +222,7 @@ export function calculateHitsWithLimit(
     hits: rawHits,
     rawHits,
     limitApplied: false,
+    limitExceeded: false,
   };
 }
 
@@ -303,6 +334,10 @@ export interface RollExecutionResult {
   isGlitch: boolean;
   isCriticalGlitch: boolean;
   limitApplied: boolean;
+  /** Whether raw hits exceeded the limit (true in both "on" and "advisory" modes) */
+  limitExceeded: boolean;
+  /** The limit enforcement mode used for this roll */
+  limitEnforcement: LimitEnforcement;
   poolSize: number;
 }
 
@@ -315,18 +350,22 @@ export function executeRoll(
   options: {
     explodingSixes?: boolean;
     limit?: number;
+    limitEnforcement?: LimitEnforcement;
   } = {}
 ): RollExecutionResult {
+  const enforcement = options.limitEnforcement ?? "on";
+
   // Roll dice
   const dice = options.explodingSixes
     ? rollDiceExploding(poolSize, rules)
     : rollDice(poolSize, rules);
 
   // Calculate hits
-  const { hits, rawHits, limitApplied } = calculateHitsWithLimit(
+  const { hits, rawHits, limitApplied, limitExceeded } = calculateHitsWithLimit(
     dice,
     rules.hitThreshold,
-    options.limit
+    options.limit,
+    enforcement
   );
 
   // Calculate glitch
@@ -343,6 +382,8 @@ export function executeRoll(
     isGlitch: glitchResult.isGlitch,
     isCriticalGlitch: glitchResult.isCriticalGlitch,
     limitApplied,
+    limitExceeded,
+    limitEnforcement: enforcement,
     poolSize: dice.length,
   };
 }
@@ -353,13 +394,19 @@ export function executeRoll(
 export function executeReroll(
   originalDice: DiceResult[],
   rules: EditionDiceRules = DEFAULT_DICE_RULES,
-  limit?: number
+  limit?: number,
+  limitEnforcement: LimitEnforcement = "on"
 ): RollExecutionResult {
   // Reroll non-hits
   const dice = rerollNonHits(originalDice, rules);
 
   // Calculate hits
-  const { hits, rawHits, limitApplied } = calculateHitsWithLimit(dice, rules.hitThreshold, limit);
+  const { hits, rawHits, limitApplied, limitExceeded } = calculateHitsWithLimit(
+    dice,
+    rules.hitThreshold,
+    limit,
+    limitEnforcement
+  );
 
   // Calculate glitch (on new dice, not original)
   const glitchResult = calculateGlitch(dice, hits, rules);
@@ -375,6 +422,8 @@ export function executeReroll(
     isGlitch: glitchResult.isGlitch,
     isCriticalGlitch: glitchResult.isCriticalGlitch,
     limitApplied,
+    limitExceeded,
+    limitEnforcement,
     poolSize: dice.length,
   };
 }
