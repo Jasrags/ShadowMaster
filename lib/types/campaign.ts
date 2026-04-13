@@ -7,6 +7,7 @@
 
 import type { ID, ISODateString, Metadata } from "./core";
 import type { EditionCode } from "./edition";
+import type { HouseRules } from "./house-rules";
 
 /**
  * Campaign visibility levels
@@ -106,7 +107,7 @@ export interface Campaign {
   };
 
   /** House rules (freeform text or structured JSON) */
-  houseRules?: string | Record<string, unknown>;
+  houseRules?: HouseRules;
 
   /** Advancement and training rules for this campaign */
   advancementSettings: CampaignAdvancementSettings;
@@ -180,7 +181,7 @@ export interface CampaignTemplate {
   enabledCreationMethodIds: ID[];
   gameplayLevel: GameplayLevel;
   enabledOptionalRules?: string[];
-  houseRules?: string | Record<string, unknown>;
+  houseRules?: HouseRules;
   createdBy: ID; // User who created the template
   isPublic: boolean; // If true, other GMs can use this template
   createdAt: ISODateString;
@@ -471,7 +472,7 @@ export interface CreateCampaignRequest {
   enabledCreationMethodIds: ID[];
   gameplayLevel: GameplayLevel;
   enabledOptionalRules?: string[];
-  houseRules?: string | Record<string, unknown>;
+  houseRules?: HouseRules;
   visibility: CampaignVisibility;
   maxPlayers?: number;
   imageUrl?: string;
@@ -491,7 +492,7 @@ export interface UpdateCampaignRequest {
   enabledCreationMethodIds?: ID[];
   gameplayLevel?: GameplayLevel;
   enabledOptionalRules?: string[];
-  houseRules?: string | Record<string, unknown>;
+  houseRules?: HouseRules;
   status?: CampaignStatus;
   visibility?: CampaignVisibility;
   maxPlayers?: number;
