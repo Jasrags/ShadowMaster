@@ -122,12 +122,7 @@ function ToggleField({ meta, value, modified, onChange, onReset }: ToggleFieldPr
           </button>
         )}
       </div>
-      <p className="mb-2 text-xs text-zinc-500 dark:text-zinc-400">
-        {meta.description}
-        {meta.issueNumber && (
-          <span className="ml-1 text-zinc-400 dark:text-zinc-500">#{meta.issueNumber}</span>
-        )}
-      </p>
+      <p className="mb-2 text-xs text-zinc-500 dark:text-zinc-400">{meta.description}</p>
       {renderControl(meta, value, onChange)}
     </div>
   );
