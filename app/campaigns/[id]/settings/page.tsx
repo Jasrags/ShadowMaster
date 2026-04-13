@@ -12,6 +12,7 @@ import type {
   CampaignStatus,
 } from "@/lib/types";
 import type { CampaignAdvancementSettings } from "@/lib/types/campaign";
+import type { HouseRules } from "@/lib/types/house-rules";
 import {
   ArrowLeft,
   Loader2,
@@ -24,6 +25,7 @@ import {
   Tag,
 } from "lucide-react";
 import AdvancementSettingsForm from "./components/AdvancementSettingsForm";
+import HouseRulesForm from "./components/HouseRulesForm";
 
 interface SettingsPageProps {
   params: Promise<{ id: string }>;
@@ -78,6 +80,7 @@ export default function CampaignSettingsPage({ params }: SettingsPageProps) {
   const [gmNotes, setGmNotes] = useState("");
   const [advancementSettings, setAdvancementSettings] =
     useState<CampaignAdvancementSettings | null>(null);
+  const [houseRules, setHouseRules] = useState<HouseRules>({});
 
   // Template state
   const [showTemplateDialog, setShowTemplateDialog] = useState(false);
@@ -127,6 +130,9 @@ export default function CampaignSettingsPage({ params }: SettingsPageProps) {
         if (c.advancementSettings) {
           setAdvancementSettings(c.advancementSettings);
         }
+        if (c.houseRules) {
+          setHouseRules(c.houseRules);
+        }
 
         // Fetch edition data with book summaries
         const editionRes = await fetch(`/api/editions/${c.editionCode}?include=bookSummaries`);
@@ -170,6 +176,7 @@ export default function CampaignSettingsPage({ params }: SettingsPageProps) {
           tags: tags.length > 0 ? tags : undefined,
           gmNotes: gmNotes || undefined,
           advancementSettings: advancementSettings || undefined,
+          houseRules: Object.keys(houseRules).length > 0 ? houseRules : undefined,
         }),
       });
 
@@ -591,6 +598,18 @@ export default function CampaignSettingsPage({ params }: SettingsPageProps) {
             />
           </section>
         )}
+
+        {/* House Rules / Feature Toggles */}
+        <section className="rounded-lg border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-black">
+          <h2 className="mb-4 text-lg font-semibold text-zinc-900 dark:text-zinc-50">
+            House Rules
+          </h2>
+          <p className="mb-6 text-sm text-zinc-500 dark:text-zinc-400">
+            Customize rules enforcement for your table. Unmodified values use the standard Shadowrun
+            defaults.
+          </p>
+          <HouseRulesForm houseRules={houseRules} onChange={setHouseRules} />
+        </section>
 
         {/* Visibility & Access */}
         <section className="rounded-lg border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-black">

@@ -431,6 +431,19 @@ export type {
 
 export type { CampaignAdvancementSettings, AdvancementRulesData } from "./campaign";
 
+// House rules types
+export type {
+  HouseRules,
+  ToggleCategory,
+  ToggleMeta,
+  ToggleValueType,
+  DiceMode,
+  LimitEnforcement,
+  GearRestrictionLevel,
+  MagicReductionFormula,
+} from "./house-rules";
+export { createDefaultHouseRules } from "./house-rules";
+
 // Location types
 export type {
   LocationType,

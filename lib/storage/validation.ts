@@ -16,7 +16,8 @@ import type {
   LocationType,
   LocationVisibility,
 } from "../types/location";
-import type { CampaignTemplate, EditionCode } from "../types";
+import type { CampaignTemplate, EditionCode, HouseRules } from "../types";
+import { TOGGLE_REGISTRY } from "../rules/house-rules-registry";
 
 // =============================================================================
 // CONSTANTS
@@ -444,6 +445,78 @@ const KNOWN_EDITION_CODES: readonly EditionCode[] = [
   "anarchy",
 ] as const;
 
+// =============================================================================
+// HOUSE RULES VALIDATION
+// =============================================================================
+
+const KNOWN_HOUSE_RULE_KEYS = new Set<string>(TOGGLE_REGISTRY.map((meta) => meta.id));
+
+/**
+ * Validate a HouseRules object.
+ * Returns an array of error strings (empty = valid).
+ */
+export function validateHouseRules(houseRules: unknown): string[] {
+  const errors: string[] = [];
+
+  if (typeof houseRules !== "object" || houseRules === null) {
+    errors.push("houseRules must be an object");
+    return errors;
+  }
+
+  const rules = houseRules as Record<string, unknown>;
+
+  for (const key of Object.keys(rules)) {
+    if (!KNOWN_HOUSE_RULE_KEYS.has(key)) {
+      errors.push(`houseRules: unknown key '${key}'`);
+      continue;
+    }
+
+    const value = rules[key];
+    if (value === undefined) continue;
+
+    const meta = TOGGLE_REGISTRY.find((m) => m.id === key);
+    if (!meta) continue;
+
+    switch (meta.valueType) {
+      case "boolean":
+        if (typeof value !== "boolean") {
+          errors.push(`houseRules.${key} must be a boolean`);
+        }
+        break;
+      case "number":
+        if (typeof value !== "number" || !Number.isFinite(value)) {
+          errors.push(`houseRules.${key} must be a finite number`);
+        } else {
+          if (meta.min !== undefined && value < meta.min) {
+            errors.push(`houseRules.${key} must be >= ${meta.min}`);
+          }
+          if (meta.max !== undefined && value > meta.max) {
+            errors.push(`houseRules.${key} must be <= ${meta.max}`);
+          }
+        }
+        break;
+      case "enum":
+        if (meta.options && !meta.options.some((o) => o.value === value)) {
+          const allowed = meta.options.map((o) => o.value).join(", ");
+          errors.push(`houseRules.${key} must be one of: ${allowed}`);
+        }
+        break;
+      case "string":
+        if (typeof value !== "string") {
+          errors.push(`houseRules.${key} must be a string`);
+        }
+        break;
+      case "string-array":
+        if (!Array.isArray(value) || !value.every((v) => typeof v === "string")) {
+          errors.push(`houseRules.${key} must be an array of strings`);
+        }
+        break;
+    }
+  }
+
+  return errors;
+}
+
 /**
  * Validate a CampaignTemplate object before writing to storage.
  */
@@ -496,9 +569,7 @@ export function validateCampaignTemplateData(data: unknown): ValidationResult {
 
   // houseRules validation
   if (template.houseRules !== undefined && template.houseRules !== null) {
-    if (typeof template.houseRules !== "object") {
-      errors.push("houseRules must be an object");
-    }
+    errors.push(...validateHouseRules(template.houseRules));
   }
 
   return {
