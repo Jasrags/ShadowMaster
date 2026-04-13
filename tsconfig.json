@@ -31,5 +31,5 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
-  "exclude": ["node_modules", ".next", "dist", "build", "e2e"]
+  "exclude": ["node_modules", ".next", "dist", "build", "e2e", "everything-claude-code"]
 }

@@ -1,0 +1,38 @@
+Documentation Update Report — 2026-04-13
+==========================================
+
+Codemaps (INITIAL GENERATION)
+─────────────────────────────
+Created:  docs/CODEMAPS/architecture.md  — 55 lines, ~600 tokens
+Created:  docs/CODEMAPS/backend.md       — 106 lines, ~950 tokens
+Created:  docs/CODEMAPS/frontend.md      — 80 lines, ~700 tokens
+Created:  docs/CODEMAPS/data.md          — 79 lines, ~600 tokens
+Created:  docs/CODEMAPS/dependencies.md  — 43 lines, ~400 tokens
+Total codemaps: 363 lines, ~3250 tokens
+
+Documentation
+─────────────
+Created:  docs/CONTRIBUTING.md  — Scripts table, git workflow, code style, PR checklist
+Created:  docs/ENV.md           — All env vars from .env.example (6 categories, 30+ vars)
+Created:  docs/RUNBOOK.md       — Deploy procedures, health checks, common issues, rollback
+
+Project Stats
+─────────────
+  API route files: 217
+  Page routes: 31
+  Components: ~240
+  Storage modules: 22
+  Rules engine modules: 55
+  Type definition files: 34
+  Test files: ~493
+
+Staleness Warnings (90+ days without update)
+─────────────────────────────────────────────
+  STALE (129 days): docs/rules/README.md
+  STALE (119 days): docs/data_tables/magic/spirits_man_water.md
+  STALE (119 days): docs/data_tables/magic/spirits_air_earth_beasts_fire.md
+  STALE (109 days): docs/prompts/operational/ (7 files)
+  STALE (109 days): docs/prompts/governance/ai_project_manager.md
+  STALE (109 days): docs/decisions/003-005 (3 ADR files)
+
+  Note: docs/references/ and docs/archive/ excluded from staleness check.
