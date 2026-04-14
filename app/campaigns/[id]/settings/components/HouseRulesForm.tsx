@@ -189,6 +189,9 @@ function renderControl(meta: ToggleMeta, value: unknown, onChange: (value: unkno
       );
 
     case "string-array":
+      if (meta.id === "disabledEdgeActionIds") {
+        return <EdgeActionToggleList value={value as string[]} onChange={onChange} />;
+      }
       return (
         <p className="text-xs italic text-zinc-400 dark:text-zinc-500">
           Configured per-item (not yet editable here)
@@ -198,4 +201,88 @@ function renderControl(meta: ToggleMeta, value: unknown, onChange: (value: unkno
     default:
       return null;
   }
+}
+
+// =============================================================================
+// EDGE ACTION PER-ITEM CHECKBOXES (#863)
+// =============================================================================
+
+const EDGE_ACTION_ITEMS: ReadonlyArray<{ id: string; label: string; description: string }> = [
+  {
+    id: "push-the-limit",
+    label: "Push the Limit",
+    description: "Add Edge dice, ignore limits, exploding 6s.",
+  },
+  {
+    id: "second-chance",
+    label: "Second Chance",
+    description: "Reroll all dice that did not score a hit.",
+  },
+  {
+    id: "seize-the-initiative",
+    label: "Seize the Initiative",
+    description: "Go first in an Initiative Pass.",
+  },
+  { id: "blitz", label: "Blitz", description: "Roll 5d6 for Initiative." },
+  { id: "close-call", label: "Close Call", description: "Negate a glitch or critical glitch." },
+  {
+    id: "dead-mans-trigger",
+    label: "Dead Man's Trigger",
+    description: "Act when incapacitated.",
+  },
+];
+
+interface EdgeActionToggleListProps {
+  value: string[];
+  onChange: (value: string[] | undefined) => void;
+}
+
+function EdgeActionToggleList({ value, onChange }: EdgeActionToggleListProps) {
+  const disabled = new Set(value ?? []);
+
+  const toggle = (id: string) => {
+    const next = new Set(disabled);
+    if (next.has(id)) {
+      next.delete(id);
+    } else {
+      next.add(id);
+    }
+    const nextArr = Array.from(next);
+    onChange(nextArr.length === 0 ? undefined : nextArr);
+  };
+
+  return (
+    <div className="space-y-2">
+      {EDGE_ACTION_ITEMS.map((item) => {
+        const isDisabled = disabled.has(item.id);
+        return (
+          <label key={item.id} className="flex items-start gap-2">
+            <input
+              type="checkbox"
+              checked={isDisabled}
+              onChange={() => toggle(item.id)}
+              className="mt-0.5 h-4 w-4 rounded border-zinc-300 text-indigo-600 focus:ring-indigo-500"
+            />
+            <span className="text-sm">
+              <span
+                className={`font-medium ${
+                  isDisabled
+                    ? "text-zinc-400 line-through dark:text-zinc-500"
+                    : "text-zinc-700 dark:text-zinc-300"
+                }`}
+              >
+                {item.label}
+              </span>
+              <span className="ml-2 text-xs text-zinc-500 dark:text-zinc-400">
+                {item.description}
+              </span>
+            </span>
+          </label>
+        );
+      })}
+      <p className="text-xs italic text-zinc-500 dark:text-zinc-400">
+        Checked actions are disabled for this campaign.
+      </p>
+    </div>
+  );
 }

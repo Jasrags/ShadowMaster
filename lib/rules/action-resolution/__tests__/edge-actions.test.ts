@@ -406,6 +406,37 @@ describe("canUseEdgeAction", () => {
     expect(result.canUse).toBe(false);
     expect(result.reason).toContain("not available");
   });
+
+  it("should reject an edge action disabled by GM house rule", () => {
+    const character = createMockCharacter();
+    const result = canUseEdgeAction(character, "push-the-limit", {
+      isPreRoll: true,
+      disabledActionIds: ["push-the-limit"],
+    });
+
+    expect(result.canUse).toBe(false);
+    expect(result.reason).toContain("disabled by the GM");
+  });
+
+  it("should allow an edge action not in the disabled list", () => {
+    const character = createMockCharacter();
+    const result = canUseEdgeAction(character, "blitz", {
+      isPreRoll: true,
+      disabledActionIds: ["push-the-limit", "second-chance"],
+    });
+
+    expect(result.canUse).toBe(true);
+  });
+
+  it("should allow actions when the disabled list is empty", () => {
+    const character = createMockCharacter();
+    const result = canUseEdgeAction(character, "push-the-limit", {
+      isPreRoll: true,
+      disabledActionIds: [],
+    });
+
+    expect(result.canUse).toBe(true);
+  });
 });
 
 // =============================================================================

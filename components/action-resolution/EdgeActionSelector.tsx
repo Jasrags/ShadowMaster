@@ -24,6 +24,8 @@ interface EdgeActionSelectorProps {
   hasRerolled?: boolean;
   /** Button size variant */
   size?: "sm" | "md";
+  /** Edge action IDs disabled by the GM for this campaign */
+  disabledActionIds?: ReadonlyArray<EdgeActionType>;
 }
 
 interface EdgeButtonConfig {
@@ -81,6 +83,7 @@ export function EdgeActionSelector({
   hasGlitch = false,
   hasRerolled = false,
   size = "sm",
+  disabledActionIds,
 }: EdgeActionSelectorProps) {
   const noEdge = currentEdge <= 0;
 
@@ -105,6 +108,8 @@ export function EdgeActionSelector({
   };
 
   const isActionVisible = (action: EdgeActionType): boolean => {
+    // GM disabled this action for the campaign
+    if (disabledActionIds?.includes(action)) return false;
     // Close Call only visible when there's a glitch
     if (action === "close-call" && !hasGlitch) return false;
     return true;
