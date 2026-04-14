@@ -6,7 +6,7 @@
  */
 
 import type { DiceResult, EditionDiceRules } from "@/lib/types";
-import type { LimitEnforcement } from "@/lib/types/house-rules";
+import type { HouseRules, LimitEnforcement } from "@/lib/types/house-rules";
 
 // =============================================================================
 // DEFAULT RULES (SR5)
@@ -75,6 +75,46 @@ export const DEFAULT_DICE_RULES: EditionDiceRules = {
     maxPenalty: -4,
   },
 };
+
+// =============================================================================
+// HOUSE RULE RESOLUTION
+// =============================================================================
+
+/**
+ * Merge house rule overrides into an EditionDiceRules base.
+ *
+ * Currently supports overrides for:
+ * - `hitThreshold` (#846): minimum die face that counts as a hit
+ * - `glitchThreshold` (#846): fraction of dice showing 1s that triggers a glitch
+ * - `woundBoxesPerPenalty` (#847): damage boxes per -1 penalty
+ * - `woundMaxPenalty` (#847): max wound penalty magnitude
+ *
+ * When `houseRules` is undefined or a given toggle is unset, the base rules
+ * value is preserved (no change vs. RAW).
+ */
+export function resolveDiceRules(
+  houseRules: HouseRules | undefined,
+  base: EditionDiceRules = DEFAULT_DICE_RULES
+): EditionDiceRules {
+  if (houseRules === undefined) {
+    return base;
+  }
+
+  const resolved: EditionDiceRules = {
+    ...base,
+    hitThreshold: houseRules.hitThreshold ?? base.hitThreshold,
+    glitchThreshold: houseRules.glitchThreshold ?? base.glitchThreshold,
+  };
+
+  if (houseRules.woundBoxesPerPenalty !== undefined || houseRules.woundMaxPenalty !== undefined) {
+    resolved.woundModifiers = {
+      boxesPerPenalty: houseRules.woundBoxesPerPenalty ?? base.woundModifiers.boxesPerPenalty,
+      maxPenalty: -Math.abs(houseRules.woundMaxPenalty ?? Math.abs(base.woundModifiers.maxPenalty)),
+    };
+  }
+
+  return resolved;
+}
 
 // =============================================================================
 // DICE ROLLING

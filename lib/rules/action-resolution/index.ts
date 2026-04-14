@@ -18,6 +18,7 @@ export {
   rerollNonHits,
   executeRoll,
   executeReroll,
+  resolveDiceRules,
   expectedHits,
   glitchProbability,
   type GlitchResult,

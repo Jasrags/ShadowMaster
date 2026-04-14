@@ -76,6 +76,7 @@ vi.mock("../dice-engine", () => ({
     explodingSixes: false,
     ruleOfSix: false,
   },
+  resolveDiceRules: vi.fn((_houseRules, base) => base),
 }));
 
 vi.mock("../action-validator", () => ({

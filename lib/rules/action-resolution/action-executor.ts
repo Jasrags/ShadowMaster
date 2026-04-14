@@ -29,8 +29,8 @@ import {
   ValidationError,
 } from "./action-validator";
 import { NotImplementedError } from "@/lib/rules/sync";
-import { executeRoll, executeReroll, DEFAULT_DICE_RULES } from "./dice-engine";
-import type { LimitEnforcement } from "@/lib/types/house-rules";
+import { executeRoll, executeReroll, DEFAULT_DICE_RULES, resolveDiceRules } from "./dice-engine";
+import type { HouseRules, LimitEnforcement } from "@/lib/types/house-rules";
 import { buildActionPool } from "./pool-builder";
 import * as actionHistoryStorage from "@/lib/storage/action-history";
 import * as combatStorage from "@/lib/storage/combat";
@@ -65,6 +65,8 @@ export interface ExecutionRequest {
   context?: ActionContext;
   /** Limit enforcement mode from campaign house rules */
   limitEnforcement?: LimitEnforcement;
+  /** Campaign house rules (applies dice threshold overrides when present) */
+  houseRules?: HouseRules;
 }
 
 /**
@@ -103,6 +105,8 @@ export interface RerollRequest {
   participantId?: ID;
   /** Limit enforcement mode from campaign house rules */
   limitEnforcement?: LimitEnforcement;
+  /** Campaign house rules (applies dice threshold overrides when present) */
+  houseRules?: HouseRules;
 }
 
 // =============================================================================
@@ -272,7 +276,8 @@ export async function executeAction(request: ExecutionRequest): Promise<Executio
   // Push the Limit bypasses limits per RAW, regardless of house rule setting
   const effectiveLimitEnforcement =
     request.edgeAction === "push-the-limit" ? "off" : (request.limitEnforcement ?? "on");
-  const rollResult = executeRoll(actionPool.totalDice, DEFAULT_DICE_RULES, {
+  const diceRules = resolveDiceRules(request.houseRules, DEFAULT_DICE_RULES);
+  const rollResult = executeRoll(actionPool.totalDice, diceRules, {
     limit: actionPool.limit,
     explodingSixes: request.edgeAction === "push-the-limit",
     limitEnforcement: effectiveLimitEnforcement,
@@ -437,9 +442,10 @@ export async function executeActionReroll(request: RerollRequest): Promise<Execu
   }
 
   // Second Chance - reroll non-hits
+  const diceRules = resolveDiceRules(request.houseRules, DEFAULT_DICE_RULES);
   const rerollResult = executeReroll(
     originalAction.dice,
-    DEFAULT_DICE_RULES,
+    diceRules,
     originalAction.pool.limit,
     request.limitEnforcement ?? "on"
   );

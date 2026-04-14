@@ -12,6 +12,7 @@ import { v4 as uuidv4 } from "uuid";
 import { getSession } from "@/lib/auth/session";
 import { getUserById } from "@/lib/storage/users";
 import { getCharacter, spendEdge } from "@/lib/storage/characters";
+import { getCampaignById } from "@/lib/storage/campaigns";
 import {
   getActionHistory,
   saveActionResult,
@@ -25,6 +26,7 @@ import {
   executePushTheLimit,
   getCurrentEdge,
   getMaxEdge,
+  resolveDiceRules,
 } from "@/lib/rules/action-resolution";
 import type {
   RollActionRequest,
@@ -151,6 +153,15 @@ export async function POST(
       );
     }
 
+    // Resolve campaign house rules (dice thresholds, etc.)
+    let diceRules = DEFAULT_DICE_RULES;
+    if (character.campaignId) {
+      const campaign = await getCampaignById(character.campaignId);
+      if (campaign?.houseRules) {
+        diceRules = resolveDiceRules(campaign.houseRules, DEFAULT_DICE_RULES);
+      }
+    }
+
     // Build or use provided pool
     let pool: ActionPool;
     if ("totalDice" in body.pool) {
@@ -158,7 +169,7 @@ export async function POST(
       pool = body.pool as ActionPool;
     } else {
       // Build from options
-      pool = buildActionPool(character, body.pool as PoolBuildOptions, DEFAULT_DICE_RULES);
+      pool = buildActionPool(character, body.pool as PoolBuildOptions, diceRules);
     }
 
     // Validate pool
@@ -182,7 +193,7 @@ export async function POST(
       }
 
       // Execute Push the Limit
-      const ptlResult = executePushTheLimit(character, pool, DEFAULT_DICE_RULES);
+      const ptlResult = executePushTheLimit(character, pool, diceRules);
       if (!ptlResult.success || !ptlResult.rollResult) {
         return NextResponse.json(
           { success: false, error: ptlResult.error || "Push the Limit failed" },
@@ -199,7 +210,7 @@ export async function POST(
       character = await spendEdge(userId, characterId, edgeSpent);
     } else {
       // Normal roll
-      rollResult = executeRoll(pool.totalDice, DEFAULT_DICE_RULES, {
+      rollResult = executeRoll(pool.totalDice, diceRules, {
         limit: pool.limit,
       });
     }
