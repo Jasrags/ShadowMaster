@@ -65,9 +65,16 @@ export function canUseEdgeAction(
     isPostRoll?: boolean;
     hasGlitch?: boolean;
     currentResult?: ActionResult;
+    /** Edge action IDs disabled by the GM for this campaign */
+    disabledActionIds?: ReadonlyArray<string>;
   },
   rules: EditionDiceRules = DEFAULT_DICE_RULES
 ): { canUse: boolean; reason?: string } {
+  // GM house rule: action disabled for this campaign
+  if (context.disabledActionIds?.includes(action)) {
+    return { canUse: false, reason: "This Edge action is disabled by the GM" };
+  }
+
   const edgeConfig = rules.edgeActions?.[action];
 
   if (!edgeConfig) {

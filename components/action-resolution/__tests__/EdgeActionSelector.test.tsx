@@ -156,4 +156,44 @@ describe("EdgeActionSelector", () => {
       expect(screen.getByText("Second Chance")).toBeDefined();
     });
   });
+
+  describe("disabledActionIds (GM house rule)", () => {
+    it("hides pre-roll actions listed in disabledActionIds", () => {
+      render(
+        <EdgeActionSelector
+          {...defaultProps}
+          timing="pre-roll"
+          disabledActionIds={["push-the-limit"]}
+        />
+      );
+
+      expect(screen.queryByText("Push the Limit")).toBeNull();
+      expect(screen.getByText("Blitz")).toBeDefined();
+    });
+
+    it("hides non-roll actions listed in disabledActionIds", () => {
+      render(
+        <EdgeActionSelector
+          {...defaultProps}
+          timing="non-roll"
+          disabledActionIds={["seize-the-initiative"]}
+        />
+      );
+
+      expect(screen.queryByText("Seize Initiative")).toBeNull();
+      expect(screen.getByText("Dead Man's Trigger")).toBeDefined();
+    });
+
+    it("returns null when every action for the timing is disabled", () => {
+      const { container } = render(
+        <EdgeActionSelector
+          {...defaultProps}
+          timing="pre-roll"
+          disabledActionIds={["push-the-limit", "blitz"]}
+        />
+      );
+
+      expect(container.firstChild).toBeNull();
+    });
+  });
 });
