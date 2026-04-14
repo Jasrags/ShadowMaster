@@ -82,6 +82,8 @@ vi.mock("../dice-engine", () => ({
     isGlitch: false,
     isCriticalGlitch: false,
     limitApplied: false,
+    limitExceeded: false,
+    limitEnforcement: "on" as const,
     poolSize: 3,
   }),
   executeReroll: vi.fn().mockReturnValue({
@@ -96,6 +98,8 @@ vi.mock("../dice-engine", () => ({
     isGlitch: false,
     isCriticalGlitch: false,
     limitApplied: false,
+    limitExceeded: false,
+    limitEnforcement: "on" as const,
     poolSize: 3,
   }),
   rollDiceExploding: vi.fn(),
@@ -531,7 +535,8 @@ describe("executeSecondChance", () => {
     expect(executeReroll).toHaveBeenCalledWith(
       originalResult.dice,
       expect.anything(),
-      originalResult.pool.limit
+      originalResult.pool.limit,
+      "on"
     );
   });
 
@@ -543,7 +548,7 @@ describe("executeSecondChance", () => {
 
     executeSecondChance(character, originalResult);
 
-    expect(executeReroll).toHaveBeenCalledWith(expect.anything(), expect.anything(), 4);
+    expect(executeReroll).toHaveBeenCalledWith(expect.anything(), expect.anything(), 4, "on");
   });
 
   it("should spend edge and return updated count", () => {

@@ -694,7 +694,8 @@ describe("executeActionReroll", () => {
       expect(executeReroll).toHaveBeenCalledWith(
         originalAction.dice,
         expect.anything(),
-        originalAction.pool.limit
+        originalAction.pool.limit,
+        "on"
       );
     });
 
@@ -990,6 +991,8 @@ describe("executeOpposedTest", () => {
         isGlitch: false,
         isCriticalGlitch: false,
         limitApplied: false,
+        limitExceeded: false,
+        limitEnforcement: "on" as const,
         poolSize: 6,
       })
       .mockReturnValueOnce({
@@ -1000,6 +1003,8 @@ describe("executeOpposedTest", () => {
         isGlitch: false,
         isCriticalGlitch: false,
         limitApplied: false,
+        limitExceeded: false,
+        limitEnforcement: "on" as const,
         poolSize: 6,
       });
 
@@ -1026,6 +1031,8 @@ describe("executeOpposedTest", () => {
       isGlitch: false,
       isCriticalGlitch: false,
       limitApplied: false,
+      limitExceeded: false,
+      limitEnforcement: "on" as const,
       poolSize: 6,
     });
 

@@ -85,6 +85,8 @@ describe("AddictionTracker", () => {
       isGlitch: false,
       isCriticalGlitch: false,
       limitApplied: false,
+      limitExceeded: false,
+      limitEnforcement: "on" as const,
       poolSize: 7,
     });
 
@@ -116,6 +118,8 @@ describe("AddictionTracker", () => {
       isGlitch: false,
       isCriticalGlitch: false,
       limitApplied: false,
+      limitExceeded: false,
+      limitEnforcement: "on" as const,
       poolSize: 7,
     });
 
@@ -145,6 +149,8 @@ describe("AddictionTracker", () => {
       isGlitch: false,
       isCriticalGlitch: false,
       limitApplied: false,
+      limitExceeded: false,
+      limitEnforcement: "on" as const,
       poolSize: 7,
     });
 
@@ -173,6 +179,8 @@ describe("AddictionTracker", () => {
       isGlitch: false,
       isCriticalGlitch: false,
       limitApplied: false,
+      limitExceeded: false,
+      limitEnforcement: "on" as const,
       poolSize: 7,
     });
 
@@ -201,6 +209,8 @@ describe("AddictionTracker", () => {
       isGlitch: false,
       isCriticalGlitch: false,
       limitApplied: false,
+      limitExceeded: false,
+      limitEnforcement: "on" as const,
       poolSize: 7,
     });
 

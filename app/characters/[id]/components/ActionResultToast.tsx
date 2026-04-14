@@ -41,6 +41,8 @@ export interface ActionResult {
   limit?: number;
   /** Hits after limit applied */
   limitedHits?: number;
+  /** Limit enforcement mode ("on" = RAW, "off" = ignored, "advisory" = shown but not capped) */
+  limitMode?: "on" | "off" | "advisory";
   /** Outcome description */
   outcome?: string;
   /** Timestamp */
@@ -263,8 +265,16 @@ export function ActionResultToast({
             <div className={`text-lg font-bold ${theme.fonts.mono} ${colors.accent}`}>
               {result.limitedHits ?? result.hits} hits
             </div>
-            {result.limit && result.hits > result.limit && (
+            {result.limit && result.limitMode === "on" && result.hits > result.limit && (
               <span className={`text-xs ${theme.colors.muted}`}>(limited from {result.hits})</span>
+            )}
+            {result.limit && result.limitMode === "advisory" && result.hits > result.limit && (
+              <span className="text-xs text-amber-500">(would exceed limit of {result.limit})</span>
+            )}
+            {result.limitMode === "off" && result.limit && (
+              <span className={`text-xs ${theme.colors.muted} line-through`}>
+                limit {result.limit}
+              </span>
             )}
             <span className={`text-xs ${theme.fonts.mono} ${theme.colors.muted}`}>
               {result.dicePool}d6

@@ -30,6 +30,7 @@ import {
 } from "./action-validator";
 import { NotImplementedError } from "@/lib/rules/sync";
 import { executeRoll, executeReroll, DEFAULT_DICE_RULES } from "./dice-engine";
+import type { LimitEnforcement } from "@/lib/types/house-rules";
 import { buildActionPool } from "./pool-builder";
 import * as actionHistoryStorage from "@/lib/storage/action-history";
 import * as combatStorage from "@/lib/storage/combat";
@@ -62,6 +63,8 @@ export interface ExecutionRequest {
   additionalModifiers?: PoolModifier[];
   /** Action context information */
   context?: ActionContext;
+  /** Limit enforcement mode from campaign house rules */
+  limitEnforcement?: LimitEnforcement;
 }
 
 /**
@@ -98,6 +101,8 @@ export interface RerollRequest {
   combatSessionId?: ID;
   /** Participant ID in combat session */
   participantId?: ID;
+  /** Limit enforcement mode from campaign house rules */
+  limitEnforcement?: LimitEnforcement;
 }
 
 // =============================================================================
@@ -264,9 +269,13 @@ export async function executeAction(request: ExecutionRequest): Promise<Executio
   }
 
   // 5. Execute the roll
+  // Push the Limit bypasses limits per RAW, regardless of house rule setting
+  const effectiveLimitEnforcement =
+    request.edgeAction === "push-the-limit" ? "off" : (request.limitEnforcement ?? "on");
   const rollResult = executeRoll(actionPool.totalDice, DEFAULT_DICE_RULES, {
     limit: actionPool.limit,
     explodingSixes: request.edgeAction === "push-the-limit",
+    limitEnforcement: effectiveLimitEnforcement,
   });
 
   // 6. Create action result
@@ -431,7 +440,8 @@ export async function executeActionReroll(request: RerollRequest): Promise<Execu
   const rerollResult = executeReroll(
     originalAction.dice,
     DEFAULT_DICE_RULES,
-    originalAction.pool.limit
+    originalAction.pool.limit,
+    request.limitEnforcement ?? "on"
   );
 
   // Create updated action result

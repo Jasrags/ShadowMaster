@@ -399,6 +399,66 @@ describe("calculateHitsWithLimit", () => {
     expect(result.hits).toBe(5);
     expect(result.limitApplied).toBe(false);
   });
+
+  // Limit enforcement mode tests (#862)
+  describe("limit enforcement modes", () => {
+    it("should cap hits in 'on' mode (RAW)", () => {
+      const dice = makeDice([5, 5, 5, 5, 5]);
+      const result = calculateHitsWithLimit(dice, 5, 3, "on");
+
+      expect(result.hits).toBe(3);
+      expect(result.rawHits).toBe(5);
+      expect(result.limitApplied).toBe(true);
+      expect(result.limitExceeded).toBe(true);
+    });
+
+    it("should ignore limit entirely in 'off' mode", () => {
+      const dice = makeDice([5, 5, 5, 5, 5]);
+      const result = calculateHitsWithLimit(dice, 5, 3, "off");
+
+      expect(result.hits).toBe(5);
+      expect(result.rawHits).toBe(5);
+      expect(result.limitApplied).toBe(false);
+      expect(result.limitExceeded).toBe(false);
+    });
+
+    it("should not cap hits in 'advisory' mode but flag exceeded", () => {
+      const dice = makeDice([5, 5, 5, 5, 5]);
+      const result = calculateHitsWithLimit(dice, 5, 3, "advisory");
+
+      expect(result.hits).toBe(5);
+      expect(result.rawHits).toBe(5);
+      expect(result.limitApplied).toBe(false);
+      expect(result.limitExceeded).toBe(true);
+    });
+
+    it("should not flag exceeded in 'advisory' mode when under limit", () => {
+      const dice = makeDice([5, 5, 3, 3, 3]);
+      const result = calculateHitsWithLimit(dice, 5, 3, "advisory");
+
+      expect(result.hits).toBe(2);
+      expect(result.limitApplied).toBe(false);
+      expect(result.limitExceeded).toBe(false);
+    });
+
+    it("should default to 'on' mode when no enforcement specified", () => {
+      const dice = makeDice([5, 5, 5, 5, 5]);
+      const result = calculateHitsWithLimit(dice, 5, 3);
+
+      expect(result.hits).toBe(3);
+      expect(result.limitApplied).toBe(true);
+      expect(result.limitExceeded).toBe(true);
+    });
+
+    it("should not flag limitExceeded in 'on' mode when under limit", () => {
+      const dice = makeDice([5, 5, 3, 3, 3]);
+      const result = calculateHitsWithLimit(dice, 5, 3, "on");
+
+      expect(result.hits).toBe(2);
+      expect(result.limitApplied).toBe(false);
+      expect(result.limitExceeded).toBe(false);
+    });
+  });
 });
 
 // =============================================================================
@@ -675,6 +735,34 @@ describe("executeRoll", () => {
 
     expect(result.isGlitch).toBe(true);
     expect(result.isCriticalGlitch).toBe(true);
+  });
+
+  it("should pass limit enforcement mode to hit calculation", () => {
+    mockCrypto([5, 5, 5, 5, 5, 5]);
+    const result = executeRoll(6, DEFAULT_DICE_RULES, { limit: 3, limitEnforcement: "off" });
+
+    expect(result.hits).toBe(6);
+    expect(result.limitApplied).toBe(false);
+    expect(result.limitEnforcement).toBe("off");
+  });
+
+  it("should show advisory info without capping hits", () => {
+    mockCrypto([5, 5, 5, 5, 5, 5]);
+    const result = executeRoll(6, DEFAULT_DICE_RULES, { limit: 3, limitEnforcement: "advisory" });
+
+    expect(result.hits).toBe(6);
+    expect(result.limitApplied).toBe(false);
+    expect(result.limitExceeded).toBe(true);
+    expect(result.limitEnforcement).toBe("advisory");
+  });
+
+  it("should default to 'on' enforcement when not specified", () => {
+    mockCrypto([5, 5, 5, 5, 5, 5]);
+    const result = executeRoll(6, DEFAULT_DICE_RULES, { limit: 3 });
+
+    expect(result.hits).toBe(3);
+    expect(result.limitApplied).toBe(true);
+    expect(result.limitEnforcement).toBe("on");
   });
 });
 

@@ -384,6 +384,8 @@ describe("POST /api/characters/[characterId]/actions/[actionId]/reroll", () => {
         isGlitch: false,
         isCriticalGlitch: false,
         limitApplied: false,
+        limitExceeded: false,
+        limitEnforcement: "on" as const,
         poolSize: 8,
       };
       const updatedAction = createMockActionResult({
@@ -646,6 +648,8 @@ describe("POST /api/characters/[characterId]/actions/[actionId]/reroll", () => {
         isGlitch: false,
         isCriticalGlitch: false,
         limitApplied: false,
+        limitExceeded: false,
+        limitEnforcement: "on" as const,
         poolSize: 8,
       });
       vi.mocked(spendEdge).mockRejectedValue(new Error("Storage error"));
