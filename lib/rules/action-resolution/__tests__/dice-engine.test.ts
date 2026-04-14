@@ -21,6 +21,7 @@ import {
   executeReroll,
   expectedHits,
   glitchProbability,
+  resolveDiceRules,
 } from "../dice-engine";
 
 // =============================================================================
@@ -903,5 +904,93 @@ describe("glitchProbability", () => {
     // P(at least 1 one) = 1/6 = ~16.67%
     const prob1 = glitchProbability(1);
     expect(prob1).toBeCloseTo(1 / 6, 2);
+  });
+});
+
+// =============================================================================
+// HOUSE RULE RESOLUTION (#846)
+// =============================================================================
+
+describe("resolveDiceRules", () => {
+  it("returns base unchanged when houseRules is undefined", () => {
+    const resolved = resolveDiceRules(undefined);
+    expect(resolved).toEqual(DEFAULT_DICE_RULES);
+  });
+
+  it("returns base unchanged when houseRules has no dice overrides", () => {
+    const resolved = resolveDiceRules({});
+    expect(resolved.hitThreshold).toBe(DEFAULT_DICE_RULES.hitThreshold);
+    expect(resolved.glitchThreshold).toBe(DEFAULT_DICE_RULES.glitchThreshold);
+  });
+
+  it("overrides hitThreshold when set", () => {
+    const resolved = resolveDiceRules({ hitThreshold: 4 });
+    expect(resolved.hitThreshold).toBe(4);
+    expect(resolved.glitchThreshold).toBe(DEFAULT_DICE_RULES.glitchThreshold);
+  });
+
+  it("overrides glitchThreshold when set", () => {
+    const resolved = resolveDiceRules({ glitchThreshold: 0.75 });
+    expect(resolved.glitchThreshold).toBe(0.75);
+    expect(resolved.hitThreshold).toBe(DEFAULT_DICE_RULES.hitThreshold);
+  });
+
+  it("overrides both thresholds together", () => {
+    const resolved = resolveDiceRules({ hitThreshold: 6, glitchThreshold: 0.3 });
+    expect(resolved.hitThreshold).toBe(6);
+    expect(resolved.glitchThreshold).toBe(0.3);
+  });
+
+  it("preserves other base rule fields (edgeActions, caps)", () => {
+    const resolved = resolveDiceRules({ hitThreshold: 4 });
+    expect(resolved.edgeActions).toEqual(DEFAULT_DICE_RULES.edgeActions);
+    expect(resolved.maxDicePool).toBe(DEFAULT_DICE_RULES.maxDicePool);
+    expect(resolved.criticalGlitchRequiresZeroHits).toBe(
+      DEFAULT_DICE_RULES.criticalGlitchRequiresZeroHits
+    );
+  });
+
+  it("overrides wound modifiers when set", () => {
+    const resolved = resolveDiceRules({ woundBoxesPerPenalty: 4, woundMaxPenalty: 6 });
+    expect(resolved.woundModifiers).toEqual({ boxesPerPenalty: 4, maxPenalty: -6 });
+  });
+
+  it("stores woundMaxPenalty as negative number regardless of input sign", () => {
+    const resolved = resolveDiceRules({ woundMaxPenalty: 8 });
+    expect(resolved.woundModifiers.maxPenalty).toBe(-8);
+  });
+
+  it("accepts a non-default base and overrides on top of it", () => {
+    const customBase: EditionDiceRules = {
+      ...DEFAULT_DICE_RULES,
+      hitThreshold: 5,
+      glitchThreshold: 0.5,
+      maxDicePool: 100,
+    };
+    const resolved = resolveDiceRules({ hitThreshold: 4 }, customBase);
+    expect(resolved.hitThreshold).toBe(4);
+    expect(resolved.maxDicePool).toBe(100);
+  });
+
+  it("does not mutate the input base", () => {
+    const base: EditionDiceRules = { ...DEFAULT_DICE_RULES };
+    resolveDiceRules({ hitThreshold: 4, glitchThreshold: 0.75 }, base);
+    expect(base.hitThreshold).toBe(DEFAULT_DICE_RULES.hitThreshold);
+    expect(base.glitchThreshold).toBe(DEFAULT_DICE_RULES.glitchThreshold);
+  });
+
+  it("affects hit counting when used in executeRoll", () => {
+    // With hitThreshold=4, a die showing 4 is a hit (normally only 5 and 6)
+    const rules = resolveDiceRules({ hitThreshold: 4 });
+    const dice = makeDice([4, 4, 4, 3, 2], rules.hitThreshold);
+    expect(calculateHits(dice, rules.hitThreshold)).toBe(3);
+  });
+
+  it("affects glitch threshold when used in calculateGlitch", () => {
+    // With glitchThreshold=0.25, 2 ones in a pool of 5 (2 > floor(5*0.25)=1) triggers glitch
+    const rules = resolveDiceRules({ glitchThreshold: 0.25 });
+    const dice = makeDice([1, 1, 5, 5, 5]);
+    const result = calculateGlitch(dice, 3, rules);
+    expect(result.isGlitch).toBe(true);
   });
 });

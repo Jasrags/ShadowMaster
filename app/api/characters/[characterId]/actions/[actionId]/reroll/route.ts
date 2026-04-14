@@ -10,6 +10,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
 import { getUserById } from "@/lib/storage/users";
 import { getCharacter, spendEdge } from "@/lib/storage/characters";
+import { getCampaignById } from "@/lib/storage/campaigns";
 import { getAction, updateActionResult } from "@/lib/storage/action-history";
 import {
   executeReroll,
@@ -18,6 +19,7 @@ import {
   getCurrentEdge,
   getMaxEdge,
   canSpendEdge,
+  resolveDiceRules,
 } from "@/lib/rules/action-resolution";
 import type { RerollActionRequest, EdgeActionType } from "@/lib/types";
 
@@ -90,12 +92,17 @@ export async function POST(
         );
       }
 
+      // Resolve campaign house rules for consistent thresholds
+      let diceRules = DEFAULT_DICE_RULES;
+      if (character.campaignId) {
+        const campaign = await getCampaignById(character.campaignId);
+        if (campaign?.houseRules) {
+          diceRules = resolveDiceRules(campaign.houseRules, DEFAULT_DICE_RULES);
+        }
+      }
+
       // Execute reroll
-      const rerollResult = executeReroll(
-        originalAction.dice,
-        DEFAULT_DICE_RULES,
-        originalAction.pool.limit
-      );
+      const rerollResult = executeReroll(originalAction.dice, diceRules, originalAction.pool.limit);
 
       // Spend Edge
       character = await spendEdge(userId, characterId, 1);

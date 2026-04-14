@@ -13,6 +13,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
 import { getUserById } from "@/lib/storage/users";
 import { getCharacterById, updateCharacter } from "@/lib/storage/characters";
+import { getCampaignById } from "@/lib/storage/campaigns";
 import {
   getCombatSession,
   getCurrentParticipant,
@@ -28,6 +29,8 @@ import {
   executeRoll,
   buildActionPool,
   calculateStateModifiers,
+  DEFAULT_DICE_RULES,
+  resolveDiceRules,
   type ValidationResult,
 } from "@/lib/rules/action-resolution";
 import { processDamageApplication } from "@/lib/rules/action-resolution/combat";
@@ -521,6 +524,15 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
 
     // Execute roll if character and action has roll config
     if (character && action.rollConfig) {
+      // Resolve campaign house rules for dice thresholds (#846)
+      let diceRules = DEFAULT_DICE_RULES;
+      if (session.campaignId) {
+        const campaign = await getCampaignById(session.campaignId);
+        if (campaign?.houseRules) {
+          diceRules = resolveDiceRules(campaign.houseRules, DEFAULT_DICE_RULES);
+        }
+      }
+
       const stateModifiers = calculateStateModifiers(character, action, session);
       const pool = buildActionPool(character, {
         attribute: action.rollConfig.attribute,
@@ -530,7 +542,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
 
       // Execute the roll
       const limit = action.rollConfig.limitType === "none" ? undefined : pool.limit;
-      const rollResult = executeRoll(pool.totalDice, undefined, { limit });
+      const rollResult = executeRoll(pool.totalDice, diceRules, { limit });
 
       result.roll = {
         dice: rollResult.dice.map((d) => d.value),
@@ -563,7 +575,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
               skill: action.opposedBy.defaultDefenseSkill,
             });
 
-            const defenseRollResult = executeRoll(defensePool.totalDice);
+            const defenseRollResult = executeRoll(defensePool.totalDice, diceRules);
 
             result.defenseRoll = {
               dice: defenseRollResult.dice.map((d) => d.value),
